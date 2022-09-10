@@ -1,4 +1,4 @@
-package com.example.budgetlens
+package com.codenode.budgetlens
 
 import org.junit.Test
 
