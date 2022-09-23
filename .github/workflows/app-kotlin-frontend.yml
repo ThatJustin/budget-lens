@@ -5,7 +5,7 @@ on:
   # Allows us to call this workflow within another workflow
   workflow_call:
     uses:
-      amirsadeghi-ca/budget-lens-backend/.github/workflows/app-django-backend.yml@TAG_OR_BRANCH
+      amirsadeghi-ca/budget-lens-backend/.github/workflows/app-django-backend.yml
       # The name of the workflow to trigger
       workflow: 'Django Backend CI Workflow'
       # The ref to the workflow file
