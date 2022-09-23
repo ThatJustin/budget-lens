@@ -32,7 +32,7 @@ jobs:
         with:
           api-level: 29
           script: |
-            ./gradlew connectedCheck --
+            ./gradlew connectedCheck
       # Debug Unit Tests
       - name: Debug Unit Tests with Android Emulator Runner
         run: |
