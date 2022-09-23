@@ -31,10 +31,13 @@ jobs:
         uses: ReactiveCircus/android-emulator-runner@v2.14.3
         with:
           api-level: 29
-          script: ./gradlew connectedCheck
+          script: |
+            adb start-server
+            ./gradlew connectedCheck
       # Debug Unit Tests
       - name: Debug Unit Tests with Android Emulator Runner
-        run: ./gradlew testDebugUnitTest
+        run: |
+          ./gradlew testDebugUnitTest
       # Generate code coverage report
       - name: Generate Code Coverage Report
         uses: actions/upload-artifact@v2
@@ -49,7 +52,8 @@ jobs:
           path: app/build/reports/coverage/debug
       # Build the app
       - name: Build with Gradle
-        run: ./gradlew build
+        run: |
+          ./gradlew build
       # Upload the build artifact (APK)
       - name: Upload APK
         uses: actions/upload-artifact@v2.1.4
@@ -58,10 +62,13 @@ jobs:
           path: app/build/outputs/apk/debug/app-debug.apk
       # Run Tests
       - name: Run Tests
-        run: ./gradlew test
+        run: |
+          ./gradlew test
       # Run a linter
       - name: Run Lint
-        run: ./gradlew lintKotlin
+        run: |
+          ./gradlew lintKotlin
       # Build/Assemble the app
       - name: Build Project
-        run: ./gradlew assemble
+        run: |
+          ./gradlew assemble
