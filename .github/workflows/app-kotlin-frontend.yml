@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Code Coverage Report
-          path: app/build/reports/coverage/debug
+          path: app/build/reports/coverage/debug/androidTest/connected
       # Generate test coverage reports
       - name: Download Test Coverage Reports Folder
         uses: actions/download-artifact@v2
