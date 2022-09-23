@@ -31,7 +31,6 @@ jobs:
         with:
           api-level: 29
           script: ./gradlew connectedCheck
-        run: ./gradlew testDebugUnitTest
       # Generate code coverage report
       - name: Generate Code Coverage Report
         uses: actions/upload-artifact@v2
