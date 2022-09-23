@@ -54,7 +54,7 @@ jobs:
       # Run a linter
       - name: Run Lint
         run: |
-          ./gradlew lintKotlin
+          ./gradlew Lint
       # Build/Assemble the app
       - name: Build Project
         run: |
