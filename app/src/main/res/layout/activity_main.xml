@@ -4,15 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:backgroundTint="#FFFFFF"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/WelcomeUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BudgetLens!"
+        android:text="BudgetLens"
+        android:textSize="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.376" />
+
+    <ImageButton
+        android:id="@+id/LoginActivityBtn"
+        android:layout_width="57dp"
+        android:layout_height="67dp"
+        android:layout_marginBottom="232dp"
+        android:background="#00FFFFFF"
+        android:text="@string/budgetlens"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/WelcomeUser"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/budgetlens_logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
