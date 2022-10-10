@@ -120,6 +120,15 @@
         app:layout_constraintVertical_bias="0.486" />
 
     <!-- optional google sign up text -->
+
+    <!-- Google sign up option -->
+
+    <!--    <com.google.android.gms.common.SignInButton-->
+<!--        android:id="@+id/google_sign_in"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        tools:ignore="MissingConstraints" />-->
+
     <TextView
         android:id="@+id/googleText"
         android:layout_width="wrap_content"
@@ -127,12 +136,11 @@
         android:text="Or"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.294"
+        app:layout_constraintHorizontal_bias="0.282"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textRegister"
-        app:layout_constraintVertical_bias="0.384" />
+        app:layout_constraintVertical_bias="0.461" />
 
-    <!-- Google sign up option -->
     <Button
         android:id="@+id/googleSignUp"
         android:layout_width="wrap_content"
@@ -144,9 +152,19 @@
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.601"
         app:layout_constraintStart_toEndOf="@+id/googleText"
         app:layout_constraintTop_toBottomOf="@+id/textRegister"
-        app:layout_constraintVertical_bias="0.306" />
+        app:layout_constraintVertical_bias="0.416" />
+
+    <ImageView
+        android:id="@+id/google_sign_in"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="212dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/google"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

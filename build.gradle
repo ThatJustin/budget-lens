@@ -2,6 +2,9 @@
 buildscript {
     ext.kotlin_version = "1.6.20"
     ext.jacocoVersion = '0.8.4'
+    repositories {
+        google()
+    }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.2"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -21,3 +24,4 @@ plugins {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
