@@ -43,7 +43,7 @@ class GoogleLoginSecondActivity : AppCompatActivity() {
     private fun signOut() {
         gsc!!.signOut().addOnCompleteListener {
             finish()
-            startActivity(Intent(this@GoogleLoginSecondActivity, GoogleLoginActivity::class.java))
+            startActivity(Intent(this@GoogleLoginSecondActivity, LoginActivity::class.java))
         }
     }
 }
