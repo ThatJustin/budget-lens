@@ -25,7 +25,7 @@ class SignUpActivity : AppCompatActivity() {
         val registerButton: Button = findViewById(R.id.filledButton)
 
         registerButton.setOnClickListener {
-            val url = "http://${BuildConfig.IP_ADDRESS}:${BuildConfig.PORT_NUMBER}/registerEndpoint/"
+            val url = "http://IP_ADDRESS_HERE:8000/loginEndpoint/"
 
             val registrationPost = OkHttpClient()
 

@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import com.google.android.material.textfield.TextInputLayout
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,15 +33,15 @@ class LoginActivity : AppCompatActivity() {
         val loginButton: Button = findViewById(R.id.checkCredentials)
 
         loginButton.setOnClickListener {
-            val url = "https://${BuildConfig.IP_ADDRESS}:${BuildConfig.PORT_NUMBER}/loginEndpoint/"
+            val url = "http://IP_ADDRESS_HERE:8000/loginEndpoint/"
 
             val registrationPost = OkHttpClient()
 
             val mediaType = "application/json".toMediaTypeOrNull()
 
             val body = ("{\r\n" +
-                    "    \"username\": \"teo14\",\r\n" +
-                    "    \"password\": \"1234palo\"\r\n" +
+                    "    \"username\": \"${findViewById<TextInputLayout>(R.id.emailCredential).editText}\",\r\n" +
+                    "    \"password\": \"${findViewById<TextInputLayout>(R.id.passwordCredential).editText}\"\r\n" +
                     "}").trimIndent().toRequestBody(mediaType)
 
             val request = Request.Builder()
@@ -49,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
                 .build()
 
             registrationPost.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: java.io.IOException) {
+                override fun onFailure(call: Call, e: IOException) {
                     e.printStackTrace()
                 }
 
@@ -58,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     response.use {
                         if (response.isSuccessful) {
                             Log.i("Successful", "${response.body?.string()}")
+
                         } else {
                             Log.e(
                                 "Error",
