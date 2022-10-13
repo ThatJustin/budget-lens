@@ -16,6 +16,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        val goToHomePageActivity = Intent(this, HomePageActivity::class.java)
 
         val actionBar = supportActionBar
 
@@ -60,7 +61,7 @@ class LoginActivity : AppCompatActivity() {
                     response.use {
                         if (response.isSuccessful) {
                             Log.i("Successful", "${response.body?.string()}")
-
+                            startActivity(goToHomePageActivity)
                         } else {
                             Log.e(
                                 "Error",
