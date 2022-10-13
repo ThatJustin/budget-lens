@@ -74,6 +74,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.2.0-alpha08"
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.2.0-alpha08"
+    }
     kotlinOptions {
         jvmTarget = '11'
     }
