@@ -1,5 +1,6 @@
 package com.codenode.budgetlens
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 
 
 class SignUpActivity : AppCompatActivity() {
@@ -27,6 +29,7 @@ class SignUpActivity : AppCompatActivity() {
     //    Check if fields have been met
     private var hasCorrectFields: Boolean = false
 
+    @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
@@ -56,7 +59,8 @@ class SignUpActivity : AppCompatActivity() {
 
             // Register using the rest API once all the frontend field checks passed
             if (hasCorrectFields) {
-                val url = "http://${BuildConfig.IP_ADDRESS}:${BuildConfig.PORT_NUMBER}/registerEndpoint/"
+                val url =
+                    "http://${BuildConfig.IP_ADDRESS}:${BuildConfig.PORT_NUMBER}/registerEndpoint/"
 
                 val registrationPost = OkHttpClient()
 
@@ -89,10 +93,13 @@ class SignUpActivity : AppCompatActivity() {
                         Log.i("Response", "Got the response from server")
                         response.use {
                             if (!response.isSuccessful) {
+                                val jsonDataString = response.body?.string().toString()
                                 Log.e(
                                     "Error",
-                                    "Something went wrong${response.body?.string().toString()} ${response.message} ${response.headers}"
+                                    "Something went wrong${jsonDataString} ${response.message} ${response.headers}"
                                 )
+
+                                validateBackendData(jsonDataString)
                             } else {
                                 Log.i("Successful", "${response.body?.string()}")
                                 startActivity(goToWelcomePage)
@@ -103,6 +110,48 @@ class SignUpActivity : AppCompatActivity() {
                 })
             }
         }
+    }
+
+    private fun validateBackendData(jsonDataString: String) {
+        this@SignUpActivity.runOnUiThread {
+            val json = JSONObject(jsonDataString)
+
+            if (json.has("user")) {
+                if (json.getJSONObject("user").has("email")) {
+                    var email = json.getJSONObject("user").getJSONArray("email").toString()
+                    email = email.substringAfter("\"").substringBefore("\"")
+                    emailField.error = email
+                }
+
+                if (json.getJSONObject("user").has("first_name")) {
+                    var firstName = json.getJSONObject("user").getJSONArray("first_name").toString()
+                    firstName = firstName.substringAfter("\"").substringBefore("\"")
+                    firstNameField.error = firstName
+
+                }
+
+                if (json.getJSONObject("user").has("last_name")) {
+                    var lastName = json.getJSONObject("user").getJSONArray("last_name").toString()
+                    lastName = lastName.substringAfter("\"").substringBefore("\"")
+                    lastNameField.error = lastName
+
+                }
+
+                if (json.getJSONObject("user").has("password")) {
+                    var password = json.getJSONObject("user").getJSONArray("password").toString()
+                    password = password.substringAfter("\"").substringBefore("\"")
+                    passwordField.error = password
+
+                }
+            }
+            if (json.has("telephone_number")) {
+                var telephoneNumber = json.getJSONArray("telephone_number").toString()
+                telephoneNumber = telephoneNumber.substringAfter("\"").substringBefore("\"")
+                telephoneField.error = telephoneNumber
+
+            }
+        }
+
     }
 
     private fun checkFrontendFields() {
