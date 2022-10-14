@@ -14,50 +14,42 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  test:
     runs-on: macos-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      matrix:
+        api-level: [21]
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout Code
-        uses: actions/checkout@v2.3.2
-      - name: Setup Java JDK
-        uses: actions/setup-java@v3
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
+        
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
         with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: 11
-      # Execute unit tests
-      - name: Unit Test with Android Emulator Runner
-        uses: ReactiveCircus/android-emulator-runner@v2.14.3
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 21
-          script: |
-            ./gradlew connectedCheck
-      # Debug Unit Tests
-      - name: Debug Unit Tests with Android Emulator Runner
-        run: |
-          ./gradlew testDebugUnitTest
-      # Build the app
-      - name: Build with Gradle
-        run: |
-          ./gradlew build
-      # Upload the build artifact (APK)
-      - name: Upload APK
-        uses: actions/upload-artifact@v2.1.4
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: run tests
+        uses: reactivecircus/android-emulator-runner@v2
         with:
-          name: BudgetLens App
-          path: app/build/outputs/apk/debug/app-debug.apk
-      # Run Tests
-      - name: Run Tests
-        run: |
-          ./gradlew test
-      # Run a linter
-      - name: Run Lint
-        run: |
-          ./gradlew Lint
-      # Build/Assemble the app
-      - name: Build Project
-        run: |
-          ./gradlew assemble
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: ./gradlew connectedCheck
