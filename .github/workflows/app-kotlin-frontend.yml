@@ -28,10 +28,10 @@ jobs:
        # local.properties
       - name: Touch local properties
         run: touch local.properties
-      # Run Tests
-      - name: Run Tests
+      # Debug Unit Tests
+      - name: Debug Unit Tests
         run: |
-          ./gradlew test
+          ./gradlew testDebugUnitTest
       # Run a linter
       - name: Run Lint
         run: |
