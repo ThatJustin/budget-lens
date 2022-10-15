@@ -146,7 +146,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#00FFFFFF"
-        android:drawableRight="@drawable/ic_baseline_lock_24"
         android:text="Sign in with Google"
         android:textColor="#717171"
         android:textSize="10sp"
@@ -159,10 +158,10 @@
 
     <ImageView
         android:id="@+id/google_sign_in"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="212dp"
-        android:layout_marginBottom="20dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="204dp"
+        android:layout_marginBottom="32dp"
         android:src="@drawable/google"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
