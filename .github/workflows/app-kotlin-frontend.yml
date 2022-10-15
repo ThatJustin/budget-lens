@@ -25,6 +25,9 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: 11
+       # local.properties
+      - name: Touch local properties
+        run: touch local.properties
       # Build the app
       - name: Build with Gradle
         run: |
