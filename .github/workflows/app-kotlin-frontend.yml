@@ -7,8 +7,6 @@ on:
   # Allows us to run this workflow manually from the Actions tab
   workflow_dispatch:
   # Triggered based on the git event type
-  push:
-    branches: [master]
   pull_request:
     branches: [master]
 
@@ -28,27 +26,10 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: 11
-      # Execute unit tests
-      - name: Unit Test with Android Emulator Runner
-        uses: ReactiveCircus/android-emulator-runner@v2.14.3
-        with:
-          api-level: 21
-          script: |
-            ./gradlew connectedCheck
       # Debug Unit Tests
-      - name: Debug Unit Tests with Android Emulator Runner
+      - name: Debug Unit Tests
         run: |
           ./gradlew testDebugUnitTest
-      # Build the app
-      - name: Build with Gradle
-        run: |
-          ./gradlew build
-      # Upload the build artifact (APK)
-      - name: Upload APK
-        uses: actions/upload-artifact@v2.1.4
-        with:
-          name: BudgetLens App
-          path: app/build/outputs/apk/debug/app-debug.apk
       # Run Tests
       - name: Run Tests
         run: |
@@ -57,7 +38,3 @@ jobs:
       - name: Run Lint
         run: |
           ./gradlew Lint
-      # Build/Assemble the app
-      - name: Build Project
-        run: |
-          ./gradlew assemble
