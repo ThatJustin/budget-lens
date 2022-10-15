@@ -9,7 +9,6 @@ on:
   # Triggered based on the git event type
   push:
   pull_request:
-  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -28,7 +27,6 @@ jobs:
           java-version: 11
       # Build the app
       - name: Build with Gradle
-        run: ./gradlew build
         run: |
           ./gradlew build
       # Debug Unit Tests
