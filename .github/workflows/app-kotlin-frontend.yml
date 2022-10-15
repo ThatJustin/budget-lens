@@ -26,6 +26,11 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: 11
+      # Build the app
+      - name: Build with Gradle
+        run: ./gradlew build
+        run: |
+          ./gradlew build
       # Debug Unit Tests
       - name: Debug Unit Tests
         run: |
