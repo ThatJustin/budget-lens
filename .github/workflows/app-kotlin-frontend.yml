@@ -36,6 +36,3 @@ jobs:
       - name: Run Lint
         run: |
           ./gradlew Lint
-      # Build Project 
-      - name: Build Project
-        run: ./gradlew assemble
