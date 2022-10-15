@@ -28,10 +28,6 @@ jobs:
        # local.properties
       - name: Touch local properties
         run: touch local.properties
-      # Build the app
-      - name: Build with Gradle
-        run: |
-          ./gradlew build
       # Run Tests
       - name: Run Tests
         run: |
