@@ -8,8 +8,6 @@ on:
   workflow_dispatch:
   # Triggered based on the git event type
   pull_request:
-    branches: [master]
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -21,19 +19,19 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Code
         uses: actions/checkout@v2.3.2
+        
       - name: Setup Java JDK
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: 11
+       # local.properties
+      - name: Touch local properties
+        run: touch local.properties
       # Debug Unit Tests
       - name: Debug Unit Tests
         run: |
           ./gradlew testDebugUnitTest
-      # Run Tests
-      - name: Run Tests
-        run: |
-          ./gradlew test
       # Run a linter
       - name: Run Lint
         run: |
