@@ -3,15 +3,14 @@ package com.codenode.budgetlens
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.telephony.PhoneNumberUtils
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
+import com.google.i18n.phonenumbers.PhoneNumberUtil
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
@@ -60,7 +59,7 @@ class SignUpActivity : AppCompatActivity() {
             // Register using the rest API once all the frontend field checks passed
             if (hasValidFieldsFrontend()) {
                 val url =
-                    "http://${BuildConfig.IP_ADDRESS}:${BuildConfig.PORT_NUMBER}/registerEndpoint/"
+                    "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/registerEndpoint/"
 
                 val registrationPost = OkHttpClient()
 
@@ -185,7 +184,14 @@ class SignUpActivity : AppCompatActivity() {
             return false
         }
 
-        if (!PhoneNumberUtils.isGlobalPhoneNumber(telephoneField.text.toString())) {
+        val phoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance()
+        try {
+            val phoneNumber = phoneUtil.parse(telephoneField.text.toString(), "CA")
+            if (!phoneUtil.isValidNumber(phoneNumber)) {
+                telephoneField.error = "This field is not a valid telephone number"
+                return false
+            }
+        } catch (e: Exception) {
             telephoneField.error = "This field is not a valid telephone number"
             return false
         }
