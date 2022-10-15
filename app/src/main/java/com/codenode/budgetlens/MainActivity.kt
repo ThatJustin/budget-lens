@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         actionBar!!.title = "Welcome to BudgetLens"
         LoginActivityBtn.setOnClickListener(){
-            val intent = Intent(this, HomePageActivity::class.java)
+            val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
     }
