@@ -3,19 +3,22 @@ package com.codenode.budgetlens
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.telephony.PhoneNumberUtils
 import android.util.Log
+import android.util.Patterns
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 
 
 class SignUpActivity : AppCompatActivity() {
-    //    5 text fields
+    // 5 text fields
     private lateinit var emailField: TextInputEditText
     private lateinit var firstNameField: TextInputEditText
     private lateinit var lastNameField: TextInputEditText
@@ -23,11 +26,8 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var confirmPasswordField: TextInputEditText
     private lateinit var passwordField: TextInputEditText
 
-    //    1 button
+    // 1 button
     private lateinit var registerButton: Button
-
-    //    Check if fields have been met
-    private var hasCorrectFields: Boolean = false
 
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +42,7 @@ class SignUpActivity : AppCompatActivity() {
 
         actionBar.setDisplayHomeAsUpEnabled(true)
 
-//        Initialize Text Fields
+        // Initialize Text Fields
         emailField = findViewById(R.id.email)
         firstNameField = findViewById(R.id.firstName)
         lastNameField = findViewById(R.id.lastName)
@@ -50,15 +50,15 @@ class SignUpActivity : AppCompatActivity() {
         confirmPasswordField = findViewById(R.id.confirmPassword)
         passwordField = findViewById(R.id.password)
 
-//        Initialize Buttons
+        // Initialize Buttons
         registerButton = findViewById(R.id.filledButton)
 
-//        On button click
+        // On button click
         registerButton.setOnClickListener {
-            checkFrontendFields()
+            hasValidFieldsFrontend()
 
             // Register using the rest API once all the frontend field checks passed
-            if (hasCorrectFields) {
+            if (hasValidFieldsFrontend()) {
                 val url =
                     "http://${BuildConfig.IP_ADDRESS}:${BuildConfig.PORT_NUMBER}/registerEndpoint/"
 
@@ -99,7 +99,7 @@ class SignUpActivity : AppCompatActivity() {
                                     "Something went wrong${jsonDataString} ${response.message} ${response.headers}"
                                 )
 
-                                validateBackendData(jsonDataString)
+                                hasValidFieldsBackend(jsonDataString)
                             } else {
                                 Log.i("Successful", "${response.body?.string()}")
                                 startActivity(goToWelcomePage)
@@ -112,7 +112,7 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateBackendData(jsonDataString: String) {
+    private fun hasValidFieldsBackend(jsonDataString: String) {
         this@SignUpActivity.runOnUiThread {
             val json = JSONObject(jsonDataString)
 
@@ -154,36 +154,40 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
-    private fun checkFrontendFields() {
+    private fun hasValidFieldsFrontend(): Boolean {
         if (emailField.length() == 0) {
             emailField.error = "This field is required"
-            hasCorrectFields = false
         }
 
         if (firstNameField.length() == 0) {
             firstNameField.error = "This field is required"
-            hasCorrectFields = false
         }
 
         if (lastNameField.length() == 0) {
             lastNameField.error = "This field is required"
-            hasCorrectFields = false
         }
 
         if (telephoneField.length() == 0) {
             telephoneField.error = "This field is required"
-            hasCorrectFields = false
         }
 
         if (passwordField.length() == 0) {
             passwordField.error = "This field is required"
-            hasCorrectFields = false
         }
 
         if (confirmPasswordField.length() == 0) {
             confirmPasswordField.error = "This field is required"
-            hasCorrectFields = false
-            return
+            return false
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(emailField.text.toString()).matches()) {
+            emailField.error = "This field is not a valid email address"
+            return false
+        }
+
+        if (!PhoneNumberUtils.isGlobalPhoneNumber(telephoneField.text.toString())) {
+            telephoneField.error = "This field is not a valid telephone number"
+            return false
         }
 
         if (confirmPasswordField.text.toString() != passwordField.text.toString()) {
@@ -192,16 +196,14 @@ class SignUpActivity : AppCompatActivity() {
                 "passwords don't match:${confirmPasswordField.text.toString()}!=${passwordField.text.toString()}"
             )
             confirmPasswordField.error = "Passwords do not match"
-            hasCorrectFields = false
-            return
+            return false
         }
 
         if (passwordField.text.toString().length < 8) {
             passwordField.error = "Password must be greater than 8 character"
-            hasCorrectFields = false
-            return
+            return false
         }
 
-        hasCorrectFields = true
+        return true
     }
 }
