@@ -21,11 +21,11 @@
 
     <!-- email input -->
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/emailCredential"
+        android:id="@+id/usernameCredential"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:hint="@string/email"
+        android:hint="@string/username"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +34,7 @@
         app:startIconDrawable="@drawable/ic_baseline_email_24">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/usernameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -52,11 +53,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailCredential"
+        app:layout_constraintTop_toBottomOf="@+id/usernameCredential"
         app:layout_constraintVertical_bias="0.050000012"
         app:startIconDrawable="@drawable/ic_baseline_lock_24">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/passwordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="password_toggle" />

@@ -3,4 +3,5 @@
     <string name="budgetlens">BudgetLens</string>
     <string name="email">E-mail Address</string>
     <string name="password">Password</string>
+    <string name="username">Username</string>
 </resources>
