@@ -38,6 +38,14 @@ class LoginActivity : AppCompatActivity() {
 
         actionBar.setDisplayHomeAsUpEnabled(true)
 
+        val registerButton: Button = findViewById(R.id.createNewUser)
+
+        //This will redirect the user to the register page
+        registerButton.setOnClickListener(){
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
         // Will eventually need to block login when user is already logged in
         loginButton.setOnClickListener {
 
@@ -48,15 +56,15 @@ class LoginActivity : AppCompatActivity() {
                 passwordField.error = "This field is required"
             }
 
-                val url = "http://IP_ADDRESS_HERE:8000/loginEndpoint/"
+                val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/loginEndpoint/"
 
                 val registrationPost = OkHttpClient()
 
                 val mediaType = "application/json".toMediaTypeOrNull()
 
                 val body = ("{\r\n" +
-                        "    \"username\": \"${findViewById<TextView>(R.id.usernameText).text}\",\r\n" +
-                        "    \"password\": \"${findViewById<TextView>(R.id.passwordText).text}\"\r\n" +
+                        "    \"username\": \"${usernameField.text}\",\r\n" +
+                        "    \"password\": \"${passwordField.text}\"\r\n" +
                         "}").trimIndent().toRequestBody(mediaType)
 
                 val request = Request.Builder()
@@ -95,4 +103,3 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 }
-class HomePage(val token: String)
