@@ -33,7 +33,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
-        val goToWelcomePage = Intent(this, WelcomeActivity::class.java)
+        val goToWelcomePage = Intent(this, HomePageActivity::class.java)
 
         val actionBar = supportActionBar
 
