@@ -32,20 +32,16 @@
         </activity>
         <activity
             android:name=".home.HomePageActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".login.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-<!--        <activity-->
-<!--            android:name=".LoginActivity"-->
-<!--            android:exported="true"-->
-<!--            android:parentActivityName=".MainActivity">-->
-<!--            <meta-data-->
-<!--                android:name="android.app.lib_name"-->
-<!--                android:value="" />-->
-<!--        </activity>-->
         <activity
             android:name=".signup.SignUpActivity"
             android:exported="true"
