@@ -1,4 +1,4 @@
-package com.codenode.budgetlens
+package com.codenode.budgetlens.googlelogin
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -9,6 +9,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import android.content.Intent
 import android.view.View
 import android.widget.Button
+import com.codenode.budgetlens.login.LoginActivity
+import com.codenode.budgetlens.R
 
 
 class GoogleLoginSecondActivity : AppCompatActivity() {

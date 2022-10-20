@@ -1,4 +1,4 @@
-package com.codenode.budgetlens
+package com.codenode.budgetlens.googlelogin
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -9,6 +9,7 @@ import android.content.Intent
 import android.widget.ImageView
 import com.google.android.gms.common.api.ApiException
 import android.widget.Toast
+import com.codenode.budgetlens.R
 
 class GoogleLoginActivity : AppCompatActivity() {
     var mGoogleSignInClient: GoogleSignInClient? = null

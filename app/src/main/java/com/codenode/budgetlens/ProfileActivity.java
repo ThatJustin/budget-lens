@@ -36,47 +36,6 @@ public class ProfileActivity extends AppCompatActivity {
          }
       });
 
-      Button confirmButton = findViewById(R.id.confirm);
-      confirmButton.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            Intent intent = new Intent(ProfileActivity.this,WalkActivity.class);
-            intent.putExtra("flag","true");
-            /*Bundle bundle=new Bundle();
-            bundle.putString("flag", "true");
-            intent.putExtras(bundle);*/
-            startActivity(intent);
-         }
-      });
-
-      home.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            Intent intent = new Intent(ProfileActivity.this,MainActivity.class);
-            startActivity(intent);
-         }
-      });
-      dashboard.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            Intent intent = new Intent(ProfileActivity.this,DashboardActivity.class);
-            startActivity(intent);
-         }
-      });
-      notification.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            Intent intent = new Intent(ProfileActivity.this,NotificationActivity.class);
-            startActivity(intent);
-         }
-      });
-      walk.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View v) {
-            Intent intent = new Intent(ProfileActivity.this,WalkActivity.class);
-            startActivity(intent);
-         }
-      });
    }
 
 

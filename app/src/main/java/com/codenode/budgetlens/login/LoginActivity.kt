@@ -1,4 +1,4 @@
-package com.codenode.budgetlens
+package com.codenode.budgetlens.login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -11,10 +11,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import android.util.Log
 import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import com.codenode.budgetlens.BuildConfig
+import com.codenode.budgetlens.HomePageActivity
+import com.codenode.budgetlens.R
+import com.codenode.budgetlens.SignUpActivity
+import com.codenode.budgetlens.googlelogin.GoogleLoginSecondActivity
 import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
