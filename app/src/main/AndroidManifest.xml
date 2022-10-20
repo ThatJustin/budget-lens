@@ -62,6 +62,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.codenode.budgetlens.ProfileActivity" />
+        <activity android:name="com.codenode.budgetlens.DashboardActivity" />
+        <activity android:name="com.codenode.budgetlens.WalkActivity"
+            android:theme="@style/Theme.BudgetLens"/>
+        <activity android:name="com.codenode.budgetlens.NotificationActivity" />
     </application>
 
 </manifest>
