@@ -1,4 +1,4 @@
-package com.codenode.budgetlens
+package com.codenode.budgetlens.signup
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -8,6 +8,9 @@ import android.util.Patterns
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.codenode.budgetlens.BuildConfig
+import com.codenode.budgetlens.R
+import com.codenode.budgetlens.home.HomePageActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.i18n.phonenumbers.PhoneNumberUtil
 import okhttp3.*

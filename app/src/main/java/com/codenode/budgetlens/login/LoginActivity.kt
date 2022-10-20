@@ -12,10 +12,10 @@ import com.google.android.gms.common.api.ApiException
 import android.util.Log
 import android.widget.Button
 import com.codenode.budgetlens.BuildConfig
-import com.codenode.budgetlens.HomePageActivity
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.SignUpActivity
-import com.codenode.budgetlens.googlelogin.GoogleLoginSecondActivity
+import com.codenode.budgetlens.login.googlelogin.GoogleLoginSecondActivity
+import com.codenode.budgetlens.home.HomePageActivity
+import com.codenode.budgetlens.signup.SignUpActivity
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -37,9 +37,9 @@ class LoginActivity : AppCompatActivity() {
 
         val actionBar = supportActionBar
 
-        usernameField = findViewById<TextInputEditText>(R.id.usernameText)
+        usernameField = findViewById(R.id.usernameText)
 
-        passwordField = findViewById<TextInputEditText>(R.id.passwordText)
+        passwordField = findViewById(R.id.passwordText)
 
         actionBar!!.title = "Login"
 
@@ -48,7 +48,7 @@ class LoginActivity : AppCompatActivity() {
         val registerButton: Button = findViewById(R.id.createNewUser)
 
         //This will redirect the user to the register page
-        registerButton.setOnClickListener(){
+        registerButton.setOnClickListener() {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
@@ -56,10 +56,10 @@ class LoginActivity : AppCompatActivity() {
         // Will eventually need to block login when user is already logged in
         loginButton.setOnClickListener {
 
-            if(usernameField.length() == 0){
+            if (usernameField.length() == 0) {
                 usernameField.error = "This field is required"
             }
-            if(passwordField.length() == 0){
+            if (passwordField.length() == 0) {
                 passwordField.error = "This field is required"
             }
 
@@ -93,8 +93,7 @@ class LoginActivity : AppCompatActivity() {
                             if (body != null) {
                                 Log.i("Successful", body)
                                 startActivity(goToHomePageActivity)
-                            }
-                            else{
+                            } else {
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")
                             }
 
@@ -113,7 +112,7 @@ class LoginActivity : AppCompatActivity() {
             .build()
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
         val account = GoogleSignIn.getLastSignedInAccount(this)
-        if(account!=null){
+        if (account != null) {
             navigateToSecondActivity()
         }
         val signInButton = findViewById<ImageView>(R.id.google_sign_in)
@@ -128,8 +127,8 @@ class LoginActivity : AppCompatActivity() {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-         if (requestCode == RC_SIGN_IN) {
-             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 task.getResult(ApiException::class.java)
                 navigateToSecondActivity()
