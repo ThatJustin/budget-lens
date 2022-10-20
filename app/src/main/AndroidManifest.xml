@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".login.googlelogin.GoogleLoginSecondActivity"
+            android:name=".login.google_login.GoogleLoginSecondActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -32,7 +32,7 @@
         </activity>
 
         <activity
-            android:name=".login.passwordreset.CodeConfimationActivity"
+            android:name=".login.password_reset.CodeConfirmationActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -66,49 +66,16 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
-            android:name=".login.googlelogin.GoogleLoginSecondActivity"
+            android:name=".login.password_reset.NewPasswordActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".login.passwordreset.NewPasswordActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".login.LoginActivity"
-            android:exported="true"
-            android:parentActivityName=".MainActivity">
-
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".login.passwordreset.PasswordResetActivity"
+            android:name=".login.password_reset.PasswordResetActivity"
             android:exported="false"
-            android:parentActivityName=".login.LoginActivity">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".home.HomePageActivity"
-            android:exported="false"
-            android:parentActivityName=".login.LoginActivity">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".signup.SignUpActivity"
-            android:exported="true"
             android:parentActivityName=".login.LoginActivity">
             <meta-data
                 android:name="android.app.lib_name"

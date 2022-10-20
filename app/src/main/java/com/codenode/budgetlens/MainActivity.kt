@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
@@ -18,6 +19,5 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
-
     }
 }

@@ -13,7 +13,8 @@ import android.util.Log
 import android.widget.Button
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.login.googlelogin.GoogleLoginSecondActivity
+import com.codenode.budgetlens.common.CommonComponents
+import com.codenode.budgetlens.login.google_login.GoogleLoginSecondActivity
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.signup.SignUpActivity
 import com.google.android.material.textfield.TextInputEditText
@@ -23,7 +24,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
-    var mGoogleSignInClient: GoogleSignInClient? = null
+    private var mGoogleSignInClient: GoogleSignInClient? = null
     private lateinit var usernameField: TextInputEditText
 
     private lateinit var passwordField: TextInputEditText
@@ -41,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
         val registerButton: Button = findViewById(R.id.createNewUser)
 
         //This will redirect the user to the register page
-        registerButton.setOnClickListener() {
+        registerButton.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
         }
@@ -82,9 +83,9 @@ class LoginActivity : AppCompatActivity() {
                     Log.i("Response", "Got the response from server")
                     response.use {
                         if (response.isSuccessful) {
-                            val body = response.body?.string()
-                            if (body != null) {
-                                Log.i("Successful", body)
+                            val responseBody = response.body?.string()
+                            if (responseBody != null) {
+                                Log.i("Successful", responseBody)
                                 startActivity(goToHomePageActivity)
                             } else {
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")
