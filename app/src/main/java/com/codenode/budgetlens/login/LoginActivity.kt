@@ -35,15 +35,8 @@ class LoginActivity : AppCompatActivity() {
 
         val loginButton: Button = findViewById(R.id.checkCredentials)
 
-        val actionBar = supportActionBar
-
         usernameField = findViewById(R.id.usernameText)
-
         passwordField = findViewById(R.id.passwordText)
-
-        actionBar!!.title = "Login"
-
-        actionBar.setDisplayHomeAsUpEnabled(true)
 
         val registerButton: Button = findViewById(R.id.createNewUser)
 

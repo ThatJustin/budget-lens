@@ -13,9 +13,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val loginActivityBtn: ImageButton = findViewById(R.id.LoginActivityBtn)
-        val actionBar = supportActionBar
 
-        actionBar!!.title = "Welcome to BudgetLens"
         loginActivityBtn.setOnClickListener() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)

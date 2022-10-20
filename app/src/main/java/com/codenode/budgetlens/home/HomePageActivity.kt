@@ -52,7 +52,6 @@ open class HomePageActivity() : AppCompatActivity() {
                     val dateOfBirth = dialogView.findViewById<View>(R.id.dateOfBirth) as TextView
                     dateOfBirth.setOnClickListener { initCalendar(dateOfBirth) }
 
-
                     true
                 }
                 else -> false

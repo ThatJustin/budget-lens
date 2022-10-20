@@ -38,12 +38,6 @@ class SignUpActivity : AppCompatActivity() {
 
         val goToWelcomePage = Intent(this, HomePageActivity::class.java)
 
-        val actionBar = supportActionBar
-
-        actionBar!!.title = "Sign Up"
-
-        actionBar.setDisplayHomeAsUpEnabled(true)
-
         // Initialize Text Fields
         emailField = findViewById(R.id.email)
         firstNameField = findViewById(R.id.firstName)
