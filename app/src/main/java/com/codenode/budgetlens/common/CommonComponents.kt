@@ -1,12 +1,15 @@
 package com.codenode.budgetlens.common
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.home.HomePageActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
@@ -14,41 +17,56 @@ import java.util.*
 class CommonComponents {
     companion object {
 
-        fun handleNavigationBar(view: View) {
-            val myBottomNavigationView = view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        /**
+         * Handles navigation bar on every page page that has it.
+         * Each activity must have a BottomNavigationView with the "bottom_navigation" as its id or it will crash.
+         */
+        fun handleNavigationBar(currentActivityName: ActivityName, context: Context, view: View) {
+            val activity: Activity = context as Activity
+
+            val myBottomNavigationView =
+                view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
             myBottomNavigationView.setOnItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.home -> {
-                        // Goes nowhere, we're already there
+                        if (currentActivityName != ActivityName.HOME) {
+                            val intent = Intent(context, HomePageActivity::class.java)
+                            context.startActivity(intent)
+                            activity.overridePendingTransition(0, 0)
+                        }
                         true
                     }
                     R.id.receipt -> {
-                        // Respond to navigation item 2 click
-//                    val intent = Intent(this, ReceiptActivity::class.java)
-//                    startActivity(intent)
-//                    overridePendingTransition(0,0)
+                        if (currentActivityName != ActivityName.RECEIPT) {
+//                            val intent = Intent(context, ReceiptActivity::class.java)
+//                            context.startActivity(intent)
+//                            activity.overridePendingTransition(0, 0)
+                        }
                         true
                     }
                     R.id.budget -> {
-                        // Respond to navigation item 2 click
-//                    val intent = Intent(this, BudgetActivity::class.java)
-//                    startActivity(intent)
-//                    overridePendingTransition(0,0)
+                        if (currentActivityName != ActivityName.BUDGET) {
+//                            val intent = Intent(context, BudgetActivity::class.java)
+//                            context.startActivity(intent)
+//                            activity.overridePendingTransition(0, 0)
+                        }
                         true
                     }
                     R.id.friends -> {
-                        // Respond to navigation item 2 click
-//                    val intent = Intent(this, FriendsActivity::class.java)
-//                    startActivity(intent)
-//                    overridePendingTransition(0,0)
+                        if (currentActivityName != ActivityName.FRIENDS) {
+//                            val intent = Intent(context, FriendsActivity::class.java)
+//                            context.startActivity(intent)
+//                            activity.overridePendingTransition(0, 0)
+                        }
                         true
                     }
                     R.id.calendar -> {
-                        // Respond to navigation item 2 click
-//                    val intent = Intent(this, CalendarActivity::class.java)
-//                    startActivity(intent)
-//                    overridePendingTransition(0,0)
+                        if (currentActivityName != ActivityName.CALENDAR) {
+//                            val intent = Intent(context, CalendarActivity::class.java)
+//                            context.startActivity(intent)
+//                            activity.overridePendingTransition(0, 0)
+                        }
                         true
                     }
 
@@ -57,6 +75,10 @@ class CommonComponents {
             }
         }
 
+        /**
+         * Handles top app bar bar on every page page that has it.
+         * Each activity must have a AppBarLayout with an MaterialToolbar using he "topAppBar" as its id or it will crash.
+         */
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
             val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar);
             topAppBar.setNavigationOnClickListener {
@@ -79,12 +101,14 @@ class CommonComponents {
                         val dialogView: View =
                             layoutInflater.inflate(R.layout.edit_profile_dialog, null)
                         builder.setView(dialogView)
-                        var dialog = builder.create()
+                        val dialog = builder.create()
                         dialog.show()
 
                         val dateOfBirth =
                             dialogView.findViewById<View>(R.id.dateOfBirth) as TextView
                         dateOfBirth.setOnClickListener { initCalendar(context, dateOfBirth) }
+
+                        // Handle more events for the edit profile UI here
 
                         true
                     }
@@ -108,5 +132,4 @@ class CommonComponents {
             dialog.show()
         }
     }
-
 }
