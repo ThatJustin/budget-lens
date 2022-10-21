@@ -62,7 +62,7 @@ android {
         debug {
             testCoverageEnabled true
             buildConfigField('String', 'ADDRESS', "\"${InetAddress.localHost.getCanonicalHostName()}\"")
-            buildConfigField('String', 'PORT', "\"53082\"")
+            buildConfigField('String', 'PORT', "\"8000\"")
         }
         release {
             debuggable true
