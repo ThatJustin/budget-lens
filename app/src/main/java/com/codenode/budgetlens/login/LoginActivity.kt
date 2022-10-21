@@ -16,6 +16,7 @@ import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
+import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.login.google_login.GoogleLoginSecondActivity
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.signup.SignUpActivity
@@ -96,13 +97,13 @@ class LoginActivity : AppCompatActivity() {
                                 //Save it using EncryptedSharedPreferences
                                 BearerToken.saveToken(token, context)
                                 Log.i("Successful", "Login successful.")
+                                UserProfile.loadProfileFromAPI(context)
                                 startActivity(goToHomePageActivity)
                             } else {
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")
                             }
 
                         } else {
-                            println("failed to login")
                             Log.e(
                                 "Error",
                                 "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
@@ -150,9 +151,6 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun loadUserProfile() {
-
-    }
     companion object {
         private const val RC_SIGN_IN = 100
     }

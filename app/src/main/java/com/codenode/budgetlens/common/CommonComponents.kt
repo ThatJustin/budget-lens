@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -47,9 +48,7 @@ class CommonComponents {
                     }
                     R.id.budget -> {
                         if (currentActivityName != ActivityName.BUDGET) {
-//                            val intent = Intent(context, BudgetActivity::class.java)
-//                            context.startActivity(intent)
-//                            activity.overridePendingTransition(0, 0)
+                            //Might open a menu?
                         }
                         true
                     }
@@ -81,6 +80,15 @@ class CommonComponents {
          */
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
             val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar);
+
+            //Set the name of the profile to the first sub menu item
+            val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
+            if (subProfile != null) {
+                subProfile.title =
+                    UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
+            }
+
+
             topAppBar.setNavigationOnClickListener {
                 // Handle navigation icon press
             }

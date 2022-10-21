@@ -13,8 +13,8 @@ open class HomePageActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
 
-        CommonComponents.handleNavigationBar(ActivityName.HOME, this, this.window.decorView)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
+        CommonComponents.handleNavigationBar(ActivityName.HOME, this, this.window.decorView)
 
         onBackPressedDispatcher.addCallback(
             this /* lifecycle owner */,
