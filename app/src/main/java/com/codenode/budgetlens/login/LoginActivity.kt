@@ -1,5 +1,6 @@
 package com.codenode.budgetlens.login
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,7 @@ import android.util.Log
 import android.widget.Button
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.login.google_login.GoogleLoginSecondActivity
 import com.codenode.budgetlens.home.HomePageActivity
@@ -21,6 +23,7 @@ import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
 import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
@@ -32,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        val context = this as Context
         val goToHomePageActivity = Intent(this, HomePageActivity::class.java)
 
         val loginButton: Button = findViewById(R.id.checkCredentials)
@@ -85,13 +89,20 @@ class LoginActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                Log.i("Successful", responseBody)
+                                val jsonObject = JSONObject(responseBody.toString())
+                                //Parse the bearer token from response
+                                val token = jsonObject.getString("token")
+
+                                //Save it using EncryptedSharedPreferences
+                                BearerToken.saveToken(token, context)
+                                Log.i("Successful", "Login successful.")
                                 startActivity(goToHomePageActivity)
                             } else {
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")
                             }
 
                         } else {
+                            println("failed to login")
                             Log.e(
                                 "Error",
                                 "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
@@ -139,6 +150,9 @@ class LoginActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun loadUserProfile() {
+
+    }
     companion object {
         private const val RC_SIGN_IN = 100
     }
