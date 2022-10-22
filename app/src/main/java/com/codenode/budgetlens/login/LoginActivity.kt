@@ -94,10 +94,11 @@ class LoginActivity : AppCompatActivity() {
                                 //Parse the bearer token from response
                                 val token = jsonObject.getString("token")
 
-                                //Save it using EncryptedSharedPreferences
+                                //Save token and load profile (if it already exists, it just updates )
                                 BearerToken.saveToken(token, context)
-                                Log.i("Successful", "Login successful.")
                                 UserProfile.loadProfileFromAPI(context)
+
+                                Log.i("Successful", "Login successful.")
                                 startActivity(goToHomePageActivity)
                             } else {
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")

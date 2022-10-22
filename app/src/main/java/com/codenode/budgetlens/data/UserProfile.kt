@@ -32,7 +32,6 @@ class UserProfile {
                 userProfile.email = profile.email
                 userProfile.telephoneNumber = profile.telephoneNumber
             }
-
         }
 
         fun loadProfileFromAPI(context: Context) {
@@ -65,19 +64,19 @@ class UserProfile {
                                 val lastName = jsonObject.getString("last_name")
                                 val email = jsonObject.getString("email")
                                 val telephoneNumber = jsonObject.getString("telephone_number")
-                                userProfile.isLoaded = true;
-                                userProfile.username = username
-                                userProfile.firstName = firstName
-                                userProfile.lastName = lastName
-                                userProfile.email = email
-                                userProfile.telephoneNumber = telephoneNumber
 
                                 //After loading from API, save it to shared preference for persistence
+                                //and update the user profile
+                                updateProfile(
+                                    false,
+                                    username,
+                                    firstName,
+                                    lastName,
+                                    email,
+                                    telephoneNumber,
+                                    context
+                                )
 
-                                val preferences: SharedPreferences =
-                                    GlobalSharedPreferences.get(context)
-                                val json = Gson().toJson(userProfile);
-                                preferences.edit().putString("UserProfile", json).apply()
                                 Log.i("Successful", "Successfully loaded profile from API.")
                             } else {
                                 Log.i("Error", "Something went wrong${response.body?.string()}")
@@ -95,12 +94,20 @@ class UserProfile {
             })
         }
 
+        /**
+         * Updates the profile.
+         * If a user registers updateBackend should be false.
+         * If a user modifies it themselves through the app,
+         * updateBackend should be true to update the backend.
+         */
         fun updateProfile(
+            updateBackend: Boolean = false,
             username: String,
             firstName: String,
             lastName: String,
             email: String,
-            telephoneNumber: String, context: Context
+            telephoneNumber: String,
+            context: Context
         ) {
 
             userProfile.username = username
@@ -114,9 +121,12 @@ class UserProfile {
             val json = Gson().toJson(userProfile);
             preferences.edit().putString("UserProfile", json).apply()
 
-            //TODO send the http request to update backend
+            //We only need to update the backend if the user is modifying it themselves
+            if (updateBackend) {
+                //TODO send the http request to update backend
 
 
+            }
         }
     }
 }
