@@ -1,4 +1,4 @@
-package com.codenode.budgetlens
+package com.codenode.budgetlens.login.google_login
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -9,14 +9,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import android.content.Intent
 import android.view.View
 import android.widget.Button
+import com.codenode.budgetlens.login.LoginActivity
+import com.codenode.budgetlens.R
 
 
 class GoogleLoginSecondActivity : AppCompatActivity() {
-    private lateinit var email:TextView
-    private lateinit var name:TextView
-    private lateinit var signOutBtn:Button
+    private lateinit var email: TextView
+    private lateinit var name: TextView
+    private lateinit var signOutBtn: Button
     private var gso: GoogleSignInOptions? = null
     private var gsc: GoogleSignInClient? = null
+
     //var name: TextView? = null
     //var email: TextView? = null
     //var signOutBtn: Button? = null

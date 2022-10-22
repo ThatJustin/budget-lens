@@ -1,13 +1,13 @@
-package com.codenode.budgetlens
+package com.codenode.budgetlens.login.password_reset
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import com.codenode.budgetlens.R
 import com.codenode.budgetlens.databinding.ActivityCodeConfimationBinding
-import com.codenode.budgetlens.databinding.ActivityPasswordResetBinding
 
-class CodeConfimationActivity : AppCompatActivity() {
+class CodeConfirmationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCodeConfimationBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

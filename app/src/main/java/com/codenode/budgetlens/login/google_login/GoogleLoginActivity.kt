@@ -1,4 +1,4 @@
-package com.codenode.budgetlens
+package com.codenode.budgetlens.login.google_login
 
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -9,9 +9,10 @@ import android.content.Intent
 import android.widget.ImageView
 import com.google.android.gms.common.api.ApiException
 import android.widget.Toast
+import com.codenode.budgetlens.R
 
 class GoogleLoginActivity : AppCompatActivity() {
-    var mGoogleSignInClient: GoogleSignInClient? = null
+    private var mGoogleSignInClient: GoogleSignInClient? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -24,7 +25,7 @@ class GoogleLoginActivity : AppCompatActivity() {
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         val account = GoogleSignIn.getLastSignedInAccount(this)
-        if(account!=null){
+        if (account != null) {
             navigateToSecondActivity()
         }
         // Set the dimensions of the sign-in button.

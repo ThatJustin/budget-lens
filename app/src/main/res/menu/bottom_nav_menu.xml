@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="home" />
+
+    <item
+        android:id="@+id/receipt"
+        android:icon="@drawable/ic_baseline_receipt_long_24"
+        android:title="Receipt" />
+
+    <item
+        android:id="@+id/budget"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="Budget" />
+
+    <item
+        android:id="@+id/friends"
+        android:icon="?attr/actionModeShareDrawable"
+        android:title="Friends" />
+
+    <item
+        android:id="@+id/calendar"
+        android:icon="@drawable/ic_baseline_calendar_month_24"
+        android:title="Calendar" />
+
+</menu>

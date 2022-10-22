@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/profile_icon"
+        android:icon="@drawable/ic_baseline_account_circle_70"
+        android:title="TopAppBar"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/sub_profile"
+                android:title="" />
+
+            <item
+                android:id="@+id/sub_edit_profile"
+                android:title="Edit Profile" />
+        </menu>
+
+    </item>
+
+</menu>
