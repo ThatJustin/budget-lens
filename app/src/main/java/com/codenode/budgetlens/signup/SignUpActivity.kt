@@ -1,6 +1,7 @@
 package com.codenode.budgetlens.signup
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.common.BearerToken
+import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.i18n.phonenumbers.PhoneNumberUtil
@@ -36,6 +39,7 @@ class SignUpActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
 
+        val context: Context = this;
         val goToWelcomePage = Intent(this, HomePageActivity::class.java)
 
         // Initialize Text Fields
@@ -64,13 +68,13 @@ class SignUpActivity : AppCompatActivity() {
 
                 val body = ("{\r\n" +
                         "    \"user\": {\r\n" +
-                        "        \"username\": \"${findViewById<TextView>(R.id.email).text}\",\r\n" +
-                        "        \"first_name\": \"${findViewById<TextView>(R.id.firstName).text}\",\r\n" +
-                        "        \"last_name\": \"${findViewById<TextView>(R.id.lastName).text}\",\r\n" +
-                        "        \"email\": \"${findViewById<TextView>(R.id.email).text}\",\r\n" +
-                        "        \"password\": \"${findViewById<TextView>(R.id.password).text}\"\r\n" +
+                        "        \"username\": \"${emailField.text}\",\r\n" +
+                        "        \"first_name\": \"${firstNameField.text}\",\r\n" +
+                        "        \"last_name\": \"${lastNameField.text}\",\r\n" +
+                        "        \"email\": \"${emailField.text}\",\r\n" +
+                        "        \"password\": \"${passwordField.text}\"\r\n" +
                         "    },\r\n" +
-                        "    \"telephone_number\": \"${findViewById<TextView>(R.id.telephoneNumber).text}\"\r\n" +
+                        "    \"telephone_number\": \"${telephoneField.text}\"\r\n" +
                         "}").trimIndent().toRequestBody(mediaType)
 
                 val request = Request.Builder()
@@ -88,20 +92,39 @@ class SignUpActivity : AppCompatActivity() {
                     override fun onResponse(call: Call, response: Response) {
                         Log.i("Response", "Got the response from server")
                         response.use {
-                            if (!response.isSuccessful) {
-                                val jsonDataString = response.body?.string().toString()
+                            val responseBody = response.body?.string().toString()
+                            if (response.isSuccessful) {
+                                val jsonObject = JSONObject(responseBody)
+
+                                //Parse the bearer token from response
+                                val token = jsonObject.getString("token")
+
+                                //Save token for API requests
+                                BearerToken.saveToken(token, context)
+
+                                // Update the profile from their input information
+                                UserProfile.updateProfile(
+                                    false,
+                                    /*TODO remove username idk why it's a thing
+                                     username shouldn't exist,  but nobody removed it from backend
+                                     so for now, it will just be a copy of the email*/
+                                    emailField.text.toString(),
+                                    firstNameField.text.toString(),
+                                    lastNameField.text.toString(),
+                                    emailField.text.toString(),
+                                    telephoneField.text.toString(),
+                                    context
+                                )
+                                Log.i("Successful", "Registered successfully.")
+                                startActivity(goToWelcomePage)
+                            } else {
                                 Log.e(
                                     "Error",
-                                    "Something went wrong${jsonDataString} ${response.message} ${response.headers}"
+                                    "Something went wrong${responseBody} ${response.message} ${response.headers}"
                                 )
-
-                                hasValidFieldsBackend(jsonDataString)
-                            } else {
-                                Log.i("Successful", "${response.body?.string()}")
-                                startActivity(goToWelcomePage)
+                                hasValidFieldsBackend(responseBody)
                             }
                         }
-
                     }
                 })
             }

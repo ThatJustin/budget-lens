@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">BudgetLens</string>
+    <string name="email_sent">A code has been sent to your email address</string>
+    <string name="invalide_email_address">Email address is invalid</string>
+    <string name="code_message">Code cannot be less than 6 digits</string>
     <string name="budgetlens">BudgetLens</string>
     <string name="email">E-mail Address</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
+    <string name="global_preferences">global_preferences</string>
 </resources>

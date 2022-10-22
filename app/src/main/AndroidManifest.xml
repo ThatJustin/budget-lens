@@ -24,7 +24,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".login.googlelogin.GoogleLoginSecondActivity"
+            android:name=".login.google_login.GoogleLoginSecondActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".login.password_reset.CodeConfirmationActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -42,10 +49,6 @@
             android:name=".home.HomePageActivity"
             android:exported="true"
             android:parentActivityName=".login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -58,7 +61,21 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
+        <activity
+            android:name=".login.password_reset.NewPasswordActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".login.password_reset.PasswordResetActivity"
+            android:exported="false"
+            android:parentActivityName=".login.LoginActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
     </application>
 
 </manifest>
