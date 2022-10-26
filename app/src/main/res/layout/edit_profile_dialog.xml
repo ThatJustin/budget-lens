@@ -58,6 +58,7 @@
             android:gravity="left"
             android:inputType="text"
             android:hint="first name"
+            android:drawableRight="@drawable/user"
             android:stretchColumns="0" />
 
         <EditText
@@ -67,6 +68,7 @@
             android:gravity="left"
             android:inputType="text"
             android:hint="last name"
+            android:drawableRight="@drawable/user"
             android:stretchColumns="1" />
     </TableRow>
     <TableRow
@@ -93,6 +95,7 @@
             android:clickable="true"
             android:layout_height="25dp"
             android:gravity="left"
+            android:drawableRight="@drawable/date"
             android:hint="2000/09/04"
             />
         <!--<EditText
@@ -127,6 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:gravity="left"
+            android:drawableRight="@drawable/email"
             android:hint="123456@gmail.com"
             android:inputType="textEmailAddress"
             />
@@ -155,6 +159,7 @@
             android:layout_height="match_parent"
             android:gravity="left"
             android:hint="514-332-4556"
+            android:drawableRight="@drawable/phone"
             android:inputType="phone" />
     </TableRow>
 

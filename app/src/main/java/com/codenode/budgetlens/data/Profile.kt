@@ -10,7 +10,8 @@ data class Profile(
     var firstName: String,
     var lastName: String,
     var email: String,
-    var telephoneNumber: String
+    var telephoneNumber: String,
+    var dateOfBirth:String
 ) {
-    constructor() : this(false, "", "", "", "", "")
+    constructor() : this(false, "", "", "", "", "","")
 }

@@ -6,7 +6,10 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
@@ -80,14 +83,14 @@ class CommonComponents {
          */
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
             val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar);
-
+            val prefs1=context.getSharedPreferences("data",Context.MODE_PRIVATE);
             //Set the name of the profile to the first sub menu item
             val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
             if (subProfile != null) {
-                subProfile.title =
-                    UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
+                //subProfile.title =
+                //    UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
+                subProfile.title =context.getSharedPreferences("data",Context.MODE_PRIVATE).getString("firstName","John").toString()+     context.getSharedPreferences("data",Context.MODE_PRIVATE).getString("lastName","John");
             }
-
 
             topAppBar.setNavigationOnClickListener {
                 // Handle navigation icon press
@@ -111,13 +114,52 @@ class CommonComponents {
                         builder.setView(dialogView)
                         val dialog = builder.create()
                         dialog.show()
-
+                        var firstName = dialogView.findViewById<View>(R.id.firstName) as EditText
+                        var lastName = dialogView.findViewById<View>(R.id.lastName) as EditText
+                        var email = dialogView.findViewById<View>(R.id.email) as EditText
+                        var phone = dialogView.findViewById<View>(R.id.phone) as EditText
                         val dateOfBirth =
                             dialogView.findViewById<View>(R.id.dateOfBirth) as TextView
                         dateOfBirth.setOnClickListener { initCalendar(context, dateOfBirth) }
 
+                        val prefs=context.getSharedPreferences("data",Context.MODE_PRIVATE);
+                        val firstNameShared=prefs.getString("firstName","John");
+                        val lastNameShared=prefs.getString("lastName","Smith");
+                        var phoneShared = prefs.getString("phone","5141111111");
+                        var emailShared = prefs.getString("email","johncena123@gmail.com");
+                        var dateOfBirthShared = prefs.getString("dateOfBirth","2000/09/04");
+                        firstName.setText(firstNameShared)
+                        lastName.setText(lastNameShared)
+                        phone.setText(phoneShared)
+                        email.setText(emailShared)
+                        dateOfBirth.setText(dateOfBirthShared);
                         // Handle more events for the edit profile UI here
-
+                        var confirm = dialogView.findViewById<View>(R.id.confirm) as Button
+                        confirm.setOnClickListener{
+                            Toast.makeText(context, "Update successful", Toast.LENGTH_SHORT)
+                                .show()
+                            val sp = prefs.edit()
+                            sp.putString("firstName",firstName.text.toString())
+                            sp.putString("lastName",lastName.text.toString())
+                            sp.putString("phone",phone.text.toString())
+                            sp.putString("email",email.text.toString())
+                            sp.putString("dateOfBirth",dateOfBirth.text.toString())
+                            sp.commit();
+                            dialog.dismiss();
+                        }
+//                        confirm.setOnClickListener{
+//                            UserProfile.updateProfile(
+//                                false,
+//                                firstName.text.toString()+lastName.text.toString(),
+//                                firstName.text.toString()+"",
+//                                lastName.text.toString()+"",
+//                                email.text.toString()+"",
+//                                phone.text.toString()+"",
+//                                dateOfBirth.text.toString() +"",
+//                                context
+//                            )
+//                        }
+                        //var
                         true
                     }
                     else -> false

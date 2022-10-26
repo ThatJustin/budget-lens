@@ -113,6 +113,7 @@ class SignUpActivity : AppCompatActivity() {
                                     lastNameField.text.toString(),
                                     emailField.text.toString(),
                                     telephoneField.text.toString(),
+                                    "",
                                     context
                                 )
                                 Log.i("Successful", "Registered successfully.")

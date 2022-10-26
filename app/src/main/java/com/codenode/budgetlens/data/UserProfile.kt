@@ -31,6 +31,7 @@ class UserProfile {
                 userProfile.lastName = profile.lastName
                 userProfile.email = profile.email
                 userProfile.telephoneNumber = profile.telephoneNumber
+                userProfile.dateOfBirth = profile.dateOfBirth
             }
         }
 
@@ -64,6 +65,7 @@ class UserProfile {
                                 val lastName = jsonObject.getString("last_name")
                                 val email = jsonObject.getString("email")
                                 val telephoneNumber = jsonObject.getString("telephone_number")
+                                val dateOfBirth = jsonObject.getString("dateOfBirth")
 
                                 //After loading from API, save it to shared preference for persistence
                                 //and update the user profile
@@ -74,6 +76,7 @@ class UserProfile {
                                     lastName,
                                     email,
                                     telephoneNumber,
+                                    dateOfBirth,
                                     context
                                 )
 
@@ -107,6 +110,7 @@ class UserProfile {
             lastName: String,
             email: String,
             telephoneNumber: String,
+            dateOfBirth:String,
             context: Context
         ) {
 
@@ -115,6 +119,7 @@ class UserProfile {
             userProfile.lastName = lastName
             userProfile.email = email
             userProfile.telephoneNumber = telephoneNumber
+            userProfile.dateOfBirth=dateOfBirth
 
             //Update the preference
             val preferences: SharedPreferences = GlobalSharedPreferences.get(context)
@@ -124,7 +129,56 @@ class UserProfile {
             //We only need to update the backend if the user is modifying it themselves
             if (updateBackend) {
                 //TODO send the http request to update backend
+                val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/userprofile?firstName="+firstName+
+                        "&lastName="+lastName+"&email="+email+"&telephoneNumber="+telephoneNumber+"&dateOfBirth="+dateOfBirth
 
+                val registrationPost = OkHttpClient()
+                val request = Request.Builder()
+                    .url(url)
+                    .method("GET", null)
+                    .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                    .addHeader("Content-Type", "application/json")
+                    .build()
+
+                registrationPost.newCall(request).enqueue(object : Callback {
+                    override fun onFailure(call: Call, e: IOException) {
+                        e.printStackTrace()
+                    }
+
+                    override fun onResponse(call: Call, response: Response) {
+                        Log.i("Response", "Got the response from server")
+                        response.use {
+                            if (response.isSuccessful) {
+                                val responseBody = response.body?.string()
+                                if (responseBody != null) {
+                                    val jsonObject = JSONObject(responseBody.toString())
+                                    //After loading from API, save it to shared preference for persistence
+                                    //and update the user profile
+                                    updateProfile(
+                                        false,
+                                        username,
+                                        firstName,
+                                        lastName,
+                                        email,
+                                        telephoneNumber,
+                                        dateOfBirth,
+                                        context
+                                    )
+                                    Log.i("Successful", "Successfully update profile from API.")
+                                } else {
+                                    Log.i("Error", "Something went wrong${response.body?.string()}")
+                                }
+
+                            } else {
+                                println("failed to load profile from API.")
+                                Log.e(
+                                    "Error",
+                                    "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
+                                )
+                            }
+                        }
+                    }
+                })
 
             }
         }
