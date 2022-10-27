@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.data.Profile
 import com.codenode.budgetlens.data.UserProfile
 import com.google.gson.Gson
 

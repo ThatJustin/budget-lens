@@ -1,22 +1,18 @@
 package com.codenode.budgetlens.common
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.util.*
 
 class CommonComponents {
     companion object {
@@ -25,7 +21,11 @@ class CommonComponents {
          * Handles navigation bar on every page page that has it.
          * Each activity must have a BottomNavigationView with the "bottom_navigation" as its id or it will crash.
          */
-        fun handleNavigationBar(currentActivityName: ActivityName, context: Context, view: View) {
+        fun handleNavigationBar(
+            currentActivityName: ActivityName,
+            context: Context,
+            view: View
+        ) {
             val activity: Activity = context as Activity
 
             val myBottomNavigationView =
@@ -112,75 +112,37 @@ class CommonComponents {
                         builder.setView(dialogView)
                         val dialog = builder.create()
                         dialog.show()
-                        var firstName = dialogView.findViewById<View>(R.id.firstName) as EditText
-                        var lastName = dialogView.findViewById<View>(R.id.lastName) as EditText
-                        var email = dialogView.findViewById<View>(R.id.email) as EditText
-                        var phone = dialogView.findViewById<View>(R.id.phone) as EditText
-                        val dateOfBirth =
-                            dialogView.findViewById<View>(R.id.dateOfBirth) as TextView
-                        dateOfBirth.setOnClickListener { initCalendar(context, dateOfBirth) }
 
-                        val prefs=context.getSharedPreferences("data",Context.MODE_PRIVATE);
-                        val firstNameShared=prefs.getString("firstName","John");
-                        val lastNameShared=prefs.getString("lastName","Smith");
-                        var phoneShared = prefs.getString("phone","5141111111");
-                        var emailShared = prefs.getString("email","johncena123@gmail.com");
-                        var dateOfBirthShared = prefs.getString("dateOfBirth","2000/09/04");
-                        firstName.setText(firstNameShared)
-                        lastName.setText(lastNameShared)
-                        phone.setText(phoneShared)
-                        email.setText(emailShared)
-                        dateOfBirth.setText(dateOfBirthShared);
+                        val firstName =
+                            dialogView.findViewById<View>(R.id.firstName_edit) as EditText
+                        val lastName = dialogView.findViewById<View>(R.id.lastName) as EditText
+                        val email = dialogView.findViewById<View>(R.id.email) as EditText
+                        val phone = dialogView.findViewById<View>(R.id.phone) as EditText
+
+                        firstName.setText(UserProfile.userProfile.firstName)
+                        lastName.setText(UserProfile.userProfile.lastName)
+                        phone.setText(UserProfile.userProfile.telephoneNumber)
+                        email.setText(UserProfile.userProfile.email)
+
                         // Handle more events for the edit profile UI here
-                        var confirm = dialogView.findViewById<View>(R.id.confirm) as Button
-                        confirm.setOnClickListener{
-                            Toast.makeText(context, "Update successful", Toast.LENGTH_SHORT)
-                                .show()
-                            val sp = prefs.edit()
-                            UserProfile.updateProfile(false,
-                                firstName.text.toString()+lastName.text.toString(),
+                        val confirm = dialogView.findViewById<View>(R.id.confirm) as Button
+                        confirm.setOnClickListener {
+                            UserProfile.updateProfile(
+                                true,
+                                email.text.toString(),
                                 firstName.text.toString(),
                                 lastName.text.toString(),
                                 email.text.toString(),
                                 phone.text.toString(),
-                                dateOfBirth.text.toString(),
-                                context
+                                context,
+                                dialog
                             )
-                            dialog.dismiss();
                         }
-//                        confirm.setOnClickListener{
-//                            UserProfile.updateProfile(
-//                                false,
-//                                firstName.text.toString()+lastName.text.toString(),
-//                                firstName.text.toString()+"",
-//                                lastName.text.toString()+"",
-//                                email.text.toString()+"",
-//                                phone.text.toString()+"",
-//                                dateOfBirth.text.toString() +"",
-//                                context
-//                            )
-//                        }
-                        //var
                         true
                     }
                     else -> false
                 }
             }
-        }
-
-        private fun initCalendar(context: Context, textView: TextView) {
-            val calendar = Calendar.getInstance()
-            val dialog = DatePickerDialog(
-                context,
-                { view, year, month, dayOfMonth ->
-                    val text = year.toString() + "/" + (month + 1) + "/" + dayOfMonth
-                    textView.text = text
-                },
-                calendar[Calendar.YEAR],
-                calendar[Calendar.MONTH],
-                calendar[Calendar.DAY_OF_MONTH]
-            )
-            dialog.show()
         }
     }
 }

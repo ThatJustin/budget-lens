@@ -13,9 +13,9 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:orientation="vertical"
         android:text="UserProfile"
         android:textSize="26sp"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -52,61 +52,26 @@
         android:layout_marginEnd="10dp">
 
         <EditText
-            android:id="@+id/firstName"
+            android:id="@+id/firstName_edit"
             android:layout_width="179dp"
             android:layout_height="40dp"
-            android:gravity="left"
-            android:inputType="text"
-            android:hint="first name"
             android:drawableRight="@drawable/user"
+            android:gravity="left"
+            android:hint="first name"
+            android:inputType="text"
             android:stretchColumns="0" />
 
         <EditText
             android:id="@+id/lastName"
             android:layout_width="182dp"
             android:layout_height="40dp"
-            android:gravity="left"
-            android:inputType="text"
-            android:hint="last name"
             android:drawableRight="@drawable/user"
+            android:gravity="left"
+            android:hint="last name"
+            android:inputType="text"
             android:stretchColumns="1" />
     </TableRow>
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="10dp">
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="25dp"
-            android:gravity="left"
-            android:text="Date of birth"
-            />
-    </TableRow>
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="10dp">
-
-        <TextView
-            android:id="@+id/dateOfBirth"
-            android:layout_width="wrap_content"
-            android:clickable="true"
-            android:layout_height="25dp"
-            android:gravity="left"
-            android:drawableRight="@drawable/date"
-            android:hint="2000/09/04"
-            />
-        <!--<EditText
-            android:id="@+id/dateOfBirth"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:gravity="left"
-            android:hint="2000/09/04"
-            android:inputType="date" />-->
-
-    </TableRow>
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -117,9 +82,9 @@
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:gravity="left"
-            android:text="email"
-            />
+            android:text="email" />
     </TableRow>
+
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -129,13 +94,13 @@
             android:id="@+id/email"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:gravity="left"
             android:drawableRight="@drawable/email"
+            android:gravity="left"
             android:hint="123456@gmail.com"
-            android:inputType="textEmailAddress"
-            />
+            android:inputType="textEmailAddress" />
 
     </TableRow>
+
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -148,6 +113,7 @@
             android:gravity="left"
             android:text="Phone Number" />
     </TableRow>
+
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -157,9 +123,9 @@
             android:id="@+id/phone"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:drawableRight="@drawable/phone"
             android:gravity="left"
             android:hint="514-332-4556"
-            android:drawableRight="@drawable/phone"
             android:inputType="phone" />
     </TableRow>
 
