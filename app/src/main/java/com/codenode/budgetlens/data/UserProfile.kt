@@ -8,6 +8,8 @@ import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.GlobalSharedPreferences
 import com.google.gson.Gson
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.IOException
 
@@ -86,7 +88,6 @@ class UserProfile {
                             }
 
                         } else {
-                            println("failed to load profile from API.")
                             Log.e(
                                 "Error",
                                 "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
@@ -129,13 +130,20 @@ class UserProfile {
             //We only need to update the backend if the user is modifying it themselves
             if (updateBackend) {
                 //TODO send the http request to update backend
-                val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/userprofile?firstName="+firstName+
-                        "&lastName="+lastName+"&email="+email+"&telephoneNumber="+telephoneNumber+"&dateOfBirth="+dateOfBirth
+                val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/userprofile"
 
                 val registrationPost = OkHttpClient()
+                val mediaType = "application/json".toMediaTypeOrNull()
+
+                val body = ("{\r\n" +
+                        "    \"firstName\": \"${firstName}\",\r\n" +
+                        "    \"lastName\": \"${lastName}\"\r\n" +
+                        "    \"email\": \"${email}\"\r\n" +
+                        "    \"telephoneNumber\": \"${telephoneNumber}\"\r\n" +
+                        "}").trimIndent().toRequestBody(mediaType)
                 val request = Request.Builder()
                     .url(url)
-                    .method("GET", null)
+                    .method("POST", body)
                     .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
                     .addHeader("Content-Type", "application/json")
                     .build()
@@ -154,23 +162,12 @@ class UserProfile {
                                     val jsonObject = JSONObject(responseBody.toString())
                                     //After loading from API, save it to shared preference for persistence
                                     //and update the user profile
-                                    updateProfile(
-                                        false,
-                                        username,
-                                        firstName,
-                                        lastName,
-                                        email,
-                                        telephoneNumber,
-                                        dateOfBirth,
-                                        context
-                                    )
                                     Log.i("Successful", "Successfully update profile from API.")
                                 } else {
                                     Log.i("Error", "Something went wrong${response.body?.string()}")
                                 }
 
                             } else {
-                                println("failed to load profile from API.")
                                 Log.e(
                                     "Error",
                                     "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"

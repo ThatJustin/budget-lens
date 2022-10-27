@@ -83,13 +83,11 @@ class CommonComponents {
          */
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
             val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar);
-            val prefs1=context.getSharedPreferences("data",Context.MODE_PRIVATE);
             //Set the name of the profile to the first sub menu item
             val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
             if (subProfile != null) {
-                //subProfile.title =
-                //    UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
-                subProfile.title =context.getSharedPreferences("data",Context.MODE_PRIVATE).getString("firstName","John").toString()+     context.getSharedPreferences("data",Context.MODE_PRIVATE).getString("lastName","John");
+                subProfile.title =
+                    UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
             }
 
             topAppBar.setNavigationOnClickListener {
@@ -139,12 +137,15 @@ class CommonComponents {
                             Toast.makeText(context, "Update successful", Toast.LENGTH_SHORT)
                                 .show()
                             val sp = prefs.edit()
-                            sp.putString("firstName",firstName.text.toString())
-                            sp.putString("lastName",lastName.text.toString())
-                            sp.putString("phone",phone.text.toString())
-                            sp.putString("email",email.text.toString())
-                            sp.putString("dateOfBirth",dateOfBirth.text.toString())
-                            sp.commit();
+                            UserProfile.updateProfile(false,
+                                firstName.text.toString()+lastName.text.toString(),
+                                firstName.text.toString(),
+                                lastName.text.toString(),
+                                email.text.toString(),
+                                phone.text.toString(),
+                                dateOfBirth.text.toString(),
+                                context
+                            )
                             dialog.dismiss();
                         }
 //                        confirm.setOnClickListener{
