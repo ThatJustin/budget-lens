@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="option">
+        <item>IGA</item>
+        <item>Costco</item>
+        <item>Walmart</item>
+        <item>Subway</item>
+    </string-array>
+</resources>
