@@ -1,10 +1,10 @@
 package com.codenode.budgetlens.login.password_reset
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Patterns
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.databinding.ActivityPasswordResetBinding
 

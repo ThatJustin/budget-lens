@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
@@ -105,15 +104,13 @@ class SignUpActivity : AppCompatActivity() {
                                 // Update the profile from their input information
                                 UserProfile.updateProfile(
                                     false,
-                                    /*TODO remove username idk why it's a thing
-                                     username shouldn't exist,  but nobody removed it from backend
-                                     so for now, it will just be a copy of the email*/
                                     emailField.text.toString(),
                                     firstNameField.text.toString(),
                                     lastNameField.text.toString(),
                                     emailField.text.toString(),
                                     telephoneField.text.toString(),
-                                    context
+                                    context,
+                                    null
                                 )
                                 Log.i("Successful", "Registered successfully.")
                                 startActivity(goToWelcomePage)
@@ -167,10 +164,8 @@ class SignUpActivity : AppCompatActivity() {
                 var telephoneNumber = json.getJSONArray("telephone_number").toString()
                 telephoneNumber = telephoneNumber.substringAfter("\"").substringBefore("\"")
                 telephoneField.error = telephoneNumber
-
             }
         }
-
     }
 
     private fun hasValidFieldsFrontend(): Boolean {

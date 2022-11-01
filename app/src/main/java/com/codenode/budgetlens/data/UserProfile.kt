@@ -2,7 +2,11 @@ package com.codenode.budgetlens.data
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.GlobalSharedPreferences
@@ -74,19 +78,22 @@ class UserProfile {
                                     lastName,
                                     email,
                                     telephoneNumber,
-                                    context
+                                    context,
+                                    null
                                 )
 
                                 Log.i("Successful", "Successfully loaded profile from API.")
                             } else {
-                                Log.i("Error", "Something went wrong${response.body?.string()}")
+                                Log.i(
+                                    "Error",
+                                    "Something went wrong ${response.message} ${response.headers}"
+                                )
                             }
 
                         } else {
-                            println("failed to load profile from API.")
                             Log.e(
                                 "Error",
-                                "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
+                                "Something went wrong ${response.message} ${response.headers}"
                             )
                         }
                     }
@@ -96,37 +103,122 @@ class UserProfile {
 
         /**
          * Updates the profile.
-         * If a user registers updateBackend should be false.
-         * If a user modifies it themselves through the app,
-         * updateBackend should be true to update the backend.
+         * If a user is editing the profile via the dialog, isUpdatingBackend should be true, false otherwise.
          */
         fun updateProfile(
-            updateBackend: Boolean = false,
+            isUpdatingBackend: Boolean = false,
             username: String,
             firstName: String,
             lastName: String,
             email: String,
             telephoneNumber: String,
-            context: Context
+            context: Context,
+            dialog: AlertDialog?
         ) {
+            if (isUpdatingBackend) {
+                //Handles updating profile from the profile edit dialog.
+                updateUserProfileAPI(
+                    username,
+                    firstName,
+                    lastName,
+                    email,
+                    telephoneNumber,
+                    context, dialog
+                )
+            } else {
+                //Handles updating profile from a login via fetching from api
+                userProfile.username = username
+                userProfile.firstName = firstName
+                userProfile.lastName = lastName
+                userProfile.email = email
+                userProfile.telephoneNumber = telephoneNumber
+                updateSharedPreferences(context)
+            }
+        }
 
-            userProfile.username = username
-            userProfile.firstName = firstName
-            userProfile.lastName = lastName
-            userProfile.email = email
-            userProfile.telephoneNumber = telephoneNumber
-
+        /**
+         * Updates shared preferences for user profile.
+         */
+        private fun updateSharedPreferences(context: Context) {
             //Update the preference
             val preferences: SharedPreferences = GlobalSharedPreferences.get(context)
             val json = Gson().toJson(userProfile);
             preferences.edit().putString("UserProfile", json).apply()
+        }
 
-            //We only need to update the backend if the user is modifying it themselves
-            if (updateBackend) {
-                //TODO send the http request to update backend
+        private fun updateUserProfileAPI(
+            username: String,
+            firstName: String,
+            lastName: String,
+            email: String,
+            telephoneNumber: String,
+            context: Context, dialog: AlertDialog?
+        ) {
+            val registrationPost = OkHttpClient()
+            val body: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("username", username)
+                .addFormDataPart("first_name", firstName)
+                .addFormDataPart("last_name", lastName)
+                .addFormDataPart("email", email)
+                .addFormDataPart("telephone_number", telephoneNumber)
+                .build()
 
+            val request = Request.Builder()
+                .url("http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/userprofile/")
+                .method("PUT", body)
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .addHeader("Content-Type", "text/plain")
+                .build()
 
-            }
+            registrationPost.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    Log.i("Response", "Got the response from server")
+                    response.use {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body?.string()
+                            if (responseBody != null) {
+                                userProfile.username = username
+                                userProfile.firstName = firstName
+                                userProfile.lastName = lastName
+                                userProfile.email = email
+                                userProfile.telephoneNumber = telephoneNumber
+                                updateSharedPreferences(context)
+
+                                Handler(Looper.getMainLooper()).post {
+                                    Toast.makeText(
+                                        context,
+                                        "Update successful.",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                dialog?.dismiss()
+
+                                Log.i("Successful", "Successfully update profile from API.")
+                            } else {
+                                Handler(Looper.getMainLooper()).post {
+                                    Toast.makeText(context, "Update failed.", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                                Log.i(
+                                    "Error",
+                                    "Something went wrong ${response.message} ${response.headers}"
+                                )
+                            }
+
+                        } else {
+                            Log.e(
+                                "Error",
+                                "Something went wrong$ ${response.message} ${response.headers}"
+                            )
+                        }
+                    }
+                }
+            })
         }
     }
 }
