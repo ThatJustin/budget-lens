@@ -5,13 +5,13 @@
     <item
         android:id="@+id/profile_icon"
         android:icon="@drawable/ic_baseline_account_circle_70"
-        android:title="TopAppBar"
+        android:title="Test"
         app:showAsAction="always">
 
         <menu>
             <item
                 android:id="@+id/sub_profile"
-                android:title="" />
+                android:title="John Smith" />
 
             <item
                 android:id="@+id/sub_edit_profile"

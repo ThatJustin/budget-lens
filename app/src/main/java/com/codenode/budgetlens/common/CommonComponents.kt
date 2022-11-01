@@ -58,7 +58,7 @@ class CommonComponents {
                     R.id.budget -> {
                         if (currentActivityName != ActivityName.BUDGET) {
                             //Might open a menu?
-                            showPopup(myBottomNavigationView,context,activity)
+                            showPopup(myBottomNavigationView, context, activity)
                         }
                         true
                     }
@@ -84,7 +84,7 @@ class CommonComponents {
             }
         }
 
-        private fun showPopup(view: View,context: Context,activity:Activity) {
+        private fun showPopup(view: View, context: Context, activity: Activity) {
             var popup: PopupMenu? = null;
             popup = PopupMenu(context, view)
             popup.inflate(R.menu.popup_menu)
@@ -148,7 +148,7 @@ class CommonComponents {
                         dialog.show()
 
                         val firstName =
-                            dialogView.findViewById<View>(R.id.firstName) as EditText
+                        dialogView.findViewById<View>(R.id.firstName_edit) as EditText
                         val lastName = dialogView.findViewById<View>(R.id.lastName) as EditText
                         val email = dialogView.findViewById<View>(R.id.email) as EditText
                         val phone = dialogView.findViewById<View>(R.id.phone) as EditText
@@ -168,7 +168,8 @@ class CommonComponents {
                                 lastName.text.toString(),
                                 email.text.toString(),
                                 phone.text.toString(),
-                                context
+                                context,
+                                dialog
                             )
                         }
                         true
