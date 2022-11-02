@@ -22,6 +22,16 @@ open class Receipt() : AppCompatActivity() {
             initCalendar(this,date)
         }
 
+        val warranties = findViewById<TextView>(R.id.warranties)
+        warranties.setOnClickListener{
+            initCalendar(this,warranties)
+        }
+        var returnDate = findViewById<TextView>(R.id.returnDate)
+        returnDate.setOnClickListener{
+            initCalendar(this,returnDate)
+        }
+
+
         val filledButton = findViewById<Button>(R.id.filledButton)
         filledButton.setOnClickListener {
             finish()

@@ -52,13 +52,14 @@ class CommonComponents {
 //                            val intent = Intent(context, ReceiptActivity::class.java)
 //                            context.startActivity(intent)
 //                            activity.overridePendingTransition(0, 0)
+                            showPopup(myBottomNavigationView, context, activity)
                         }
                         true
                     }
                     R.id.budget -> {
                         if (currentActivityName != ActivityName.BUDGET) {
                             //Might open a menu?
-                            showPopup(myBottomNavigationView, context, activity)
+
                         }
                         true
                     }
@@ -148,7 +149,7 @@ class CommonComponents {
                         dialog.show()
 
                         val firstName =
-                        dialogView.findViewById<View>(R.id.firstName_edit) as EditText
+                            dialogView.findViewById<View>(R.id.firstName_edit) as EditText
                         val lastName = dialogView.findViewById<View>(R.id.lastName) as EditText
                         val email = dialogView.findViewById<View>(R.id.email) as EditText
                         val phone = dialogView.findViewById<View>(R.id.phone) as EditText
