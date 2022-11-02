@@ -22,6 +22,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/receipts_filter_bar"
+            app:titleCentered="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
