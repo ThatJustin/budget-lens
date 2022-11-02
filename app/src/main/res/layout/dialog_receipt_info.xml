@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".receipts.ReceiptInfoDialog"
-    style="@style/Theme.BudgetLens">
+    tools:context=".receipts.ReceiptInfoDialog">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -44,7 +43,7 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/receipt_info_merchant_icon"
             android:layout_width="71dp"
             android:layout_height="71dp"
             android:layout_alignParentStart="true"
@@ -54,7 +53,7 @@
             android:src="@drawable/ic_baseline_store_24" />
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/receipt_info_receipt_image"
             android:layout_width="match_parent"
             android:layout_height="157dp"
             android:layout_alignParentStart="true"
@@ -65,7 +64,7 @@
 
         <Button
             android:id="@+id/receipt_info_view_items"
-            android:layout_width="175dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/receipt_info_delete"
             android:layout_alignParentStart="true"
@@ -75,7 +74,7 @@
 
         <Button
             android:id="@+id/receipt_info_delete"
-            android:layout_width="175dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
@@ -85,17 +84,17 @@
 
         <Button
             android:id="@+id/receipt_info_add_important_date"
-            android:layout_width="175dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/receipt_info_edit"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="25dp"
-            android:layout_marginBottom="43dp"
-            android:text="Add Important Date" />
+            android:layout_marginBottom="45dp"
+            android:text="Add Date" />
 
         <Button
             android:id="@+id/receipt_info_edit"
-            android:layout_width="175dp"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
