@@ -42,6 +42,7 @@ class UserReceipts {
                                 for (i in 0 until receipts.length()) {
                                     val receipt = receipts.getJSONObject(i)
                                     val id = receipt.getInt("id")
+                                    println("id $id")
                                     val merchant = receipt.getString("merchant")
                                     val scanDate = receipt.getString("scan_date")
                                     val receiptImage = receipt.getString("receipt_image")
