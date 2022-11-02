@@ -18,23 +18,33 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/scan_date"
+            android:id="@+id/merchant_name"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/scan_date"
+            android:text="@string/merchant_name"
             android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintTop_toTopOf="@id/receipts_card"/>
 
         <TextView
-            android:id="@+id/receipt_image"
+            android:id="@+id/total_amount"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
-            android:text="@string/receipt_image"
+            android:text="@string/total_amount"
             android:textColor="@color/black"
             android:textSize="15sp"
-            app:layout_constraintTop_toBottomOf="@id/scan_date"/>
+            app:layout_constraintTop_toBottomOf="@id/merchant_name"/>
+
+        <TextView
+            android:id="@+id/scan_date"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:text="@string/scan_date"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toRightOf="@+id/merchant_name"/>
 
     </LinearLayout>
 

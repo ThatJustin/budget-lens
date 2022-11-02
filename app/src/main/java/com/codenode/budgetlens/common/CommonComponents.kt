@@ -44,6 +44,7 @@ class CommonComponents {
                     }
                     R.id.receipts -> {
                         if (currentActivityName != ActivityName.RECEIPTS) {
+                            activity.finish()
                             val intent = Intent(context, ReceiptsListPageActivity::class.java)
                             context.startActivity(intent)
                             activity.overridePendingTransition(0, 0)

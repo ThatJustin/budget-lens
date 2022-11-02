@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.common.ActivityName
+import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
 
 class ReceiptsListPageActivity : AppCompatActivity() {
-    private var receiptList: List<Receipts> = listOf()
-    private var receiptsList: RecyclerView? = null
+    private var receiptList: List<Receipts> = listOf(Receipts())
+    private var receiptsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>
 
@@ -17,16 +19,13 @@ class ReceiptsListPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipts_list_page)
 
-        loadReceiptsFromAPI(this)
+        CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
+        CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
 
-        receiptsList.apply {
-            linearLayoutManager = LinearLayoutManager(this@ReceiptsListPageActivity)
-            adapter = ReceiptsRecyclerViewAdapter(receiptList)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        finish()
+        receiptsListRecyclerView = findViewById(R.id.receipts_list)
+        linearLayoutManager = LinearLayoutManager(this)
+        receiptsListRecyclerView?.layoutManager = linearLayoutManager
+        adapter = ReceiptsRecyclerViewAdapter(loadReceiptsFromAPI(this))
+        receiptsListRecyclerView?.adapter = adapter
     }
 }

@@ -17,8 +17,9 @@ class ReceiptsRecyclerViewAdapter (private val receipts: List<Receipts>) : Recyc
 
     override fun onBindViewHolder(holder: ReceiptsRecyclerViewAdapter.ViewHolder, position: Int) {
         val receipt = receipts[position]
-        holder.scanDate.text = Resources.getSystem().getString(R.string.scan_date, receipt.scan_date)
-        holder.receiptImageURL.text = Resources.getSystem().getString(R.string.receipt_image, receipt.receipt_image)
+        holder.merchantName.text = holder.itemView.context.getString(R.string.merchant_name, receipt.merchant_name)
+        holder.scanDate.text = holder.itemView.context.getString(R.string.scan_date, receipt.scan_date)
+        holder.totalAmount.text = holder.itemView.context.getString(R.string.total_amount, receipt.total_amount)
     }
 
     override fun getItemCount(): Int {
@@ -26,8 +27,9 @@ class ReceiptsRecyclerViewAdapter (private val receipts: List<Receipts>) : Recyc
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        val merchantName: TextView = itemView.findViewById(R.id.merchant_name)
         val scanDate: TextView = itemView.findViewById(R.id.scan_date)
-        val receiptImageURL: TextView = itemView.findViewById(R.id.receipt_image)
+        val totalAmount: TextView = itemView.findViewById(R.id.total_amount)
 
         init {
             itemView.setOnClickListener(this)
