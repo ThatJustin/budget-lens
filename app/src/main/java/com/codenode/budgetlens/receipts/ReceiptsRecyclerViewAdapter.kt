@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Receipts
 
-class ReceiptsRecyclerViewAdapter (private val receipts: List<Receipts>) : RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>() {
+class ReceiptsRecyclerViewAdapter (private val receipts: MutableList<Receipts>) : RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReceiptsRecyclerViewAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.receipts_list_model, parent, false)
         return ViewHolder(view)
@@ -39,6 +39,7 @@ class ReceiptsRecyclerViewAdapter (private val receipts: List<Receipts>) : Recyc
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val receipt = receipts[position]
+                println("Clicked receipt at index $receipt")
             }
         }
     }

@@ -1,6 +1,11 @@
 package com.codenode.budgetlens.receipts
 
+import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
@@ -8,9 +13,10 @@ import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
+import kotlinx.coroutines.launch
 
 class ReceiptsListPageActivity : AppCompatActivity() {
-    private var receiptList: List<Receipts> = listOf(Receipts())
+    private lateinit var receiptList: MutableList<Receipts>
     private var receiptsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>
@@ -22,10 +28,14 @@ class ReceiptsListPageActivity : AppCompatActivity() {
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
 
+        receiptList = loadReceiptsFromAPI(this)
+
         receiptsListRecyclerView = findViewById(R.id.receipts_list)
-        linearLayoutManager = LinearLayoutManager(this)
-        receiptsListRecyclerView?.layoutManager = linearLayoutManager
-        adapter = ReceiptsRecyclerViewAdapter(loadReceiptsFromAPI(this))
-        receiptsListRecyclerView?.adapter = adapter
+        if (receiptsListRecyclerView != null) {
+            linearLayoutManager = LinearLayoutManager(this)
+            receiptsListRecyclerView!!.layoutManager = linearLayoutManager
+            adapter = ReceiptsRecyclerViewAdapter(receiptList)
+            receiptsListRecyclerView!!.adapter = adapter
+        }
     }
 }
