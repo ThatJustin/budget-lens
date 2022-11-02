@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -41,11 +42,11 @@ class CommonComponents {
                         }
                         true
                     }
-                    R.id.receipt -> {
-                        if (currentActivityName != ActivityName.RECEIPT) {
-//                            val intent = Intent(context, ReceiptActivity::class.java)
-//                            context.startActivity(intent)
-//                            activity.overridePendingTransition(0, 0)
+                    R.id.receipts -> {
+                        if (currentActivityName != ActivityName.RECEIPTS) {
+                            val intent = Intent(context, ReceiptsListPageActivity::class.java)
+                            context.startActivity(intent)
+                            activity.overridePendingTransition(0, 0)
                         }
                         true
                     }

@@ -8,34 +8,34 @@
     app:cardElevation="3dp"
     app:cardUseCompatPadding="true"
     android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
+    android:focusable="true">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/receipts_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/scan_date"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Scan Date"
+            android:text="@string/scan_date"
             android:textColor="@color/black"
             android:textSize="15sp"
-            app:layout_constraintTop_toTopOf="@id/receipts_card" />
+            app:layout_constraintTop_toTopOf="@id/receipts_card"/>
 
         <TextView
             android:id="@+id/receipt_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="10dp"
-            android:text="Receipt Image URL"
+            android:text="@string/receipt_image"
             android:textColor="@color/black"
             android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@id/scan_date"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

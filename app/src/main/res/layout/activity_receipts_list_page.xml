@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".receipts.ReceiptsListPageActivity">
@@ -18,9 +18,10 @@
             app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/outline_menu_24"
             app:title="Budget Lens"
-            app:titleCentered="true" />
+            app:titleCentered="true"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/receipts_filter_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -30,34 +31,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:layout_marginStart="16dp"
-                android:text="Receipts"
+                android:text="@string/receipts"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="@+id/receipts_filter_bar"
+                app:layout_constraintTop_toTopOf="@+id/receipts_filter_bar"/>
 
             <Button
                 android:id="@+id/sort_by_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sort By"
+                android:text="@string/sort_by"
                 app:icon="@drawable/sort_48px"
                 app:layout_constraintBottom_toBottomOf="@+id/receiptsTextView"
                 app:layout_constraintEnd_toEndOf="@+id/receiptsTextView"
                 app:layout_constraintStart_toStartOf="@+id/receiptsTextView"
-                app:layout_constraintTop_toTopOf="@+id/receiptsTextView" />
+                app:layout_constraintTop_toTopOf="@+id/receiptsTextView"/>
 
             <Button
                 android:id="@+id/filter_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Filter"
+                android:text="@string/filter"
                 app:icon="@drawable/filter_alt_48px"
                 app:layout_constraintBottom_toBottomOf="@+id/receiptsTextView"
                 app:layout_constraintEnd_toEndOf="@+id/receiptsTextView"
                 app:layout_constraintHorizontal_bias="0.944"
                 app:layout_constraintStart_toStartOf="@+id/receiptsTextView"
-                app:layout_constraintTop_toTopOf="@+id/receiptsTextView" />
+                app:layout_constraintTop_toTopOf="@+id/receiptsTextView"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -73,7 +74,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:startIconDrawable="@drawable/search_48px"
-                android:hint="Search"
+                android:hint="@string/search"
+                android:background="#E8DEF8"
                 android:inputType="text"
                 app:layout_constraintTop_toTopOf="@+id/search_bar"/>
 
@@ -82,7 +84,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/receipts_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/search_bar_text"
             android:padding="10dp"/>
 
@@ -99,6 +101,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
