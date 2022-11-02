@@ -5,12 +5,12 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.R
 import java.util.*
-
 
 open class Receipt() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +22,10 @@ open class Receipt() : AppCompatActivity() {
             initCalendar(this,date)
         }
 
+        val filledButton = findViewById<Button>(R.id.filledButton)
+        filledButton.setOnClickListener {
+            finish()
+        }
         /*var mercant = findViewById<Spinner>(R.id.mercant)
         mercant.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
