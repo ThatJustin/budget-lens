@@ -51,7 +51,9 @@ class CommonComponents {
                     }
                     R.id.budget -> {
                         if (currentActivityName != ActivityName.BUDGET) {
-                            //Might open a menu?
+                            val intent = Intent(context, ScanningReceiptActivity::class.java)
+                            context.startActivity(intent)
+                            activity.overridePendingTransition(0, 0)
                         }
                         true
                     }
@@ -144,5 +146,10 @@ class CommonComponents {
                 }
             }
         }
+
+        fun handleAddingReceipts(){
+
+        }
+
     }
 }
