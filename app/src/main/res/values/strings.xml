@@ -8,4 +8,22 @@
     <string name="password">Password</string>
     <string name="username">Username</string>
     <string name="global_preferences">global_preferences</string>
+    <string-array name="currency_array">
+        <item>CAD</item>
+        <item>Euro</item>
+        <item>Pounds</item>
+        <item>USD</item>
+    </string-array>
+    <string-array name="category_array">
+        <item>Food</item>
+        <item>Movie</item>
+        <item>Fuel</item>
+        <item>Rent</item>
+    </string-array>
+    <string-array name="payment_array">
+        <item>Cash</item>
+        <item>Credit Card</item>
+        <item>Debit Card</item>
+        <item>Paypal</item>
+    </string-array>
 </resources>
