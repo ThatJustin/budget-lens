@@ -10,6 +10,7 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
+import com.codenode.budgetlens.data.UserReceipts
 import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
 
 class ReceiptsListPageActivity : AppCompatActivity() {
@@ -17,7 +18,8 @@ class ReceiptsListPageActivity : AppCompatActivity() {
     private var receiptsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>
-    private var isLoading = false
+
+    var pageSize = 5
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,8 +28,9 @@ class ReceiptsListPageActivity : AppCompatActivity() {
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
 
-        receiptList = loadReceiptsFromAPI(this)
+        receiptList = loadReceiptsFromAPI(this, pageSize)
 
+        val context = this;
         receiptsListRecyclerView = findViewById(R.id.receipts_list)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         if (receiptsListRecyclerView != null) {
@@ -35,29 +38,16 @@ class ReceiptsListPageActivity : AppCompatActivity() {
             receiptsListRecyclerView!!.layoutManager = linearLayoutManager
             adapter = ReceiptsRecyclerViewAdapter(receiptList)
             receiptsListRecyclerView!!.adapter = adapter
-            receiptsListRecyclerView!!.addOnScrollListener(object: RecyclerView.OnScrollListener() {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    if (dy > 0) {
-                        isLoading = true
-                        progressBar.visibility = View.VISIBLE
-                        val visibleItemCount = linearLayoutManager.childCount
-                        val totalItemCount = linearLayoutManager.itemCount
-                        val pastVisibleItems = linearLayoutManager.findFirstVisibleItemPosition()
-                        if (pastVisibleItems + visibleItemCount >= totalItemCount) {
-                            adapter.notifyDataSetChanged()
-                        }
-                    }
-                    isLoading = false
-                    progressBar.visibility = View.GONE
-                }
+            receiptsListRecyclerView!!.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
 
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    if (!recyclerView.canScrollVertically(1)) {
-                        println("Reached end of list")
+                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE
+                    ) {
+                        progressBar.visibility = View.VISIBLE
+                        receiptList = loadReceiptsFromAPI(context, pageSize)
                         adapter.notifyDataSetChanged()
                     }
                 }

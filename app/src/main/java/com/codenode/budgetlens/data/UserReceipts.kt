@@ -15,15 +15,12 @@ class UserReceipts {
     companion object {
         var userReceipts = mutableListOf<Receipts>()
 
-        fun loadReceiptsFromAPI(context: Context): MutableList<Receipts> {
-            var pageNumber = 1
-            val pageSize = 10
+        var pageNumber = 1;
 
-            // When reloading, make the list empty
-            userReceipts.clear()
-
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"
-
+        fun loadReceiptsFromAPI(context: Context, pageSize: Int): MutableList<Receipts> {
+            val url =
+                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"
+            var stufftoLoad = false
             val receiptsRequest = OkHttpClient()
             val request = Request.Builder()
                 .url(url)
@@ -39,12 +36,11 @@ class UserReceipts {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                val pageList = JSONObject(responseBody.toString()).getString("page_list")
-                                val pageDescription = JSONObject(responseBody.toString()).getString("description")
-                                val paginationNumber = pageDescription.substring(pageDescription.length - 2, pageDescription.length - 1)
-                                pageNumber = paginationNumber.toInt()
+                                val pageList =
+                                    JSONObject(responseBody.toString()).getString("page_list")
                                 val receipts = JSONArray(pageList)
                                 for (i in 0 until receipts.length()) {
+                                    stufftoLoad = true
                                     val receipt = receipts.getJSONObject(i)
                                     val id = receipt.getInt("id")
                                     val merchant = receipt.getString("merchant")
@@ -57,16 +53,37 @@ class UserReceipts {
                                     val coupon = receipt.getInt("coupon")
                                     val currency = receipt.getString("currency")
                                     val importantDates = receipt.getString("important_dates")
-                                    userReceipts.add(Receipts(id, merchant, scanDate, receiptImage, location, total, tax, tip, coupon, currency, importantDates))
+                                    userReceipts.add(
+                                        Receipts(
+                                            id,
+                                            merchant,
+                                            scanDate,
+                                            receiptImage,
+                                            location,
+                                            total,
+                                            tax,
+                                            tip,
+                                            coupon,
+                                            currency,
+                                            importantDates
+                                        )
+                                    )
+                                }
+                                if (stufftoLoad) {
+                                    pageNumber++
                                 }
                                 Log.i("Successful", "Successfully loaded receipts from API.")
-
                             } else {
-                                Log.i("Error", "Something went wrong ${response.message} ${response.headers}")
+                                Log.i(
+                                    "Error",
+                                    "Something went wrong ${response.message} ${response.headers}"
+                                )
                             }
-
                         } else {
-                            Log.e("Error", "Something went wrong ${response.message} ${response.headers}")
+                            Log.e(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
                         }
                     }
                     countDownLatch.countDown();
