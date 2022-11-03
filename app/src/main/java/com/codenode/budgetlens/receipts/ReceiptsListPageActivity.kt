@@ -19,7 +19,7 @@ class ReceiptsListPageActivity : AppCompatActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var adapter: RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>
 
-    private var pageSize = 5
+    private var pageSize = 3
 
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,20 +28,21 @@ class ReceiptsListPageActivity : AppCompatActivity() {
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
 
-        userReceipts.clear()
 
         receiptList = loadReceiptsFromAPI(this, pageSize)
 
         val context = this;
         receiptsListRecyclerView = findViewById(R.id.receipts_list)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
+        progressBar.visibility = View.GONE
 
         if (receiptsListRecyclerView != null) {
             linearLayoutManager = LinearLayoutManager(this)
             receiptsListRecyclerView!!.layoutManager = linearLayoutManager
             adapter = ReceiptsRecyclerViewAdapter(receiptList)
             receiptsListRecyclerView!!.adapter = adapter
-            receiptsListRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            receiptsListRecyclerView!!.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)

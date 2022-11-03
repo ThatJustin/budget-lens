@@ -38,8 +38,8 @@ class UserReceipts {
                             if (responseBody != null) {
                                 val pageList = JSONObject(responseBody.toString()).getString("page_list")
                                 val receipts = JSONArray(pageList)
-                                contentLoadedFromResponse = true
                                 for (i in 0 until receipts.length()) {
+                                    contentLoadedFromResponse = true
                                     val receipt = receipts.getJSONObject(i)
                                     val id = receipt.getInt("id")
                                     val merchant = receipt.getString("merchant")
