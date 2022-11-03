@@ -20,7 +20,6 @@ class UserReceipts {
 
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"
             var contentLoadedFromResponse: Boolean
-
             val receiptsRequest = OkHttpClient()
             val request = Request.Builder()
                 .url(url)
@@ -63,7 +62,8 @@ class UserReceipts {
                                 Log.i("Error", "Something went wrong ${response.message} ${response.headers}")
                             }
                         } else {
-                            Log.e("Error", "Something went wrong ${response.message} ${response.headers}")
+                            Log.e("Error", "Something went wrong ${response.message} ${response.headers}"
+                            )
                         }
                     }
                     countDownLatch.countDown()
