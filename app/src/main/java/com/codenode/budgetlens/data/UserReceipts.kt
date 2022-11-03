@@ -6,6 +6,7 @@ import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.common.BearerToken
 import okhttp3.*
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 
@@ -15,11 +16,13 @@ class UserReceipts {
         var userReceipts = mutableListOf<Receipts>()
 
         fun loadReceiptsFromAPI(context: Context): MutableList<Receipts> {
+            var pageNumber = 1
+            val pageSize = 10
 
             // When reloading, make the list empty
             userReceipts.clear()
 
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/"
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"
 
             val receiptsRequest = OkHttpClient()
             val request = Request.Builder()
@@ -36,11 +39,14 @@ class UserReceipts {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                val receipts = JSONArray(responseBody.toString())
+                                val pageList = JSONObject(responseBody.toString()).getString("page_list")
+                                val pageDescription = JSONObject(responseBody.toString()).getString("description")
+                                val paginationNumber = pageDescription.substring(pageDescription.length - 2, pageDescription.length - 1)
+                                pageNumber = paginationNumber.toInt()
+                                val receipts = JSONArray(pageList)
                                 for (i in 0 until receipts.length()) {
                                     val receipt = receipts.getJSONObject(i)
                                     val id = receipt.getInt("id")
-                                    println("id $id")
                                     val merchant = receipt.getString("merchant")
                                     val scanDate = receipt.getString("scan_date")
                                     val receiptImage = receipt.getString("receipt_image")
