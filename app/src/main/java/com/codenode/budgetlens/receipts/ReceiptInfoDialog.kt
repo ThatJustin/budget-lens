@@ -8,8 +8,12 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.Spinner
 import androidx.appcompat.widget.Toolbar
+import com.bumptech.glide.Glide
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
@@ -19,12 +23,17 @@ import okhttp3.*
 import java.io.IOException
 
 
-class ReceiptInfoDialog(context: Context, themeResId: Int) : Dialog(context, themeResId) {
+//Open already uploaded receipt
+class ReceiptInfoDialog(context: Context) : Dialog(context) {
     // How to use this dialog :
     // Should be opened via clicking a receipt from a list on the receipt page, but it's not ready yet.
     // When the receipt list page is done, clicking on a receipt should open this dialog using the code below
     // you will also need to pass data from the activity to this class, you can add and pass a variable from constructor if needed
     // I assume a Receipt class instance that holds the values will suffice.
+    // Remaining Steps:
+    //  1. Capture Image From Camera
+    //  2. Read text from captured image, used any lib to help you to read text.
+    //  3. Your logic to arenge all text on right path, like name, currency, amount, date...
     /*
                 val openReceiptDialog = findViewById.... // code it
         val dialog = ReceiptInfoDialog(this, R.style.ReceiptItemDialog)
@@ -50,6 +59,24 @@ class ReceiptInfoDialog(context: Context, themeResId: Int) : Dialog(context, the
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         val dialogView: View = layoutInflater.inflate(R.layout.dialog_receipt_info, null)
         setContentView(dialogView)
+        //connect your xml component(like: textview, imageview, button)
+        val imageReceipt = dialogView.findViewById<ImageView>(R.id.receipt_info_receipt_image)
+
+        //Load string array into dropdown
+        val currencyArray = context.resources.getStringArray(R.array.currency_array)
+        val currencySpinner = dialogView.findViewById<Spinner>(R.id.spinner)
+        currencySpinner.adapter=ArrayAdapter(context,android.R.layout.simple_spinner_item,currencyArray)
+
+        val categoryArray = context.resources.getStringArray(R.array.category_array)
+        val categorySpinner = dialogView.findViewById<Spinner>(R.id.spinner_category)
+        categorySpinner.adapter=ArrayAdapter(context,android.R.layout.simple_spinner_item,categoryArray)
+
+        val paymentArray = context.resources.getStringArray(R.array.payment_array)
+        val paymentSpinner = dialogView.findViewById<Spinner>(R.id.spinner_payment)
+        paymentSpinner.adapter=ArrayAdapter(context,android.R.layout.simple_spinner_item,paymentArray)
+
+        //Glide will help you to load images from server url
+        Glide.with(context).load("https://makereceipt.com/images/receipt-with-calculated-tip-sample-min.jpg").into(imageReceipt);
         receiptInfoDialog = this
 
         val window = window;
@@ -70,20 +97,20 @@ class ReceiptInfoDialog(context: Context, themeResId: Int) : Dialog(context, the
 
 
     private fun handleListeners() {
-        findViewById<Button>(R.id.receipt_info_delete)?.setOnClickListener {
-
-            MaterialAlertDialogBuilder(context)
-                .setTitle("Delete Receipt")
-                .setMessage("Are you sure you want to delete this receipt?\r\nThe action cannot be undone.")
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .setPositiveButton("Delete") { dialog, _ ->
-                    requestReceiptDeletion(dialog)
-                }
-                .show()
-
-        }
+//        findViewById<Button>(R.id.receipt_info_delete)?.setOnClickListener {
+//
+//            MaterialAlertDialogBuilder(context)
+//                .setTitle("Delete Receipt")
+//                .setMessage("Are you sure you want to delete this receipt?\r\nThe action cannot be undone.")
+//                .setNegativeButton("Cancel") { dialog, _ ->
+//                    dialog.dismiss()
+//                }
+//                .setPositiveButton("Delete") { dialog, _ ->
+//                    requestReceiptDeletion(dialog)
+//                }
+//                .show()
+//
+//        }
 
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         toolBar.setNavigationOnClickListener { dismiss() }
