@@ -40,7 +40,7 @@ class ReceiptsRecyclerViewAdapter (private val receipts: MutableList<Receipts>) 
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val receipt = receipts[position]
-                println("Clicked receipt at index $receipt")
+                println("Clicked $receipt")
             }
         }
     }

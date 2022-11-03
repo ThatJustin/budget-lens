@@ -14,13 +14,13 @@ class UserReceipts {
 
     companion object {
         var userReceipts = mutableListOf<Receipts>()
-
         var pageNumber = 1;
 
         fun loadReceiptsFromAPI(context: Context, pageSize: Int): MutableList<Receipts> {
-            val url =
-                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"
-            var stufftoLoad = false
+
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"
+            var contentLoadedFromResponse = false
+
             val receiptsRequest = OkHttpClient()
             val request = Request.Builder()
                 .url(url)
@@ -36,11 +36,10 @@ class UserReceipts {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                val pageList =
-                                    JSONObject(responseBody.toString()).getString("page_list")
+                                val pageList = JSONObject(responseBody.toString()).getString("page_list")
                                 val receipts = JSONArray(pageList)
+                                contentLoadedFromResponse = true
                                 for (i in 0 until receipts.length()) {
-                                    stufftoLoad = true
                                     val receipt = receipts.getJSONObject(i)
                                     val id = receipt.getInt("id")
                                     val merchant = receipt.getString("merchant")
@@ -53,37 +52,17 @@ class UserReceipts {
                                     val coupon = receipt.getInt("coupon")
                                     val currency = receipt.getString("currency")
                                     val importantDates = receipt.getString("important_dates")
-                                    userReceipts.add(
-                                        Receipts(
-                                            id,
-                                            merchant,
-                                            scanDate,
-                                            receiptImage,
-                                            location,
-                                            total,
-                                            tax,
-                                            tip,
-                                            coupon,
-                                            currency,
-                                            importantDates
-                                        )
-                                    )
+                                    userReceipts.add(Receipts(id, merchant, scanDate, receiptImage, location, total, tax, tip, coupon, currency, importantDates))
                                 }
-                                if (stufftoLoad) {
+                                if (contentLoadedFromResponse) {
                                     pageNumber++
                                 }
                                 Log.i("Successful", "Successfully loaded receipts from API.")
                             } else {
-                                Log.i(
-                                    "Error",
-                                    "Something went wrong ${response.message} ${response.headers}"
-                                )
+                                Log.i("Error", "Something went wrong ${response.message} ${response.headers}")
                             }
                         } else {
-                            Log.e(
-                                "Error",
-                                "Something went wrong ${response.message} ${response.headers}"
-                            )
+                            Log.e("Error", "Something went wrong ${response.message} ${response.headers}")
                         }
                     }
                     countDownLatch.countDown();
