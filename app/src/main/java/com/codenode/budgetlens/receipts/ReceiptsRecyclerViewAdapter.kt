@@ -9,21 +9,30 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Receipts
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 
-class ReceiptsRecyclerViewAdapter (private val receipts: MutableList<Receipts>) : RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>() {
+class ReceiptsRecyclerViewAdapter(private val receipts: MutableList<Receipts>) :
+    RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReceiptsRecyclerViewAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.receipts_list_model, parent, false)
+    
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ReceiptsRecyclerViewAdapter.ViewHolder {
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.receipts_list_model, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ReceiptsRecyclerViewAdapter.ViewHolder, position: Int) {
         val receipt = receipts[position]
-        holder.merchantName.text = holder.itemView.context.getString(R.string.merchant_name, receipt.merchant_name)
-        holder.scanDate.text = holder.itemView.context.getString(R.string.scan_date, receipt.scan_date)
-        holder.totalAmount.text = holder.itemView.context.getString(R.string.total_amount, receipt.total_amount)
+        holder.merchantName.text =
+            holder.itemView.context.getString(R.string.merchant_name, receipt.merchant_name)
+        holder.scanDate.text =
+            holder.itemView.context.getString(R.string.scan_date, receipt.scan_date)
+        holder.totalAmount.text =
+            holder.itemView.context.getString(R.string.total_amount, receipt.total_amount)
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -35,7 +44,8 @@ class ReceiptsRecyclerViewAdapter (private val receipts: MutableList<Receipts>) 
         return receipts.size
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         val merchantName: TextView = itemView.findViewById(R.id.merchant_name)
         val scanDate: TextView = itemView.findViewById(R.id.scan_date)
         val totalAmount: TextView = itemView.findViewById(R.id.total_amount)
@@ -55,20 +65,19 @@ class ReceiptsRecyclerViewAdapter (private val receipts: MutableList<Receipts>) 
                         removeReceipt(position)
                     }
                 }
-                    dialog.show()
+                dialog.show()
             }
         }
     }
 
     private fun removeReceipt(position: Int) {
-//        Snackbar.make(
-//            (Activity)context.findViewById<BottomNavigationView>(R.id.bottom_navigation),
-//                            "Receipt deleted.",
-//                            Snackbar.LENGTH_SHORT
-//                        ).show()
-
+        val activity = context as Activity
+        Snackbar.make(
+            activity.findViewById<BottomNavigationView>(R.id.bottom_navigation),
+            "Receipt deleted.",
+            Snackbar.LENGTH_SHORT
+        ).show()
         receipts.removeAt(position)
         notifyItemRemoved(position)
-
     }
 }

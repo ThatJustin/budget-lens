@@ -28,22 +28,4 @@
     <string name="sort_by">Sort By</string>
     <string name="filter">Filter</string>
     <string name="search">Search</string>
-    <string-array name="currency_array">
-        <item>CAD</item>
-        <item>Euro</item>
-        <item>Pounds</item>
-        <item>USD</item>
-    </string-array>
-    <string-array name="category_array">
-        <item>Food</item>
-        <item>Movie</item>
-        <item>Fuel</item>
-        <item>Rent</item>
-    </string-array>
-    <string-array name="payment_array">
-        <item>Cash</item>
-        <item>Credit Card</item>
-        <item>Debit Card</item>
-        <item>Paypal</item>
-    </string-array>
 </resources>

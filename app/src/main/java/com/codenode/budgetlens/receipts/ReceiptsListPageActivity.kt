@@ -11,7 +11,6 @@ import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
-import com.codenode.budgetlens.data.UserReceipts.Companion.userReceipts
 
 class ReceiptsListPageActivity : AppCompatActivity() {
     private lateinit var receiptList: MutableList<Receipts>
@@ -27,7 +26,6 @@ class ReceiptsListPageActivity : AppCompatActivity() {
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
-
 
         receiptList = loadReceiptsFromAPI(this, pageSize)
 

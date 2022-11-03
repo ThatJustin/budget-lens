@@ -16,6 +16,7 @@ class UserReceipts {
         var userReceipts = mutableListOf<Receipts>()
         var pageNumber = 1;
 
+        //TODO move this to another thread
         fun loadReceiptsFromAPI(context: Context, pageSize: Int): MutableList<Receipts> {
 
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"

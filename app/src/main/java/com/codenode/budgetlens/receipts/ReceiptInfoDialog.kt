@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
+import com.bumptech.glide.Glide
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
@@ -24,7 +25,6 @@ import java.io.IOException
 //Open already uploaded receipt
 class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
 
-    var RECEIPT_ID = -1
     var receiptInfo = receipt
 
     private lateinit var receiptInfoDialog: Dialog
@@ -34,24 +34,16 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         val dialogView: View = layoutInflater.inflate(R.layout.dialog_receipt_info, null)
         setContentView(dialogView)
+
         //connect your xml component(like: textview, imageview, button)
         val imageReceipt = dialogView.findViewById<ImageView>(R.id.receipt_info_receipt_image)
 
-        //Load string array into dropdown
-        val currencyArray = context.resources.getStringArray(R.array.currency_array)
-//        val currencySpinner = dialogView.findViewById<Spinner>(R.id.spinner)
-//        currencySpinner.adapter=ArrayAdapter(context,android.R.layout.simple_spinner_item,currencyArray)
 
-        val categoryArray = context.resources.getStringArray(R.array.category_array)
-//        val categorySpinner = dialogView.findViewById<Spinner>(R.id.spinner_category)
-//        categorySpinner.adapter=ArrayAdapter(context,android.R.layout.simple_spinner_item,categoryArray)
 
-        val paymentArray = context.resources.getStringArray(R.array.payment_array)
-//        val paymentSpinner = dialogView.findViewById<Spinner>(R.id.spinner_payment)
-//        paymentSpinner.adapter=ArrayAdapter(context,android.R.layout.simple_spinner_item,paymentArray)
+        //TODO Glide to another thread, it's costly on the main UI thread
+        imageReceipt.scaleType = ImageView.ScaleType.CENTER
+        Glide.with(context).load(receiptInfo.receipt_image).into(imageReceipt);
 
-        //Glide will help you to load images from server url
-//        Glide.with(context).load("https://makereceipt.com/images/receipt-with-calculated-tip-sample-min.jpg").into(imageReceipt);
         receiptInfoDialog = this
 
         val window = window;
@@ -123,7 +115,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
                             isDeletedReceipt = true;
                             dialog.dismiss()
                             receiptInfoDialog.dismiss()
-                            Log.i("Successful", "Receipt ID $RECEIPT_ID deleted.")
+                            Log.i("Successful", "Receipt ID ${receiptInfo.id} deleted.")
                         } else {
                             Log.i(
                                 "Error",

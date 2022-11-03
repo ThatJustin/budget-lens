@@ -3,6 +3,7 @@ buildscript {
     ext.kotlin_version = "1.7.20"
     ext.jacocoVersion = '0.8.4'
     repositories {
+        mavenCentral()
         google()
     }
     dependencies {
