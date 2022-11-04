@@ -2,6 +2,7 @@ package com.codenode.budgetlens.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -9,22 +10,31 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
+import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.common.ScanningReceiptActivity
+import com.codenode.budgetlens.data.UserProfile
+import com.codenode.budgetlens.login.LoginActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONObject
+import java.io.IOException
 
 open class HomePageActivity() : AppCompatActivity() {
 
 
     private var AddMenuIsClosed:Boolean = true
+    private var token: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
 
-//        CommonComponents.handleAddReceipt(this.window.decorView, this, layoutInflater)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.HOME, this, this.window.decorView)
 
@@ -39,6 +49,9 @@ open class HomePageActivity() : AppCompatActivity() {
         val openAddMenu: FloatingActionButton = findViewById(R.id.addReceipts)
         val manualReceiptButton:FloatingActionButton = findViewById(R.id.createManual)
         val scanReceiptButton:FloatingActionButton = findViewById(R.id.ScanReceipt)
+        val logoutButton:FloatingActionButton = findViewById(R.id.logout)
+
+        val context = this
 
         openAddMenu.setOnClickListener{
             if(AddMenuIsClosed){
@@ -68,7 +81,5 @@ open class HomePageActivity() : AppCompatActivity() {
             scanReceiptButton.alpha = 0.0F
             this.startActivity(intent)
         }
-
-
     }
 }

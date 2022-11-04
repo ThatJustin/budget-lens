@@ -16,6 +16,11 @@
             <item
                 android:id="@+id/sub_edit_profile"
                 android:title="Edit Profile" />
+
+            <item
+                android:id="@+id/logout"
+                android:title="Logout"
+                android:icon="@drawable/ic_baseline_logout_24"/>
         </menu>
 
     </item>
