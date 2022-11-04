@@ -58,7 +58,7 @@ jobs:
         with:
           api-level: 31
           arch: x86_64
-          profile: Pixel 4 API 31
+          profile: Pixel_4_API_31
           disable-animations: true
           script: ./gradlew connectedAndroidTest
       # Upload Android Instrumented Tests Report
