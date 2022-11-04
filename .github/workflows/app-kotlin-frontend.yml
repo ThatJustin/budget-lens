@@ -60,7 +60,7 @@ jobs:
           arch: x86_64
           profile: pixel_4
           disable-animations: true
-          script: ./gradlew connectedAndroidTest
+          script: ./gradlew connectedDebugAndroidTest
       # Upload Android Instrumented Tests Report
       - name: Android Instrumented Tests Report Upload
         uses: actions/upload-artifact@v2
