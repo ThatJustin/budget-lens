@@ -20,6 +20,7 @@ class UserReceipts {
 
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"
             var contentLoadedFromResponse: Boolean
+
             val receiptsRequest = OkHttpClient()
             val request = Request.Builder()
                 .url(url)
