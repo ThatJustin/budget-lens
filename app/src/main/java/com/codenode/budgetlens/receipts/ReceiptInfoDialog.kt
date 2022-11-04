@@ -47,6 +47,13 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
         val tvReturnPeriod = dialogView.findViewById<TextView>(R.id.tvReturnPeriod)
 
 
+        tvDate1.text = receiptInfo.scan_date
+        tvMerchantName.text = receiptInfo.merchant_name
+//        tvAddedBy.text = receiptInfo.user_name
+        tvReceiptNumber.text = receiptInfo.id.toString()
+        tvSplitAmount.text = receiptInfo.total_amount.toString()
+        tvExpirationDate.text = receiptInfo.important_dates
+        tvReturnPeriod.text = receiptInfo.important_dates
 
         //TODO Glide to another thread, it's costly on the main UI thread
         imageReceipt.scaleType = ImageView.ScaleType.CENTER
