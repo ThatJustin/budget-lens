@@ -28,17 +28,6 @@ jobs:
       # local.properties
       - name: Touch local properties
         run: touch local.properties
-      # Run an Emulator to Run Automated Android Instrumented Tests
-      - name: Android Emulator Runner for Automated Android Instrumented Tests
-        uses: ReactiveCircus/android-emulator-runner@v2.27.0
-        with:
-          api-level: 31
-          arch: x86_64
-          profile: Pixel 4 API 31
-          disable-animations: true
-          disable-window: true
-          disable-audio: true
-          script: ./gradlew connectedAndroidTest
       # Run Unit Tests and Code Coverage
       - name: Debug Unit Tests and Code Coverage
         run: |
@@ -71,3 +60,16 @@ jobs:
       - name: Run Lint
         run: |
           ./gradlew Lint
+  tests:
+    runs-on: macos-latest
+    needs: build
+    steps:
+      # Run an Emulator to Run Automated Android Instrumented Tests
+      - name: Android Emulator Runner for Automated Android Instrumented Tests
+        uses: ReactiveCircus/android-emulator-runner@v2.27.0
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: Pixel 4 API 31
+          disable-animations: true
+          script: ./gradlew connectedAndroidTest
