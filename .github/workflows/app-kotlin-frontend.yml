@@ -25,13 +25,24 @@ jobs:
         with:
           distribution: 'zulu' # See 'Supported distributions' for available options
           java-version: 11
-       # local.properties
+      # local.properties
       - name: Touch local properties
         run: touch local.properties
-      # Run Unit Tests, Android Instrumented Tests And Code Coverage
-      - name: Debug Unit Tests, Android Instrumented Tests and Code Coverage
+      # Run an Emulator to Run Automated Android Instrumented Tests
+      - name: Android Emulator Runner for Automated Android Instrumented Tests
+        uses: ReactiveCircus/android-emulator-runner@v2.27.0
+        with:
+          api-level: 31
+          arch: x86_64
+          profile: Pixel 4 API 31
+          disable-animations: true
+          disable-window: true
+          disable-audio: true
+          script: ./gradlew connectedAndroidTest
+      # Run Unit Tests and Code Coverage
+      - name: Debug Unit Tests and Code Coverage
         run: |
-          ./gradlew app testDebugUnitTest app connectedDebugAndroidTest -PtestBuildType=release app connectedCheck
+          ./gradlew app testDebugUnitTest app connectedCheck
       # Upload Unit Tests Report
       - name: Unit Tests Report Upload
         uses: actions/upload-artifact@v2
