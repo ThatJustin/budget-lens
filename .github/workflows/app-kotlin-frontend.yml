@@ -40,7 +40,7 @@ jobs:
           path: app/build/reports/tests/testDebugUnitTest
       # Upload APK
       - name: APK Upload
-        uses: actions/upload-artifact@v2.1.4
+        uses: actions/upload-artifact@v2
         with:
           name: BudgetLens App
           path: app/build/outputs/apk/debug/app-debug.apk
