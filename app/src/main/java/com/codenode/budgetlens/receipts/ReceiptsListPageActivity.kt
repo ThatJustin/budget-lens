@@ -30,26 +30,34 @@ class ReceiptsListPageActivity : AppCompatActivity() {
 
         userReceipts.clear()
 
+        val progressBar: ProgressBar = findViewById(R.id.progressBar)
         receiptList = loadReceiptsFromAPI(this, pageSize)
 
-        val context = this;
+        val context = this
         receiptsListRecyclerView = findViewById(R.id.receipts_list)
-        val progressBar: ProgressBar = findViewById(R.id.progressBar)
+        progressBar.visibility = View.VISIBLE
+
+        if(receiptList.isEmpty()) {
+            receiptsListRecyclerView!!.visibility = View.GONE
+            progressBar.visibility = View.GONE
+        }
 
         if (receiptsListRecyclerView != null) {
+            receiptsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
             receiptsListRecyclerView!!.layoutManager = linearLayoutManager
             adapter = ReceiptsRecyclerViewAdapter(receiptList)
             receiptsListRecyclerView!!.adapter = adapter
+            progressBar.visibility = View.GONE
             receiptsListRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        progressBar.visibility = View.VISIBLE
                         receiptList = loadReceiptsFromAPI(context, pageSize)
                         adapter.notifyDataSetChanged()
                     }
+                    progressBar.visibility = View.VISIBLE
                 }
             })
         }

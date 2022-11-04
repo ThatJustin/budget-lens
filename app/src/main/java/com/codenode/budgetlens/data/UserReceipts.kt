@@ -14,12 +14,12 @@ class UserReceipts {
 
     companion object {
         var userReceipts = mutableListOf<Receipts>()
-        var pageNumber = 1;
+        var pageNumber = 1
 
         fun loadReceiptsFromAPI(context: Context, pageSize: Int): MutableList<Receipts> {
 
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"
-            var contentLoadedFromResponse = false
+            var contentLoadedFromResponse: Boolean
 
             val receiptsRequest = OkHttpClient()
             val request = Request.Builder()
@@ -59,23 +59,25 @@ class UserReceipts {
                                 }
                                 Log.i("Successful", "Successfully loaded receipts from API.")
                             } else {
+                                contentLoadedFromResponse = false
                                 Log.i("Error", "Something went wrong ${response.message} ${response.headers}")
                             }
                         } else {
-                            Log.e("Error", "Something went wrong ${response.message} ${response.headers}")
+                            Log.e("Error", "Something went wrong ${response.message} ${response.headers}"
+                            )
                         }
                     }
-                    countDownLatch.countDown();
+                    countDownLatch.countDown()
                 }
 
                 override fun onFailure(call: Call, e: IOException) {
                     e.printStackTrace()
-                    countDownLatch.countDown();
+                    countDownLatch.countDown()
                 }
             })
 
             // wait for a response before returning
-            countDownLatch.await();
+            countDownLatch.await()
             return userReceipts
         }
     }
