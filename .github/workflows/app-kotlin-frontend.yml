@@ -31,7 +31,7 @@ jobs:
       # Run Unit Tests, Android Instrumented Tests And Code Coverage
       - name: Debug Unit Tests, Android Instrumented Tests and Code Coverage
         run: |
-          ./gradlew app testDebugUnitTest app connectedDebugAndroidTest app connectedCheck
+          ./gradlew app testDebugUnitTest app connectedDebugAndroidTest -PtestBuildType=release app connectedCheck
       # Upload Unit Tests Report
       - name: Unit Tests Report Upload
         uses: actions/upload-artifact@v2
