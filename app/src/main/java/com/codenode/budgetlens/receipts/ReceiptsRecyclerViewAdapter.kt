@@ -1,5 +1,6 @@
 package com.codenode.budgetlens.receipts
 
+
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
