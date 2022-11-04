@@ -32,7 +32,7 @@ class ReceiptsListPageActivity : AppCompatActivity() {
 
         receiptList = loadReceiptsFromAPI(this, pageSize)
 
-        val context = this;
+        val context = this
         receiptsListRecyclerView = findViewById(R.id.receipts_list)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
 
