@@ -28,28 +28,16 @@ jobs:
       # local.properties
       - name: Touch local properties
         run: touch local.properties
-      # Run Unit Tests and Code Coverage
-      - name: Debug Unit Tests and Code Coverage
+      # Run Unit Tests
+      - name: Debug Unit Tests
         run: |
-          ./gradlew app testDebugUnitTest app connectedCheck
+          ./gradlew app testDebugUnitTest
       # Upload Unit Tests Report
       - name: Unit Tests Report Upload
         uses: actions/upload-artifact@v2
         with:
           name: app_unit_test
           path: app/build/reports/tests/testDebugUnitTest
-      # Upload Android Instrumented Tests Report
-      - name: Android Instrumented Tests Report Upload
-        uses: actions/upload-artifact@v2
-        with:
-          name: app_android_instrumented_test
-          path: app/build/reports/androidTests/connected
-      # Upload Code Coverage Report
-      - name: Code Coverage Report Upload
-        uses: actions/upload-artifact@v2
-        with:
-          name: app_code_coverage
-          path: app/build/reports/coverage/androidTest/debug/connected
       # Upload APK
       - name: APK Upload
         uses: actions/upload-artifact@v2
@@ -73,3 +61,19 @@ jobs:
           profile: Pixel 4 API 31
           disable-animations: true
           script: ./gradlew connectedAndroidTest
+      # Upload Android Instrumented Tests Report
+      - name: Android Instrumented Tests Report Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: app_android_instrumented_test
+          path: app/build/reports/androidTests/connected
+      # Run All Tests for Code Coverage
+      - name: Run All Tests
+        run: |
+          ./gradlew app connectedCheck
+      # Upload Code Coverage Report
+      - name: Code Coverage Report Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: app_code_coverage
+          path: app/build/reports/coverage/androidTest/debug/connected
