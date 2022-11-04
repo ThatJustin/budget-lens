@@ -17,10 +17,14 @@ import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.data.Receipts
+import com.codenode.budgetlens.data.UserProfile
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.*
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.util.*
 
 
 //Open already uploaded receipt
@@ -39,25 +43,31 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
         //connect your xml component(like: textview, imageview, button)
         val imageReceipt = dialogView.findViewById<ImageView>(R.id.receipt_info_receipt_image)
         val tvMerchantName = dialogView.findViewById<TextView>(R.id.tvMerchantName)
+//        val tvAddedBy = dialogView.findViewById<TextView>(R.id.tvAddedBy)
+        val tvReceiptDate = dialogView.findViewById<TextView>(R.id.tvReceiptDate)
         val tvAddedBy = dialogView.findViewById<TextView>(R.id.tvAddedBy)
-        val tvReceiptNumber = dialogView.findViewById<TextView>(R.id.tvReceiptNumber)
-        val tvSplitAmount = dialogView.findViewById<TextView>(R.id.tvSplitAmount)
-        val tvExpirationDate = dialogView.findViewById<TextView>(R.id.tvExpirationDate)
-        val tvDate1 = dialogView.findViewById<TextView>(R.id.tvDate1)
-        val tvReturnPeriod = dialogView.findViewById<TextView>(R.id.tvReturnPeriod)
+        val tvSplitAmount = dialogView.findViewById<TextView>(R.id.tvTotalAmount)
+        val tvTotalAmountCurrency = dialogView.findViewById<TextView>(R.id.tvTotalAmountCurrency)
+//        val tvExpirationDate = dialogView.findViewById<TextView>(R.id.tvExpirationDate)
+        val tvDateUploaded = dialogView.findViewById<TextView>(R.id.tvDateUploaded)
+//        val tvReturnPeriod = dialogView.findViewById<TextView>(R.id.tvReturnPeriod)
 
 
-        tvDate1.text = receiptInfo.scan_date
         tvMerchantName.text = receiptInfo.merchant_name
-//        tvAddedBy.text = receiptInfo.user_name
-        tvReceiptNumber.text = receiptInfo.id.toString()
+        tvDateUploaded.text = "0000/00/00 - 00:00" // not yet implemented in Receipt Model
         tvSplitAmount.text = receiptInfo.total_amount.toString()
-        tvExpirationDate.text = receiptInfo.important_dates
-        tvReturnPeriod.text = receiptInfo.important_dates
+        tvTotalAmountCurrency.text = "Total Amount(${receiptInfo.currency})"
+
+        tvReceiptDate.text = receiptInfo.scan_date
+        tvAddedBy.text = UserProfile.getFullName()
+
+//      tvExpirationDate.text = receiptInfo.important_dates
+//      tvReturnPeriod.text = receiptInfo.important_dates
 
         //TODO Glide to another thread, it's costly on the main UI thread
         imageReceipt.scaleType = ImageView.ScaleType.CENTER
-        Glide.with(context).load(receiptInfo.receipt_image).into(imageReceipt);
+        Glide.with(context).load(receiptInfo.receipt_image)
+            .placeholder(R.drawable.ic_baseline_receipt_long_24).into(imageReceipt)
 
         receiptInfoDialog = this
 
