@@ -14,6 +14,7 @@ import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.google_login.GoogleLoginSecondActivity
+import com.codenode.budgetlens.login.password_reset.PasswordResetActivity
 import com.codenode.budgetlens.signup.SignUpActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -39,6 +40,7 @@ class LoginActivity : AppCompatActivity() {
         val goToHomePageActivity = Intent(this, HomePageActivity::class.java)
 
         val loginButton: Button = findViewById(R.id.checkCredentials)
+        val resetButton: Button = findViewById(R.id.forgorPass)
 
         usernameField = findViewById(R.id.usernameText)
         passwordField = findViewById(R.id.passwordText)
@@ -48,6 +50,12 @@ class LoginActivity : AppCompatActivity() {
         //This will redirect the user to the register page
         registerButton.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
+        //This will redirect the user to the password reset page
+        resetButton.setOnClickListener {
+            val intent = Intent(this, PasswordResetActivity::class.java)
             startActivity(intent)
         }
 
