@@ -27,7 +27,23 @@ class ReceiptsListPageActivity : AppCompatActivity() {
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
 
+        //API call which helps retrieve receipts from server
         receiptList = loadReceiptsFromAPI(this, pageSize)
+
+//        val testingReceipts = Receipts(
+//            123,
+//            "Castco",
+//            "2022/02/02 - 13:54",
+//            "https://www.researchgate.net/publication/321637231/figure/fig1/AS:596617438699520@1519256090021/Example-of-actual-receipt.png",
+//            "--",
+//            100.25,
+//            2.01,
+//            0.0,
+//            0,
+//            "CAD",
+//            "2022/02/16"
+//        )
+//        receiptList.add(testingReceipts)
 
         val context = this;
         receiptsListRecyclerView = findViewById(R.id.receipts_list)
