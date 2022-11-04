@@ -10,6 +10,7 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.codenode.budgetlens.BuildConfig
@@ -37,6 +38,13 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
 
         //connect your xml component(like: textview, imageview, button)
         val imageReceipt = dialogView.findViewById<ImageView>(R.id.receipt_info_receipt_image)
+        val tvMerchantName = dialogView.findViewById<TextView>(R.id.tvMerchantName)
+        val tvAddedBy = dialogView.findViewById<TextView>(R.id.tvAddedBy)
+        val tvReceiptNumber = dialogView.findViewById<TextView>(R.id.tvReceiptNumber)
+        val tvSplitAmount = dialogView.findViewById<TextView>(R.id.tvSplitAmount)
+        val tvExpirationDate = dialogView.findViewById<TextView>(R.id.tvExpirationDate)
+        val tvDate1 = dialogView.findViewById<TextView>(R.id.tvDate1)
+        val tvReturnPeriod = dialogView.findViewById<TextView>(R.id.tvReturnPeriod)
 
 
 
