@@ -20,7 +20,9 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import java.io.File
@@ -34,6 +36,7 @@ class ScanningReceiptActivity : AppCompatActivity() {
     private lateinit var confirmImage: Button
     private lateinit var imageView: ImageView
     private var imagePath: String? = ""
+    private var fileName: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +94,7 @@ class ScanningReceiptActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun storePicture(receiptPhoto: Bitmap) {
         val root = Environment.getDataDirectory().toString()
-        val fileName = "Receipt_${LocalDateTime.now()}.jpg".replace(":", ".")
+        fileName = "Receipt_${LocalDateTime.now()}.jpg".replace(":", ".")
 
         val file = File(this.cacheDir, fileName)
 
@@ -122,16 +125,25 @@ class ScanningReceiptActivity : AppCompatActivity() {
 
         val registrationPost = OkHttpClient()
 
-        val mediaType = "multipart/form-data".toMediaTypeOrNull()
+        val mediaType = "text/plain".toMediaTypeOrNull()
 
-        val body = ("{\r\n" +
-                "    \"receipt_image\": \"${imagePath}\",\r\n" +
-                "}").trimIndent().toRequestBody(mediaType)
+        val requestBody = MultipartBody.Builder()
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("receipt_image", fileName,
+                File(imagePath).asRequestBody("image/jpg".toMediaType()))
+            .addFormDataPart("merchant","1")
+            .addFormDataPart("location","1")
+            .addFormDataPart("total","1")
+            .addFormDataPart("tax","1")
+            .addFormDataPart("tip","1")
+            .addFormDataPart("coupon","1")
+            .addFormDataPart("currency","USD")
+            .addFormDataPart("important_dates","1999-01-01")
+            .build()
 
         val request = Request.Builder()
             .url(url)
-            .method("POST", body)
-            .addHeader("Content-Type", "multipart/form-data")
+            .method("POST", requestBody)
             .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
             .build()
 

@@ -49,7 +49,6 @@ open class HomePageActivity() : AppCompatActivity() {
         val openAddMenu: FloatingActionButton = findViewById(R.id.addReceipts)
         val manualReceiptButton:FloatingActionButton = findViewById(R.id.createManual)
         val scanReceiptButton:FloatingActionButton = findViewById(R.id.ScanReceipt)
-        val logoutButton:FloatingActionButton = findViewById(R.id.logout)
 
         val context = this
 
