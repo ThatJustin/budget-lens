@@ -54,22 +54,13 @@ class CommonComponents {
 //                            context.startActivity(intent)
 //                            activity.overridePendingTransition(0, 0)
 //                   showPopup(myBottomNavigationView, context, activity)
-                    R.id.receipt -> {
-                        if (currentActivityName != ActivityName.RECEIPT) {
-//                            val intent = Intent(context, ReceiptActivity::class.java)
-//                            context.startActivity(intent)
-//                            activity.overridePendingTransition(0, 0)
-                            showPopup(myBottomNavigationView, context, activity)
-                        }
-                        true
-                    }
                     R.id.receipts -> {
                         if (currentActivityName != ActivityName.RECEIPTS) {
-                            val intent = Intent(context, ReceiptsListPageActivity::class.java)
-                            context.startActivity(intent)
-                            activity.finish()
-                            activity.overridePendingTransition(0, 0)
-
+                            //val intent = Intent(context, ReceiptsListPageActivity::class.java)
+                            //context.startActivity(intent)
+                            //activity.finish()
+                            //activity.overridePendingTransition(0, 0)
+                            showPopup(myBottomNavigationView, context, activity)
                         }
                         true
                     }

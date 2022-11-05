@@ -6,4 +6,8 @@
         <item>Walmart</item>
         <item>Subway</item>
     </string-array>
+    <string-array name="option2">
+        <item>USD</item>
+        <item>CAD</item>
+    </string-array>
 </resources>
