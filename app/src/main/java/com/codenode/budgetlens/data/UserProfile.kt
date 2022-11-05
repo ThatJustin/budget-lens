@@ -219,6 +219,12 @@ class UserProfile {
                     }
                 }
             })
+
+
+        }
+
+        fun getFullName(): String {
+            return userProfile.firstName + " " + userProfile.lastName;
         }
     }
 }

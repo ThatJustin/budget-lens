@@ -44,9 +44,9 @@ class CommonComponents {
                     }
                     R.id.receipts -> {
                         if (currentActivityName != ActivityName.RECEIPTS) {
-                            activity.finish()
                             val intent = Intent(context, ReceiptsListPageActivity::class.java)
                             context.startActivity(intent)
+                            activity.finish()
                             activity.overridePendingTransition(0, 0)
                         }
                         true
@@ -84,7 +84,7 @@ class CommonComponents {
          * Each activity must have a AppBarLayout with an MaterialToolbar using he "topAppBar" as its id or it will crash.
          */
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
-            val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar);
+            val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar)
             //Set the name of the profile to the first sub menu item
             val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
             if (subProfile != null) {
