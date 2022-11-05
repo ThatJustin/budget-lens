@@ -74,10 +74,15 @@ class CodeConfirmationActivity : AppCompatActivity() {
                                 Log.i("Successful", "Code match successful.")
                                 startActivity(intent)
                             } else {
+
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")
                             }
 
                         } else {
+                            runOnUiThread {
+                                confirmCode.error = "Please enter the correct confirmation code"
+                            }
+
                             Log.e(
                                 "Error",
                                 "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"

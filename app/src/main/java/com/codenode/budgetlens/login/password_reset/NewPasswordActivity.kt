@@ -78,10 +78,15 @@ class NewPasswordActivity : AppCompatActivity() {
                                 Log.i("Successful", "Password changed successful.")
                                 startActivity(intent)
                             } else {
+
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")
                             }
 
                         } else {
+                            runOnUiThread {
+                                confirmPassword.error = "The entered password doesn't match"
+                            }
+
                             Log.e(
                                 "Error",
                                 "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"

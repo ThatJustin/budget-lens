@@ -3,12 +3,10 @@ package com.codenode.budgetlens.login.password_reset
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.util.Patterns
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.databinding.ActivityPasswordResetBinding
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -75,6 +73,11 @@ class PasswordResetActivity : AppCompatActivity() {
                             }
 
                         } else {
+
+                            runOnUiThread {
+                                emailAddress.error = "Please enter an valid email"
+                            }
+
                             Log.e(
                                 "Error",
                                 "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
