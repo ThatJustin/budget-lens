@@ -3,6 +3,7 @@ package com.codenode.budgetlens.receipts
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,14 +25,15 @@ class ReceiptsListPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipts_list_page)
-
+        var additionalData = ""
+        val searchBar: SearchView = findViewById(R.id.search_bar_text)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
 
         userReceipts.clear()
 
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
-        receiptList = loadReceiptsFromAPI(this, pageSize)
+        receiptList = loadReceiptsFromAPI(this, pageSize,additionalData)
 
         val context = this
         receiptsListRecyclerView = findViewById(R.id.receipts_list)
@@ -54,11 +56,29 @@ class ReceiptsListPageActivity : AppCompatActivity() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        receiptList = loadReceiptsFromAPI(context, pageSize)
+                        receiptList = loadReceiptsFromAPI(context, pageSize,additionalData)
                         adapter.notifyDataSetChanged()
                     }
                     progressBar.visibility = View.VISIBLE
                 }
+            })
+            searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    println("hey")
+                    additionalData+="?search="+searchBar.query
+                    receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
+                    adapter.notifyDataSetChanged()
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+//                    println("hey2")
+//                    println(searchBar.query)
+//                    receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
+//                    adapter.notifyDataSetChanged()
+                    return true
+                }
+
             })
         }
     }
