@@ -23,7 +23,7 @@ class PasswordResetActivity : AppCompatActivity() {
                 Toast.makeText(this, getString(R.string.email_sent), Toast.LENGTH_LONG).show()
                 startActivity(Intent(this, CodeConfirmationActivity::class.java))
             } else {
-                Toast.makeText(this, getString(R.string.invalide_email_address), Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(R.string.invalid_email_address), Toast.LENGTH_LONG)
                     .show()
             }
         }

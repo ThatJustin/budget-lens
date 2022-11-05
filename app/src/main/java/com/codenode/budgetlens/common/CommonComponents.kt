@@ -16,6 +16,7 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.manualReceipt.Receipt
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -47,12 +48,28 @@ class CommonComponents {
                         }
                         true
                     }
+
+ //                   R.id.receipt -> { if (currentActivityName != ActivityName.RECEIPT) {
+//                            val intent = Intent(context, ReceiptActivity::class.java)
+//                            context.startActivity(intent)
+//                            activity.overridePendingTransition(0, 0)
+//                   showPopup(myBottomNavigationView, context, activity)
                     R.id.receipt -> {
                         if (currentActivityName != ActivityName.RECEIPT) {
 //                            val intent = Intent(context, ReceiptActivity::class.java)
 //                            context.startActivity(intent)
 //                            activity.overridePendingTransition(0, 0)
                             showPopup(myBottomNavigationView, context, activity)
+                        }
+                        true
+                    }
+                    R.id.receipts -> {
+                        if (currentActivityName != ActivityName.RECEIPTS) {
+                            val intent = Intent(context, ReceiptsListPageActivity::class.java)
+                            context.startActivity(intent)
+                            activity.finish()
+                            activity.overridePendingTransition(0, 0)
+
                         }
                         true
                     }
@@ -117,7 +134,7 @@ class CommonComponents {
          * Each activity must have a AppBarLayout with an MaterialToolbar using he "topAppBar" as its id or it will crash.
          */
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
-            val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar);
+            val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar)
             //Set the name of the profile to the first sub menu item
             val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
             if (subProfile != null) {

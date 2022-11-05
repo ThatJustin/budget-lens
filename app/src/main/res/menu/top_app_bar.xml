@@ -5,7 +5,7 @@
     <item
         android:id="@+id/profile_icon"
         android:icon="@drawable/ic_baseline_account_circle_70"
-        android:title="Test"
+        android:title="@string/user_profile_name"
         app:showAsAction="always">
 
         <menu>
@@ -15,7 +15,7 @@
 
             <item
                 android:id="@+id/sub_edit_profile"
-                android:title="Edit Profile" />
+                android:title="@string/edit_profile" />
         </menu>
 
     </item>

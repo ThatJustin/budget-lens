@@ -1,11 +1,31 @@
 <resources>
     <string name="app_name">BudgetLens</string>
     <string name="email_sent">A code has been sent to your email address</string>
-    <string name="invalide_email_address">Email address is invalid</string>
+    <string name="invalid_email_address">Email address is invalid</string>
     <string name="code_message">Code cannot be less than 6 digits</string>
-    <string name="budgetlens">BudgetLens</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="log_in">Log In</string>
+    <string name="register">Register</string>
+    <string name="google_sign_in">Sign in with Google</string>
+    <string name="or">Or</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="google">Google</string>
     <string name="email">E-mail Address</string>
     <string name="password">Password</string>
     <string name="username">Username</string>
+    <string name="user_profile_name">%1$s</string>
+    <string name="edit_profile">Edit Profile</string>
     <string name="global_preferences">global_preferences</string>
+    <string name="merchant_name">%1$s</string>
+    <string name="scan_date">%1$s</string>
+    <string name="receipt_image">Receipt Image URL: %1$s</string>
+    <string name="total_amount">Total Amount($): %1$f</string>
+    <string name="home">Home</string>
+    <string name="receipts">Receipts</string>
+    <string name="budget">Budget</string>
+    <string name="friends">Friends</string>
+    <string name="calendar">Calendar</string>
+    <string name="sort_by">Sort By</string>
+    <string name="filter">Filter</string>
+    <string name="search">Search</string>
 </resources>
