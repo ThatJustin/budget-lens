@@ -9,12 +9,12 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import okhttp3.*
@@ -49,19 +49,18 @@ class CommonComponents {
                         }
                         true
                     }
-                    R.id.receipt -> {
-                        if (currentActivityName != ActivityName.RECEIPT) {
-//                            val intent = Intent(context, ReceiptActivity::class.java)
-//                            context.startActivity(intent)
-//                            activity.overridePendingTransition(0, 0)
+                    R.id.receipts -> {
+                        if (currentActivityName != ActivityName.RECEIPTS) {
+                            val intent = Intent(context, ReceiptsListPageActivity::class.java)
+                            context.startActivity(intent)
+                            activity.finish()
+                            activity.overridePendingTransition(0, 0)
                         }
                         true
                     }
                     R.id.budget -> {
                         if (currentActivityName != ActivityName.BUDGET) {
-                            val intent = Intent(context, ScanningReceiptActivity::class.java)
-                            context.startActivity(intent)
-                            activity.overridePendingTransition(0, 0)
+                            //Might open a menu?
                         }
                         true
                     }
@@ -92,7 +91,7 @@ class CommonComponents {
          * Each activity must have a AppBarLayout with an MaterialToolbar using he "topAppBar" as its id or it will crash.
          */
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
-            val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar);
+            val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar)
             //Set the name of the profile to the first sub menu item
             val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
             if (subProfile != null) {

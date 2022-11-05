@@ -4,26 +4,26 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="home" />
+        android:title="@string/home" />
 
     <item
-        android:id="@+id/receipt"
+        android:id="@+id/receipts"
         android:icon="@drawable/ic_baseline_receipt_long_24"
-        android:title="Receipt" />
+        android:title="@string/receipts" />
 
     <item
         android:id="@+id/budget"
         android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="Budget" />
+        android:title="@string/budget" />
 
     <item
         android:id="@+id/friends"
         android:icon="?attr/actionModeShareDrawable"
-        android:title="Friends" />
+        android:title="@string/friends" />
 
     <item
         android:id="@+id/calendar"
         android:icon="@drawable/ic_baseline_calendar_month_24"
-        android:title="Calendar" />
+        android:title="@string/calendar" />
 
 </menu>

@@ -122,7 +122,7 @@ class ScanningReceiptActivity : AppCompatActivity() {
 
         val registrationPost = OkHttpClient()
 
-        val mediaType = "application/json".toMediaTypeOrNull()
+        val mediaType = "multipart/form-data".toMediaTypeOrNull()
 
         val body = ("{\r\n" +
                 "    \"receipt_image\": \"${imagePath}\",\r\n" +
@@ -131,7 +131,8 @@ class ScanningReceiptActivity : AppCompatActivity() {
         val request = Request.Builder()
             .url(url)
             .method("POST", body)
-            .addHeader("Content-Type", "application/json")
+            .addHeader("Content-Type", "multipart/form-data")
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
             .build()
 
         registrationPost.newCall(request).enqueue(object : Callback {
