@@ -19,8 +19,8 @@ class UserReceipts {
         //TODO move this to another thread
         fun loadReceiptsFromAPI(context: Context, pageSize: Int): MutableList<Receipts> {
 
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}"
-            var contentLoadedFromResponse: Boolean
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
+            var contentLoadedFromResponse = false
 
             val receiptsRequest = OkHttpClient()
             val request = Request.Builder()
@@ -60,7 +60,6 @@ class UserReceipts {
                                 }
                                 Log.i("Successful", "Successfully loaded receipts from API.")
                             } else {
-                                contentLoadedFromResponse = false
                                 Log.i("Error", "Something went wrong ${response.message} ${response.headers}")
                             }
                         } else {
