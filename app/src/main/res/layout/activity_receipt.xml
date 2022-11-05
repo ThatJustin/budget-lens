@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="20dp"
         android:entries="@array/option"
         android:inputType="text"
         android:minHeight="48dp"
@@ -41,14 +41,13 @@
         app:layout_constraintTop_toBottomOf="@+id/appName3"
         app:layout_constraintVertical_bias="1.0" />
 
-
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="92dp"
+        android:layout_marginBottom="88dp"
         android:focusable="false"
         android:hint="Date"
         android:minHeight="48dp"
@@ -65,8 +64,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="148dp"
-        android:hint="Currency"
         android:entries="@array/option2"
+        android:hint="Currency"
         android:inputType="text"
         android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/location"
@@ -76,12 +75,12 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/item"
-        android:layout_width="150dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:hint="item"
+        android:layout_marginBottom="20dp"
+        android:hint="item-price"
         android:inputType="text"
         android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/location"
@@ -90,26 +89,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/price"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:hint="price"
-        android:inputType="number"
-        android:minHeight="48dp"
-        app:layout_constraintBottom_toTopOf="@+id/location"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/item" />
-
-    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/total"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="76dp"
+        android:layout_marginBottom="80dp"
         android:hint="Total"
         android:inputType="numberDecimal"
         android:minHeight="48dp"
@@ -124,9 +109,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="140dp"
+        android:layout_marginBottom="208dp"
         android:hint="Location"
         android:inputType="text"
+        android:minHeight="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/filledButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/timeOfSale"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="144dp"
+        android:focusable="false"
+        android:hint="time of sale"
         android:minHeight="48dp"
         app:layout_constraintBottom_toTopOf="@+id/filledButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -154,7 +154,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:focusable="false"
         android:hint="returnDate"
         android:minHeight="48dp"
@@ -169,7 +169,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="24dp"
         android:text="Submit"
         app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -177,7 +177,7 @@
         app:layout_constraintHorizontal_bias="0.446"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/appName3"
-        app:layout_constraintVertical_bias="0.954" />
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

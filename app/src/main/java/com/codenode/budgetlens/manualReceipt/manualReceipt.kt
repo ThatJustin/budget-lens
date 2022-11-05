@@ -31,7 +31,10 @@ open class Receipt() : AppCompatActivity() {
         returnDate.setOnClickListener{
             initCalendar(this,returnDate)
         }
-
+        val timeOfSale = findViewById<TextView>(R.id.timeOfSale)
+        timeOfSale.setOnClickListener{
+            initCalendar(this,timeOfSale)
+        }
 
 
 
@@ -44,7 +47,6 @@ open class Receipt() : AppCompatActivity() {
         var mercant = findViewById<Spinner>(R.id.mercant)
         var currency = findViewById<Spinner>(R.id.currency)
         val item = findViewById<TextView>(R.id.item)
-        val price = findViewById<TextView>(R.id.price)
         img2.setBounds(0,0,80,80);
         img3.setBounds(0,0,80,80);
         img4.setBounds(0,0,80,80);
@@ -52,9 +54,11 @@ open class Receipt() : AppCompatActivity() {
         location.setCompoundDrawables(null, null, img3, null);
         warranties.setCompoundDrawables(null, null, img4, null);
         returnDate.setCompoundDrawables(null, null, img4, null);
+        timeOfSale.setCompoundDrawables(null, null, img4, null);
 
         val filledButton = findViewById<Button>(R.id.filledButton)
         filledButton.setOnClickListener {
+            val itemTmp = item.text.toString();
             Log.d("1111111",date.text.toString());
             if(date.text.toString()==null|| ("".equals(date.text.toString()))){
                 Toast.makeText(this,"pleace choose date",Toast.LENGTH_SHORT).show();
@@ -62,16 +66,25 @@ open class Receipt() : AppCompatActivity() {
                 Toast.makeText(this,"pleace enter total",Toast.LENGTH_SHORT).show();
             }else if(item.text.toString()==null|| ("".equals(item.text.toString()))){
                 Toast.makeText(this,"pleace enter item",Toast.LENGTH_SHORT).show();
-            }else if(price.text.toString()==null|| ("".equals(price.text.toString()))){
-                Toast.makeText(this,"pleace enter price",Toast.LENGTH_SHORT).show();
             }else if(location.text.toString()==null|| ("".equals(location.text.toString()))){
                 Toast.makeText(this,"pleace enter location",Toast.LENGTH_SHORT).show();
-            }else if(warranties.text.toString()==null|| ("".equals(warranties.text.toString()))){
-                Toast.makeText(this,"pleace enter warranties",Toast.LENGTH_SHORT).show();
-            }else if(returnDate.text.toString()==null|| ("".equals(returnDate.text.toString()))){
-                Toast.makeText(this,"pleace enter returnDate",Toast.LENGTH_SHORT).show();
             }else{
-                finish()
+                if(itemTmp.indexOf("-")==-1){
+                    Toast.makeText(this,"pleace enter current item-price",Toast.LENGTH_SHORT).show();
+                }else{
+                    val itemArr  = itemTmp.split("-");
+                    if(itemArr.size>1){
+                        val item_price = itemArr[1];
+                        if( item_price.matches("-?\\d+(\\.\\d+)?".toRegex())){
+                            finish()
+                        }else{
+                            Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
             }
 
         }
