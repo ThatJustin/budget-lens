@@ -68,7 +68,12 @@ class ReceiptsListPageActivity : AppCompatActivity() {
             //listener for search bar input
             searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
+                    //clean the data, otherwise the search will based on the previous search
+                    additionalData = ""
+                    receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
+                    adapter.notifyDataSetChanged()
 
+                    //perform the search
                     additionalData += "?search=" + searchBar.query
                     userReceipts.clear()
                     receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
