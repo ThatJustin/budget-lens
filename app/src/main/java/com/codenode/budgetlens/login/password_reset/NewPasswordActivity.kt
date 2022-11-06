@@ -75,16 +75,15 @@ class NewPasswordActivity : AppCompatActivity() {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
                                 intent.putExtra("email", email)
+                                intent.putExtra("passwordChangeSuccess", true)
                                 Log.i("Successful", "Password changed successful.")
                                 startActivity(intent)
                             } else {
-
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")
                             }
-
                         } else {
                             runOnUiThread {
-                                confirmPassword.error = "The entered password doesn't match"
+                                confirmPassword.error = "The entered password doesn't match."
                             }
 
                             Log.e(

@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -64,20 +65,15 @@ class PasswordResetActivity : AppCompatActivity() {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
                                 intent.putExtra("email", emailAddress.text.toString())
-
-
                                 Log.i("Successful", "Generate successful.")
                                 startActivity(intent)
                             } else {
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")
                             }
-
                         } else {
-
                             runOnUiThread {
                                 emailAddress.error = "Please enter an valid email"
                             }
-
                             Log.e(
                                 "Error",
                                 "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
@@ -86,10 +82,6 @@ class PasswordResetActivity : AppCompatActivity() {
                     }
                 }
             })
-
-
         }
     }
-
-
 }

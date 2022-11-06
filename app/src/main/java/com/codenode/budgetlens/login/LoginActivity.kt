@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -37,6 +38,7 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val context = this as Context
+
         val goToHomePageActivity = Intent(this, HomePageActivity::class.java)
 
         val loginButton: Button = findViewById(R.id.checkCredentials)
@@ -63,10 +65,10 @@ class LoginActivity : AppCompatActivity() {
         loginButton.setOnClickListener {
 
             if (usernameField.length() == 0) {
-                usernameField.error = "This field is required"
+                usernameField.error = "This field is required."
             }
             if (passwordField.length() == 0) {
-                passwordField.error = "This field is required"
+                passwordField.error = "This field is required."
             }
 
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/loginEndpoint/"
@@ -108,13 +110,13 @@ class LoginActivity : AppCompatActivity() {
                                 Log.i("Successful", "Login successful.")
                                 startActivity(goToHomePageActivity)
                             } else {
-                                Log.i("Empty", "Something went wrong${response.body?.string()}")
+                                Log.i("Empty", "Something went wrong ${response.body?.string()}")
                             }
 
                         } else {
                             Log.e(
                                 "Error",
-                                "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
+                                "Something went wrong ${response.body?.string()} ${response.message} ${response.headers}"
                             )
                         }
                     }
@@ -131,6 +133,16 @@ class LoginActivity : AppCompatActivity() {
         }
         val signInButton = findViewById<ImageView>(R.id.google_sign_in)
         signInButton.setOnClickListener { signIn() }
+        //If we just came back from a successful password change, let them know
+        val isSuccessPasswordChange: Boolean =
+            intent.getBooleanExtra("passwordChangeSuccess", false);
+        if (isSuccessPasswordChange) {
+            Snackbar.make(
+                signInButton,
+                "Successfully changed password.",
+                Snackbar.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun signIn() {
@@ -147,7 +159,7 @@ class LoginActivity : AppCompatActivity() {
                 task.getResult(ApiException::class.java)
                 navigateToSecondActivity()
             } catch (e: ApiException) {
-                Toast.makeText(applicationContext, "Something went wrong", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "Something went wrong ", Toast.LENGTH_SHORT)
                     .show()
             }
         }
