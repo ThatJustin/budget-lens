@@ -158,14 +158,6 @@ class ScanningReceiptActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val responseBody = response.body?.string()
                         if (responseBody != null) {
-                            val jsonObject = JSONObject(responseBody.toString())
-                            //Parse the bearer token from response
-                            val token = jsonObject.getString("token")
-
-                            //Save token and load profile (if it already exists, it just updates )
-                            BearerToken.saveToken(token, context)
-                            UserProfile.loadProfileFromAPI(context)
-
                             Log.i("Successful", "Receipt Saved to Database!")
                             startActivity(goToHomePageActivity)
                         } else {
