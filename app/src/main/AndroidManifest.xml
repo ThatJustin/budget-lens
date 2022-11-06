@@ -36,7 +36,7 @@
         </activity>
         <activity
             android:name=".login.password_reset.CodeConfirmationActivity"
-            android:exported="false">
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -75,14 +75,14 @@
         </activity>
         <activity
             android:name=".login.password_reset.NewPasswordActivity"
-            android:exported="false">
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".login.password_reset.PasswordResetActivity"
-            android:exported="false"
+            android:exported="true"
             android:parentActivityName=".login.LoginActivity">
             <meta-data
                 android:name="android.app.lib_name"
