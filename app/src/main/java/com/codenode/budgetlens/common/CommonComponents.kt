@@ -3,17 +3,24 @@ package com.codenode.budgetlens.common
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
+import com.codenode.budgetlens.login.LoginActivity
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.IOException
 
 class CommonComponents {
     companion object {
@@ -142,9 +149,61 @@ class CommonComponents {
                         }
                         true
                     }
+                    R.id.logout -> {
+                        val intent: Intent = Intent(context, LoginActivity::class.java)
+
+                        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/logoutEndpoint/"
+
+                        val registrationPost = OkHttpClient()
+
+                        val mediaType = "application/json".toMediaTypeOrNull()
+
+                        val body = ("").trimIndent().toRequestBody(mediaType)
+
+                        val request = Request.Builder()
+                            .url(url)
+                            .method("DELETE", body)
+                            .addHeader("Content-Type", "application/json")
+                            .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                            .build()
+
+                        registrationPost.newCall(request).enqueue(object : Callback {
+                            override fun onFailure(call: Call, e: IOException) {
+                                e.printStackTrace()
+                            }
+
+                            override fun onResponse(call: Call, response: Response) {
+                                Log.i("Response", "Got the response from server")
+                                response.use {
+                                    if (response.isSuccessful) {
+                                        val responseBody = response.body?.string()
+                                        if (responseBody != null) {
+                                            Log.i("Successful", "Logout Successful.")
+                                            BearerToken.delete(context)
+                                            context.startActivity(intent)
+                                        } else {
+                                            Log.i("Empty", "Something went wrong${response.body?.string()}")
+                                        }
+
+                                    } else {
+                                        Log.e(
+                                            "Error",
+                                            "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
+                                        )
+                                    }
+                                }
+                            }
+                        })
+                        true
+                    }
                     else -> false
                 }
             }
         }
+
+        fun handleAddingReceipts(){
+
+        }
+
     }
 }
