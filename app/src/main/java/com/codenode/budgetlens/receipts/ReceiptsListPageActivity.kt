@@ -12,6 +12,7 @@ import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
+import com.codenode.budgetlens.data.UserReceipts.Companion.pageNumber
 import com.codenode.budgetlens.data.UserReceipts.Companion.userReceipts
 
 class ReceiptsListPageActivity : AppCompatActivity() {
@@ -31,6 +32,7 @@ class ReceiptsListPageActivity : AppCompatActivity() {
         CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
 
         userReceipts.clear()
+        pageNumber = 1
 
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         receiptList = loadReceiptsFromAPI(this, pageSize, additionalData)
@@ -68,6 +70,7 @@ class ReceiptsListPageActivity : AppCompatActivity() {
                 override fun onQueryTextSubmit(query: String?): Boolean {
 
                     additionalData += "?search=" + searchBar.query
+                    userReceipts.clear()
                     receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
                     adapter.notifyDataSetChanged()
                     return true
