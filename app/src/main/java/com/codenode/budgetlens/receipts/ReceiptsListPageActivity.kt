@@ -11,6 +11,7 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
+import com.codenode.budgetlens.data.UserReceipts
 import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
 import com.codenode.budgetlens.data.UserReceipts.Companion.pageNumber
 import com.codenode.budgetlens.data.UserReceipts.Companion.userReceipts
