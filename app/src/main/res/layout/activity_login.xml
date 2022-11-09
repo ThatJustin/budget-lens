@@ -65,7 +65,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- forgor password page -->
+    <!-- forgot password page -->
     <Button
         android:id="@+id/forgorPass"
         android:layout_width="wrap_content"
