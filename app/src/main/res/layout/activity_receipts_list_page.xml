@@ -72,10 +72,12 @@
                 android:id="@+id/search_bar_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:background="#E8DEF8"
-                android:hint="@string/search"
+                android:queryHint="@string/search"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
+                android:iconifiedByDefault="false"
                 android:singleLine="true"
                 app:layout_constraintTop_toTopOf="@+id/search_bar"
                 app:startIconDrawable="@drawable/search_48px" />

@@ -11,7 +11,6 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
-import com.codenode.budgetlens.data.UserReceipts
 import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
 import com.codenode.budgetlens.data.UserReceipts.Companion.pageNumber
 import com.codenode.budgetlens.data.UserReceipts.Companion.userReceipts
@@ -83,6 +82,16 @@ class ReceiptsListPageActivity : AppCompatActivity() {
                 }
 
                 override fun onQueryTextChange(newText: String?): Boolean {
+                    //clean the data, otherwise the search will based on the previous search
+                    additionalData = ""
+                    receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
+                    adapter.notifyDataSetChanged()
+
+                    //perform the search
+                    additionalData += "?search=" + searchBar.query
+                    userReceipts.clear()
+                    receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
+                    adapter.notifyDataSetChanged()
                     return true
                 }
 
