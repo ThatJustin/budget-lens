@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".receipts.ReceiptsListPageActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -20,9 +20,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/receipts_filter_bar"
-            app:titleCentered="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:titleCentered="true">
 
             <TextView
                 android:id="@+id/receiptsTextView"
@@ -33,7 +33,7 @@
                 android:textColor="@color/black"
                 android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="@+id/receipts_filter_bar"
-                app:layout_constraintTop_toTopOf="@+id/receipts_filter_bar"/>
+                app:layout_constraintTop_toTopOf="@+id/receipts_filter_bar" />
 
             <Button
                 android:id="@+id/sort_by_button"
@@ -44,7 +44,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/receiptsTextView"
                 app:layout_constraintEnd_toEndOf="@+id/receiptsTextView"
                 app:layout_constraintStart_toStartOf="@+id/receiptsTextView"
-                app:layout_constraintTop_toTopOf="@+id/receiptsTextView"/>
+                app:layout_constraintTop_toTopOf="@+id/receiptsTextView" />
 
             <Button
                 android:id="@+id/filter_button"
@@ -56,34 +56,29 @@
                 app:layout_constraintEnd_toEndOf="@+id/receiptsTextView"
                 app:layout_constraintHorizontal_bias="0.944"
                 app:layout_constraintStart_toStartOf="@+id/receiptsTextView"
-                app:layout_constraintTop_toTopOf="@+id/receiptsTextView"/>
+                app:layout_constraintTop_toTopOf="@+id/receiptsTextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/search_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            app:endIconMode="clear_text">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/search_bar_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:startIconDrawable="@drawable/search_48px"
-                android:hint="@string/search"
-                android:background="#E8DEF8"
-                android:inputType="text"
-                app:layout_constraintTop_toTopOf="@+id/search_bar"/>
-
-        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="vertical">
+
+            <SearchView
+
+                android:id="@+id/search_bar_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#E8DEF8"
+                android:hint="@string/search"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:singleLine="true"
+                app:layout_constraintTop_toTopOf="@+id/search_bar"
+                app:startIconDrawable="@drawable/search_48px" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/receipts_list"
@@ -98,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:indeterminate="true"
-                android:padding="10dp"/>
+                android:padding="10dp" />
 
         </LinearLayout>
 
@@ -115,6 +110,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

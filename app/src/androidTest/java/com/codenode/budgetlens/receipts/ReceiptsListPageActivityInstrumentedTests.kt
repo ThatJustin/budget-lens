@@ -3,8 +3,11 @@ package com.codenode.budgetlens.receipts
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoMatchingViewException
+import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -14,6 +17,7 @@ import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
+import org.hamcrest.core.IsNot.not
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -23,6 +27,15 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class ReceiptsListPageActivityInstrumentedTests {
+
+    fun ViewInteraction.isDisplayed(): Boolean {
+        return try {
+            check(matches(ViewMatchers.isDisplayed()))
+            true
+        } catch (e: NoMatchingViewException) {
+            false
+        }
+    }
 
     // This is used to clear the shared preferences before each test
     companion object {
@@ -69,8 +82,14 @@ class ReceiptsListPageActivityInstrumentedTests {
         val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-        onView(withId(R.id.receipts_list)).perform(swipeUp())
-        onView(withId(R.id.receipts_list)).perform(swipeDown())
-        onView(withId(R.id.receipts_list)).perform(click()).check(matches(isDisplayed()))
+        if (onView(withId(R.id.receipts_card)).isDisplayed()) {
+            onView(withId(R.id.receipts_list)).perform(swipeUp())
+            onView(withId(R.id.receipts_list)).perform(swipeDown())
+            onView(withId(R.id.receipts_list)).perform(click())
+            onView(withId(R.id.relativeLayout)).check(matches(isDisplayed()))
+        }
+        else {
+            !onView(withId(R.id.receipts_card)).isDisplayed()
+        }
     }
 }
