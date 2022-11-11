@@ -1,5 +1,6 @@
 package com.codenode.budgetlens.receipts
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
@@ -22,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.*
 import java.io.IOException
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -31,7 +33,8 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
     var receiptInfo = receipt
 
     private lateinit var receiptInfoDialog: Dialog
-    var isDeletedReceipt = false;
+    var isDeletedReceipt = false
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -51,13 +54,30 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
 //        val tvReturnPeriod = dialogView.findViewById<TextView>(R.id.tvReturnPeriod)
 
 
-        tvMerchantName.text = receiptInfo.merchant_name
+        if (receiptInfo.merchant_name != null) {
+            tvMerchantName.text = context.getString(R.string.merchant_name, receiptInfo.merchant_name)
+        } else {
+            tvMerchantName.text = context.getString(R.string.merchant_name, "N/A")
+        }
         tvDateUploaded.text = "0000/00/00 - 00:00" // not yet implemented in Receipt Model
-        tvSplitAmount.text = receiptInfo.total_amount.toString()
-        tvTotalAmountCurrency.text = "Total Amount(${receiptInfo.currency})"
+        if (receiptInfo.total_amount != null) {
+            tvSplitAmount.text = context.getString(R.string.total, receiptInfo.total_amount)
+        } else {
+            tvSplitAmount.text = context.getString(R.string.total, 0.00)
+        }
+        if (receiptInfo.currency != null) {
+            tvTotalAmountCurrency.text = context.getString(R.string.total_amount_currency, receiptInfo.currency)
+        } else {
+            tvTotalAmountCurrency.text = context.getString(R.string.total_amount_currency, "N/A")
+        }
 
-        tvReceiptDate.text = receiptInfo.scan_date
-        tvAddedBy.text = UserProfile.getFullName()
+        if (receiptInfo.scan_date != null) {
+            tvReceiptDate.text = context.getString(R.string.scan_date, receiptInfo.scan_date)
+        } else {
+            val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            tvReceiptDate.text = context.getString(R.string.scan_date, date)
+        }
+        tvAddedBy.text = context.getString(R.string.user_profile_name, " " + UserProfile.getFullName())
 
 //      tvExpirationDate.text = receiptInfo.important_dates
 //      tvReturnPeriod.text = receiptInfo.important_dates
@@ -78,8 +98,8 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
             )
             window.setBackgroundDrawableResource(R.color.purple_50)
             window.setLayout(
-                WindowManager.LayoutParams.FILL_PARENT,
-                WindowManager.LayoutParams.FILL_PARENT
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT
             )
         }
         handleListeners()

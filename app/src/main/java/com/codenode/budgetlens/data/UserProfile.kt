@@ -142,7 +142,7 @@ class UserProfile {
         private fun updateSharedPreferences(context: Context) {
             //Update the preference
             val preferences: SharedPreferences = GlobalSharedPreferences.get(context)
-            val json = Gson().toJson(userProfile);
+            val json = Gson().toJson(userProfile)
             preferences.edit().putString("UserProfile", json).apply()
         }
 
@@ -224,7 +224,7 @@ class UserProfile {
         }
 
         fun getFullName(): String {
-            return userProfile.firstName + " " + userProfile.lastName;
+            return userProfile.firstName + " " + userProfile.lastName
         }
     }
 }
