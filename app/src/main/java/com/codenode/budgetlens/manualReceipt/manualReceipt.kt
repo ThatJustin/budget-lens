@@ -65,16 +65,16 @@ open class Receipt() : AppCompatActivity() {
             val itemTmp = item.text.toString();
             Log.d("1111111",date.text.toString());
             if(date.text.toString()==null|| ("".equals(date.text.toString()))){
-                Toast.makeText(this,"Please choose date",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"pleace choose date",Toast.LENGTH_SHORT).show();
             }else if(total.text.toString()==null|| ("".equals(total.text.toString()))){
-                Toast.makeText(this,"Please enter total",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"pleace enter total",Toast.LENGTH_SHORT).show();
             }else if(item.text.toString()==null|| ("".equals(item.text.toString()))){
-                Toast.makeText(this,"Please enter item",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"pleace enter item",Toast.LENGTH_SHORT).show();
             }else if(location.text.toString()==null|| ("".equals(location.text.toString()))){
-                Toast.makeText(this,"Please enter location",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"pleace enter location",Toast.LENGTH_SHORT).show();
             }else{
                 if(itemTmp.indexOf(",")==-1){
-                    Toast.makeText(this,"Please enter current item-price",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,"pleace enter current item-price",Toast.LENGTH_SHORT).show();
                 }else{
                     val itemArray = itemTmp.split(",");
                     if (itemArray.size>1){
@@ -98,10 +98,10 @@ open class Receipt() : AppCompatActivity() {
                             if( item_price.matches("-?\\d+(\\.\\d+)?".toRegex())){
                                 finish()
                             }else{
-                                Toast.makeText(this,"please enter current price",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
                             }
                         }else{
-                            Toast.makeText(this,"please enter current price",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
                         }
                     }
 
