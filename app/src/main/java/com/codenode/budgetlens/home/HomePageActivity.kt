@@ -18,6 +18,8 @@ import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.common.ScanningReceiptActivity
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.login.LoginActivity
+import com.codenode.budgetlens.manualReceipt.Receipt
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -51,6 +53,13 @@ open class HomePageActivity() : AppCompatActivity() {
         val scanReceiptButton:FloatingActionButton = findViewById(R.id.ScanReceipt)
 
         val context = this
+
+        manualReceiptButton.setOnClickListener{
+            val intent = Intent(context, Receipt::class.java)
+            context.startActivity(intent)
+            context.finish()
+            context.overridePendingTransition(0, 0)
+        }
 
         openAddMenu.setOnClickListener{
             if(AddMenuIsClosed){
