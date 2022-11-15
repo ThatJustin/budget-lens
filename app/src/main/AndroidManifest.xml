@@ -18,6 +18,15 @@
         android:theme="@style/Theme.BudgetLens"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <provider
+            android:authorities="com.codenode.budgetlens"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
         <activity
             android:name=".MainActivity"
             android:exported="true">
