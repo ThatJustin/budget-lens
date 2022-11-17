@@ -63,17 +63,26 @@ open class Receipt() : AppCompatActivity() {
         val filledButton = findViewById<Button>(R.id.filledButton)
         filledButton.setOnClickListener {
             val itemTmp = item.text.toString();
+            var flag = 0;
             Log.d("1111111",date.text.toString());
             if(date.text.toString()==null|| ("".equals(date.text.toString()))){
+                flag++;
                 Toast.makeText(this,"pleace choose date",Toast.LENGTH_SHORT).show();
-            }else if(total.text.toString()==null|| ("".equals(total.text.toString()))){
+            }
+            if(total.text.toString()==null|| ("".equals(total.text.toString()))){
+                flag++;
                 Toast.makeText(this,"pleace enter total",Toast.LENGTH_SHORT).show();
-            }else if(item.text.toString()==null|| ("".equals(item.text.toString()))){
+            }
+            if(item.text.toString()==null|| ("".equals(item.text.toString()))){
+                flag++;
                 Toast.makeText(this,"pleace enter item",Toast.LENGTH_SHORT).show();
-            }else if(location.text.toString()==null|| ("".equals(location.text.toString()))){
+            }
+            if(location.text.toString()==null|| ("".equals(location.text.toString()))){
+                flag++;
                 Toast.makeText(this,"pleace enter location",Toast.LENGTH_SHORT).show();
             }else{
                 if(itemTmp.indexOf(",")==-1){
+                    flag++;
                     Toast.makeText(this,"pleace enter current item-price",Toast.LENGTH_SHORT).show();
                 }else{
                     val itemArray = itemTmp.split(",");
@@ -85,9 +94,11 @@ open class Receipt() : AppCompatActivity() {
                                 if( item_price.matches("-?\\d+(\\.\\d+)?".toRegex())){
                                     finish()
                                 }else{
+                                    flag++;
                                     Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
                                 }
                             }else{
+                                flag++;
                                 Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -98,9 +109,11 @@ open class Receipt() : AppCompatActivity() {
                             if( item_price.matches("-?\\d+(\\.\\d+)?".toRegex())){
                                 finish()
                             }else{
+                                flag++;
                                 Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
                             }
                         }else{
+                            flag++;
                             Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
                         }
                     }

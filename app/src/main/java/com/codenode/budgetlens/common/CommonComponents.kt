@@ -6,18 +6,14 @@ import android.content.Intent
 import android.view.Gravity
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
-import com.codenode.budgetlens.manualReceipt.Receipt
 import com.codenode.budgetlens.login.LoginActivity
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.google.android.material.appbar.MaterialToolbar
@@ -47,7 +43,6 @@ class CommonComponents {
             myBottomNavigationView.setOnItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.home -> {
-                        println("Calling handletopbar")
                         if (currentActivityName != ActivityName.HOME) {
                             val intent = Intent(context, HomePageActivity::class.java)
                             context.startActivity(intent)
@@ -55,26 +50,18 @@ class CommonComponents {
                         }
                         true
                     }
-
- //                   R.id.receipt -> { if (currentActivityName != ActivityName.RECEIPT) {
-//                            val intent = Intent(context, ReceiptActivity::class.java)
-//                            context.startActivity(intent)
-//                            activity.overridePendingTransition(0, 0)
-//                   showPopup(myBottomNavigationView, context, activity)
                     R.id.receipts -> {
                         if (currentActivityName != ActivityName.RECEIPTS) {
-                            //val intent = Intent(context, ReceiptsListPageActivity::class.java)
-                            //context.startActivity(intent)
-                            //activity.finish()
-                            //activity.overridePendingTransition(0, 0)
-                            showPopup(myBottomNavigationView, context, activity)
+                            val intent = Intent(context, ReceiptsListPageActivity::class.java)
+                            context.startActivity(intent)
+                            activity.finish()
+                            activity.overridePendingTransition(0, 0)
                         }
                         true
                     }
                     R.id.budget -> {
                         if (currentActivityName != ActivityName.BUDGET) {
                             //Might open a menu?
-
                         }
                         true
                     }
@@ -98,33 +85,6 @@ class CommonComponents {
                     else -> false
                 }
             }
-        }
-
-        private fun showPopup(view: View, context: Context, activity: Activity) {
-            var popup: PopupMenu? = null;
-            popup = PopupMenu(context, view)
-            popup.inflate(R.menu.popup_menu)
-            popup.setGravity(Gravity.END);
-
-            popup.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item: MenuItem? ->
-
-                when (item!!.itemId) {
-                    R.id.item1 -> {
-                        Toast.makeText(context, item.title, Toast.LENGTH_SHORT).show();
-                    }
-                    R.id.item2 -> {
-                        //Toast.makeText(context, item.title, Toast.LENGTH_SHORT).show();
-                        //val goReceiptPageActivity = Intent(context, Receipt::class.java)
-                        val intent = Intent(context, Receipt::class.java)
-                        context.startActivity(intent)
-                        activity.overridePendingTransition(0, 0)
-                    }
-                }
-
-                true
-            })
-
-            popup.show()
         }
 
         /**
