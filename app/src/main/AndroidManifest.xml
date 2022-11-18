@@ -18,6 +18,15 @@
         android:theme="@style/Theme.BudgetLens"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <provider
+            android:authorities="com.codenode.budgetlens"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
         <activity
             android:name=".TestActivity"
             android:exported="false">
@@ -67,6 +76,7 @@
         <activity
             android:name=".receipts.ReceiptsListPageActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".home.HomePageActivity">
             <meta-data
                 android:name="android.app.lib_name"

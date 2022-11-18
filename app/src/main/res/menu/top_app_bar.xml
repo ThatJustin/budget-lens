@@ -11,7 +11,7 @@
         <menu>
             <item
                 android:id="@+id/sub_profile"
-                android:title="John Smith" />
+                android:title="@string/user_profile_name" />
 
             <item
                 android:id="@+id/sub_edit_profile"
