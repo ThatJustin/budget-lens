@@ -19,7 +19,7 @@ class UserItems {
         fun loadItemsFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<Items> {
 
 
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/pageNumber=${UserReceipts.pageNumber}&pageSize=${pageSize}/"+additionalData
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/pageNumber=${UserItems.pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
 
             val receiptsRequest = OkHttpClient()
@@ -49,6 +49,8 @@ class UserItems {
                                     userItems.add(Items(id,name,price,importantDates))
                                 }
                                 if (contentLoadedFromResponse) {
+                                    Log.i("im here bruh","hahahhahahahhahahahah")
+                                    Log.i("if",pageNumber.toString())
                                     pageNumber++
                                 }
                                 Log.i("Successful", "Successfully loaded items from API.")
