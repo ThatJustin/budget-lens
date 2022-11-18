@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:minWidth="275dp"
-    android:minHeight="355dp"
+    android:minHeight="255dp"
     android:orientation="vertical">
 
     <TextView
@@ -27,7 +27,7 @@
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="20dp"
-        android:text="Sort Option 1" />
+        android:text="Price" />
 
     <com.google.android.material.chip.ChipGroup
         android:layout_width="match_parent"
@@ -60,7 +60,7 @@
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="20dp"
-        android:text="Sort Option 2" />
+        android:text="Name" />
 
     <com.google.android.material.chip.ChipGroup
         android:layout_width="match_parent"
@@ -79,40 +79,6 @@
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_4"
-            style="@style/ItemSortChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="Descending" />
-    </com.google.android.material.chip.ChipGroup>
-
-    <TextView
-        style="@style/LabelTextStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="20dp"
-        android:paddingTop="10dp"
-        android:paddingEnd="20dp"
-        android:text="Sort Option 3" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="10dp"
-        app:selectionRequired="false"
-        app:singleSelection="true">
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_5"
-            style="@style/ItemSortChipStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:text="Ascending" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_6"
             style="@style/ItemSortChipStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

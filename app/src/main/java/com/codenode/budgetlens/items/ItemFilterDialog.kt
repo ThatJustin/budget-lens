@@ -1,4 +1,4 @@
-package com.codenode.budgetlens
+package com.codenode.budgetlens.items
 
 import android.app.Dialog
 import android.content.Context
@@ -6,12 +6,15 @@ import android.os.Bundle
 import android.view.View
 import android.view.Window
 import android.widget.ImageButton
+import com.codenode.budgetlens.R
 
 
 class ItemFilterDialog(context: Context) : Dialog(context) {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
+
 
         val dialogView: View = layoutInflater.inflate(R.layout.item_filter_dialog, null)
         setContentView(dialogView)
