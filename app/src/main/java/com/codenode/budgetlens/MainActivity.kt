@@ -16,15 +16,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         GlobalSharedPreferences.load(this)
-
-        val loginActivityBtn: ImageButton = findViewById(R.id.LoginActivityBtn)
-        loginActivityBtn.setOnClickListener() {
-            val intent : Intent = if (BearerToken.exists(this)) {
-                Intent(this, HomePageActivity::class.java)
-            } else {
-                Intent(this, LoginActivity::class.java)
-            }
-            startActivity(intent)
-        }
+        startActivity(Intent(this, TestActivity::class.java))
+//        val loginActivityBtn: ImageButton = findViewById(R.id.LoginActivityBtn)
+//        loginActivityBtn.setOnClickListener() {
+//            val intent : Intent = if (BearerToken.exists(this)) {
+//                Intent(this, HomePageActivity::class.java)
+//            } else {
+//                Intent(this, LoginActivity::class.java)
+//            }
+//            startActivity(intent)
+//        }
     }
 }
