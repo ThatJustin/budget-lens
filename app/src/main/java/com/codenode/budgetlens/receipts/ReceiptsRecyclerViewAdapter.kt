@@ -12,6 +12,8 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Receipts
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ReceiptsRecyclerViewAdapter(private val receipts: MutableList<Receipts>) :
     RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>() {
@@ -28,12 +30,23 @@ class ReceiptsRecyclerViewAdapter(private val receipts: MutableList<Receipts>) :
 
     override fun onBindViewHolder(holder: ReceiptsRecyclerViewAdapter.ViewHolder, position: Int) {
         val receipt = receipts[position]
-        holder.merchantName.text =
-            holder.itemView.context.getString(R.string.merchant_name, receipt.merchant_name)
-        holder.scanDate.text =
-            holder.itemView.context.getString(R.string.scan_date, receipt.scan_date)
-        holder.totalAmount.text =
-            holder.itemView.context.getString(R.string.total_amount, receipt.total_amount)
+        if (receipt.merchant_name == null) {
+            holder.merchantName.text = holder.itemView.context.getString(R.string.merchant_name, "N/A")
+        }
+        else {
+            holder.merchantName.text = holder.itemView.context.getString(R.string.merchant_name, receipt.merchant_name)
+        }
+        if (receipt.scan_date == null) {
+            val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+            holder.scanDate.text = holder.itemView.context.getString(R.string.scan_date, date)
+        } else {
+            holder.scanDate.text = holder.itemView.context.getString(R.string.scan_date, receipt.scan_date)
+        }
+        if (receipt.total_amount == null) {
+            holder.totalAmount.text = holder.itemView.context.getString(R.string.total_amount, 0.00)
+        } else {
+            holder.totalAmount.text = holder.itemView.context.getString(R.string.total_amount, receipt.total_amount)
+        }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {

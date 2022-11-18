@@ -56,7 +56,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
-                android:layout_weight="1"
                 android:src="@drawable/ic_baseline_store_24" />
 
             <TextView
@@ -67,10 +66,9 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="9dp"
                 android:layout_marginEnd="0dp"
-                android:layout_weight="1.25"
                 android:text="TESTO"
                 android:textColor="@color/purple_700"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -81,9 +79,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="0dp"
-                android:layout_weight="1.5"
-                android:text="2069/04/20 4:20 PM"
-                android:textSize="18dp"
+                android:text="@string/scan_date"
+                android:textSize="18sp"
                 android:textStyle="bold" />
         </RelativeLayout>
 
@@ -99,9 +96,10 @@
                 android:id="@+id/tvTotalAmountCurrency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Amount (%1$s): "
-                android:textSize="18dp"
-                android:paddingLeft="82dp"
+                android:text="@string/total_amount_currency"
+                android:textSize="18sp"
+                android:paddingStart="82dp"
+                android:paddingEnd="0dp"
                 android:textStyle="bold" />
 
             <TextView
@@ -109,8 +107,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="0.00"
-                android:textSize="18dp"
+                android:text="@string/total"
+                android:textSize="18sp"
                 android:textColor="@color/purple_700"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -200,19 +198,18 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cvReceiptImage"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
-                android:text="Added by "
-                android:textSize="18dp"/>
+                android:text="@string/added_by"
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tvAddedBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Amir"
-                android:textSize="18dp"
+                android:text="@string/user_profile_name"
+                android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -223,9 +220,8 @@
             android:layout_below="@id/cvReceiptImage"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
-            android:layout_weight="1.5"
             android:text="2022/02/02 - 13:54"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <Button
@@ -236,7 +232,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="25dp"
             android:layout_marginBottom="45dp"
-            android:text="View Items" />
+            android:text="@string/view_items" />
 
         <Button
             android:id="@+id/receipt_info_delete"
@@ -246,7 +242,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="25dp"
             android:layout_marginBottom="50dp"
-            android:text="Delete" />
+            android:text="@string/delete" />
 
         <Button
             android:id="@+id/receipt_info_add_important_date"
@@ -256,7 +252,7 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="45dp"
-            android:text="Add Date" />
+            android:text="@string/add_date" />
 
         <Button
             android:id="@+id/receipt_info_edit"
@@ -266,7 +262,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="50dp"
-            android:text="Edit" />
+            android:text="@string/edit" />
 
 
     </RelativeLayout>
