@@ -1,5 +1,6 @@
 package com.codenode.budgetlens.items
 
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +31,6 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
         holder.itemPrice.text =
             holder.itemView.context.getString(R.string.price, item.price)
     }
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
@@ -39,16 +39,12 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
     override fun getItemCount(): Int {
         return items.size
     }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val itemName: TextView = itemView.findViewById(R.id.item_name)
         val itemPrice: TextView = itemView.findViewById(R.id.item_price)
-
         init {
             itemView.setOnClickListener(this)
         }
-
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {

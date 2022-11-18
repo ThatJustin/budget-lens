@@ -1,106 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/items_cards"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:backgroundTint="@android:color/transparent"
+    android:backgroundTint="#FFFFFF"
     android:clickable="true"
     android:focusable="true"
     app:cardCornerRadius="10dp"
-    app:cardElevation="3dp"
+
     app:cardUseCompatPadding="true"
     app:strokeColor="@android:color/transparent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="7">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/items_months_view"
-        android:layout_width="87dp"
-        android:layout_height="95dp"
-        android:layout_gravity="start"
-        android:background="#FFFFFF"
-        android:backgroundTint="@android:color/transparent"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:strokeColor="@android:color/transparent">
-
-
-        <LinearLayout
-            android:layout_width="80dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/items_months_view"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
-            android:background="#FFFBFE"
-            android:orientation="horizontal">
+            android:layout_weight="1.5"
+            android:background="#FFFFFF"
+            android:backgroundTint="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:strokeColor="@android:color/transparent">
 
 
             <TextView
                 android:id="@+id/months"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#EAEAEA"
-                android:padding="10dp"
-                android:text="@string/total_amount"
-                android:textColor="@color/black"
+                android:background="@android:color/transparent"
+                android:padding="16dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginLeft="6dp"
+                android:text="@string/date"
+                android:layout_gravity="center"
+                android:textColor="#79747E"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/items_card_view"
-        android:layout_width="307dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:background="#FFFFFF"
-        android:backgroundTint="@android:color/transparent"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true"
-        app:strokeColor="@android:color/transparent">
-
-
-        <LinearLayout
-            android:layout_width="400dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/items_card_view"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="#FFFBFE"
-            android:orientation="horizontal">
+            android:layout_gravity="end"
+            app:cardElevation="3dp"
+            android:layout_weight="5.5"
+            android:background="#FFFFFF"
+            android:backgroundTint="@android:color/transparent"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="10dp"
+            app:cardUseCompatPadding="true"
+            app:strokeColor="@android:color/transparent">
+
 
             <LinearLayout
-                android:id="@+id/items_card"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="match_parent"
                 android:background="#FFFBFE"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="5">
 
-                <LinearLayout
-                    android:id="@+id/category_icon"
-                    android:layout_width="54dp"
+
+                <TextView
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_gravity="center"
                     android:background="#FFFBFE"
-                    android:orientation="vertical">
+                    android:drawableStart="@drawable/ic_baseline_lock_24"
+                    android:padding="10dp"
 
-                    <TextView
-                        android:layout_width="36dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="end"
-                        android:background="#FFFBFE"
-                        android:drawableStart="@drawable/ic_baseline_lock_24"
-                        android:scaleX="1.5"
-                        android:scaleY="1.5" />
-                </LinearLayout>
+                    android:layout_weight="1"/>
 
 
                 <LinearLayout
                     android:id="@+id/items_detail"
-                    android:layout_width="131dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="2.5"
                     android:background="#FFFBFE"
                     android:orientation="vertical">
 
@@ -108,7 +97,9 @@
                         android:id="@+id/item_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="9dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginStart="2dp"
                         android:letterSpacing="0.01"
                         android:text="@string/item_name"
                         android:textColor="@color/black"
@@ -116,21 +107,17 @@
                         android:textStyle="bold"
                         app:layout_constraintTop_toTopOf="@id/buy_date" />
 
-                    <TextView
-                        android:id="@+id/category_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/category_name"
-                        android:textColor="@color/black"
-                        android:textSize="10sp"
-                        tools:ignore="SmallSp" />
+
 
                     <TextView
                         android:id="@+id/buy_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="1dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginStart="2dp"
                         android:text="@string/scan_date"
-                        android:textColor="#6B000000"
+                        android:textColor="@color/black"
                         android:textSize="14sp"
 
 
@@ -139,8 +126,9 @@
 
                 <LinearLayout
                     android:id="@+id/amount_detail"
-                    android:layout_width="109dp"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1.5"
                     android:background="#F0F0F0"
                     android:orientation="vertical">
 
@@ -148,18 +136,19 @@
                         android:id="@+id/item_price"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="20dp"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginRight="10dp"
                         android:background="#F0F0F0"
                         android:text="@string/price"
                         android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="12sp"
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
 
             </LinearLayout>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

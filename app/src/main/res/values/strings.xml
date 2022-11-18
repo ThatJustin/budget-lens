@@ -22,7 +22,9 @@
     <string name="scan_date">%1$s</string>
     <string name="receipt_image">Receipt Image URL: %1$s</string>
     <string name="total_amount">Total Amount($): %1$f</string>
-    <string name="price">Price($): %1$f</string>
+    <string name="item_total">%1$f</string>
+    <string name="date"> %1$f</string>
+    <string name="price">$%1$.2f</string>
     <string name="home">Home</string>
     <string name="receipts">Receipts</string>
     <string name="budget">Budget</string>
