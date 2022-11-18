@@ -9,6 +9,7 @@ import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Items
 import com.codenode.budgetlens.data.UserItems.Companion.loadItemsFromAPI
 import com.codenode.budgetlens.data.UserItems.Companion.pageNumber
@@ -27,7 +28,7 @@ class ItemListActivity : AppCompatActivity() {
         //search/sort/filter variable
         var additionalData = ""
         val searchBar: SearchView = findViewById(R.id.search_bar_text)
-//        CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
+        CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
 //        CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
 
         userItems.clear()
