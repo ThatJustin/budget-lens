@@ -29,7 +29,7 @@ class ItemListActivity : AppCompatActivity() {
         var additionalData = ""
         val searchBar: SearchView = findViewById(R.id.search_bar_text)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
-//        CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
+
 
         userItems.clear()
         pageNumber = 1
@@ -44,14 +44,7 @@ class ItemListActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
 
         if (itemList.isEmpty()) {
-            //test data
-//            val list = mutableListOf<Items>()
-//            var item1 = Items(1,"Apple",4.99,"Nov-16")
-//            var item2 = Items(2,"Banana",3.99,"Nov-26")
-//            var item3 = Items(3,"Peach",4.99,"Nov-17")
-//            itemList.add(item1)
-//            itemList.add(item2)
-//            itemList.add(item3)
+
             itemsListRecyclerView!!.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
