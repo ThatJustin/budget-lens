@@ -4,21 +4,30 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.media.MediaRouter.UserRouteInfo
+import android.net.Uri
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+//import kotlinx.android.synthetic.main.activity_scanning_receipt.view.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -30,40 +39,75 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDateTime
 
+private lateinit var photoFile:File
+
 class ScanningReceiptActivity : AppCompatActivity() {
 
-    private lateinit var getImage: Button
+    private lateinit var getImage2: Button
+    private lateinit var getGalleryImg: FloatingActionButton
     private lateinit var confirmImage: Button
     private lateinit var imageView: ImageView
     private var imagePath: String? = ""
     private var fileName: String = ""
 
+    private var currentImgPath: String? = ""
+    private var tempFile: String? = ""
+
+    private var galPath: String? = ""
+    private var pictureFromGall: File? = null
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanning_receipt)
 
         val context = this as Context
         val goToHomePageActivity = Intent(this, HomePageActivity::class.java)
-        getImage = findViewById(R.id.getImage)
+        getImage2 = findViewById(R.id.getImage)
+        getGalleryImg = findViewById(R.id.addFromGallery)
         confirmImage = findViewById(R.id.confirmReceipt)
         imageView = findViewById(R.id.imageView)
 
-        if (ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(android.Manifest.permission.CAMERA),
-                101
-            )
+        getGalleryImg.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = "image/*"
+            tempFile = "Receipt_${LocalDateTime.now()}"
+            var storageDirectory: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            try {
+                var imgFile: File = File.createTempFile(tempFile,".png",storageDirectory)
+                currentImgPath = imgFile.absolutePath // path to where images are saved:/storage/emulated/0/Android/data/com.codenode.budgetlens/files/Pictures
+                var imageUri: Uri = FileProvider.getUriForFile(this, "com.codenode.budgetlens",imgFile)
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+                tempFile = currentImgPath.toString().split("/").last()
+                Log.i("Path", currentImgPath.toString())
+                Log.i("Path", tempFile.toString())
+                pictureFromGall = getIntent().getExtras()?.get(tempFile) as File?
+                tempFile = pictureFromGall.toString()
+                startActivityForResult(intent, 2)
+
+            }catch (e: IOException){
+                e.printStackTrace()
+            }
         }
 
-        getImage.setOnClickListener {
-            var img = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            startActivityForResult(img, 101)
+        getImage2.setOnClickListener{
+            tempFile = "Receipt_${LocalDateTime.now()}"
+            var storageDirectory: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+            try {
+                var imgFile: File = File.createTempFile(tempFile,".png",storageDirectory)
+                currentImgPath = imgFile.absolutePath // path to where images are saved:/storage/emulated/0/Android/data/com.codenode.budgetlens/files/Pictures
+                var imageUri: Uri = FileProvider.getUriForFile(this, "com.codenode.budgetlens",imgFile)
+                var intent: Intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+                tempFile = currentImgPath.toString().split("/").last()
+                startActivityForResult(intent, 1)
+
+            }catch (e: IOException){
+                e.printStackTrace()
+            }
         }
+
         confirmImage.setOnClickListener {
             confirm(context, goToHomePageActivity)
         }
@@ -73,50 +117,20 @@ class ScanningReceiptActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 101) {
-            val pic = data?.extras?.get("data") as Bitmap
-            imageView.setImageBitmap(pic)
-            storePicture(pic)
-        }
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 101 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            getImage.isEnabled = true
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun storePicture(receiptPhoto: Bitmap) {
-        val root = Environment.getDataDirectory().toString()
-        fileName = "Receipt_${LocalDateTime.now()}.jpg".replace(":", ".")
-
-        val file = File(this.cacheDir, fileName)
-
-        Log.i("Test", file.toString())
-
-//        val file = File("$root/Download/$fileName")
-        if (!file.exists()) {
-            file.createNewFile()
-        }
-        Log.i("path", file.absolutePath)
-        try {
-            val output = FileOutputStream(file)
-            receiptPhoto.compress(Bitmap.CompressFormat.JPEG, 100, output)
-            imagePath = file.absolutePath
-            output.flush()
-            output.close()
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            var bitmap: Bitmap = BitmapFactory.decodeFile(currentImgPath)
+            var imageView: ImageView = findViewById(R.id.imageView)
+            imageView.setImageBitmap(bitmap)
+            getImage2.text = "Scan Again?"
             confirmImage.isEnabled = true
             confirmImage.alpha = 1.0F
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
+        if (requestCode == 2) {
+            imageView.setImageURI(data?.data)
+            confirmImage.isEnabled = true
+            confirmImage.alpha = 1.0F
 
+        }
     }
 
     private fun confirm(context: Context, goToHomePageActivity: Intent) {
@@ -129,8 +143,8 @@ class ScanningReceiptActivity : AppCompatActivity() {
 
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("receipt_image", fileName,
-                File(imagePath).asRequestBody("image/jpg".toMediaType()))
+            .addFormDataPart("receipt_image", tempFile,
+                File(currentImgPath).asRequestBody("image/png".toMediaType()))
             .addFormDataPart("merchant","1")
             .addFormDataPart("location","1")
             .addFormDataPart("total","1")
@@ -174,6 +188,4 @@ class ScanningReceiptActivity : AppCompatActivity() {
             }
         })
     }
-
-
 }
