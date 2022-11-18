@@ -45,14 +45,6 @@ class ItemListActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE
 
         if (itemList.isEmpty()) {
-            //test data
-//            val list = mutableListOf<Items>()
-//            var item1 = Items(1,"Apple",4.99,"Nov-16")
-//            var item2 = Items(2,"Banana",3.99,"Nov-26")
-//            var item3 = Items(3,"Peach",4.99,"Nov-17")
-//            itemList.add(item1)
-//            itemList.add(item2)
-//            itemList.add(item3)
             itemsListRecyclerView!!.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
@@ -70,15 +62,15 @@ class ItemListActivity : AppCompatActivity() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
+                    progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
                         itemList = loadItemsFromAPI(context, pageSize, additionalData)
                         itemAdapter.notifyDataSetChanged()
                     }
-                    progressBar.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
                 }
             }
             )
         }
-
     }
 }
