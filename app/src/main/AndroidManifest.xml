@@ -69,8 +69,23 @@
         <activity
             android:name=".receipts.ReceiptsListPageActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".home.HomePageActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".budget.BudgetPageActivity"
+            android:exported="true"
+            android:parentActivityName=".home.HomePageActivity">>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".budget.BudgetSpendingTrendActivity"
+            android:exported="true"
+            android:parentActivityName=".home.HomePageActivity">>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

@@ -199,18 +199,19 @@ class SignUpActivity : AppCompatActivity() {
             return false
         }
 
+        /**
         val phoneUtil: PhoneNumberUtil = PhoneNumberUtil.getInstance()
         try {
-            val phoneNumber = phoneUtil.parse(telephoneField.text.toString(), "CA")
-            if (!phoneUtil.isValidNumber(phoneNumber)) {
-                telephoneField.error = "This field is not a valid telephone number"
-                return false
-            }
-        } catch (e: Exception) {
-            telephoneField.error = "This field is not a valid telephone number"
-            return false
+        val phoneNumber = phoneUtil.parse(telephoneField.text.toString(), "CA")
+        if (!phoneUtil.isValidNumber(phoneNumber)) {
+        telephoneField.error = "This field is not a valid telephone number"
+        return false
         }
-
+        } catch (e: Exception) {
+        telephoneField.error = "This field is not a valid telephone number"
+        return false
+        }
+         **/
         if (confirmPasswordField.text.toString() != passwordField.text.toString()) {
             Log.d(
                 "Debug Password",
