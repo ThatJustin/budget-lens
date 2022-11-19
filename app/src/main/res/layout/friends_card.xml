@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/receipts_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true"
+        android:clickable="true"
+        android:focusable="true">
+        <LinearLayout
+            android:id="@+id/friends_icon"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:drawableStart="@drawable/ic_baseline_photo_24"
+                android:scaleX="1.5"
+                android:scaleY="1.5" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/receipts_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:padding="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/friend_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="@string/friend_name"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/friend_trade"
+            android:layout_width="98dp"
+            android:layout_marginLeft="300dp"
+            android:layout_height="match_parent"
+            android:background="@color/purple_50"
+            android:padding="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/trade_relation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/trade_relation"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintTop_toTopOf="@id/trade_amount"/>
+            <TextView
+                android:id="@+id/trade_amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/trade_amount"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toRightOf="@+id/trade_relation"/>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
