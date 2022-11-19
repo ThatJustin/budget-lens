@@ -18,10 +18,14 @@ import com.codenode.budgetlens.data.UserItems.Companion.pageNumber
 import com.codenode.budgetlens.data.UserItems.Companion.userItems
 import com.codenode.budgetlens.items.sort.ItemSortDialog
 import com.codenode.budgetlens.items.sort.ItemSortDialogListener
+import java.util.*
 
 
 class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
     private lateinit var itemList: MutableList<Items>
+
+    //Save an untouched copy for when sorting/filtering is undone
+    private lateinit var itemListUntouched: MutableList<Items>
     private var itemsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var itemAdapter: RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>
@@ -34,7 +38,6 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
         setContentView(R.layout.activity_item_list)
 
         val searchBar: SearchView = findViewById(R.id.search_bar_text)
-
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
@@ -52,13 +55,6 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
         }
     }
 
-    class SortOptions {
-        var isPriceAscending = false
-        var isPriceDescending = false
-        var isNameAscending = false
-        var isNameDescending = false
-    }
-
     private fun handleFilter() {
         val filterButton = findViewById<Button>(R.id.filter_item_btn_open)
         filterButton.setOnClickListener {
@@ -66,7 +62,6 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
             dialog.show()
         }
     }
-
 
     private fun handleAdapter() {
         userItems.clear()
@@ -76,6 +71,8 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
 
         //load the list
         itemList = loadItemsFromAPI(this, pageSize, additionalData)
+        itemListUntouched = itemList.map { it.copy() }.toMutableList()
+
         val context = this
 
         itemsListRecyclerView = findViewById(R.id.item_list)
@@ -101,7 +98,21 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
                     super.onScrollStateChanged(recyclerView, newState)
                     progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
+
+                        //Before loading, revert to the old order
+                        itemList.clear()
+                        itemList.addAll(itemListUntouched)
+
+                        //Load in more
                         itemList = loadItemsFromAPI(context, pageSize, additionalData)
+
+                        // update the untouched
+                        itemListUntouched = itemList.map { it.copy() }.toMutableList()
+
+                        //Apply whatever sort is set
+                        applyItemSortOptions()
+
+                        //Update the adapter items
                         itemAdapter.notifyDataSetChanged()
                     }
                     progressBar.visibility = View.GONE
@@ -111,22 +122,54 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
         }
     }
 
+    class SortOptions {
+        var isPriceAscending = false
+        var isPriceDescending = false
+        var isNameAscending = false
+        var isNameDescending = false
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun onReturnedSortOptions(
         isPriceAscending: Boolean,
         isPriceDescending: Boolean,
         isNameAscending: Boolean,
         isNameDescending: Boolean
     ) {
-        println("isPriceAscending $isPriceAscending")
+        //Update the options
         sortOptions.isPriceAscending = isPriceAscending
-
-        println("isPriceDescending $isPriceDescending")
         sortOptions.isPriceDescending = isPriceDescending
-
-        println("isNameAscending $isNameAscending")
         sortOptions.isNameAscending = isNameAscending
-
-        println("isNameDescending $isNameDescending")
         sortOptions.isNameDescending = isNameDescending
+
+        applyItemSortOptions()
+
+        //Update adapter of changes
+        itemAdapter.notifyDataSetChanged()
+    }
+
+    /**
+     * Sorts the itemList MutableList<Items> based on sortOptions from user.
+     */
+    private fun applyItemSortOptions() {
+        // Restore itemList to the untouched state
+
+        itemList.clear()
+        itemList.addAll(itemListUntouched)
+
+        //Sort
+        if (sortOptions.isPriceAscending) {
+            itemList.sortBy { it.price }
+        }
+        if (sortOptions.isPriceDescending) {
+            itemList.sortByDescending { it.price }
+        }
+        if (sortOptions.isNameAscending) {
+            itemList.sortBy { it.name.lowercase() }
+        }
+        if (sortOptions.isNameDescending) {
+            itemList.sortByDescending { it.name.lowercase() }
+        }
     }
 }
