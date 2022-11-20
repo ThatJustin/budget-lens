@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFBFE"
     tools:context=".receipts.ReceiptInfoDialog">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -43,13 +44,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/activeFilterConstraint"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="617dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/divider1"
@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
+            android:drawablePadding="5dp"
             android:text="Active Filters"
             app:drawableStartCompat="@drawable/ic_outline_filter_list_20"
             app:layout_constraintStart_toStartOf="parent"
@@ -77,8 +78,9 @@
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/active_item_filters_chip_group"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,112 +126,11 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/merchantConstraint"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activeFilterConstraint">
-
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
-            app:dividerInsetEnd="16dp"
-            app:dividerInsetStart="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:text="Merchant"
-            app:drawableStartCompat="@drawable/ic_outline_shopping_cart_20"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/categoryConstraint"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/merchantConstraint">
-
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
-            app:dividerInsetEnd="16dp"
-            app:dividerInsetStart="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:text="Category"
-            app:drawableStartCompat="@drawable/ic_baseline_category_20"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider3" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/dateConstraint"
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryConstraint">
-
-        <com.google.android.material.divider.MaterialDivider
-            android:id="@+id/divider4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="28dp"
-            app:dividerInsetEnd="16dp"
-            app:dividerInsetStart="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="8dp"
-            android:text="Date"
-            app:drawableStartCompat="@drawable/ic_outline_calendar_month_20"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider4" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/priceConstraint"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateConstraint">
 
@@ -250,147 +151,142 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp"
-            android:text="Date"
-            app:drawableStartCompat="@drawable/ic_outline_calendar_month_20"
+            android:drawablePadding="5dp"
+            android:text="Price"
+            app:drawableStartCompat="@drawable/ic_outline_monetization_on_20"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider5" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-    <!--    <com.google.android.material.divider.MaterialDivider-->
-    <!--        android:id="@+id/divider1"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/merchantConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/activeFilterConstraint">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView11"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="20dp"-->
-    <!--        android:layout_marginTop="8dp"-->
-    <!--        android:text="Active Filters"-->
-    <!--        app:drawableStartCompat="@drawable/ic_outline_filter_list_20"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/divider1" />-->
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            app:dividerInsetEnd="16dp"
+            app:dividerInsetStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <com.google.android.material.chip.ChipGroup-->
-    <!--        android:id="@+id/active_item_filters_chip_group"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="50dp"-->
-    <!--        android:layout_marginStart="20dp"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textView11">-->
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:drawablePadding="5dp"
+            android:text="Merchant"
+            app:drawableStartCompat="@drawable/ic_outline_shopping_cart_20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
-    <!--        <com.google.android.material.chip.Chip-->
-    <!--            android:id="@+id/chip_1"-->
-    <!--            style="@style/Widget.Material3.Chip.Input"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:checked="true"-->
-    <!--            android:text="Merchant"-->
-    <!--            app:checkedIconVisible="false" />-->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/menu"
+            style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="40dp"
+            android:inputType="none"
+            android:paddingTop="8dp"
+            app:boxStrokeWidth="0dp"
+            app:endIconTint="#6750A4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView12">
 
-    <!--        <com.google.android.material.chip.Chip-->
-    <!--            android:id="@+id/chip_2"-->
-    <!--            style="@style/Widget.Material3.Chip.Input"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:checked="true"-->
-    <!--            android:text="Category"-->
-    <!--            app:checkedIconVisible="false" />-->
+            <AutoCompleteTextView
+                android:id="@+id/item_filter_merchant_options"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:paddingVertical="5dp"
+                android:popupBackground="#F3EDF7"
+                app:hintEnabled="false" />
 
-    <!--        <com.google.android.material.chip.Chip-->
-    <!--            android:id="@+id/chip_3"-->
-    <!--            style="@style/Widget.Material3.Chip.Input"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:checked="true"-->
-    <!--            android:text="Date"-->
-    <!--            app:checkedIconVisible="false" />-->
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <!--        <com.google.android.material.chip.Chip-->
-    <!--            android:id="@+id/chip_4"-->
-    <!--            style="@style/Widget.Material3.Chip.Input"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:checked="true"-->
-    <!--            android:text="Price"-->
-    <!--            app:checkedIconVisible="false" />-->
 
-    <!--    </com.google.android.material.chip.ChipGroup>-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--    <com.google.android.material.divider.MaterialDivider-->
-    <!--        android:id="@+id/divider2"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/active_item_filters_chip_group" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/categoryConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/merchantConstraint">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView12"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="20dp"-->
-    <!--        android:layout_marginTop="8dp"-->
-    <!--        android:text="Merchant"-->
-    <!--        app:drawableStartCompat="@drawable/ic_outline_shopping_cart_20"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/divider2" />-->
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            app:dividerInsetEnd="16dp"
+            app:dividerInsetStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <com.google.android.material.divider.MaterialDivider-->
-    <!--        android:id="@+id/divider3"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textView12" />-->
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:drawablePadding="5dp"
+            android:text="Category"
+            app:drawableStartCompat="@drawable/ic_baseline_category_20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider3" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView13"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="20dp"-->
-    <!--        android:layout_marginTop="8dp"-->
-    <!--        android:text="Category"-->
-    <!--        app:drawableStartCompat="@drawable/ic_baseline_category_24"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/divider3" />-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dateConstraint"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryConstraint">
 
-    <!--    <com.google.android.material.divider.MaterialDivider-->
-    <!--        android:id="@+id/divider4"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textView13" />-->
+        <com.google.android.material.divider.MaterialDivider
+            android:id="@+id/divider4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="28dp"
+            app:dividerInsetEnd="16dp"
+            app:dividerInsetStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView14"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="20dp"-->
-    <!--        android:layout_marginTop="8dp"-->
-    <!--        android:text="Date"-->
-    <!--        app:drawableStartCompat="@drawable/ic_outline_calendar_month_20"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/divider4" />-->
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:drawablePadding="5dp"
+            android:text="Date"
+            app:drawableStartCompat="@drawable/ic_outline_calendar_month_20"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
-    <!--    <com.google.android.material.divider.MaterialDivider-->
-    <!--        android:id="@+id/divider5"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/textView14" />-->
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/textView15"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_marginStart="20dp"-->
-    <!--        android:layout_marginTop="8dp"-->
-    <!--        android:text="Price"-->
-    <!--        app:drawableStartCompat="@drawable/ic_outline_monetization_on_20"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/divider5" />-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout><!--    <com.google.android.material.divider.MaterialDivider-->

@@ -58,7 +58,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
     private fun handleFilter() {
         val filterButton = findViewById<Button>(R.id.filter_item_btn_open)
         filterButton.setOnClickListener {
-            val dialog = ItemFilterDialog(this)
+            val dialog = ItemFilterDialog(this, R.style.fullscreendialog)
             dialog.show()
         }
     }
