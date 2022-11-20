@@ -36,22 +36,15 @@ class ItemFilterDialog(context: Context, themeID: Int) : Dialog(context, themeID
         val items = listOf(
             "",
             "A",
+            "b",
+            "H",
             "C",
             "B",
             "1",
             "hhh"
-        ).sorted()
+        ).sortedBy { it.lowercase() }
         val adapter = ArrayAdapter(context, R.layout.list_item, items)
         merchantOptions.setAdapter(adapter)
-        merchantOptions.threshold = 3
-
-//        val items = arrayOf("Item 1", "Item 2", "Item 3", "Item 4")
-//        (merchantOptions.text as? MaterialAutoCompleteTextView)?.setSimpleItems(items)
-
-//        val items = listOf("Item 1", "Item 2", "Item 3", "Item 4")
-//        val adapter = ArrayAdapter(context, R.layout.list_item, items)
-        (merchantOptions.editableText as? AutoCompleteTextView)?.setAdapter(adapter)
-
     }
 }
 
