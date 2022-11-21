@@ -64,7 +64,7 @@
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background=""
+            android:background="@null"
             android:src="@drawable/ic_baseline_cancel_40">
         </ImageButton>
     </LinearLayout>
@@ -79,7 +79,7 @@
   <ImageButton
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
-      android:background=""
+      android:background="@null"
       android:src="@drawable/ic_baseline_check_circle_40">
   </ImageButton>
     </LinearLayout>

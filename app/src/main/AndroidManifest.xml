@@ -106,6 +106,15 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".friends.FriendsPageActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".home.HomePageActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
     </application>
 
 </manifest>
