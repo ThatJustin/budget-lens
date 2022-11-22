@@ -26,6 +26,7 @@ import java.util.*
 
 class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilterDialogListener {
     private lateinit var itemList: MutableList<Items>
+
     //Save an untouched copy for when sorting/filtering is undone
     private lateinit var itemListUntouched: MutableList<Items>
 
@@ -35,6 +36,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     private var pageSize = 5
     var additionalData = ""
     private val sortOptions = SortOptions()
+    private var filterOptions = ItemFilterOptions()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +69,12 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     private fun handleFilter() {
         val filterButton = findViewById<Button>(R.id.filter_item_btn_open)
         filterButton.setOnClickListener {
-            val dialog = ItemFilterDialog(this, R.style.fullscreendialog, supportFragmentManager)
+            val dialog = ItemFilterDialog(
+                this,
+                R.style.fullscreendialog,
+                supportFragmentManager,
+                filterOptions
+            )
             dialog.show()
         }
     }
@@ -188,7 +195,8 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     /**
      * A listener that gets back the filters set in the ItemFilterDialog.
      */
-    override fun onReturnedFilterOptions(filterOptions: ItemFilterOptions) {
+    override fun onReturnedFilterOptions(newFilterOptions: ItemFilterOptions) {
+        this.filterOptions = newFilterOptions
         //set additionalData here
 
         // update adapter

@@ -25,9 +25,10 @@ import java.util.*
 class ItemFilterDialog(
     private val activityContext: Context,
     themeID: Int,
-    private val supportFragmentManager: FragmentManager
+    private val supportFragmentManager: FragmentManager,
+    private val previousFilterOptions: ItemFilterOptions
 ) : Dialog(activityContext, themeID) {
-    
+
     private val calendar = Calendar.getInstance()
     private val dateFormatString = "yyyy/MM/dd"
     private lateinit var merchantOptions: AutoCompleteTextView
@@ -83,6 +84,39 @@ class ItemFilterDialog(
         handleCategory()
         handleStartEndDate()
         handlePriceRange()
+        loadFilters()
+    }
+
+    /**
+     * Loads previously applied filters.
+     */
+    private fun loadFilters() {
+        //Update the filters to the previously selected ones
+        this.filterOptions = previousFilterOptions
+
+        //Merchant
+        if (filterOptions.merchantName.isNotEmpty()) {
+            merchantChip.visibility = View.VISIBLE
+            merchantOptions.setText(filterOptions.merchantName)
+        }
+        //Category
+        if (filterOptions.categoryName.isNotEmpty()) {
+            categoryChip.visibility = View.VISIBLE
+            categoryOptions.setText(filterOptions.categoryName)
+        }
+        //Date
+        if (filterOptions.startDate != 0L && filterOptions.endDate != 0L) {
+            dateChip.visibility = View.VISIBLE
+            startDate.setText(filterOptions.startDate.toString())
+            endDate.setText(filterOptions.endDate.toString())
+        }
+        //Price
+        if (filterOptions.minPrice != 0.0 && filterOptions.maxPrice != 0.0) {
+            priceChip.visibility = View.VISIBLE
+            minPrice.setText(filterOptions.minPrice.toString())
+            maxPrice.setText(filterOptions.maxPrice.toString())
+        }
+
     }
 
     /**
