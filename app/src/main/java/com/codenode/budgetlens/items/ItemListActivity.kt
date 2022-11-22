@@ -16,6 +16,7 @@ import com.codenode.budgetlens.data.Items
 import com.codenode.budgetlens.data.UserItems.Companion.loadItemsFromAPI
 import com.codenode.budgetlens.data.UserItems.Companion.pageNumber
 import com.codenode.budgetlens.data.UserItems.Companion.userItems
+import com.codenode.budgetlens.items.filter.ItemFilterDialog
 import com.codenode.budgetlens.items.sort.ItemSortDialog
 import com.codenode.budgetlens.items.sort.ItemSortDialogListener
 import java.util.*
@@ -58,7 +59,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
     private fun handleFilter() {
         val filterButton = findViewById<Button>(R.id.filter_item_btn_open)
         filterButton.setOnClickListener {
-            val dialog = ItemFilterDialog(this, R.style.fullscreendialog)
+            val dialog = ItemFilterDialog(this, R.style.fullscreendialog, supportFragmentManager)
             dialog.show()
         }
     }
