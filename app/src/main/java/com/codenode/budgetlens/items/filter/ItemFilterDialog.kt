@@ -1,5 +1,6 @@
 package com.codenode.budgetlens.items.filter
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
@@ -22,13 +23,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class ItemFilterDialog(
-    context: Context,
+    private val activityContext: Context,
     themeID: Int,
     private val supportFragmentManager: FragmentManager
-) : Dialog(context, themeID) {
+) : Dialog(activityContext, themeID) {
+    
     private val calendar = Calendar.getInstance()
     private val dateFormatString = "yyyy/MM/dd"
-    var filterOptions = ItemFilterOptions()
     private lateinit var merchantOptions: AutoCompleteTextView
     private lateinit var categoryOptions: AutoCompleteTextView
     private lateinit var activeFilters: ChipGroup
@@ -42,6 +43,10 @@ class ItemFilterDialog(
     private lateinit var endDate: AutoCompleteTextView
     var isMinPriceSet = false
     var isMaxPriceSet = false
+
+    private var itemFilterDialogListener: ItemFilterDialogListener? = null
+    var filterOptions = ItemFilterOptions()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -52,6 +57,8 @@ class ItemFilterDialog(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT
         )
+        //Set listener
+        itemFilterDialogListener = activityContext as Activity as ItemFilterDialogListener
 
         //Active filters
         activeFilters = findViewById(R.id.active_item_filters_chip_group)
@@ -71,16 +78,21 @@ class ItemFilterDialog(
         maxPrice = findViewById(R.id.item_filter_max_price)
 
         handleClosingDialog()
-
         handleChipClicking()
         handleMerchant()
         handleCategory()
-        handleDateRange()
+        handleStartEndDate()
         handlePriceRange()
-
     }
 
-    private fun openDatePicker() {
+    /**
+     * Creates and opens a date range picker.
+     * Overrides:
+     * addOnPositiveButtonClickListener: calls updateDateSelection with updated date and view VISIBLE
+     * addOnNegativeButtonClickListener: calls updateDateSelection with 0 dates and view GONE
+     * addOnCancelListener: calls updateDateSelection with 0 dates and view GONE
+     */
+    private fun openDateRangePicker() {
         val dateRangePicker =
             MaterialDatePicker.Builder.dateRangePicker()
                 .setTitleText("Select dates")
@@ -103,29 +115,32 @@ class ItemFilterDialog(
         }
     }
 
-    private fun updateDateSelection(first: Long, second: Long, visible: Int) {
-        filterOptions.startDate = first
-        filterOptions.endDate = second
+    /**
+     * Updates the start and end date text fields, their visibility and
+     */
+    private fun updateDateSelection(start: Long, end: Long, visible: Int) {
+        filterOptions.startDate = start
+        filterOptions.endDate = end
         dateChip.visibility = visible
-        updateDateTextView(first, second)
+        updateDateTextView(start, end)
     }
 
     /**
      * Updates the start date and end date text views with the input millisecond timestamp.
      */
-    private fun updateDateTextView(first: Long, second: Long) {
-        if (first == 0L && second == 0L) { /// user did not save the selected date
+    private fun updateDateTextView(start: Long, end: Long) {
+        if (start == 0L && end == 0L) { /// user did not save the selected date
             startDate.setText("")
             endDate.setText("")
         } else {
             //Update start date
-            calendar.timeInMillis = first
+            calendar.timeInMillis = start
 
             var dateFormat = SimpleDateFormat(dateFormatString, Locale.CANADA)
             startDate.setText(dateFormat.format(calendar.time))
 
             //update end date
-            calendar.timeInMillis = second
+            calendar.timeInMillis = end
             dateFormat = SimpleDateFormat(dateFormatString, Locale.CANADA)
             endDate.setText(dateFormat.format(calendar.time))
         }
@@ -194,7 +209,11 @@ class ItemFilterDialog(
         }
     }
 
+    /**
+     * Handles merchant filter.
+     */
     private fun handleMerchant() {
+        //TODO load merchants and remove duplicates
         val items = listOf(
             "",
             "BestBuy",
@@ -214,7 +233,11 @@ class ItemFilterDialog(
         }
     }
 
+    /**
+     * Handles category filter.
+     */
     private fun handleCategory() {
+        //TODO load category and remove duplicates
         val items = listOf(
             "",
             "cat 1",
@@ -233,13 +256,16 @@ class ItemFilterDialog(
         }
     }
 
-    private fun handleDateRange() {
+    /**
+     * Handles the start and end date setOnClickListener which calls openDateRangePicker.
+     */
+    private fun handleStartEndDate() {
         startDate.setOnClickListener {
-            openDatePicker()
+            openDateRangePicker()
         }
 
         maxPrice.setOnClickListener {
-            openDatePicker()
+            openDateRangePicker()
         }
     }
 
@@ -249,17 +275,18 @@ class ItemFilterDialog(
      * Detects when user enters valid prices and shows/hides the price chip when needed.
      */
     private fun handlePriceRange() {
-
-        fun showPriceChip() {
-            if (isMinPriceSet && isMaxPriceSet) {
-                priceChip.visibility = View.VISIBLE
-            } else {
-                priceChip.visibility = View.GONE
-            }
+        /**
+         * Toggles the price chip.
+         */
+        fun togglePriceChip() {
+            priceChip.visibility = if (isMinPriceSet && isMaxPriceSet) View.VISIBLE else View.GONE
         }
 
-        //Author https://stackoverflow.com/a/24397810
-        fun ensureValidDecimalPosition(s: String, maxDecimalDigits: Int): String {
+        /**
+         * Ensures the input text when using a decimal is at most 2 numbers.
+         * @author https://stackoverflow.com/a/24397810
+         */
+        fun enforceValidDecimalPosition(s: String, maxDecimalDigits: Int): String {
             var str = s
             var result = ""
             var after = false
@@ -300,14 +327,14 @@ class ItemFilterDialog(
                 } else {
                     filterOptions.minPrice = 00.00
                 }
-                showPriceChip()
+                togglePriceChip()
             }
 
             //Author https://stackoverflow.com/a/24397810
             override fun afterTextChanged(s: Editable) {
                 val str: String = s.toString()
                 if (str.isEmpty()) return
-                val str2 = ensureValidDecimalPosition(str, 2)
+                val str2 = enforceValidDecimalPosition(str, 2)
                 if (str2 != str) {
                     if (str2 is String) {
                         minPrice.setText(str2)
@@ -332,14 +359,14 @@ class ItemFilterDialog(
                 } else {
                     filterOptions.maxPrice = 00.00
                 }
-                showPriceChip()
+                togglePriceChip()
             }
 
             //Author https://stackoverflow.com/a/24397810
             override fun afterTextChanged(s: Editable) {
                 val str: String = s.toString()
                 if (str.isEmpty()) return
-                val str2 = ensureValidDecimalPosition(str, 2)
+                val str2 = enforceValidDecimalPosition(str, 2)
                 if (str2 != str) {
                     if (str2 is String) {
                         maxPrice.setText(str2)
@@ -352,9 +379,13 @@ class ItemFilterDialog(
         })
     }
 
+    /**
+     * Handles closing the dialog.
+     */
     private fun handleClosingDialog() {
         val closeDialog = findViewById<ImageButton>(R.id.filter_item_dialog_close)
         closeDialog.setOnClickListener {
+            itemFilterDialogListener?.onReturnedFilterOptions(filterOptions)
             this.dismiss()
         }
     }

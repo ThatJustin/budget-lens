@@ -17,16 +17,18 @@ import com.codenode.budgetlens.data.UserItems.Companion.loadItemsFromAPI
 import com.codenode.budgetlens.data.UserItems.Companion.pageNumber
 import com.codenode.budgetlens.data.UserItems.Companion.userItems
 import com.codenode.budgetlens.items.filter.ItemFilterDialog
+import com.codenode.budgetlens.items.filter.ItemFilterDialogListener
+import com.codenode.budgetlens.items.filter.ItemFilterOptions
 import com.codenode.budgetlens.items.sort.ItemSortDialog
 import com.codenode.budgetlens.items.sort.ItemSortDialogListener
 import java.util.*
 
 
-class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
+class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilterDialogListener {
     private lateinit var itemList: MutableList<Items>
-
     //Save an untouched copy for when sorting/filtering is undone
     private lateinit var itemListUntouched: MutableList<Items>
+
     private var itemsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var itemAdapter: RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>
@@ -48,6 +50,9 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
         handleFilter()
     }
 
+    /**
+     * Handles the item sort showing.
+     */
     private fun handleSort() {
         val sortButton = findViewById<Button>(R.id.sort_item_btn_open)
         sortButton.setOnClickListener {
@@ -56,6 +61,9 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
         }
     }
 
+    /**
+     * Handles the filter.
+     */
     private fun handleFilter() {
         val filterButton = findViewById<Button>(R.id.filter_item_btn_open)
         filterButton.setOnClickListener {
@@ -64,6 +72,9 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
         }
     }
 
+    /**
+     * Handles RecycleView adapter.
+     */
     private fun handleAdapter() {
         userItems.clear()
         pageNumber = 1
@@ -172,5 +183,15 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener {
         if (sortOptions.isNameDescending) {
             itemList.sortByDescending { it.name.lowercase() }
         }
+    }
+
+    /**
+     * A listener that gets back the filters set in the ItemFilterDialog.
+     */
+    override fun onReturnedFilterOptions(filterOptions: ItemFilterOptions) {
+        //set additionalData here
+
+        // update adapter
+
     }
 }
