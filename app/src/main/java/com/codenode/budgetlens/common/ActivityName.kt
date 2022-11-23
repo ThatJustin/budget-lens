@@ -1,5 +1,5 @@
 package com.codenode.budgetlens.common
 
 enum class ActivityName {
-    HOME, RECEIPTS, BUDGET, FRIENDS, CALENDAR, SETTINGS
+    HOME, RECEIPTS, BUDGET, FRIENDS, CALENDAR, SETTINGS, CATEGORY_SETTINGS
 }
