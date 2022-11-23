@@ -16,6 +16,7 @@ import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
+import com.codenode.budgetlens.settings.SettingsActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import okhttp3.*
@@ -150,6 +151,12 @@ class CommonComponents {
                                 dialog
                             )
                         }
+                        true
+                    }
+                    R.id.settings -> {
+                        val intent: Intent = Intent(context, SettingsActivity::class.java)
+                        context.startActivity(intent)
+                        BearerToken.getToken(context)
                         true
                     }
                     R.id.logout -> {

@@ -84,6 +84,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".settings.SettingsActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".login.password_reset.NewPasswordActivity"
             android:exported="true">
             <meta-data
