@@ -15,13 +15,13 @@ import java.util.concurrent.CountDownLatch
 class UserFriends {
     companion object{
         var userFriends = mutableListOf<Friends>()
-        var pageNumber = 1
+       // var pageNumber = 1
 
         fun loadFriendsFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<Friends> {
 
 
-            // Todo: change the URL
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/pageNumber=${UserFriends.pageNumber}&pageSize=${pageSize}/"+additionalData
+           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friends/"
+//            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friends/pageNumber=${UserFriends.pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
 
             val friendsRequest = OkHttpClient()
@@ -39,22 +39,21 @@ class UserFriends {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                val pageList = JSONObject(responseBody.toString()).getString("page_list")
-                                val friends = JSONArray(pageList)
+                                val friendsObjects= JSONObject(responseBody.toString()).getString("response")
+                                val friends = JSONArray(friendsObjects)
                                 for (i in 0 until friends.length()) {
                                     contentLoadedFromResponse = true
                                     val friends = friends.getJSONObject(i)
                                     val userId = friends.getInt("id")
-                                    val friendName = friends.getString("name")
-                                    val tradeRelation = friends.getString("trade_relation")
-                                    val tradeAmount = friends.getDouble("trade_amount")
-                                    userFriends.add(Friends(userId,friendName,tradeRelation,tradeAmount))
+                                    val firstName = friends.getString("first_name")
+                                    val lastName = friends.getString("last_name")
+                                    val email= friends.getString("email")
+                                    userFriends.add(Friends(userId, firstName,lastName,email))
                                 }
-                                //?? i copy paste this who wrote it lmao
                                 if (contentLoadedFromResponse) {
                                     Log.i("im here bruh","hahahhahahahhahahahah")
-                                    Log.i("if",pageNumber.toString())
-                                    pageNumber++
+                                    //Log.i("if",pageNumber.toString())
+                                  //  pageNumber++
                                 }
                                 Log.i("Successful", "Successfully loaded Friends from API.")
                             } else {

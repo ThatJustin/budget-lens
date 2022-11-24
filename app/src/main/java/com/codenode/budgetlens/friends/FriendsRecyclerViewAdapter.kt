@@ -20,12 +20,10 @@ class FriendsRecyclerViewAdapter(private val friends: MutableList<Friends>) :
     }
     override fun onBindViewHolder(holder: FriendsRecyclerViewAdapter.ViewHolder,position: Int) {
         val friend = friends[position]
-        holder.friendName.text =
-            holder.itemView.context.getString(R.string.friend_name, friend.friendName)
-        holder.tradeRelation.text=
-            holder.itemView.context.getString(R.string.trade_relation, friend.trade_relation)
-        holder.tradeAmount.text=
-            holder.itemView.context.getString(R.string.trade_amount, friend.trade_amount)
+        holder.friendFirstName.text =
+            holder.itemView.context.getString(R.string.friend_first_name, friend.firstName)
+        holder.friendLastName.text=
+            holder.itemView.context.getString(R.string.friend_last_name, friend.lastName)
     }
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -35,9 +33,8 @@ class FriendsRecyclerViewAdapter(private val friends: MutableList<Friends>) :
         return friends.size
     }
     inner class ViewHolder(friendsView: View) : RecyclerView.ViewHolder(friendsView), View.OnClickListener {
-        val friendName: TextView = friendsView.findViewById(R.id.friend_name)
-        val tradeRelation: TextView = friendsView.findViewById(R.id.trade_relation)
-        val tradeAmount: TextView = friendsView.findViewById(R.id.trade_amount)
+        val friendFirstName: TextView = friendsView.findViewById(R.id.friend_first_name)
+        val friendLastName: TextView = friendsView.findViewById(R.id.friend_last_name)
         init {
             friendsView.setOnClickListener(this)
         }
