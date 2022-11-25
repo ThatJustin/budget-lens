@@ -56,8 +56,10 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
 
         if (receiptInfo.merchant_name != null) {
             tvMerchantName.text = context.getString(R.string.merchant_name, receiptInfo.merchant_name)
+            tvMerchantName.text = tvMerchantName.text.toString().substring(0, tvMerchantName.text.toString().length - 2)
         } else {
             tvMerchantName.text = context.getString(R.string.merchant_name, "N/A")
+            tvMerchantName.text = tvMerchantName.text.toString().substring(0, tvMerchantName.text.toString().length - 2)
         }
         tvDateUploaded.text = "0000/00/00 - 00:00" // not yet implemented in Receipt Model
         if (receiptInfo.total_amount != null) {
