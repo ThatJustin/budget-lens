@@ -48,7 +48,8 @@ class UserFriends {
                                     val firstName = friends.getString("first_name")
                                     val lastName = friends.getString("last_name")
                                     val email= friends.getString("email")
-                                    userFriends.add(Friends(userId, firstName,lastName,email))
+                                    val initial = firstName[0]
+                                    userFriends.add(Friends(userId, firstName,lastName,email,initial))
                                 }
                                 if (contentLoadedFromResponse) {
                                     Log.i("im here bruh","hahahhahahahhahahahah")

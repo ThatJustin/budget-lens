@@ -36,27 +36,29 @@
                 app:layout_constraintTop_toTopOf="@+id/friends_filter_bar" />
 
             <Button
-                android:id="@+id/sort_by_button"
+                android:id="@+id/request_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sort_by"
-                app:icon="@drawable/sort_48px"
+                android:text="@string/request"
+                app:icon="@drawable/ic_baseline_add_alert_24"
                 app:layout_constraintBottom_toBottomOf="@+id/friendsTextView"
                 app:layout_constraintEnd_toEndOf="@+id/friendsTextView"
                 app:layout_constraintStart_toStartOf="@+id/friendsTextView"
-                app:layout_constraintTop_toTopOf="@+id/friendsTextView" />
+                app:layout_constraintTop_toTopOf="@+id/friendsTextView"
+                android:backgroundTint="@color/purple_300"/>
 
             <Button
-                android:id="@+id/filter_button"
+                android:id="@+id/add_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/filter"
-                app:icon="@drawable/filter_alt_48px"
+                android:text="@string/add"
+                app:icon="@drawable/ic_baseline_add_24"
                 app:layout_constraintBottom_toBottomOf="@+id/friendsTextView"
                 app:layout_constraintEnd_toEndOf="@+id/friendsTextView"
                 app:layout_constraintHorizontal_bias="0.944"
                 app:layout_constraintStart_toStartOf="@+id/friendsTextView"
-                app:layout_constraintTop_toTopOf="@+id/friendsTextView" />
+                app:layout_constraintTop_toTopOf="@+id/friendsTextView"
+                android:backgroundTint="@color/purple_300"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <LinearLayout

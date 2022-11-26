@@ -24,6 +24,8 @@ class FriendsRecyclerViewAdapter(private val friends: MutableList<Friends>) :
             holder.itemView.context.getString(R.string.friend_first_name, friend.firstName)
         holder.friendLastName.text=
             holder.itemView.context.getString(R.string.friend_last_name, friend.lastName)
+        holder.friendInitial.text=
+            holder.itemView.context.getString(R.string.friend_initial,friend.friendInitial)
     }
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -35,6 +37,7 @@ class FriendsRecyclerViewAdapter(private val friends: MutableList<Friends>) :
     inner class ViewHolder(friendsView: View) : RecyclerView.ViewHolder(friendsView), View.OnClickListener {
         val friendFirstName: TextView = friendsView.findViewById(R.id.friend_first_name)
         val friendLastName: TextView = friendsView.findViewById(R.id.friend_last_name)
+        val friendInitial: TextView = friendsView.findViewById(R.id.friend_initial)
         init {
             friendsView.setOnClickListener(this)
         }
