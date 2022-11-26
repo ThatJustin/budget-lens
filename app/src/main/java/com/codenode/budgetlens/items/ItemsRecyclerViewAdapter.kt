@@ -30,6 +30,8 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
 
         holder.itemPrice.text =
             holder.itemView.context.getString(R.string.price, item.price)
+
+        holder.itemDate.text = holder.itemView.context.getString(R.string.scan_date,item.scan_dates)
     }
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -42,6 +44,7 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         val itemName: TextView = itemView.findViewById(R.id.item_name)
         val itemPrice: TextView = itemView.findViewById(R.id.item_price)
+        val itemDate: TextView = itemView.findViewById(R.id.months)
         init {
             itemView.setOnClickListener(this)
         }

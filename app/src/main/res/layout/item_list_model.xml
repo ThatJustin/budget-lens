@@ -25,8 +25,8 @@
             android:layout_weight="1.5"
             android:background="#FFFFFF"
             android:backgroundTint="@android:color/transparent"
-            android:clickable="true"
-            android:focusable="true"
+            android:clickable="false"
+            android:focusable="false"
             app:cardCornerRadius="10dp"
             app:cardUseCompatPadding="true"
             app:strokeColor="@android:color/transparent">
@@ -58,8 +58,8 @@
             android:layout_weight="5.5"
             android:background="#FFFFFF"
             android:backgroundTint="@android:color/transparent"
-            android:clickable="true"
-            android:focusable="true"
+            android:clickable="false"
+            android:focusable="false"
             app:cardCornerRadius="10dp"
             app:cardUseCompatPadding="true"
             app:strokeColor="@android:color/transparent">
@@ -78,10 +78,10 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:background="#FFFBFE"
-                    android:drawableStart="@drawable/ic_baseline_lock_24"
                     android:padding="10dp"
 
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    app:drawableStartCompat="@drawable/ic_baseline_lock_24" />
 
 
                 <LinearLayout
