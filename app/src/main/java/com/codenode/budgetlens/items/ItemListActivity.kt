@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
@@ -37,6 +38,8 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     var additionalData = ""
     private val sortOptions = SortOptions()
     private var filterOptions = ItemFilterOptions()
+    private lateinit var itemTotal: TextView
+    private lateinit var result: Pair<MutableList<Items>,Double>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +49,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
+        itemTotal = findViewById(R.id.item_cost_value)
 
         handleAdapter()
         handleSort()
@@ -84,12 +88,15 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
      */
     private fun handleAdapter() {
         userItems.clear()
+
         pageNumber = 1
 
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
 
         //load the list
-        itemList = loadItemsFromAPI(this, pageSize, additionalData)
+        result = loadItemsFromAPI(this, pageSize, additionalData)
+        itemList = result.first
+        itemTotal.text = result.second.toString()
         itemListUntouched = itemList.map { it.copy() }.toMutableList()
 
         val context = this
@@ -117,13 +124,14 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
                     super.onScrollStateChanged(recyclerView, newState)
                     progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-
                         //Before loading, revert to the old order
                         itemList.clear()
                         itemList.addAll(itemListUntouched)
 
                         //Load in more
-                        itemList = loadItemsFromAPI(context, pageSize, additionalData)
+                        result = loadItemsFromAPI(context, pageSize, additionalData)
+                        itemList = result.first
+                        itemTotal.text = result.second.toString()
 
                         // update the untouched
                         itemListUntouched = itemList.map { it.copy() }.toMutableList()

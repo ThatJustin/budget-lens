@@ -4,7 +4,8 @@ data class Items(
     var id: Int,
     var name: String,
     var price: Double,
-    var important_dates: String
+    var important_dates: String,
+    var scan_dates: String
 ) {
-    constructor() : this(0, "", 0.0, "")
+    constructor() : this( 0, "", 0.0, "","")
 }
