@@ -5,10 +5,11 @@ package com.codenode.budgetlens.data
  * it goes in the UserCategory class.
  */
 data class Category(
+    var category_id: Int,
     var category_name: String,
     var category_toggle_star: Boolean,
     var parent_category_id: Int?
 
 ) {
-    constructor() : this("", false, 0)
+    constructor() : this(0, "", false, 0)
 }
