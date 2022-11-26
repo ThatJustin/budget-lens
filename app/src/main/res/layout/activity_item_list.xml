@@ -149,6 +149,7 @@
                 tools:ignore="MissingConstraints" />
 
             <TextView
+                android:id="@+id/item_cost_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
