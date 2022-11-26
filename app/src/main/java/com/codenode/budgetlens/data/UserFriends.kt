@@ -20,7 +20,7 @@ class UserFriends {
         fun loadFriendsFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<Friends> {
 
 
-           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friends/"
+           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/"
 //            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friends/pageNumber=${UserFriends.pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
 
