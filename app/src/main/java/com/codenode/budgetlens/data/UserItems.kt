@@ -51,11 +51,10 @@ class UserItems {
                                     JSONObject(responseBody.toString()).getString("page_list")
                                 val items = JSONArray(pageList)
 
-                                try{
-                                    totalCost =
-                                        JSONObject(responseBody.toString()).getString("total Cost")
-                                            .toDouble()
-                                }catch (e:Exception){}
+                                totalCost =
+                                    JSONObject(responseBody.toString()).getString("total Cost")
+                                        .toDouble()
+
 
 
                                 for (i in 0 until items.length()) {
@@ -66,7 +65,27 @@ class UserItems {
                                     val price = item.getDouble("price")
                                     val importantDates = item.getString("important_dates")
                                     val scanDate = item.getString("scan_date")
-                                    val displayDate = scanDate.substring(5,7)+" "+scanDate.substring(8,10)
+                                    var month = "Error"
+                                    when (scanDate.substring(5, 7)) {
+                                        "01" -> month = "JAN"
+                                        "02" -> month = "FEB"
+                                        "03" -> month = "MAR"
+                                        "04" -> month = "APR"
+                                        "05" -> month = "MAY"
+                                        "06" -> month = "JUN"
+                                        "07" -> month = "JUL"
+                                        "08" -> month = "AUG"
+                                        "09" -> month = "SEP"
+                                        "10" -> month = "OCT"
+                                        "11" -> month = "NOV"
+                                        "12" -> month = "DEC"
+                                        else -> {
+                                            month = "NA"
+                                        }
+
+                                    }
+                                    val displayDate =
+                                        month + " " + scanDate.substring(8, 10)
 
                                     userItems.add(
                                         Items(
