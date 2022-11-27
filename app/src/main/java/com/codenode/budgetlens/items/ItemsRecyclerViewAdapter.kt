@@ -1,9 +1,7 @@
 package com.codenode.budgetlens.items
 
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +14,7 @@ import com.codenode.budgetlens.data.Items
 class ItemsRecyclerViewAdapter(
     private val items: MutableList<Items>,
     val itemListActivity: ItemListActivity
-) :
-    RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -60,6 +57,8 @@ class ItemsRecyclerViewAdapter(
         }
 
         override fun onClick(v: View?) {
+
+
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val item = items[position]
