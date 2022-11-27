@@ -8,7 +8,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.BearerToken
+import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.databinding.ActivityMainBinding
 import okhttp3.*
 import org.json.JSONArray
@@ -25,6 +27,8 @@ class ItemInfoActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_item_info)
+        CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
+        CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
         //get the item Id from the previous page
 
         val itemId: String? = intent.getStringExtra("itemId")
