@@ -2,6 +2,7 @@ package com.codenode.budgetlens.receipts
 
 import android.annotation.SuppressLint
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
@@ -23,10 +24,13 @@ class ReceiptsListPageActivity : AppCompatActivity() {
 
     private var pageSize = 5
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipts_list_page)
         var additionalData = ""
+        val filterButton = findViewById<Button>(R.id.filter_button)
+        val sortByButton = findViewById<Button>(R.id.sort_by_button)
         val searchBar: SearchView = findViewById(R.id.search_bar_text)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
@@ -66,6 +70,62 @@ class ReceiptsListPageActivity : AppCompatActivity() {
                     progressBar.visibility = View.GONE
                 }
             })
+
+            filterButton.setOnClickListener {
+                if (merchantName is selected) {
+                    additionalData = "$additionalData?merchant_name=$merchantName"
+                }
+                if (category is selected) {
+                    additionalData = "$additionalData?category=$category"
+                }
+                if (scanDate is selected) {
+                    if (scanDateStart != null && scanDateEnd == null) {
+                        additionalData = "$additionalData?scan_date_start=$scanDateStart"
+                    }
+                    else if (scanDateStart != null && scanDateEnd != null) {
+                        additionalData = "$additionalData?scan_date_start=$scanDateStart&scan_date_end=$scanDateEnd"
+                    }
+                }
+                if (totalAmount is selected) {
+                    additionalData = "$additionalData?total=$totalAmount"
+                }
+                receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
+                adapter.notifyDataSetChanged()
+            }
+
+            sortByButton.setOnClickListener {
+                if (sortByMerchantName is selected) {
+                    additionalData = if (sortByMerchantNameAscending is selected) {
+                        "$additionalData?ordering=$sortByMerchantName"
+                    } else {
+                        "$additionalData?ordering=-$sortByMerchantName"
+                    }
+                }
+                if (sortByCategory is selected) {
+                    additionalData = if (sortByCategoryAscending is selected) {
+                        "$additionalData?ordering=$sortByCategory"
+                    } else {
+                        "$additionalData?ordering=-$sortByCategory"
+                    }
+                }
+                if (sortByScanDate is selected) {
+                    additionalData = if (sortByScanDateAscending is selected) {
+                        "$additionalData?ordering=$sortByScanDate"
+                    } else {
+                        "$additionalData?ordering=-$sortByScanDate"
+                    }
+                }
+                if (sortByTotalAmount is selected) {
+                    additionalData = if (sortByTotalAmountAscending is selected) {
+                        "$additionalData?ordering=$sortByTotalAmount"
+                    } else {
+                        "$additionalData?ordering=-$sortByTotalAmount"
+                    }
+                }
+                receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
+                adapter.notifyDataSetChanged()
+            }
+
             //listener for search bar input
             searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 @SuppressLint("NotifyDataSetChanged")
