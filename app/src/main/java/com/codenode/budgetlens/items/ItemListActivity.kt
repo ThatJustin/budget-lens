@@ -204,17 +204,18 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     /**
      * A listener that gets back the filters set in the ItemFilterDialog.
      */
+    @SuppressLint("NotifyDataSetChanged")
     override fun onReturnedFilterOptions(newFilterOptions: ItemFilterOptions) {
         this.filterOptions = newFilterOptions
-        var sb = StringBuilder()
+        val sb = StringBuilder()
         additionalData = ""
-        println("categoryName " + filterOptions.categoryName)
-        println("categoryId " + filterOptions.categoryId)
-        println(" merchantName" + filterOptions.merchantName)
-        println("startDate " + filterOptions.startDate)
-        println(" endDate" + filterOptions.endDate)
-        println("maxPrice " + filterOptions.maxPrice)
-        println(" minPrice" + filterOptions.minPrice)
+//        println("categoryName " + filterOptions.categoryName)
+//        println("categoryId " + filterOptions.categoryId)
+//        println(" merchantName" + filterOptions.merchantName)
+//        println("startDate " + filterOptions.startDate)
+//        println(" endDate" + filterOptions.endDate)
+//        println("maxPrice " + filterOptions.maxPrice)
+//        println(" minPrice" + filterOptions.minPrice)
         //set additionalData here
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             sb.append("?category_id=${filterOptions.categoryId}")
@@ -234,7 +235,8 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
         itemList.clear()
         itemList.addAll(itemListUntouched)
 
-        //Load in more
+        pageSize = 1
+        //reload
         result = loadItemsFromAPI(this, pageSize, additionalData)
         itemList = result.first
         itemTotal.text = result.second.toString()
@@ -247,6 +249,40 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
 
         //Update the adapter items
         itemAdapter.notifyDataSetChanged()
-        // update adapter
+    }
+
+    /**
+     * Handles results from opened activities by this activity.
+     */
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ITEM_INFO_ACTIVITY) {
+            val posToRemove = data?.getIntExtra("position", -1)
+            val price = data?.getDoubleExtra("price", 0.0)
+            if (posToRemove != null && price != null) {
+                val newTotal = (itemTotal.text.toString().toDouble() - price)
+                result.first.removeAt(posToRemove)
+                //why must pair be val
+                result = Pair(result.first, newTotal)
+                itemTotal.text = result.second.toString()
+                itemAdapter.notifyItemRemoved(posToRemove)
+            }
+        }
+    }
+
+    /**
+     * Handles opening the single item page using this activity.
+     */
+    fun openItemInfoActivity(item: Items, position: Int) {
+        //save the itemId and position for the item info page
+        val intent = Intent(this, ItemInfoActivity::class.java)
+        intent.putExtra("itemId", item.id.toString())
+        intent.putExtra("position", position)
+        startActivityForResult(intent, ITEM_INFO_ACTIVITY)
+    }
+
+    companion object {
+        const val ITEM_INFO_ACTIVITY = 6463646
     }
 }
