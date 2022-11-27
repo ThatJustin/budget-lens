@@ -11,8 +11,10 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Items
 
 
-class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
-    RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>() {
+class ItemsRecyclerViewAdapter(
+    private val items: MutableList<Items>,
+    val itemListActivity: ItemListActivity
+) : RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -31,8 +33,10 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
         holder.itemPrice.text =
             holder.itemView.context.getString(R.string.price, item.price)
 
-        holder.itemDate.text = holder.itemView.context.getString(R.string.scan_date,item.scan_dates)
+        holder.itemDate.text =
+            holder.itemView.context.getString(R.string.scan_date, item.scan_dates)
     }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
@@ -41,20 +45,23 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
     override fun getItemCount(): Int {
         return items.size
     }
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         val itemName: TextView = itemView.findViewById(R.id.item_name)
         val itemPrice: TextView = itemView.findViewById(R.id.item_price)
         val itemDate: TextView = itemView.findViewById(R.id.months)
+
         init {
             itemView.setOnClickListener(this)
         }
+
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val item = items[position]
-                println("Clicked $item")
+                itemListActivity.openItemInfoActivity(item, position)
             }
         }
     }
-
 }

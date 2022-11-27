@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,11 +27,10 @@ import java.util.*
 
 
 class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilterDialogListener {
-    private lateinit var itemList: MutableList<Items>
-
     //Save an untouched copy for when sorting/filtering is undone
     private lateinit var itemListUntouched: MutableList<Items>
 
+    private lateinit var itemList: MutableList<Items>
     private var itemsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var itemAdapter: RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>
@@ -38,6 +38,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     var additionalData = ""
     private val sortOptions = SortOptions()
     private var filterOptions = ItemFilterOptions()
+
     private lateinit var itemTotal: TextView
     private lateinit var result: Pair<MutableList<Items>, Double>
 
@@ -113,7 +114,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
             itemsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
             itemsListRecyclerView!!.layoutManager = linearLayoutManager
-            itemAdapter = ItemsRecyclerViewAdapter(itemList)
+            itemAdapter = ItemsRecyclerViewAdapter(itemList, this)
 
             itemsListRecyclerView!!.adapter = itemAdapter
             progressBar.visibility = View.GONE

@@ -11,7 +11,6 @@ data class Receipts (
     var tip: Double?,
     var coupon: Int?,
     var currency: String?,
-    var important_dates: String?,
 ) {
-    constructor() : this(0, "", "", "", "", 0.0, 0.0, 0.0, 0, "", "")
+    constructor() : this(0, "", "", "", "", 0.0, 0.0, 0.0, 0, "")
 }
