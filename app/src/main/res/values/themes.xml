@@ -40,9 +40,16 @@
         <item name="android:textColor">@color/chip_text_color</item>
         <item name="checkedIconTint">#1D192B</item>
     </style>
+    <style name="ReceiptsSortDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:windowBackground">@drawable/popup_background</item>
+    </style>
+    <style name="ReceiptsSortChipStyle" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="checkedIconTint">#1D192B</item>
+    </style>
     <style name="LabelTextStyle" parent="TextAppearance.Material3.LabelMedium">
 <!--        <item name="android:textColor">@color/black</item>-->
 <!--        <item name="android:fontFamily">@font/font_family_roboto</item>-->
     </style>
-
 </resources>
