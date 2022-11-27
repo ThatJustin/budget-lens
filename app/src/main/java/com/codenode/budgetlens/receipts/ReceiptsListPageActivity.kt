@@ -57,12 +57,13 @@ class ReceiptsListPageActivity : AppCompatActivity() {
                 RecyclerView.OnScrollListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    progressBar.visibility = View.VISIBLE
                     super.onScrollStateChanged(recyclerView, newState)
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
                         receiptList = loadReceiptsFromAPI(context, pageSize, additionalData)
                         adapter.notifyDataSetChanged()
                     }
-                    progressBar.visibility = View.VISIBLE
+                    progressBar.visibility = View.GONE
                 }
             })
             //listener for search bar input
@@ -82,6 +83,7 @@ class ReceiptsListPageActivity : AppCompatActivity() {
                     return true
                 }
 
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onQueryTextChange(newText: String?): Boolean {
                     //clean the data, otherwise the search will based on the previous search
                     additionalData = ""

@@ -1,13 +1,14 @@
 package com.codenode.budgetlens.receipts
 
-
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Receipts
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -47,6 +48,13 @@ class ReceiptsRecyclerViewAdapter(private val receipts: MutableList<Receipts>) :
         } else {
             holder.totalAmount.text = holder.itemView.context.getString(R.string.total_amount, receipt.total_amount)
         }
+        if (receipt.receipt_image == null) {
+            holder.receiptImage.scaleType = ImageView.ScaleType.CENTER
+            Glide.with(holder.itemView.context).load(receipt.receipt_image).placeholder(R.drawable.ic_baseline_receipt_long_24).into(holder.receiptImage)
+        } else {
+            holder.receiptImage.scaleType = ImageView.ScaleType.CENTER
+            Glide.with(holder.itemView.context).load(receipt.receipt_image).into(holder.receiptImage)
+        }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -63,6 +71,7 @@ class ReceiptsRecyclerViewAdapter(private val receipts: MutableList<Receipts>) :
         val merchantName: TextView = itemView.findViewById(R.id.merchant_name)
         val scanDate: TextView = itemView.findViewById(R.id.scan_date)
         val totalAmount: TextView = itemView.findViewById(R.id.total_amount)
+        val receiptImage: ImageView = itemView.findViewById(R.id.receipt_image_thumbnail_preview)
 
         init {
             itemView.setOnClickListener(this)
