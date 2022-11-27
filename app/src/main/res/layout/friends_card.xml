@@ -85,8 +85,6 @@
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
-
-
                     <TextView
                         android:id="@+id/friend_last_name"
                         android:layout_width="wrap_content"
@@ -100,7 +98,7 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <LinearLayout
+            <!--    <LinearLayout
                     android:id="@+id/trade_detail"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -133,7 +131,7 @@
                         android:textSize="12sp"
                         android:textStyle="bold"/>
                 </LinearLayout>
-
+-->
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>

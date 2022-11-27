@@ -2,8 +2,8 @@ package com.codenode.budgetlens.data
 
 data class Friends (
     var userId: Int,
-    var lastName: String,
     var firstName: String,
+    var lastName: String,
     var email: String,
     var friendInitial: Char
 //    var trade_relation: String,
