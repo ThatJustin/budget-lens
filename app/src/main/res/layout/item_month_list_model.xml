@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/items_card_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true"
+    app:strokeColor="#FFFBFE">
+
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="match_parent"
+        android:background="#FFFBFE"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/items_card"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="#FFFBFE"
+            android:orientation="horizontal">
+
+
+            <LinearLayout
+                android:id="@+id/amount_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#F0F0F0"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/total_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="20dp"
+                    android:background="#F0F0F0"
+                    android:text="@string/total_amount"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tax_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="#F0F0F0"
+                    android:text="@string/total_amount"
+                    android:textColor="@color/black"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
