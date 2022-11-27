@@ -16,15 +16,15 @@
     <string name="user_profile_name">%1$s</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="global_preferences">global_preferences</string>
-    <string name="merchant_name">%1$s</string>
     <string name="item_name">%1$s</string>
     <string name="category_name">%1$s</string>
     <string name="category">Category</string>
-    <string name="scan_date">%1$s</string>
-    <string name="receipt_image">Receipt Image URL: %1$s</string>
     <string name="item_total">%1$f</string>
     <string name="date"> %1$f</string>
     <string name="price">$%1$.2f</string>
+    <string name="merchant_name">%1$s - </string>
+    <string name="scan_date">%1$s</string>
+    <string name="receipt_image_thumbnail_preview_description">Receipt Image Thumbnail Preview</string>
     <string name="total">%1$.2f</string>
     <string name="total_amount">Total Amount($): %1$.2f</string>
     <string name="total_amount_currency">Total Amount(%1s):</string>
@@ -44,7 +44,7 @@
     <string name="search">Search</string>
     <string name="relatedReceipt">View Related Receipt</string>
     <string name="important_date_placeholder">Nov 02,2022 For Return Deadline</string>
-    <string name= "reminder">Reminders</string>
+    <string name="reminder">Reminders</string>
     <string name="add">+ADD</string>
     <string name="icons">an icon</string>
     <string-array name="category_place_holder">
