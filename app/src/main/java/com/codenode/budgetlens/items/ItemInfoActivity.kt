@@ -69,9 +69,12 @@ class ItemInfoActivity() : AppCompatActivity() {
                             val price = item.getString("price")
                             val name = item.getString("name")
                             val user = item.getString("user")
-                            itemPrice.text = price
-                            itemName.text = name
-                            itemOwner.text = user
+                            runOnUiThread {
+                                itemPrice.text = price
+                                itemName.text = name
+                                itemOwner.text = user
+                            }
+
 
                         } else {
                             Log.i(

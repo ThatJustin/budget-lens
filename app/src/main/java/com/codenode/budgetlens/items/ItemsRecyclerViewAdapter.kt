@@ -58,6 +58,7 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
 
         override fun onClick(v: View?) {
 
+
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val item = items[position]
