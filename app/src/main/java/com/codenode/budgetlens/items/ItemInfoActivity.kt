@@ -1,9 +1,12 @@
 package com.codenode.budgetlens.items
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
@@ -12,9 +15,12 @@ import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.databinding.ActivityMainBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import okhttp3.*
 import org.json.JSONArray
 import java.io.IOException
+import java.util.concurrent.CountDownLatch
 
 class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -23,6 +29,7 @@ class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var itemName: TextView
     private lateinit var itemOwner: TextView
 
+    private var localPrice = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -32,6 +39,7 @@ class ItemInfoActivity() : AppCompatActivity() {
         //get the item Id from the previous page
 
         val itemId: String? = intent.getStringExtra("itemId")
+        val position: Int = intent.getIntExtra("position", -1)
 
         //create category arrays
         //here is where you get the array from the database
@@ -78,7 +86,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                                 itemName.text = name
                                 itemOwner.text = user
                             }
-
+                            localPrice = price.toDouble()
 
                         } else {
                             Log.i(
@@ -96,6 +104,83 @@ class ItemInfoActivity() : AppCompatActivity() {
             }
         })
 
+        handleDeleteItem(itemId, position)
+    }
 
+    private fun handleDeleteItem(itemId: String?, position: Int) {
+        findViewById<Button>(R.id.item_info_delete)?.setOnClickListener {
+
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Delete Item")
+                .setMessage("Are you sure you want to delete this Item?\r\nThe action cannot be undone.")
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Delete") { dialog, _ ->
+                    requestItemDeletion(dialog, itemId, position)
+                }
+                .show()
+
+        }
+    }
+
+    private fun requestItemDeletion(dialog: DialogInterface, itemId: String?, position: Int) {
+        var success = false
+        val url =
+            "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/delete/$itemId/"
+
+        val registrationPost = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .delete()
+            .build()
+        val countDownLatch = CountDownLatch(1)
+        registrationPost.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                success = false
+                e.printStackTrace()
+                countDownLatch.countDown()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            success = true
+                            Log.i("Successful", "Item ID $itemId deleted.")
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+                    } else {
+                        Snackbar.make(
+                            findViewById(R.id.toolbar),
+                            "Failed to delete.",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        dialog.dismiss()
+                        Log.e(
+                            "Error",
+                            "Something went wrong ${response.message} ${response.headers}"
+                        )
+                    }
+                }
+                countDownLatch.countDown()
+            }
+        })
+        countDownLatch.await()
+        if (success) {
+            dialog.dismiss()
+            val intent = Intent(this, ItemListActivity::class.java)
+            intent.putExtra("position", position)
+            intent.putExtra("price", localPrice)
+            setResult(ItemListActivity.ITEM_INFO_ACTIVITY, intent)
+            finish()
+        }
     }
 }

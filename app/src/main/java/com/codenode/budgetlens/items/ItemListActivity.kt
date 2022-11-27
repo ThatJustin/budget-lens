@@ -1,6 +1,7 @@
 package com.codenode.budgetlens.items
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -63,7 +64,7 @@ class ItemListActivity : AppCompatActivity() {
             itemsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
             itemsListRecyclerView!!.layoutManager = linearLayoutManager
-            itemAdapter = ItemsRecyclerViewAdapter(itemList)
+            itemAdapter = ItemsRecyclerViewAdapter(itemList, this)
 
             itemsListRecyclerView!!.adapter = itemAdapter
             progressBar.visibility = View.GONE
@@ -84,5 +85,40 @@ class ItemListActivity : AppCompatActivity() {
             }
             )
         }
+    }
+
+    /**
+     * Handles results from opened activities by this activity.
+     */
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == ITEM_INFO_ACTIVITY) {
+            val posToRemove = data?.getIntExtra("position", -1)
+            val price = data?.getDoubleExtra("price", 0.0)
+            if (posToRemove != null && price != null) {
+                val newTotal = (itemTotal.text.toString().toDouble() - price)
+                result.first.removeAt(posToRemove)
+                //why must pair be val
+                result = Pair(result.first, newTotal)
+                itemTotal.text = result.second.toString()
+                itemAdapter.notifyItemRemoved(posToRemove)
+            }
+        }
+    }
+
+    /**
+     * Handles opening the single item page using this activity.
+     */
+    fun openItemInfoActivity(item: Items, position: Int) {
+        //save the itemId and position for the item info page
+        val intent = Intent(this, ItemInfoActivity::class.java)
+        intent.putExtra("itemId", item.id.toString())
+        intent.putExtra("position", position)
+        startActivityForResult(intent, ITEM_INFO_ACTIVITY)
+    }
+
+    companion object {
+        const val ITEM_INFO_ACTIVITY = 6463646
     }
 }

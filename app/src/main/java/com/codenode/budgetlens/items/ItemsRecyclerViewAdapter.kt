@@ -2,7 +2,6 @@ package com.codenode.budgetlens.items
 
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +11,10 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Items
 
 
-
-class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
-    RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>() {
+class ItemsRecyclerViewAdapter(
+    private val items: MutableList<Items>,
+    val itemListActivity: ItemListActivity
+) : RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -62,14 +62,8 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val item = items[position]
-                //save the item Id for the item info page
-                val intent = Intent(context, ItemInfoActivity::class.java)
-                intent.putExtra("itemId", item.id.toString())
-                if (v != null) {
-                    v.context?.startActivity(intent)
-                }
+                itemListActivity.openItemInfoActivity(item, position)
             }
         }
     }
-
 }
