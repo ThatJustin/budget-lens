@@ -108,6 +108,7 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
                 RecyclerView.OnScrollListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    progressBar.visibility = View.VISIBLE
                     super.onScrollStateChanged(recyclerView, newState)
                     progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
