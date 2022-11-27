@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -15,12 +16,20 @@ import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
 import androidx.core.util.Pair
 import androidx.fragment.app.FragmentManager
+import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.common.BearerToken
+import com.codenode.budgetlens.data.UserProfile
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
+import okhttp3.*
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.CountDownLatch
 
 class ItemFilterDialog(
     private val activityContext: Context,
@@ -47,6 +56,9 @@ class ItemFilterDialog(
 
     private var itemFilterDialogListener: ItemFilterDialogListener? = null
     var filterOptions = ItemFilterOptions()
+    var selectedCategoryId = -1
+
+    var categoryMap = mutableMapOf<Int, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +70,9 @@ class ItemFilterDialog(
             WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.MATCH_PARENT
         )
+
+        categoryMap.clear()
+
         //Set listener
         itemFilterDialogListener = activityContext as Activity as ItemFilterDialogListener
 
@@ -80,11 +95,11 @@ class ItemFilterDialog(
 
         handleClosingDialog()
         handleChipClicking()
+        loadFilters()
         handleMerchant()
         handleCategory()
         handleStartEndDate()
         handlePriceRange()
-        loadFilters()
     }
 
     /**
@@ -102,6 +117,7 @@ class ItemFilterDialog(
         //Category
         if (filterOptions.categoryName.isNotEmpty()) {
             categoryChip.visibility = View.VISIBLE
+            filterOptions.categoryId = filterOptions.categoryId
             categoryOptions.setText(filterOptions.categoryName)
         }
         //Date
@@ -222,6 +238,7 @@ class ItemFilterDialog(
             1 -> {
                 categoryChip.isChecked = true
                 filterOptions.categoryName = ""
+                filterOptions.categoryId = -1
                 categoryOptions.text.clear()
             }
             2 -> {
@@ -267,27 +284,93 @@ class ItemFilterDialog(
         }
     }
 
+    private fun <K, V> getKeyByValue(hashMap: Map<K, V>, target: V): K {
+        return hashMap.filter { target == it.value }.keys.first()
+    }
+
     /**
      * Handles category filter.
      */
     private fun handleCategory() {
-        //TODO load category and remove duplicates
-        val items = listOf(
-            "",
-            "cat 1",
-            "cat 2"
-        ).sortedBy { it.lowercase() }
-        val adapter = ArrayAdapter(context, R.layout.list_item, items)
+        val categoryItemsMap = loadCategories()
+        println("categoryItemsMap $categoryItemsMap")
+        val categoryItems: MutableList<String> = categoryItemsMap.values.toMutableList()
+            .sortedBy { it.lowercase() } as MutableList<String>
+//        val items = listOf(
+//            "",
+//            "BestfffBuy",
+//            "ggg",
+//        ).sortedBy { it.lowercase() }
+        val adapter = ArrayAdapter(context, R.layout.list_item, categoryItems)
         categoryOptions.setAdapter(adapter)
         categoryOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
             filterOptions.categoryName = ""
+            filterOptions.categoryId = -1
             categoryChip.visibility = View.GONE
             val value = adapter.getItem(pos) ?: ""
             if (value.isNotEmpty()) {
                 filterOptions.categoryName = value
+                filterOptions.categoryId = getKeyByValue(categoryMap, value)
                 categoryChip.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun loadCategories(): MutableMap<Int, String> {
+        categoryMap.clear()
+        //I do not think anything in the DB begins at index 0
+        categoryMap[0] = ""
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category"
+
+        val registrationPost = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .method("GET", null)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+            .addHeader("Content-Type", "application/json")
+            .build()
+
+        val countDownLatch = CountDownLatch(1)
+
+        registrationPost.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                countDownLatch.countDown()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            val categories = JSONArray(responseBody.toString())
+                            for (i in 0 until categories.length()) {
+                                val category = categories.getJSONObject(i)
+                                val id = category.getInt("id")
+                                val categoryName = category.getString("category_name")
+                                categoryMap[id] = categoryName
+                            }
+                            Log.i("Successful", "Successfully loaded categories from API.")
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+
+                    } else {
+                        Log.e(
+                            "Error",
+                            "Something went wrong ${response.message} ${response.headers}"
+                        )
+                    }
+                }
+                countDownLatch.countDown()
+            }
+        })
+        countDownLatch.await()
+        return categoryMap
     }
 
     /**

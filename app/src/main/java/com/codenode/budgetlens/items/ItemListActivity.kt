@@ -39,7 +39,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     private val sortOptions = SortOptions()
     private var filterOptions = ItemFilterOptions()
     private lateinit var itemTotal: TextView
-    private lateinit var result: Pair<MutableList<Items>,Double>
+    private lateinit var result: Pair<MutableList<Items>, Double>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -205,9 +205,47 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
      */
     override fun onReturnedFilterOptions(newFilterOptions: ItemFilterOptions) {
         this.filterOptions = newFilterOptions
+        var sb = StringBuilder()
+        additionalData = ""
+        println("categoryName " + filterOptions.categoryName)
+        println("categoryId " + filterOptions.categoryId)
+        println(" merchantName" + filterOptions.merchantName)
+        println("startDate " + filterOptions.startDate)
+        println(" endDate" + filterOptions.endDate)
+        println("maxPrice " + filterOptions.maxPrice)
+        println(" minPrice" + filterOptions.minPrice)
         //set additionalData here
+        if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
+            sb.append("?category_id=${filterOptions.categoryId}")
+        }
+//        if (filterOptions.categoryName.isNotEmpty() && filterOptions.merchantId > -1) {
+//            sb.append("?merchant_id=${filterOptions.merchantId}")
+//        }
 
+        if (filterOptions.startDate > 0 && filterOptions.endDate > 0) {
+
+        }
+        if (filterOptions.maxPrice > 0 && filterOptions.minPrice > 0) {
+
+        }
+        additionalData = sb.toString()
+
+        itemList.clear()
+        itemList.addAll(itemListUntouched)
+
+        //Load in more
+        result = loadItemsFromAPI(this, pageSize, additionalData)
+        itemList = result.first
+        itemTotal.text = result.second.toString()
+
+        // update the untouched
+        itemListUntouched = itemList.map { it.copy() }.toMutableList()
+
+        //Apply whatever sort is set
+        applyItemSortOptions()
+
+        //Update the adapter items
+        itemAdapter.notifyDataSetChanged()
         // update adapter
-
     }
 }
