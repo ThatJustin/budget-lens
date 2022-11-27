@@ -2,6 +2,7 @@ package com.codenode.budgetlens.items
 
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Items
+
 
 
 class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
@@ -31,8 +33,10 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
         holder.itemPrice.text =
             holder.itemView.context.getString(R.string.price, item.price)
 
-        holder.itemDate.text = holder.itemView.context.getString(R.string.scan_date,item.scan_dates)
+        holder.itemDate.text =
+            holder.itemView.context.getString(R.string.scan_date, item.scan_dates)
     }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
@@ -41,18 +45,29 @@ class ItemsRecyclerViewAdapter(private val items: MutableList<Items>) :
     override fun getItemCount(): Int {
         return items.size
     }
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         val itemName: TextView = itemView.findViewById(R.id.item_name)
         val itemPrice: TextView = itemView.findViewById(R.id.item_price)
         val itemDate: TextView = itemView.findViewById(R.id.months)
+
         init {
             itemView.setOnClickListener(this)
         }
+
         override fun onClick(v: View?) {
+
+
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val item = items[position]
-                println("Clicked $item")
+                //save the item Id for the item info page
+                val intent = Intent(context, ItemInfoActivity::class.java)
+                intent.putExtra("itemId", item.id.toString())
+                if (v != null) {
+                    v.context?.startActivity(intent)
+                }
             }
         }
     }

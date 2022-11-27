@@ -24,7 +24,7 @@ class ItemListActivity : AppCompatActivity() {
     private lateinit var itemAdapter: RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
     private lateinit var itemTotal: TextView
-    private lateinit var result: Pair<MutableList<Items>,Double>
+    private lateinit var result: Pair<MutableList<Items>, Double>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,11 +42,13 @@ class ItemListActivity : AppCompatActivity() {
 
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
 
+
         //load the list
 
         result = loadItemsFromAPI(this, pageSize, additionalData)
         itemList = result.first
         itemTotal.text = result.second.toString()
+
 
         val context = this
         itemsListRecyclerView = findViewById(R.id.item_list)
