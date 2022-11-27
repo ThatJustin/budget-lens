@@ -28,7 +28,7 @@ class ItemInfoActivity() : AppCompatActivity() {
         //get the item Id from the previous page
 
         val itemId: String? = intent.getStringExtra("itemId")
-        Log.i("this is item info page ", itemId.toString())
+
         //create category arrays
         //here is where you get the array from the database
         val categories = resources.getStringArray(R.array.category_place_holder)
