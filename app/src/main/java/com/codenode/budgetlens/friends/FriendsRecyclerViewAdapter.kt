@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.data.Friends
 import android.widget.TextView
+
 class FriendsRecyclerViewAdapter(private val friends: MutableList<Friends>) :
     RecyclerView.Adapter<FriendsRecyclerViewAdapter.ViewHolder>() {
         var context: Context? = null

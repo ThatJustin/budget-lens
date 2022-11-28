@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch
 class UserFriends {
     companion object{
         var userFriends = mutableListOf<Friends>()
-       // var pageNumber = 1
+        var pageNumber = 1
 
         fun loadFriendsFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<Friends> {
 
@@ -41,6 +41,7 @@ class UserFriends {
                             if (responseBody != null) {
                                 val friendsObjects= JSONObject(responseBody.toString()).getString("response")
                                 val friends = JSONArray(friendsObjects)
+                                userFriends = mutableListOf<Friends>()
                                 for (i in 0 until friends.length()) {
                                     contentLoadedFromResponse = true
                                     val friends = friends.getJSONObject(i)
@@ -49,12 +50,21 @@ class UserFriends {
                                     val lastName = friends.getString("last_name")
                                     val email= friends.getString("email")
                                     val initial = firstName[0]
-                                    userFriends.add(Friends(userId, firstName,lastName,email,initial))
-                                }
+                                    userFriends.add(
+                                            Friends(
+                                                userId,
+                                                firstName,
+                                                lastName,
+                                                email,
+                                                initial
+                                            )
+                                        )
+                                    }
+
                                 if (contentLoadedFromResponse) {
                                     Log.i("im here bruh","hahahhahahahhahahahah")
                                     //Log.i("if",pageNumber.toString())
-                                  //  pageNumber++
+                                    //pageNumber++
                                 }
                                 Log.i("Successful", "Successfully loaded Friends from API.")
                             } else {
