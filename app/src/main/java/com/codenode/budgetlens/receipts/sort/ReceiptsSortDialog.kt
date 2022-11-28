@@ -32,10 +32,10 @@ class ReceiptsSortDialog(context: Context, themeID: Int, var sortOptions: Receip
 
         val isMerchantAscending = findViewById<Chip>(R.id.chip_1)
         val isMerchantDescending = findViewById<Chip>(R.id.chip_2)
-        val isCouponAscending = findViewById<Chip>(R.id.chip_3)
-        val isCouponDescending = findViewById<Chip>(R.id.chip_4)
-        val isLocationAscending = findViewById<Chip>(R.id.chip_5)
-        val isLocationDescending = findViewById<Chip>(R.id.chip_6)
+        val isLocationAscending = findViewById<Chip>(R.id.chip_3)
+        val isLocationDescending = findViewById<Chip>(R.id.chip_4)
+        val isCouponAscending = findViewById<Chip>(R.id.chip_5)
+        val isCouponDescending = findViewById<Chip>(R.id.chip_6)
         val isTaxAscending = findViewById<Chip>(R.id.chip_7)
         val isTaxDescending = findViewById<Chip>(R.id.chip_8)
         val isTipAscending = findViewById<Chip>(R.id.chip_9)
@@ -46,10 +46,10 @@ class ReceiptsSortDialog(context: Context, themeID: Int, var sortOptions: Receip
         //set the sort options that were previously selected
         isMerchantAscending.isChecked = sortOptions.isMerchantAscending
         isMerchantDescending.isChecked = sortOptions.isMerchantDescending
-        isCouponAscending.isChecked = sortOptions.isCouponAscending
-        isCouponDescending.isChecked = sortOptions.isCouponDescending
         isLocationAscending.isChecked = sortOptions.isLocationAscending
         isLocationDescending.isChecked = sortOptions.isLocationDescending
+        isCouponAscending.isChecked = sortOptions.isCouponAscending
+        isCouponDescending.isChecked = sortOptions.isCouponDescending
         isTaxAscending.isChecked = sortOptions.isTaxAscending
         isTaxDescending.isChecked = sortOptions.isTaxDescending
         isTipAscending.isChecked = sortOptions.isTipAscending
@@ -64,10 +64,10 @@ class ReceiptsSortDialog(context: Context, themeID: Int, var sortOptions: Receip
                 receiptsSortDialogListener!!.onReturnedSortOptions(
                     isMerchantAscending.isChecked,
                     isMerchantDescending.isChecked,
-                    isCouponAscending.isChecked,
-                    isCouponDescending.isChecked,
                     isLocationAscending.isChecked,
                     isLocationDescending.isChecked,
+                    isCouponAscending.isChecked,
+                    isCouponDescending.isChecked,
                     isTaxAscending.isChecked,
                     isTaxDescending.isChecked,
                     isTipAscending.isChecked,

@@ -4,10 +4,10 @@ interface ReceiptsSortDialogListener {
     fun onReturnedSortOptions(
         isMerchantAscending: Boolean,
         isMerchantDescending: Boolean,
-        isCouponAscending: Boolean,
-        isCouponDescending: Boolean,
         isLocationAscending: Boolean,
         isLocationDescending: Boolean,
+        isCouponAscending: Boolean,
+        isCouponDescending: Boolean,
         isTaxAscending: Boolean,
         isTaxDescending: Boolean,
         isTipAscending: Boolean,
