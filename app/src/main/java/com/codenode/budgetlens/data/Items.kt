@@ -8,5 +8,4 @@ data class Items(
     var scan_dates: String
 ) {
     constructor() : this( 0, "", 0.0, "","")
-
 }
