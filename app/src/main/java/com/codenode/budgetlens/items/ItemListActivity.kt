@@ -1,20 +1,21 @@
 package com.codenode.budgetlens.items
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.SearchView
-import androidx.appcompat.app.AppCompatActivity
-import android.content.Intent
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Items
+import com.codenode.budgetlens.data.UserItems
 import com.codenode.budgetlens.data.UserItems.Companion.loadItemsFromAPI
 import com.codenode.budgetlens.data.UserItems.Companion.pageNumber
 import com.codenode.budgetlens.data.UserItems.Companion.userItems
@@ -23,6 +24,7 @@ import com.codenode.budgetlens.items.filter.ItemFilterDialogListener
 import com.codenode.budgetlens.items.filter.ItemFilterOptions
 import com.codenode.budgetlens.items.sort.ItemSortDialog
 import com.codenode.budgetlens.items.sort.ItemSortDialogListener
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -41,6 +43,8 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
 
     private lateinit var itemTotal: TextView
     private lateinit var result: Pair<MutableList<Items>, Double>
+
+    private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.CANADA)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -207,35 +211,41 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     @SuppressLint("NotifyDataSetChanged")
     override fun onReturnedFilterOptions(newFilterOptions: ItemFilterOptions) {
         this.filterOptions = newFilterOptions
-        val sb = StringBuilder()
+        val filterOptionList = ArrayList<String>()
+        val sb = StringBuilder("?")
         additionalData = ""
-//        println("categoryName " + filterOptions.categoryName)
-//        println("categoryId " + filterOptions.categoryId)
-//        println(" merchantName" + filterOptions.merchantName)
-//        println("startDate " + filterOptions.startDate)
-//        println(" endDate" + filterOptions.endDate)
-//        println("maxPrice " + filterOptions.maxPrice)
-//        println(" minPrice" + filterOptions.minPrice)
-        //set additionalData here
+
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
-            sb.append("?category_id=${filterOptions.categoryId}")
+            filterOptionList.add("category_id=${filterOptions.categoryId}")
         }
+        //TODO backend doesn't support this filter yet
 //        if (filterOptions.categoryName.isNotEmpty() && filterOptions.merchantId > -1) {
-//            sb.append("?merchant_id=${filterOptions.merchantId}")
+//            filterOptionList.add("merchant_id=${filterOptions.merchantId}")
 //        }
-
-        if (filterOptions.startDate > 0 && filterOptions.endDate > 0) {
-
+        if (filterOptions.startDate.isNotEmpty() && filterOptions.endDate.isNotEmpty()) {
+            filterOptionList.add(
+                "start_date=${filterOptions.startDate}&end_date=${filterOptions.endDate}"
+            )
         }
-        if (filterOptions.maxPrice > 0 && filterOptions.minPrice > 0) {
-
+        if (filterOptions.minPrice > 0 && filterOptions.maxPrice > 0) {
+            filterOptionList.add("min_price=${filterOptions.minPrice}&max_price=${filterOptions.maxPrice}")
         }
+
+        for (i in 0 until filterOptionList.size) {
+            if (i == 0) {
+                sb.append(filterOptionList[i])
+            } else {
+                sb.append("&${filterOptionList[i]}")
+            }
+        }
+
         additionalData = sb.toString()
 
         itemList.clear()
-        itemList.addAll(itemListUntouched)
 
         pageSize = 1
+        pageNumber = 1
+
         //reload
         result = loadItemsFromAPI(this, pageSize, additionalData)
         itemList = result.first

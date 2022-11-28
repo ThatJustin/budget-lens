@@ -19,13 +19,11 @@ import androidx.fragment.app.FragmentManager
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
-import com.codenode.budgetlens.data.UserProfile
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
 import okhttp3.*
 import org.json.JSONArray
-import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,7 +37,7 @@ class ItemFilterDialog(
 ) : Dialog(activityContext, themeID) {
 
     private val calendar = Calendar.getInstance()
-    private val dateFormatString = "yyyy/MM/dd"
+    private val dateFormatString = "yyyy-MM-dd"
     private lateinit var merchantOptions: AutoCompleteTextView
     private lateinit var categoryOptions: AutoCompleteTextView
     private lateinit var activeFilters: ChipGroup
@@ -56,7 +54,6 @@ class ItemFilterDialog(
 
     private var itemFilterDialogListener: ItemFilterDialogListener? = null
     var filterOptions = ItemFilterOptions()
-    var selectedCategoryId = -1
 
     var categoryMap = mutableMapOf<Int, String>()
 
@@ -121,10 +118,10 @@ class ItemFilterDialog(
             categoryOptions.setText(filterOptions.categoryName)
         }
         //Date
-        if (filterOptions.startDate != 0L && filterOptions.endDate != 0L) {
+        if (filterOptions.startDate.isNotEmpty() && filterOptions.endDate.isNotEmpty()) {
             dateChip.visibility = View.VISIBLE
-            startDate.setText(filterOptions.startDate.toString())
-            endDate.setText(filterOptions.endDate.toString())
+            startDate.setText(filterOptions.startDate)
+            endDate.setText(filterOptions.endDate)
         }
         //Price
         if (filterOptions.minPrice != 0.0 && filterOptions.maxPrice != 0.0) {
@@ -169,10 +166,17 @@ class ItemFilterDialog(
      * Updates the start and end date text fields, their visibility and
      */
     private fun updateDateSelection(start: Long, end: Long, visible: Int) {
-        filterOptions.startDate = start
-        filterOptions.endDate = end
+        filterOptions.startDate = getDateFromMilliseconds(start)
+        filterOptions.endDate = getDateFromMilliseconds(end)
         dateChip.visibility = visible
         updateDateTextView(start, end)
+    }
+
+    private fun getDateFromMilliseconds(time: Long): String {
+        calendar.timeInMillis = time
+        calendar.add(Calendar.DATE, 1)
+        val dateFormat = SimpleDateFormat(dateFormatString, Locale.CANADA)
+        return dateFormat.format(calendar.time)
     }
 
     /**
@@ -184,15 +188,10 @@ class ItemFilterDialog(
             endDate.setText("")
         } else {
             //Update start date
-            calendar.timeInMillis = start
-
-            var dateFormat = SimpleDateFormat(dateFormatString, Locale.CANADA)
-            startDate.setText(dateFormat.format(calendar.time))
+            startDate.setText(getDateFromMilliseconds(start))
 
             //update end date
-            calendar.timeInMillis = end
-            dateFormat = SimpleDateFormat(dateFormatString, Locale.CANADA)
-            endDate.setText(dateFormat.format(calendar.time))
+            endDate.setText(getDateFromMilliseconds(end))
         }
     }
 
@@ -242,8 +241,8 @@ class ItemFilterDialog(
                 categoryOptions.text.clear()
             }
             2 -> {
-                filterOptions.startDate = 0
-                filterOptions.endDate = 0
+                filterOptions.startDate = ""
+                filterOptions.endDate = ""
                 dateChip.visibility = View.GONE
                 startDate.setText("")
                 endDate.setText("")
@@ -264,11 +263,9 @@ class ItemFilterDialog(
      * Handles merchant filter.
      */
     private fun handleMerchant() {
-        //TODO load merchants and remove duplicates
+        //TODO load merchants
         val items = listOf(
-            "",
-            "BestBuy",
-            "Future Shop",
+            ""
         ).sortedBy { it.lowercase() }
         val adapter = ArrayAdapter(context, R.layout.list_item, items)
         merchantOptions.setAdapter(adapter)
@@ -293,14 +290,9 @@ class ItemFilterDialog(
      */
     private fun handleCategory() {
         val categoryItemsMap = loadCategories()
-        println("categoryItemsMap $categoryItemsMap")
         val categoryItems: MutableList<String> = categoryItemsMap.values.toMutableList()
             .sortedBy { it.lowercase() } as MutableList<String>
-//        val items = listOf(
-//            "",
-//            "BestfffBuy",
-//            "ggg",
-//        ).sortedBy { it.lowercase() }
+
         val adapter = ArrayAdapter(context, R.layout.list_item, categoryItems)
         categoryOptions.setAdapter(adapter)
         categoryOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
