@@ -64,7 +64,7 @@ class UserFriends {
                                 if (contentLoadedFromResponse) {
                                     Log.i("im here bruh","hahahhahahahhahahahah")
                                     //Log.i("if",pageNumber.toString())
-                                    pageNumber++
+                                    //pageNumber++
                                 }
                                 Log.i("Successful", "Successfully loaded Friends from API.")
                             } else {
