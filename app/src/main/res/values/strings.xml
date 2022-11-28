@@ -35,6 +35,7 @@
     <string name="merchant_selection">Select Merchant</string>
     <string name="location_selection">Select Location</string>
     <string name="currency_selection">Select Currency</string>
+    <string name="total_selection">Select Total</string>
     <string name="coupon">Coupon</string>
     <string name="location">Location</string>
     <string name="tax">Tax</string>

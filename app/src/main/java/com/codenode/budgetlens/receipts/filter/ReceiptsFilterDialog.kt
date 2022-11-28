@@ -4,8 +4,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.Window
@@ -38,36 +36,30 @@ class ReceiptsFilterDialog(
 ) : Dialog(activityContext, themeID) {
 
     private val calendar = Calendar.getInstance()
-    private val dateFormatString = "yyyy/MM/dd"
+    private val dateFormatString = "yyyy-MM-dd"
     private lateinit var merchantOptions: AutoCompleteTextView
     private lateinit var locationOptions: AutoCompleteTextView
     private lateinit var currencyOptions: AutoCompleteTextView
     private lateinit var couponOptions: AutoCompleteTextView
+    private lateinit var totalOptions: AutoCompleteTextView
     private lateinit var activeFilters: ChipGroup
     private lateinit var merchantChip: Chip
     private lateinit var locationChip: Chip
     private lateinit var currencyChip: Chip
     private lateinit var couponChip: Chip
+    private lateinit var totalChip: Chip
     private lateinit var dateChip: Chip
-    private lateinit var priceChip: Chip
-    private lateinit var minPrice: AutoCompleteTextView
-    private lateinit var maxPrice: AutoCompleteTextView
-    private lateinit var startDate: AutoCompleteTextView
-    private lateinit var endDate: AutoCompleteTextView
-    var isMinPriceSet = false
-    var isMaxPriceSet = false
+    private lateinit var scanDateStart: AutoCompleteTextView
+    private lateinit var scanDateEnd: AutoCompleteTextView
 
     private var receiptsFilterDialogListener: ReceiptsFilterDialogListener? = null
-    var filterOptions = ReceiptsFilterOptions()
-    var selectedMerchantId = -1
-    var selectedLocationId = -1
-    var selectedCurrencyId = -1
-    var selectedCouponId = -1
+    private var filterOptions = ReceiptsFilterOptions()
 
     var merchantMap = mutableMapOf<Int, String>()
     var locationMap = mutableMapOf<Int, String>()
     var currencyMap = mutableMapOf<Int, String>()
     var couponMap = mutableMapOf<Int, String>()
+    var totalMap = mutableMapOf<Int, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +76,7 @@ class ReceiptsFilterDialog(
         locationMap.clear()
         currencyMap.clear()
         couponMap.clear()
+        totalMap.clear()
 
         //Set listener
         receiptsFilterDialogListener = activityContext as Activity as ReceiptsFilterDialogListener
@@ -103,13 +96,12 @@ class ReceiptsFilterDialog(
         // Coupon
         couponOptions = findViewById(R.id.receipts_filter_coupon_options)
 
-        //Date
-        startDate = findViewById(R.id.receipts_filter_start_date)
-        endDate = findViewById(R.id.receipts_filter_end_date)
+        // Total
+        totalOptions = findViewById(R.id.receipts_filter_total_options)
 
-        //Price
-        minPrice = findViewById(R.id.item_filter_min_price)
-        maxPrice = findViewById(R.id.item_filter_max_price)
+        //Date
+        scanDateStart = findViewById(R.id.receipts_filter_scan_date_start)
+        scanDateEnd = findViewById(R.id.receipts_filter_scan_date_end)
 
         handleClosingDialog()
         handleChipClicking()
@@ -118,8 +110,8 @@ class ReceiptsFilterDialog(
         handleLocations()
         handleCurrencies()
         handleCoupons()
-        handleStartEndDate()
-        handlePriceRange()
+        handleTotals()
+        handleScanDateStartEnd()
     }
 
     /**
@@ -132,38 +124,33 @@ class ReceiptsFilterDialog(
         //Merchant
         if (filterOptions.merchantName.isNotEmpty()) {
             merchantChip.visibility = View.VISIBLE
-            filterOptions.merchantId = filterOptions.merchantId
             merchantOptions.setText(filterOptions.merchantName)
         }
         //Location
         if (filterOptions.location.isNotEmpty()) {
             locationChip.visibility = View.VISIBLE
-            filterOptions.locationId = filterOptions.locationId
             locationOptions.setText(filterOptions.location)
         }
         //Currency
         if (filterOptions.currency.isNotEmpty()) {
             currencyChip.visibility = View.VISIBLE
-            filterOptions.currencyId = filterOptions.currencyId
             currencyOptions.setText(filterOptions.currency)
         }
         //Coupon
         if (filterOptions.coupon.isNotEmpty()) {
             couponChip.visibility = View.VISIBLE
-            filterOptions.couponId = filterOptions.couponId
             couponOptions.setText(filterOptions.coupon)
         }
-        //Date
-        if (filterOptions.startDate != 0L && filterOptions.endDate != 0L) {
-            dateChip.visibility = View.VISIBLE
-            startDate.setText(filterOptions.startDate.toString())
-            endDate.setText(filterOptions.endDate.toString())
+        //Total
+        if (filterOptions.total.isNotEmpty()) {
+            totalChip.visibility = View.VISIBLE
+            totalOptions.setText(filterOptions.total)
         }
-        //Price
-        if (filterOptions.minPrice != 0.0 && filterOptions.maxPrice != 0.0) {
-            priceChip.visibility = View.VISIBLE
-            minPrice.setText(filterOptions.minPrice.toString())
-            maxPrice.setText(filterOptions.maxPrice.toString())
+        //Date
+        if (filterOptions.scanDateStart.isNotEmpty() && filterOptions.scanDateEnd.isNotEmpty()) {
+            dateChip.visibility = View.VISIBLE
+            scanDateStart.setText(filterOptions.scanDateStart)
+            scanDateEnd.setText(filterOptions.scanDateEnd)
         }
     }
 
@@ -201,10 +188,17 @@ class ReceiptsFilterDialog(
      * Updates the start and end date text fields, their visibility
      */
     private fun updateDateSelection(start: Long, end: Long, visible: Int) {
-        filterOptions.startDate = start
-        filterOptions.endDate = end
+        filterOptions.scanDateStart = getDateFromMilliseconds(start)
+        filterOptions.scanDateEnd = getDateFromMilliseconds(end)
         dateChip.visibility = visible
         updateDateTextView(start, end)
+    }
+
+    private fun getDateFromMilliseconds(time: Long): String {
+        calendar.timeInMillis = time
+        calendar.add(Calendar.DATE, 1)
+        val dateFormat = SimpleDateFormat(dateFormatString, Locale.CANADA)
+        return dateFormat.format(calendar.time)
     }
 
     /**
@@ -212,19 +206,14 @@ class ReceiptsFilterDialog(
      */
     private fun updateDateTextView(start: Long, end: Long) {
         if (start == 0L && end == 0L) { /// user did not save the selected date
-            startDate.setText("")
-            endDate.setText("")
+            scanDateStart.setText("")
+            scanDateEnd.setText("")
         } else {
             //Update start date
-            calendar.timeInMillis = start
-
-            var dateFormat = SimpleDateFormat(dateFormatString, Locale.CANADA)
-            startDate.setText(dateFormat.format(calendar.time))
+            scanDateStart.setText(getDateFromMilliseconds(start))
 
             //update end date
-            calendar.timeInMillis = end
-            dateFormat = SimpleDateFormat(dateFormatString, Locale.CANADA)
-            endDate.setText(dateFormat.format(calendar.time))
+            scanDateEnd.setText(getDateFromMilliseconds(end))
         }
     }
 
@@ -248,10 +237,10 @@ class ReceiptsFilterDialog(
                     couponChip = chip
                 }
                 4 -> {
-                    dateChip = chip
+                    totalChip = chip
                 }
                 5 -> {
-                    priceChip = chip
+                    dateChip = chip
                 }
             }
             chip.setOnClickListener { view ->
@@ -271,42 +260,34 @@ class ReceiptsFilterDialog(
             0 -> {
                 merchantChip.isChecked = true
                 filterOptions.merchantName = ""
-                filterOptions.merchantId = -1
                 merchantOptions.text.clear()
             }
             1 -> {
                 locationChip.isChecked = true
                 filterOptions.location = ""
-                filterOptions.locationId = -1
                 locationOptions.text.clear()
             }
             2 -> {
                 currencyChip.isChecked = true
                 filterOptions.currency = ""
-                filterOptions.currencyId = -1
                 currencyOptions.text.clear()
             }
             3 -> {
                 couponChip.isChecked = true
                 filterOptions.coupon = ""
-                filterOptions.couponId = -1
                 couponOptions.text.clear()
             }
             4 -> {
-                filterOptions.startDate = 0
-                filterOptions.endDate = 0
-                dateChip.visibility = View.GONE
-                startDate.setText("")
-                endDate.setText("")
+                totalChip.isChecked = true
+                filterOptions.total = ""
+                totalOptions.text.clear()
             }
             5 -> {
-                filterOptions.minPrice = 00.00
-                filterOptions.maxPrice = 00.00
-                priceChip.isChecked = true
-                isMinPriceSet = false
-                isMaxPriceSet = false
-                minPrice.text.clear()
-                maxPrice.text.clear()
+                filterOptions.scanDateStart = ""
+                filterOptions.scanDateEnd = ""
+                dateChip.visibility = View.GONE
+                scanDateStart.setText("")
+                scanDateEnd.setText("")
             }
         }
     }
@@ -316,7 +297,6 @@ class ReceiptsFilterDialog(
      */
     private fun handleMerchants() {
         val merchantReceiptsMap = loadMerchants()
-        println("merchantReceiptsMap $merchantReceiptsMap")
         val merchantReceipts: MutableList<String> = merchantReceiptsMap.values.toMutableList().distinct()
             .sortedBy { it.lowercase() } as MutableList<String>
 
@@ -324,12 +304,10 @@ class ReceiptsFilterDialog(
         merchantOptions.setAdapter(adapter)
         merchantOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
             filterOptions.merchantName = ""
-            filterOptions.merchantId = -1
             merchantChip.visibility = View.GONE
             val value = adapter.getItem(pos) ?: ""
             if (value.isNotEmpty()) {
                 filterOptions.merchantName = value
-                filterOptions.merchantId = getKeyByValue(merchantMap, value)
                 merchantChip.visibility = View.VISIBLE
             }
         }
@@ -347,12 +325,10 @@ class ReceiptsFilterDialog(
         locationOptions.setAdapter(adapter)
         locationOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
             filterOptions.location = ""
-            filterOptions.locationId = -1
             locationChip.visibility = View.GONE
             val value = adapter.getItem(pos) ?: ""
             if (value.isNotEmpty()) {
                 filterOptions.location = value
-                filterOptions.locationId = getKeyByValue(locationMap, value)
                 locationChip.visibility = View.VISIBLE
             }
         }
@@ -370,12 +346,10 @@ class ReceiptsFilterDialog(
         currencyOptions.setAdapter(adapter)
         currencyOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
             filterOptions.currency = ""
-            filterOptions.currencyId = -1
             currencyChip.visibility = View.GONE
             val value = adapter.getItem(pos) ?: ""
             if (value.isNotEmpty()) {
                 filterOptions.currency = value
-                filterOptions.currencyId = getKeyByValue(currencyMap, value)
                 currencyChip.visibility = View.VISIBLE
             }
         }
@@ -393,19 +367,34 @@ class ReceiptsFilterDialog(
         couponOptions.setAdapter(adapter)
         couponOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
             filterOptions.coupon = ""
-            filterOptions.couponId = -1
             couponChip.visibility = View.GONE
             val value = adapter.getItem(pos) ?: ""
             if (value.isNotEmpty()) {
                 filterOptions.coupon = value
-                filterOptions.couponId = getKeyByValue(couponMap, value)
                 couponChip.visibility = View.VISIBLE
             }
         }
     }
 
-    private fun <K, V> getKeyByValue(hashMap: Map<K, V>, target: V): K {
-        return hashMap.filter { target == it.value }.keys.first()
+    /**
+     * Handles total filter.
+     */
+    private fun handleTotals() {
+        val totalReceiptsMap = loadTotals()
+        val totalReceipts: MutableList<String> = totalReceiptsMap.values.toMutableList().distinct()
+            .sortedBy { it.lowercase() } as MutableList<String>
+
+        val adapter = ArrayAdapter(context, R.layout.list_receipts, totalReceipts)
+        totalOptions.setAdapter(adapter)
+        totalOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
+            filterOptions.total = ""
+            totalChip.visibility = View.GONE
+            val value = adapter.getItem(pos) ?: ""
+            if (value.isNotEmpty()) {
+                filterOptions.total = value
+                totalChip.visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun loadMerchants(): MutableMap<Int, String> {
@@ -677,126 +666,85 @@ class ReceiptsFilterDialog(
         return couponMap
     }
 
-    /**
-     * Handles the start and end date setOnClickListener which calls openDateRangePicker.
-     */
-    private fun handleStartEndDate() {
-        startDate.setOnClickListener {
-            openDateRangePicker()
-        }
+    private fun loadTotals(): MutableMap<Int, String> {
+        var pageNumber = 1
+        totalMap.clear()
+        var contentLoadedFromResponse = true
 
-        maxPrice.setOnClickListener {
-            openDateRangePicker()
+        while (contentLoadedFromResponse) {
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=5/"
+            contentLoadedFromResponse = false
+
+            val receiptsRequest = OkHttpClient()
+            val request = Request.Builder()
+                .url(url)
+                .method("GET", null)
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .addHeader("Content-Type", "application/json")
+                .build()
+
+            val countDownLatch = CountDownLatch(1)
+
+            receiptsRequest.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                    countDownLatch.countDown()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    Log.i("Response", "Got the response from server")
+                    response.use {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body?.string()
+                            if (responseBody != null) {
+                                val pageList =
+                                    JSONObject(responseBody.toString()).getString("page_list")
+                                val receipts = JSONArray(pageList)
+                                for (i in 0 until receipts.length()) {
+                                    contentLoadedFromResponse = true
+                                    val receipt = receipts.getJSONObject(i)
+                                    val id = receipt.getInt("id")
+                                    val total = receipt.getString("total")
+                                    totalMap[id] = total
+                                }
+                                if (contentLoadedFromResponse) {
+                                    pageNumber++
+                                }
+                                Log.i("Successful", "Successfully loaded merchants from API.")
+                            } else {
+                                contentLoadedFromResponse = false
+                                Log.i(
+                                    "Error",
+                                    "Something went wrong ${response.message} ${response.headers}"
+                                )
+                            }
+                        } else {
+                            Log.e(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+                    }
+                    countDownLatch.countDown()
+                }
+            })
+
+            countDownLatch.await()
         }
+        return totalMap
     }
 
     /**
-     * Handles the min and max price inputs.
-     * Detects when user enters valid prices and shows/hides the price chip when needed.
+     * Handles the start and end date setOnClickListener which calls openDateRangePicker.
      */
-    private fun handlePriceRange() {
-        /**
-         * Toggles the price chip.
-         */
-        fun togglePriceChip() {
-            priceChip.visibility = if (isMinPriceSet && isMaxPriceSet) View.VISIBLE else View.GONE
+    private fun handleScanDateStartEnd() {
+        scanDateStart.setOnClickListener {
+            openDateRangePicker()
         }
 
-        /**
-         * Ensures the input text when using a decimal is at most 2 numbers.
-         * @author https://stackoverflow.com/a/24397810
-         */
-        fun enforceValidDecimalPosition(s: String, maxDecimalDigits: Int): String {
-            var str = s
-            var result = ""
-            var after = false
-            var pos = 0
-            var decimalPos = 0
-
-            if (str[0] == '.') {
-                str = "00$str"
-            }
-
-            while (pos < str.length) {
-                if (str[pos] == '.' || after) {
-                    if (str[pos] == '.') {
-                        after = true
-                    } else {
-                        decimalPos++
-                        if (decimalPos > maxDecimalDigits) {
-                            return result
-                        }
-                    }
-                }
-                result += str[pos]
-                pos++
-            }
-            return result
+        scanDateEnd.setOnClickListener {
+            openDateRangePicker()
         }
-
-        minPrice.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val text = s.toString()
-                isMinPriceSet = if (text.contains(".")) {
-                    text.substring(text.indexOf("."), text.length).length == 3
-                } else {
-                    text.isNotEmpty()
-                }
-                if (text.isNotEmpty()) {
-                    filterOptions.minPrice = text.toDouble()
-                } else {
-                    filterOptions.minPrice = 00.00
-                }
-                togglePriceChip()
-            }
-
-            //Author https://stackoverflow.com/a/24397810
-            override fun afterTextChanged(s: Editable) {
-                val str: String = s.toString()
-                if (str.isEmpty()) return
-                val str2 = enforceValidDecimalPosition(str, 2)
-                if (str2 != str) {
-                    if (str2 is String) {
-                        minPrice.setText(str2)
-                        minPrice.setSelection(str2.length)
-                    }
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-        })
-
-        maxPrice.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                val text = s.toString()
-                isMaxPriceSet = if (text.contains(".")) {
-                    text.substring(text.indexOf("."), text.length).length == 3
-                } else {
-                    text.isNotEmpty()
-                }
-                if (text.isNotEmpty()) {
-                    filterOptions.maxPrice = text.toDouble()
-                } else {
-                    filterOptions.maxPrice = 00.00
-                }
-                togglePriceChip()
-            }
-
-            //Author https://stackoverflow.com/a/24397810
-            override fun afterTextChanged(s: Editable) {
-                val str: String = s.toString()
-                if (str.isEmpty()) return
-                val str2 = enforceValidDecimalPosition(str, 2)
-                if (str2 != str) {
-                    if (str2 is String) {
-                        maxPrice.setText(str2)
-                        maxPrice.setSelection(str2.length)
-                    }
-                }
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-        })
     }
 
     /**

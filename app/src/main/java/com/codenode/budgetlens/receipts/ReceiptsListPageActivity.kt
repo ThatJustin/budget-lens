@@ -34,7 +34,7 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
     //Save an untouched copy for when sorting/filtering is undone
     private lateinit var receiptsListUntouched: MutableList<Receipts>
 
-    val pageSize = 5
+    private var pageSize = 5
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
@@ -170,10 +170,10 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
     class SortOptions {
         var isMerchantAscending = false
         var isMerchantDescending = false
-        var isCouponAscending = false
-        var isCouponDescending = false
         var isLocationAscending = false
         var isLocationDescending = false
+        var isCouponAscending = false
+        var isCouponDescending = false
         var isTaxAscending = false
         var isTaxDescending = false
         var isTipAscending = false
@@ -186,10 +186,10 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
     override fun onReturnedSortOptions(
         isMerchantAscending: Boolean,
         isMerchantDescending: Boolean,
-        isCouponAscending: Boolean,
-        isCouponDescending: Boolean,
         isLocationAscending: Boolean,
         isLocationDescending: Boolean,
+        isCouponAscending: Boolean,
+        isCouponDescending: Boolean,
         isTaxAscending: Boolean,
         isTaxDescending: Boolean,
         isTipAscending: Boolean,
@@ -200,10 +200,10 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         //Update the options
         sortOptions.isMerchantAscending = isMerchantAscending
         sortOptions.isMerchantDescending = isMerchantDescending
-        sortOptions.isCouponAscending = isCouponAscending
-        sortOptions.isCouponDescending = isCouponDescending
         sortOptions.isLocationAscending = isLocationAscending
         sortOptions.isLocationDescending = isLocationDescending
+        sortOptions.isCouponAscending = isCouponAscending
+        sortOptions.isCouponDescending = isCouponDescending
         sortOptions.isTaxAscending = isTaxAscending
         sortOptions.isTaxDescending = isTaxDescending
         sortOptions.isTipAscending = isTipAscending
@@ -232,17 +232,17 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         if (sortOptions.isMerchantDescending) {
             receiptsList.sortByDescending { it.merchant_name }
         }
-        if (sortOptions.isCouponAscending) {
-            receiptsList.sortBy { it.coupon }
-        }
-        if (sortOptions.isCouponDescending) {
-            receiptsList.sortByDescending { it.coupon }
-        }
         if (sortOptions.isLocationAscending) {
             receiptsList.sortBy { it.location }
         }
         if (sortOptions.isLocationDescending) {
             receiptsList.sortByDescending { it.location }
+        }
+        if (sortOptions.isCouponAscending) {
+            receiptsList.sortBy { it.coupon }
+        }
+        if (sortOptions.isCouponDescending) {
+            receiptsList.sortByDescending { it.coupon }
         }
         if (sortOptions.isTaxAscending) {
             receiptsList.sortBy { it.tax }
@@ -271,68 +271,47 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
     override fun onReturnedFilterOptions(newFilterOptions: ReceiptsFilterOptions) {
         this.filterOptions = newFilterOptions
 
-        val sb = StringBuilder()
+        val filterOptionList = ArrayList<String>()
+        val sb = StringBuilder("?")
         additionalData = ""
 
-        println("merchantName " + filterOptions.merchantName)
-        println("merchantId " + filterOptions.merchantId)
-        println("coupon " + filterOptions.coupon)
-        println("couponId " + filterOptions.couponId)
-        println("location " + filterOptions.location)
-        println("locationId " + filterOptions.locationId)
-        println("tax " + filterOptions.tax)
-        println("tip " + filterOptions.tip)
-        println("startDate " + filterOptions.startDate)
-        println("endDate " + filterOptions.endDate)
-        println("maxPrice " + filterOptions.maxPrice)
-        println("minPrice " + filterOptions.minPrice)
-
         //set additionalData here
-        if (filterOptions.merchantName.isNotEmpty() && filterOptions.merchantId > -1) {
-            sb.append("?merchant_id=${filterOptions.merchantId}")
+        if (filterOptions.merchantName.isNotEmpty()) {
+            filterOptionList.add("merchant_name=${filterOptions.merchantName}")
         }
         if (filterOptions.location.isNotEmpty()) {
-            sb.append("?location=${filterOptions.location}")
+            filterOptionList.add("location=${filterOptions.location}")
         }
-        if (filterOptions.coupon.isNotEmpty() && filterOptions.couponId > -1) {
-            sb.append("?coupon_id=${filterOptions.couponId}")
+        if (filterOptions.coupon.isNotEmpty()) {
+            filterOptionList.add("coupon=${filterOptions.coupon}")
         }
-        if (filterOptions.currency.isNotEmpty() && filterOptions.currencyId > -1) {
-            sb.append("?currency_id=${filterOptions.currencyId}")
+        if (filterOptions.currency.isNotEmpty()) {
+            filterOptionList.add("currency=${filterOptions.currency}")
         }
-//        if (filterOptions.tax.isFinite()) {
-//            sb.append("?tax=${filterOptions.tax}")
-//        }
-//        if (filterOptions.tip.isFinite()) {
-//            sb.append("?tip=${filterOptions.tip}")
-//        }
+        if (filterOptions.total.isNotEmpty()) {
+            filterOptionList.add("total=${filterOptions.total}")
+        }
+        if (filterOptions.scanDateStart.isNotEmpty() && filterOptions.scanDateEnd.isNotEmpty()) {
+            filterOptionList.add("scan_date_start=${filterOptions.scanDateStart}&scan_date_end=${filterOptions.scanDateEnd}"
+            )
+        }
 
-//        // update adapter
-//        if (filterOptions.startDate > 0 && filterOptions.endDate > 0) {
-//            receiptsList.clear()
-//            receiptsList.addAll(receiptsListUntouched)
-//            receiptsList = receiptsList.filter {
-//                it.scan_date >= filterOptions.startDate && it.scan_date <= filterOptions.endDate
-//            } as MutableList<Receipts>
-//            receiptsAdapter.notifyDataSetChanged()
-//        }
-//
-//        if (filterOptions.maxPrice > 0 && filterOptions.minPrice > 0) {
-//            receiptsList.clear()
-//            receiptsList.addAll(receiptsListUntouched)
-//            receiptsList = receiptsList.filter {
-//                it.total_amount >= filterOptions.minPrice && it.total_amount <= filterOptions.maxPrice
-//            } as MutableList<Receipts>
-//            receiptsAdapter.notifyDataSetChanged()
-//        }
+        for (i in 0 until filterOptionList.size) {
+            if (i == 0) {
+                sb.append(filterOptionList[i])
+            } else {
+                sb.append("&${filterOptionList[i]}")
+            }
+        }
 
         additionalData = sb.toString()
         println("additionalData $additionalData")
 
         receiptsList.clear()
-        receiptsList.addAll(receiptsListUntouched)
 
-        //Load in more
+        pageNumber = 1
+
+        //reload
         receiptsList = loadReceiptsFromAPI(this, pageSize, additionalData)
 
         // update the untouched

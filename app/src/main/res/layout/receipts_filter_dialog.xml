@@ -134,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/date_title"
+                    android:text="@string/total_price"
                     android:visibility="gone"
                     app:checkedIconVisible="false"/>
 
@@ -144,110 +144,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
-                    android:text="@string/price_title"
+                    android:text="@string/date_title"
                     android:visibility="gone"
                     app:checkedIconVisible="false"/>
 
             </com.google.android.material.chip.ChipGroup>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/priceConstraint"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginTop="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dateConstraint">
-
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider5"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:dividerInsetEnd="16dp"
-                app:dividerInsetStart="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <TextView
-                android:id="@+id/textView15"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
-                android:drawablePadding="5dp"
-                android:text="@string/price_title"
-                app:drawableStartCompat="@drawable/ic_outline_monetization_on_20"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider5"/>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/receipts_filter_price_min_text_input_layer"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="156dp"
-                android:layout_height="76dp"
-                android:layout_marginStart="20dp"
-                android:paddingTop="14dp"
-                app:boxStrokeColor="@color/receipts_filter_text_input_layout_color"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1dp"
-                app:endIconTint="#6750A4"
-                app:hintAnimationEnabled="true"
-                app:hintEnabled="false"
-                app:hintTextColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView15"
-                app:startIconDrawable="@drawable/ic_baseline_attach_money_20">
-
-                <AutoCompleteTextView
-                    android:id="@+id/item_filter_min_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/minimum_price"
-                    android:inputType="numberDecimal"
-                    android:popupBackground="#F3EDF7"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/receipts_filter_price_max_text_input_layer"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="156dp"
-                android:layout_height="76dp"
-                android:layout_marginStart="208dp"
-                android:paddingTop="14dp"
-                app:boxStrokeColor="@color/receipts_filter_text_input_layout_color"
-                app:boxStrokeWidth="1dp"
-                app:boxStrokeWidthFocused="1dp"
-                app:endIconTint="#6750A4"
-                app:hintAnimationEnabled="true"
-                app:hintEnabled="false"
-                app:hintTextColor="@color/black"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView15"
-                app:startIconDrawable="@drawable/ic_baseline_attach_money_20">
-
-                <AutoCompleteTextView
-                    android:id="@+id/item_filter_max_price"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/maximum_price"
-                    android:inputType="numberDecimal"
-                    android:popupBackground="#F3EDF7"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider7"
-                android:layout_width="15dp"
-                android:layout_height="1dp"
-                android:layout_marginTop="67dp"
-                app:layout_constraintEnd_toStartOf="@+id/receipts_filter_price_max_text_input_layer"
-                app:layout_constraintStart_toEndOf="@+id/receipts_filter_price_min_text_input_layer"
-                app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -492,9 +393,9 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/dateConstraint"
+            android:id="@+id/totalConstraint"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
+            android:layout_height="120dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -518,13 +419,73 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
                 android:drawablePadding="5dp"
-                android:text="@string/date_title"
-                app:drawableStartCompat="@drawable/ic_outline_calendar_month_20"
+                android:text="@string/total_price"
+                app:drawableStartCompat="@drawable/ic_baseline_attach_money_20"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/divider8"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/receipts_filter_start_date_text_input_layer"
+                android:id="@+id/receipts_filter_total_text_input_layer"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="80dp"
+                android:inputType="none"
+                android:paddingTop="8dp"
+                app:boxStrokeColor="@color/receipts_filter_text_input_layout_color"
+                app:endIconTint="#6750A4"
+                app:hintEnabled="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView17">
+
+                <AutoCompleteTextView
+                    android:id="@+id/receipts_filter_total_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/total_selection"
+                    android:inputType="none"
+                    android:paddingVertical="5dp"
+                    android:popupBackground="#F3EDF7"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/dateConstraint"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/totalConstraint">
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider9"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="28dp"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/textView18"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:drawablePadding="5dp"
+                android:text="@string/date_title"
+                app:drawableStartCompat="@drawable/ic_outline_calendar_month_20"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider9"/>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/receipts_filter_scan_date_start_text_input_layer"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="156dp"
                 android:layout_height="76dp"
@@ -538,11 +499,11 @@
                 app:hintEnabled="false"
                 app:hintTextColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView17"
+                app:layout_constraintTop_toBottomOf="@+id/textView18"
                 app:startIconDrawable="@drawable/ic_outline_calendar_today_20">
 
                 <AutoCompleteTextView
-                    android:id="@+id/receipts_filter_start_date"
+                    android:id="@+id/receipts_filter_scan_date_start"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
@@ -556,7 +517,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/receipts_filter_end_date_text_input_layer"
+                android:id="@+id/receipts_filter_scan_date_end_text_input_layer"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                 android:layout_width="156dp"
                 android:layout_height="76dp"
@@ -570,11 +531,11 @@
                 app:hintEnabled="false"
                 app:hintTextColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView17"
+                app:layout_constraintTop_toBottomOf="@+id/textView18"
                 app:startIconDrawable="@drawable/ic_outline_calendar_today_20">
 
                 <AutoCompleteTextView
-                    android:id="@+id/receipts_filter_end_date"
+                    android:id="@+id/receipts_filter_scan_date_end"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="false"
@@ -588,12 +549,12 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/divider9"
+                android:id="@+id/divider10"
                 android:layout_width="15dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="67dp"
-                app:layout_constraintEnd_toStartOf="@+id/receipts_filter_end_date_text_input_layer"
-                app:layout_constraintStart_toEndOf="@+id/receipts_filter_start_date_text_input_layer"
+                app:layout_constraintEnd_toStartOf="@+id/receipts_filter_scan_date_end_text_input_layer"
+                app:layout_constraintStart_toEndOf="@+id/receipts_filter_scan_date_start_text_input_layer"
                 app:layout_constraintTop_toTopOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
