@@ -41,6 +41,7 @@ class UserFriends {
                             if (responseBody != null) {
                                 val friendsObjects= JSONObject(responseBody.toString()).getString("response")
                                 val friends = JSONArray(friendsObjects)
+                                userFriends = mutableListOf<Friends>()
                                 for (i in 0 until friends.length()) {
                                     contentLoadedFromResponse = true
                                     val friends = friends.getJSONObject(i)
@@ -49,8 +50,7 @@ class UserFriends {
                                     val lastName = friends.getString("last_name")
                                     val email= friends.getString("email")
                                     val initial = firstName[0]
-                                    if (pageNumber == 1) {
-                                        userFriends.add(
+                                    userFriends.add(
                                             Friends(
                                                 userId,
                                                 firstName,
@@ -60,7 +60,7 @@ class UserFriends {
                                             )
                                         )
                                     }
-                                }
+
                                 if (contentLoadedFromResponse) {
                                     Log.i("im here bruh","hahahhahahahhahahahah")
                                     //Log.i("if",pageNumber.toString())
