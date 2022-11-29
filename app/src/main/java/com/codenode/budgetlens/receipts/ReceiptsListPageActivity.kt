@@ -15,6 +15,7 @@ import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
 import com.codenode.budgetlens.data.UserReceipts.Companion.pageNumber
 import com.codenode.budgetlens.data.UserReceipts.Companion.userReceipts
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity.ReceiptsListPageActivity.pageSize
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterDialog
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterDialogListener
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterOptions
@@ -23,6 +24,11 @@ import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialogListener
 
 class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener,
     ReceiptsFilterDialogListener {
+
+    object ReceiptsListPageActivity {
+        var pageSize = 5
+    }
+
     private lateinit var receiptsList: MutableList<Receipts>
     private var receiptsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -33,8 +39,6 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
 
     //Save an untouched copy for when sorting/filtering is undone
     private lateinit var receiptsListUntouched: MutableList<Receipts>
-
-    private var pageSize = 5
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
@@ -117,7 +121,7 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
                         receiptsList.addAll(receiptsListUntouched)
 
                         //Load in more
-                        loadReceiptsFromAPI(context, pageSize, additionalData)
+                        receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
 
                         // update the untouched
                         receiptsListUntouched = receiptsList.map { it.copy() }.toMutableList()

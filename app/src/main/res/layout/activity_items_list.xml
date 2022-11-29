@@ -78,7 +78,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="#E7E0EC"
-                android:hint="@string/search"
+                android:queryHint="@string/search"
                 android:iconifiedByDefault="false"
                 android:imeOptions="actionSearch"
                 android:inputType="text"

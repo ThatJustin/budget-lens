@@ -16,6 +16,7 @@ import androidx.core.util.Pair
 import androidx.fragment.app.FragmentManager
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity.ReceiptsListPageActivity.pageSize
 import com.codenode.budgetlens.common.BearerToken
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
@@ -403,7 +404,7 @@ class ReceiptsFilterDialog(
         var contentLoadedFromResponse = true
 
         while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=5/"
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
             contentLoadedFromResponse = false
 
             val receiptsRequest = OkHttpClient()
@@ -471,7 +472,7 @@ class ReceiptsFilterDialog(
         var contentLoadedFromResponse = true
 
         while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=5/"
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
             contentLoadedFromResponse = false
 
             val receiptsRequest = OkHttpClient()
@@ -538,7 +539,7 @@ class ReceiptsFilterDialog(
         var contentLoadedFromResponse = true
 
         while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=5/"
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
             contentLoadedFromResponse = false
 
             val receiptsRequest = OkHttpClient()
@@ -605,7 +606,7 @@ class ReceiptsFilterDialog(
         var contentLoadedFromResponse = true
 
         while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=5/"
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
             contentLoadedFromResponse = false
 
             val receiptsRequest = OkHttpClient()
@@ -672,7 +673,7 @@ class ReceiptsFilterDialog(
         var contentLoadedFromResponse = true
 
         while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=5/"
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
             contentLoadedFromResponse = false
 
             val receiptsRequest = OkHttpClient()
