@@ -19,7 +19,7 @@
             app:title="Receipts"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/receipts_filter_bar"
+            android:id="@+id/receipts_sort_by_and_filter_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:titleCentered="true">
@@ -32,8 +32,8 @@
                 android:layout_marginStart="16dp"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="@+id/receipts_filter_bar"
-                app:layout_constraintTop_toTopOf="@+id/receipts_filter_bar"/>
+                app:layout_constraintStart_toStartOf="@+id/receipts_sort_by_and_filter_bar"
+                app:layout_constraintTop_toTopOf="@+id/receipts_sort_by_and_filter_bar"/>
 
             <Button
                 android:id="@+id/sort_by_button"

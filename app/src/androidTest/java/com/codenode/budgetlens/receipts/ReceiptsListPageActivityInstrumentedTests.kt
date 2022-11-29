@@ -81,14 +81,14 @@ class ReceiptsListPageActivityInstrumentedTests {
         val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-        if (onView(withId(R.id.receipts_card)).isDisplayed()) {
+        if (onView(withId(R.id.receipts_list)).isDisplayed()) {
             onView(withId(R.id.receipts_list)).perform(swipeUp())
             onView(withId(R.id.receipts_list)).perform(swipeDown())
             onView(withId(R.id.receipts_list)).perform(click())
             onView(withId(R.id.relativeLayout)).check(matches(isDisplayed()))
         }
         else {
-            !onView(withId(R.id.receipts_card)).isDisplayed()
+            !onView(withId(R.id.receipts_list)).isDisplayed()
         }
     }
 }

@@ -5,10 +5,8 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewInteraction
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -27,7 +25,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class ReceiptsListPageSortingAndFilteringInstrumentedTests {
+class ReceiptsListPageFilteringAndSortingInstrumentedTests {
 
     private fun ViewInteraction.isDisplayed(): Boolean {
         return try {
@@ -78,18 +76,24 @@ class ReceiptsListPageSortingAndFilteringInstrumentedTests {
     }
 
     @Test
-    fun test_receipts_list_can_be_sorted() {
-        // This test checks to see if the receipts list can be sorted
-        // by merchant, location, coupon and total
-        if (onView(withId(R.id.receipts_card)).isDisplayed()) {
-            onView(withId(R.id.sort_by_button)).perform(click())
-            onView(withText("Descending")).inRoot(RootMatchers.isPlatformPopup()).perform(click())
-            onView(withId(R.id.receipts_list)).perform(swipeDown())
-            onView(withId(R.id.receipts_list)).perform(click())
-            onView(withId(R.id.relativeLayout)).check(matches(isDisplayed()))
+    fun test_receipts_list_filter_dialog_window_opens() {
+        // This test only checks to see if the receipts list filter dialog window opens when the filter button is clicked
+        if (onView(withId(R.id.receipts_list)).isDisplayed()) {
+            onView(withId(R.id.filter_button)).perform(click())
         }
         else {
-            !onView(withId(R.id.receipts_card)).isDisplayed()
+            !onView(withId(R.id.receipts_list)).isDisplayed()
+        }
+    }
+
+    @Test
+    fun test_receipts_list_sort_by_dialog_window_opens() {
+        // This test only checks to see if the receipts list sort by dialog window opens when the sort by button is clicked
+        if (onView(withId(R.id.receipts_list)).isDisplayed()) {
+            onView(withId(R.id.sort_by_button)).perform(click())
+        }
+        else {
+            !onView(withId(R.id.receipts_list)).isDisplayed()
         }
     }
 }
