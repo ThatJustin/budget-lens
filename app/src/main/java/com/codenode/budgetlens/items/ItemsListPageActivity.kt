@@ -15,20 +15,19 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Items
-import com.codenode.budgetlens.data.UserItems
 import com.codenode.budgetlens.data.UserItems.Companion.loadItemsFromAPI
 import com.codenode.budgetlens.data.UserItems.Companion.pageNumber
 import com.codenode.budgetlens.data.UserItems.Companion.userItems
-import com.codenode.budgetlens.items.filter.ItemFilterDialog
-import com.codenode.budgetlens.items.filter.ItemFilterDialogListener
-import com.codenode.budgetlens.items.filter.ItemFilterOptions
-import com.codenode.budgetlens.items.sort.ItemSortDialog
-import com.codenode.budgetlens.items.sort.ItemSortDialogListener
+import com.codenode.budgetlens.items.filter.ItemsFilterDialog
+import com.codenode.budgetlens.items.filter.ItemsFilterDialogListener
+import com.codenode.budgetlens.items.filter.ItemsFilterOptions
+import com.codenode.budgetlens.items.sort.ItemsSortDialog
+import com.codenode.budgetlens.items.sort.ItemsSortDialogListener
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilterDialogListener {
+class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, ItemsFilterDialogListener {
     //Save an untouched copy for when sorting/filtering is undone
     private lateinit var itemListUntouched: MutableList<Items>
 
@@ -39,7 +38,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     private var pageSize = 5
     var additionalData = ""
     private val sortOptions = SortOptions()
-    private var filterOptions = ItemFilterOptions()
+    private var filterOptions = ItemsFilterOptions()
 
     private lateinit var itemTotal: TextView
     private lateinit var result: Pair<MutableList<Items>, Double>
@@ -67,7 +66,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     private fun handleSort() {
         val sortButton = findViewById<Button>(R.id.sort_item_btn_open)
         sortButton.setOnClickListener {
-            val dialog = ItemSortDialog(this, R.style.ItemSortDialog, sortOptions)
+            val dialog = ItemsSortDialog(this, R.style.ItemSortDialog, sortOptions)
             dialog.show()
         }
     }
@@ -78,7 +77,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
     private fun handleFilter() {
         val filterButton = findViewById<Button>(R.id.filter_item_btn_open)
         filterButton.setOnClickListener {
-            val dialog = ItemFilterDialog(
+            val dialog = ItemsFilterDialog(
                 this,
                 R.style.fullscreendialog,
                 supportFragmentManager,
@@ -209,7 +208,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
      * A listener that gets back the filters set in the ItemFilterDialog.
      */
     @SuppressLint("NotifyDataSetChanged")
-    override fun onReturnedFilterOptions(newFilterOptions: ItemFilterOptions) {
+    override fun onReturnedFilterOptions(newFilterOptions: ItemsFilterOptions) {
         this.filterOptions = newFilterOptions
         val filterOptionList = ArrayList<String>()
         val sb = StringBuilder("?")

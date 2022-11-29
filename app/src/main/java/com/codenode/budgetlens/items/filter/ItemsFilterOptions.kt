@@ -1,6 +1,6 @@
 package com.codenode.budgetlens.items.filter
 
-data class ItemFilterOptions(
+data class ItemsFilterOptions(
     var merchantName: String = "",
     var categoryName: String = "",
     var categoryId: Int = -1,
