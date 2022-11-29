@@ -54,7 +54,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
-        itemTotal = findViewById(R.id.item_cost_value)
+        itemTotal = findViewById(R.id.items_cost_value)
 
         handleAdapter()
         handleSort()
@@ -106,7 +106,7 @@ class ItemListActivity : AppCompatActivity(), ItemSortDialogListener, ItemFilter
 
         val context = this
 
-        itemsListRecyclerView = findViewById(R.id.item_list)
+        itemsListRecyclerView = findViewById(R.id.items_list)
         progressBar.visibility = View.VISIBLE
 
         if (itemList.isEmpty()) {

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".receipts.ReceiptsListPageActivity">
+    tools:context=".items.ItemListActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
@@ -18,24 +18,24 @@
             android:layout_height="?attr/actionBarSize"
             android:backgroundTint="#FFFBFE"
             app:menu="@menu/top_app_bar"
-            app:title="Items" />
+            app:title="Items"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/receipts_sort_by_and_filter_bar"
+            android:id="@+id/items_sort_by_and_filter_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:titleCentered="true">
 
             <TextView
-                android:id="@+id/receiptsTextView"
+                android:id="@+id/itemsTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:layout_marginStart="16dp"
                 android:textColor="@color/black"
                 android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="@+id/receipts_sort_by_and_filter_bar"
-                app:layout_constraintTop_toTopOf="@+id/receipts_sort_by_and_filter_bar" />
+                app:layout_constraintStart_toStartOf="@+id/items_sort_by_and_filter_bar"
+                app:layout_constraintTop_toTopOf="@+id/items_sort_by_and_filter_bar"/>
 
             <Button
                 android:id="@+id/sort_item_btn_open"
@@ -43,14 +43,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:backgroundTint="#6750A4"
-
                 android:text="@string/sort_by"
                 app:icon="@drawable/sort_48px"
-
-                app:layout_constraintBottom_toBottomOf="@+id/receiptsTextView"
-                app:layout_constraintEnd_toEndOf="@+id/receiptsTextView"
-                app:layout_constraintStart_toStartOf="@+id/receiptsTextView"
-                app:layout_constraintTop_toTopOf="@+id/receiptsTextView" />
+                app:layout_constraintBottom_toBottomOf="@+id/itemsTextView"
+                app:layout_constraintEnd_toEndOf="@+id/itemsTextView"
+                app:layout_constraintStart_toStartOf="@+id/itemsTextView"
+                app:layout_constraintTop_toTopOf="@+id/itemsTextView"/>
 
             <Button
                 android:id="@+id/filter_item_btn_open"
@@ -59,14 +57,13 @@
                 android:backgroundTint="#6750A4"
                 android:text="@string/filter"
                 app:icon="@drawable/filter_alt_48px"
-                app:layout_constraintBottom_toBottomOf="@+id/receiptsTextView"
-                app:layout_constraintEnd_toEndOf="@+id/receiptsTextView"
+                app:layout_constraintBottom_toBottomOf="@+id/itemsTextView"
+                app:layout_constraintEnd_toEndOf="@+id/itemsTextView"
                 app:layout_constraintHorizontal_bias="0.944"
-                app:layout_constraintStart_toStartOf="@+id/receiptsTextView"
-                app:layout_constraintTop_toTopOf="@+id/receiptsTextView" />
+                app:layout_constraintStart_toStartOf="@+id/itemsTextView"
+                app:layout_constraintTop_toTopOf="@+id/itemsTextView"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,7 +72,6 @@
             android:orientation="vertical">
 
             <SearchView
-
                 android:id="@+id/search_bar_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -89,17 +85,15 @@
                 android:queryBackground="@android:color/transparent"
                 android:singleLine="true"
                 app:layout_constraintTop_toTopOf="@+id/search_bar"
-                app:startIconDrawable="@drawable/search_48px" />
-
+                app:startIconDrawable="@drawable/search_48px"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/item_list"
+                android:id="@+id/items_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:padding="10dp"
-                app:layout_constraintTop_toBottomOf="@id/search_bar_text" />
-
+                app:layout_constraintTop_toBottomOf="@id/search_bar_text"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -107,28 +101,27 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:indeterminate="true"
-                android:padding="10dp" />
-
+                android:padding="10dp"/>
 
         </LinearLayout>
 
-
     </com.google.android.material.appbar.AppBarLayout>
+
     <View
         android:id="@+id/horizontal_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#AB9494"
-        app:layout_constraintBottom_toTopOf="@+id/item_cost"/>
+        app:layout_constraintBottom_toTopOf="@+id/items_cost"/>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_cost"
+        android:id="@+id/items_cost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFBFE"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:strokeColor="@android:color/transparent"
-        app:titleCentered="true"
-        >
+        app:titleCentered="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -139,17 +132,18 @@
             tools:ignore="MissingConstraints">
 
             <TextView
+                android:id="@+id/total_items_cost_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Total (CAD$)"
+                android:text="@string/total_items_currency"
                 android:textColor="#6750A4"
                 android:textStyle="bold"
                 android:textSize="12sp"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="MissingConstraints"/>
 
             <TextView
-                android:id="@+id/item_cost_value"
+                android:id="@+id/items_cost_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
@@ -162,7 +156,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -174,6 +167,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

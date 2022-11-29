@@ -48,6 +48,7 @@
     <string name="total">%1$.2f</string>
     <string name="total_amount">Total Amount($): %1$.2f</string>
     <string name="total_amount_currency">Total Amount(%1s):</string>
+    <string name="total_items_currency">Total (%1s):</string>
     <string name="added_by">Added by:</string>
     <string name="view_items">View Items</string>
     <string name="delete">Delete</string>
