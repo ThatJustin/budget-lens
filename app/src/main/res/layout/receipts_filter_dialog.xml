@@ -384,7 +384,7 @@
                     android:id="@+id/receipts_filter_coupon_options"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/currency_selection"
+                    android:hint="@string/coupon_selection"
                     android:inputType="none"
                     android:paddingVertical="5dp"
                     android:popupBackground="#F3EDF7"/>
