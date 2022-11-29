@@ -7,8 +7,8 @@ package com.codenode.budgetlens.data
 data class Profile(
     var isLoaded: Boolean = false,
     var username: String,
-    var firstName: String,
-    var lastName: String,
+    var firstName: String?,
+    var lastName: String?,
     var email: String,
     var telephoneNumber: String,
 ) {

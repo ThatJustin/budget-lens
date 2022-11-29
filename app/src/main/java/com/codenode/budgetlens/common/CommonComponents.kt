@@ -10,9 +10,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.view.menu.MenuView.ItemView
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.UserProfile
+import com.codenode.budgetlens.friends.FriendsPageActivity
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
@@ -67,9 +69,10 @@ class CommonComponents {
                     }
                     R.id.friends -> {
                         if (currentActivityName != ActivityName.FRIENDS) {
-//                            val intent = Intent(context, FriendsActivity::class.java)
-//                            context.startActivity(intent)
-//                            activity.overridePendingTransition(0, 0)
+                            val intent = Intent(context, FriendsPageActivity::class.java)
+                            context.startActivity(intent)
+                            activity.finish()
+                            activity.overridePendingTransition(0, 0)
                         }
                         true
                     }
@@ -93,7 +96,9 @@ class CommonComponents {
          */
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
             val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar)
+            val profileIcon = topAppBar.menu.findItem(R.id.profile_icon)
             //Set the name of the profile to the first sub menu item
+            profileIcon.title = context.getString(R.string.user_profile_name, UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName)
             val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
             if (subProfile != null) {
                 subProfile.title =

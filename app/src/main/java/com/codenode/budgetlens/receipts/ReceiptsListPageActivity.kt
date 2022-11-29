@@ -67,6 +67,7 @@ class ReceiptsListPageActivity : AppCompatActivity() {
             })
             //listener for search bar input
             searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                @SuppressLint("NotifyDataSetChanged")
                 override fun onQueryTextSubmit(query: String?): Boolean {
                     //clean the data, otherwise the search will based on the previous search
                     additionalData = ""
@@ -94,7 +95,6 @@ class ReceiptsListPageActivity : AppCompatActivity() {
                     adapter.notifyDataSetChanged()
                     return true
                 }
-
             })
         }
     }

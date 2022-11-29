@@ -19,7 +19,6 @@ class UserReceipts {
         //TODO move this to another thread
         fun loadReceiptsFromAPI(context: Context, pageSize: Int,additionalData:String): MutableList<Receipts> {
 
-
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
 
@@ -45,7 +44,7 @@ class UserReceipts {
                                     val receipt = receipts.getJSONObject(i)
                                     val id = receipt.getInt("id")
                                     val merchant = receipt.getString("merchant")
-                                    val scanDate = receipt.getString("scan_date")
+                                    val scanDate = receipt.getString("scan_date").substring(0, 10)
                                     val receiptImage = receipt.getString("receipt_image")
                                     val location = receipt.getString("location")
                                     val total = receipt.getDouble("total")
@@ -53,8 +52,7 @@ class UserReceipts {
                                     val tip = receipt.getDouble("tip")
                                     val coupon = receipt.getInt("coupon")
                                     val currency = receipt.getString("currency")
-                                    val importantDates = receipt.getString("important_dates")
-                                    userReceipts.add(Receipts(id, merchant, scanDate, receiptImage, location, total, tax, tip, coupon, currency, importantDates))
+                                    userReceipts.add(Receipts(id, merchant, scanDate, receiptImage, location, total, tax, tip, coupon, currency))
                                 }
                                 if (contentLoadedFromResponse) {
                                     pageNumber++
