@@ -55,6 +55,24 @@ class UserCategories {
                                             null
                                         )
                                     )
+
+                                    // Add the SubCategories to the list as well
+                                    val subCategoryList = category.getJSONArray("sub_category_list")
+                                    for (i in 0 until subCategoryList.length()) {
+                                        val subCategory = subCategoryList.getJSONObject(i)
+                                        val subId = -1 // Another way of distinguishing between subCategoryies
+                                        val subCategoryName = subCategory.getString("category_name")
+                                        val subCategoryToggleStar =
+                                            subCategory.getBoolean("category_toggle_star")
+                                        userCategories.add(
+                                            Category(
+                                                subId,
+                                                subCategoryName,
+                                                subCategoryToggleStar,
+                                                id // From category variable
+                                            )
+                                        )
+                                    }
                                     Log.d("Debug Adding", "Added category")
                                 }
                             }

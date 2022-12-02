@@ -3,26 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sub_category_card_view"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:clickable="true"
-    android:focusable="true"
-    app:barrierMargin="0dp"
-    app:cardCornerRadius="30dp"
-    app:cardElevation="0dp"
-    app:cardUseCompatPadding="true"
     android:divider="@null"
-    android:dividerHeight="0dp">
+    android:dividerHeight="0dp"
+    android:focusable="true"
+    android:translationX="40dp"
+    app:cardCornerRadius="30dp"
+    app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:id="@+id/category_card"
-            android:layout_width="388dp"
-            android:layout_height="39dp"
-            android:background="#e7def8"
+            android:layout_width="310dp"
+            android:layout_height="38dp"
+            android:background="#FEFAFD"
             android:orientation="vertical"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
