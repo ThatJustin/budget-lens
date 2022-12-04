@@ -11,13 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/top_app_bar"
-            app:title="Home" />
-
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="746dp"
@@ -25,9 +18,16 @@
 
             <!-- Scrollable content -->
 
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:menu="@menu/top_app_bar"
+                app:title="Home" />
         </androidx.core.widget.NestedScrollView>
 
     </com.google.android.material.appbar.AppBarLayout>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -40,6 +40,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_nav_menu" />
+
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addReceipts"

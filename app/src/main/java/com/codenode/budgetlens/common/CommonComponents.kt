@@ -13,6 +13,7 @@ import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.data.UserProfile
+import com.codenode.budgetlens.friends.FriendsPageActivity
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
@@ -72,9 +73,10 @@ class CommonComponents {
                     }
                     R.id.friends -> {
                         if (currentActivityName != ActivityName.FRIENDS) {
-//                            val intent = Intent(context, FriendsActivity::class.java)
-//                            context.startActivity(intent)
-//                            activity.overridePendingTransition(0, 0)
+                            val intent = Intent(context, FriendsPageActivity::class.java)
+                            context.startActivity(intent)
+                            activity.finish()
+                            activity.overridePendingTransition(0, 0)
                         }
                         true
                     }

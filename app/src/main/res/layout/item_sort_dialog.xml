@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemSortDialog"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:minWidth="275dp"
+    android:minHeight="255dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_50"
+        android:paddingStart="20dp"
+        android:paddingTop="15dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="15dp"
+        android:text="Item Sort"
+        android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+        android:textSize="15sp" />
+
+    <TextView
+        style="@style/LabelTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:text="Price" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        app:selectionRequired="false"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_1"
+            style="@style/ItemSortChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Ascending" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_2"
+            style="@style/ItemSortChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Descending" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <TextView
+        style="@style/LabelTextStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="20dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
+        android:text="Name" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        app:selectionRequired="false"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_3"
+            style="@style/ItemSortChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Ascending" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_4"
+            style="@style/ItemSortChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="Descending" />
+    </com.google.android.material.chip.ChipGroup>
+
+    <Button
+        android:id="@+id/save_item_sort_options"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="#6750A4"
+        android:text="Save" />
+
+</LinearLayout>
