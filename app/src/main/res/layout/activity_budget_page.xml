@@ -7,7 +7,6 @@
     tools:context=".budget.BudgetPageActivity">
 
 
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -71,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="16dp"
-                android:text="November 01"
+                android:text="November 01 - November 18"
                 android:textColor="@color/purple"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -83,6 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="November 18"
+                android:visibility="gone"
                 android:textColor="@color/purple"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="16dp"
-                android:text="-"
+                android:text=""
                 android:textColor="@color/purple"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/textView6"
@@ -361,18 +361,18 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
-                android:isScrollContainer="false"
                 android:horizontalSpacing="10dp"
+                android:isScrollContainer="false"
+                android:layout_marginTop="10dp"
                 android:numColumns="2"
                 android:padding="10dp"
                 android:stretchMode="columnWidth"
                 android:verticalSpacing="5dp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+                app:layout_constraintTop_toBottomOf="@+id/clicktoadd"
                 app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -380,16 +380,16 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/ScanReceipt"
-        app:tint="@color/white"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        app:backgroundTint="@color/purple"
         android:layout_marginBottom="80dp"
-        app:srcCompat="@drawable/budget"
+        app:backgroundTint="@color/purple"
         app:fabCustomSize="80dp"
-        app:maxImageSize="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ScrollView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ScrollView"
+        app:maxImageSize="40dp"
+        app:srcCompat="@drawable/budget"
+        app:tint="@color/white" />
 </androidx.constraintlayout.widget.ConstraintLayout>
