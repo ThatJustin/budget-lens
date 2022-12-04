@@ -115,7 +115,13 @@
         </activity>
         <activity
             android:name=".manualReceipt.Receipt"
-            android:exported="false">
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".common.ScanningReceiptActivity"
             android:exported="true"
             android:parentActivityName=".MainActivity">
