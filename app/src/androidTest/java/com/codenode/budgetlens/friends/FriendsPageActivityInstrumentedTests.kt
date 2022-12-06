@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.receipts
+package com.codenode.budgetlens.friends
 
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
@@ -25,7 +25,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class ReceiptsListPageActivityInstrumentedTests {
+class FriendsPageActivityInstrumentedTests {
 
     private fun ViewInteraction.isDisplayed(): Boolean {
         return try {
@@ -48,8 +48,8 @@ class ReceiptsListPageActivityInstrumentedTests {
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ReceiptsListPageActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
+    // This is ran before each test for FriendsPageActivity in order to simulate the user flow/experience/interaction
+    // from the opening MainActivity logo splash page and logging in into the app to viewing the friends page
     @Before
     fun setup() {
         clearStorage()
@@ -70,21 +70,21 @@ class ReceiptsListPageActivityInstrumentedTests {
 
     @Test
     fun test_receipts_list_page_activity_is_displayed_and_scrollable() {
-        // This test checks to see if the receipts list page activity is displayed and scrollable
-        // by first checking if it is displayed when the "Receipts" button/item on the navigation
+        // This test checks to see if the friends page activity is displayed and scrollable
+        // by first checking if it is displayed when the "Friends" button/item on the navigation
         // bar is clicked and then scrolling down and up the list to make sure that it is scrollable
-        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
-        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
+        onView(withId(R.id.friends)).perform(click()).check(matches(isDisplayed()))
+        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, FriendsPageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-        if (onView(withId(R.id.receipts_card)).isDisplayed()) {
-            onView(withId(R.id.receipts_list)).perform(swipeUp())
-            onView(withId(R.id.receipts_list)).perform(swipeDown())
-            onView(withId(R.id.receipts_list)).perform(click())
+        if (onView(withId(R.id.friend_card_view)).isDisplayed()) {
+            onView(withId(R.id.friends_list)).perform(swipeUp())
+            onView(withId(R.id.friends_list)).perform(swipeDown())
+            onView(withId(R.id.friends_list)).perform(click())
             onView(withId(R.id.relativeLayout)).check(matches(isDisplayed()))
         }
         else {
-            !onView(withId(R.id.receipts_card)).isDisplayed()
+            !onView(withId(R.id.friend_card_view)).isDisplayed()
         }
     }
 }
