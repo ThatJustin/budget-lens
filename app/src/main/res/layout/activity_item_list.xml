@@ -38,7 +38,7 @@
                 app:layout_constraintTop_toTopOf="@+id/receipts_filter_bar" />
 
             <Button
-                android:id="@+id/sort_by_button"
+                android:id="@+id/sort_item_btn_open"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -53,7 +53,7 @@
                 app:layout_constraintTop_toTopOf="@+id/receiptsTextView" />
 
             <Button
-                android:id="@+id/filter_button"
+                android:id="@+id/filter_item_btn_open"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#6750A4"
