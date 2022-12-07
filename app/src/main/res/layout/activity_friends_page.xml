@@ -35,17 +35,22 @@
                 app:layout_constraintStart_toStartOf="@+id/friends_filter_bar"
                 app:layout_constraintTop_toTopOf="@+id/friends_filter_bar" />
 
-            <Button
-                android:id="@+id/request_button"
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/request_switch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/request"
-                app:icon="@drawable/ic_baseline_add_alert_24"
+                android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/friendsTextView"
                 app:layout_constraintEnd_toEndOf="@+id/friendsTextView"
                 app:layout_constraintStart_toStartOf="@+id/friendsTextView"
                 app:layout_constraintTop_toTopOf="@+id/friendsTextView"
-                android:backgroundTint="@color/purple_300"/>
+                android:backgroundTint="@color/purple_300"
+                app:thumbTint="@color/purple_300"
+                android:text="@string/request"
+                android:textColor="@color/purple_300"
+                android:textSize="15sp" />
+
 
             <Button
                 android:id="@+id/add_button"
