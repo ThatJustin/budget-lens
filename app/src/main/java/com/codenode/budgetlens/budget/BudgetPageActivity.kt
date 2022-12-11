@@ -11,11 +11,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import com.alibaba.fastjson.JSON
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.ExpandableHeightGridView
-import com.codenode.budgetlens.PieChartView
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.adapter.CostsAdapter
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
+import com.codenode.budgetlens.data.Costs
 import com.codenode.budgetlens.data.Trend
 import com.codenode.budgetlens.data.Tyepnames
 import com.codenode.budgetlens.utils.AppUtils
@@ -24,10 +25,10 @@ import com.codenode.budgetlens.utils.MyDialog
 import com.loopj.android.http.RequestParams
 import com.loopj.android.http.TextHttpResponseHandler
 import cz.msebera.android.httpclient.Header
+import kotlinx.android.synthetic.main.activity_budget_page.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONException
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,11 +53,9 @@ class BudgetPageActivity : AppCompatActivity() {
         val t1s = formats.format(d1s)
 
         AppUtils.setData(textView6, t1, t1s)
-
+        getCosts()
         Log.e("aaa", t1 + "===" + t1s)
-        val piechart = findViewById<PieChartView>(R.id.pieChart)
-        val datas = arrayOf(70f, 80.0f, 90.00f, 103f, 120f, 77f)
-        piechart.setDatas(datas)
+
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.BUDGET, this, this.window.decorView)
         findViewById<ConstraintLayout>(R.id.constraintLayout3).setOnClickListener() {
@@ -160,6 +159,43 @@ class BudgetPageActivity : AppCompatActivity() {
 
                 getType()
                 Log.i("Response", "responseString"+responseString)
+            }
+        })
+    }
+    private fun getCosts() {
+
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/costs/"
+        HttpUtils.get("Bearer ${BearerToken.getToken(this)}", url, object : TextHttpResponseHandler() {
+            override fun onFailure(
+                statusCode: Int,
+                headers: Array<Header>,
+                responseString: String,
+                throwable: Throwable
+            ) {
+                Toast.makeText(
+                    this@BudgetPageActivity,
+                    "Failed to add a category, please try again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Array<Header>,
+                responseString: String
+            ) {
+                var bean=JSON.parseObject(responseString, Costs::class.java);
+
+
+                var madapte= CostsAdapter()
+                recyc.adapter=madapte;
+                madapte.setNewInstance(bean.Costs as MutableList<Costs.CostsBean>?)
+                val list: MutableList<Float> = ArrayList()
+                for (fl in bean.Costs!!) {
+                    list.add(fl.category_cost!!)
+                }
+                val datas = list.toTypedArray()
+                pieChart.setDatas(datas)
             }
         })
     }

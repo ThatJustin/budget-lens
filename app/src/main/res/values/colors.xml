@@ -22,4 +22,7 @@
     <color name="purple">#6750A4</color>
     <color name="circle_1">#BAAEFE</color>
     <color name="transparent">#00000000</color>
+    <color name="text333">#333333</color>
+    <color name="text666">#666666</color>
+    <color name="text999">#999999</color>
 </resources>

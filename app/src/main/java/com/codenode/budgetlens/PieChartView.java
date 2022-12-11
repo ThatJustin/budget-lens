@@ -14,12 +14,6 @@ import android.view.animation.OvershootInterpolator;
 
 import java.text.DecimalFormat;
 
-/**
- * Created by   fairytale110
- * Creat date   2016/9/14 15:57
- * Copy Right   www.xkyiliao.com
- */
-@SuppressWarnings("all")
 public class PieChartView extends View implements ValueAnimator.AnimatorUpdateListener {
 
     private int ACTION_ROTATION = 1;
@@ -28,7 +22,7 @@ public class PieChartView extends View implements ValueAnimator.AnimatorUpdateLi
     private int width, height;
     private String TAG = getClass().getSimpleName();
 
-    private String[] arcColors = new String[]{"#78CDFF", "#7E68FF", "#DC4175", "#00C69F", "#FFC300","#BAAEFE"};
+    private String[] arcColors = new String[]{"#78CDFF", "#7E68FF", "#DC4175", "#00C69F", "#FFC300","#BAAEFE","#588035","#4B0082","#4682B4","#2F4F4F"};
     private String defaultColor = "#A9A9A9";
     private String tittleStr = "Total spending";
     private String totalPrice = "";
@@ -207,7 +201,7 @@ public class PieChartView extends View implements ValueAnimator.AnimatorUpdateLi
                 }
                 int pixel = bitmap.getPixel((int) curtX, (int) curtY);
                 setDrawingCacheEnabled(false);
-                //获取颜色RGB
+                //get the color RGB
                 int redValue = Color.red(pixel);
                 int blueValue = Color.blue(pixel);
                 int greenValue = Color.green(pixel);

@@ -110,162 +110,16 @@
                 android:layout_marginTop="44dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout2"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="78dp"
+                android:layout_marginTop="50dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintStart_toEndOf="@+id/pieChart"
-                app:layout_constraintTop_toBottomOf="@+id/textView6">
+                app:layout_constraintTop_toBottomOf="@+id/textView6"/>
 
-                <View
-                    android:id="@+id/circleview1"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/circle_blue" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toRightOf="@+id/circleview1"
-                    android:text="Uncategorized"
-                    android:textColor="@color/black"
-                    android:textSize="10sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toEndOf="@+id/pieChart"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayout2">
-
-                <View
-                    android:id="@+id/circleview2"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/circle_purple" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toRightOf="@+id/circleview2"
-                    android:text="Food &amp; Dining"
-                    android:textColor="@color/black"
-                    android:textSize="10sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toEndOf="@+id/pieChart"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
-
-                <View
-                    android:id="@+id/circleview3"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/circle_pink" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toRightOf="@+id/circleview3"
-                    android:text="Shopping"
-                    android:textColor="@color/black"
-                    android:textSize="10sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toEndOf="@+id/pieChart"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayout4">
-
-                <View
-                    android:id="@+id/circleview4"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/circle_green" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toRightOf="@+id/circleview4"
-                    android:text="Bills &amp; Utilities"
-                    android:textColor="@color/black"
-                    android:textSize="10sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toEndOf="@+id/pieChart"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayout5">
-
-                <View
-                    android:id="@+id/circleview5"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/circle_yellow" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toRightOf="@+id/circleview5"
-                    android:text="Healthy &amp; Fitness"
-                    android:textColor="@color/black"
-                    android:textSize="10sp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/relativeLayout7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="10dp"
-                app:layout_constraintStart_toEndOf="@+id/pieChart"
-                app:layout_constraintTop_toBottomOf="@+id/relativeLayout6">
-
-                <View
-                    android:id="@+id/circleview6"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/circle_light_purple" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_toRightOf="@+id/circleview6"
-                    android:text="Auto &amp; Transpot"
-                    android:textColor="@color/black"
-                    android:textSize="10sp" />
-            </RelativeLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout2"

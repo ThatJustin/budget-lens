@@ -52,6 +52,9 @@ open class HomePageActivity() : AppCompatActivity() {
 
         val context = this
 
+        manualReceiptButton.setOnClickListener {
+            startActivity(Intent(this,AddReceiptsActivity::class.java))
+        }
         openAddMenu.setOnClickListener{
             if(AddMenuIsClosed){
                 openAddMenu.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
