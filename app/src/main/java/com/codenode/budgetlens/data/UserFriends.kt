@@ -50,13 +50,15 @@ class UserFriends {
                                     val lastName = friends.getString("last_name")
                                     val email= friends.getString("email")
                                     val initial = firstName[0]
+                                    val requestAccepted = friends.getBoolean("confirmed")
                                     userFriends.add(
                                             Friends(
                                                 userId,
                                                 firstName,
                                                 lastName,
                                                 email,
-                                                initial
+                                                initial,
+                                                requestAccepted
                                             )
                                         )
                                     }

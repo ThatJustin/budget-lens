@@ -1,23 +1,39 @@
 package com.codenode.budgetlens.friends
-import com.codenode.budgetlens.R
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import com.codenode.budgetlens.data.Friends
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import com.codenode.budgetlens.R
+import com.codenode.budgetlens.data.Friends
 
 class FriendsRecyclerViewAdapter(private val friends: MutableList<Friends>) :
     RecyclerView.Adapter<FriendsRecyclerViewAdapter.ViewHolder>() {
         var context: Context? = null
+    private val typeFriendCard = 0
+    private val typeFriendPendingRequest = 1
+    private val typeFriendWaitingForApproval = 2
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ) :FriendsRecyclerViewAdapter.ViewHolder{
-        val view =
+
+        val friendCardView =
             LayoutInflater.from(parent.context).inflate(R.layout.friends_card, parent, false)
-        return ViewHolder(view)
+        val friendPendingRequestCardView =
+            LayoutInflater.from(parent.context).inflate(R.layout.friends_card_pending_request, parent,false)
+        val friendWaitingForApprovalCardView =
+            LayoutInflater.from(parent.context).inflate(R.layout.friends_card_waiting_approval,parent,false)
+
+        return if(viewType == typeFriendPendingRequest){
+            ViewHolder(friendPendingRequestCardView)
+        }else if(viewType == typeFriendWaitingForApproval){
+            ViewHolder(friendWaitingForApprovalCardView)
+        }else
+            ViewHolder(friendCardView)
+
     }
     override fun onBindViewHolder(holder: FriendsRecyclerViewAdapter.ViewHolder,position: Int) {
         val friend = friends[position]
