@@ -5,11 +5,13 @@ data class Friends (
     var firstName: String,
     var lastName: String,
     var email: String,
-    var friendInitial: Char,
-    var requestAccepted: Boolean
+ //   var friendInitial: Char,
+    var friendInitial: String,
+    var requestAccepted: Boolean,
+    var requestSent: Boolean
 //    var trade_relation: String,
 //    var trade_amount: Double
     )
 {
-    constructor(): this(0,"","","",' ',true)
+    constructor(): this(0,"","","","",true,false)
 }

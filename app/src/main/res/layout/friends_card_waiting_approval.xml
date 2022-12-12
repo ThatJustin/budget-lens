@@ -41,14 +41,20 @@
                 android:weightSum="5">
 
 
-                <TextView
-                    android:layout_width="0dp"
+                <Button
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:layout_marginHorizontal="10dp"
+                    android:id="@+id/friend_initial"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:background="@color/purple_300"
-                    android:drawableStart="@drawable/ic_baseline_lock_24"
-                    android:padding="10dp"
-                    android:layout_weight="1"/>
+                    android:layout_width="10dp"
+                    android:text="@string/friend_initial"
+                    android:backgroundTint="@color/white"
+                    android:layout_weight="1"
+                    android:textSize="25dp"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    android:textColor="@color/purple_300"
+                    />
 
                 <LinearLayout
                     android:id="@+id/friends_name_card"
