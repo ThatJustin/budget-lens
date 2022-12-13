@@ -12,19 +12,19 @@ import java.util.concurrent.CountDownLatch
 
 //Im not sure about this class. since all friends are users,
 // friends are the relation between, just in case this class is needed so i created like this
-class UserFriends {
+class UserFriendRequestSend {
     companion object{
-        var userFriends = mutableListOf<Friends>()
+        var userFriendRequestSend = mutableListOf<FriendRequestSend>()
         var pageNumber = 1
 
-        fun loadFriendsFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<Friends> {
+        fun loadFriendRequestSendFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<FriendRequestSend> {
 
 
-           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/"
+           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/requests_sent/"
 //            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friends/pageNumber=${UserFriends.pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
 
-            val friendsRequest = OkHttpClient()
+            val friendsRequestSendRequest = OkHttpClient()
             val request = Request.Builder()
                 .url(url)
                 .method("GET", null)
@@ -32,31 +32,33 @@ class UserFriends {
                 .addHeader("Content-Type", "application/json")
                 .build()
             val countDownLatch = CountDownLatch(1)
-            friendsRequest.newCall(request).enqueue(object : Callback {
+            friendsRequestSendRequest.newCall(request).enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
                     Log.i("Response", "Got the response from server")
                     response.use {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                val friendsObjects= JSONObject(responseBody.toString()).getString("response")
-                                val friends = JSONArray(friendsObjects)
-                                userFriends = mutableListOf<Friends>()
-                                for (i in 0 until friends.length()) {
+                                val friendRequestSendObjects= JSONObject(responseBody.toString()).getString("response")
+                                val friendRequestSend = JSONArray(friendRequestSendObjects)
+                                userFriendRequestSend = mutableListOf<FriendRequestSend>()
+                                for (i in 0 until friendRequestSend.length()) {
                                     contentLoadedFromResponse = true
-                                    val friends = friends.getJSONObject(i)
-                                    val userId = friends.getInt("id")
-                                    val firstName = friends.getString("first_name")
-                                    val lastName = friends.getString("last_name")
-                                    val email= friends.getString("email")
+                                    val friendRequestSend = friendRequestSend.getJSONObject(i)
+                                    val userId = friendRequestSend.getInt("id")
+                                    val firstName = friendRequestSend.getString("first_name")
+                                    val lastName = friendRequestSend.getString("last_name")
+                                    val email= friendRequestSend.getString("email")
                                     val initial = firstName[0]
-                                    userFriends.add(
-                                            Friends(
+                                    val isConfirmed = friendRequestSend.getBoolean("confirm")
+                                    userFriendRequestSend.add(
+                                        FriendRequestSend(
                                                 userId,
                                                 firstName,
                                                 lastName,
                                                 email,
                                                 initial,
+                                                isConfirmed
 
                                             )
                                         )
@@ -87,7 +89,7 @@ class UserFriends {
 
             // wait for a response before returning
             countDownLatch.await()
-            return userFriends
+            return userFriendRequestSend
         }
     }
 }

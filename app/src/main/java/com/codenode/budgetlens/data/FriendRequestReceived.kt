@@ -1,15 +1,16 @@
 package com.codenode.budgetlens.data
 
-data class Friends (
+
+class FriendRequestReceived (
     var userId: Int,
     var firstName: String,
     var lastName: String,
     var email: String,
     var friendInitial: Char,
+    var isConfirmed: Boolean
 
-//    var trade_relation: String,
-//    var trade_amount: Double
-    )
-{
-    constructor(): this(0,"","","",' ')
+        ){
+    constructor(): this(0,"","","",' ',true)
+
 }
+
