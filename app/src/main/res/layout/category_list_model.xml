@@ -7,8 +7,8 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    app:barrierMargin="0dp"
     app:cardCornerRadius="30dp"
+    app:strokeColor="#e7def8"
     app:cardElevation="0dp"
     app:cardUseCompatPadding="true"
     android:divider="@null"
@@ -20,13 +20,13 @@
 
         <LinearLayout
             android:id="@+id/category_card"
-            android:layout_width="388dp"
-            android:layout_height="39dp"
+            android:layout_width="387dp"
+            android:layout_height="wrap_content"
             android:background="#e7def8"
-            android:orientation="vertical"
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -53,10 +53,19 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
                     android:text="TextView"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@+id/image_category"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/image_category"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="@+id/image_category" />
+
+                <ImageView
+                    android:id="@+id/image_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@+id/category_name"
+                    app:layout_constraintEnd_toEndOf="@+id/category_name"
+                    app:layout_constraintTop_toTopOf="@+id/category_name"
+                    app:srcCompat="@drawable/ic_baseline_star_24" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
