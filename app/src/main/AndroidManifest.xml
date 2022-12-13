@@ -54,6 +54,20 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".items.ItemListActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".items.ItemInfoActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".login.google_login.GoogleLoginSecondActivity"
             android:exported="false">
             <meta-data
@@ -126,6 +140,15 @@
             android:name=".common.ScanningReceiptActivity"
             android:exported="true"
             android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".friends.FriendsPageActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".home.HomePageActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

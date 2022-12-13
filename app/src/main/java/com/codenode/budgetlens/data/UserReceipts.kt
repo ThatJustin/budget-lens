@@ -52,8 +52,7 @@ class UserReceipts {
                                     val tip = receipt.getDouble("tip")
                                     val coupon = receipt.getInt("coupon")
                                     val currency = receipt.getString("currency")
-                                    val importantDates = receipt.getString("important_dates")
-                                    userReceipts.add(Receipts(id, merchant, scanDate, receiptImage, location, total, tax, tip, coupon, currency, importantDates))
+                                    userReceipts.add(Receipts(id, merchant, scanDate, receiptImage, location, total, tax, tip, coupon, currency))
                                 }
                                 if (contentLoadedFromResponse) {
                                     pageNumber++
