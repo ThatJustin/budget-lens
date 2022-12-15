@@ -1,7 +1,7 @@
 package com.codenode.budgetlens.data
 
 
-class FriendRequestReceived (
+class FriendRequestReceive (
     var userId: Int,
     var firstName: String,
     var lastName: String,

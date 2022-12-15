@@ -107,7 +107,7 @@
                 app:startIconDrawable="@drawable/search_48px" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/friends_list"
+                android:id="@+id/friend_request_send_list"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
