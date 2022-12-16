@@ -116,7 +116,7 @@ class BudgetPageActivity : AppCompatActivity() {
 
     fun AddAdapter() {
 
-        Log.e("Response", "trendlistr"+trendlist.toString())
+        Log.e("Response", "trendlistr---"+trendlist.toString())
         adapter = CategoryAdapter(this, trendlist)
         grid!!.isFocusable = false;
         grid!!.isExpanded = true
