@@ -54,12 +54,15 @@ open class HomePageActivity() : AppCompatActivity() {
 
         val context = this
 
-        manualReceiptButton.setOnClickListener{
+        manualReceiptButton.setOnClickListener {
+            startActivity(Intent(this,AddReceiptsActivity::class.java))
+        }
+     /*   manualReceiptButton.setOnClickListener{
             val intent = Intent(context, Receipt::class.java)
             context.startActivity(intent)
             context.finish()
             context.overridePendingTransition(0, 0)
-        }
+        }*/
 
         openAddMenu.setOnClickListener{
             if(AddMenuIsClosed){
