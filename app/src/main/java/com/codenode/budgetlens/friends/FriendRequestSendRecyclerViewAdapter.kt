@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.codenode.budgetlens.data.Friends
 import android.widget.TextView
+import com.codenode.budgetlens.data.FriendRequestSend
 
-class FriendRequestSendRecyclerViewAdapter(private val friends: MutableList<Friends>) :
+class FriendRequestSendRecyclerViewAdapter(private val friendRequestSend: MutableList<FriendRequestSend>) :
     RecyclerView.Adapter<FriendRequestSendRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
     override fun onCreateViewHolder(
@@ -16,41 +16,33 @@ class FriendRequestSendRecyclerViewAdapter(private val friends: MutableList<Frie
         viewType: Int
     ) :FriendRequestSendRecyclerViewAdapter.ViewHolder{
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.friends_card, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.friends_card_pending_request, parent, false)
         return ViewHolder(view)
     }
     override fun onBindViewHolder(holder: FriendRequestSendRecyclerViewAdapter.ViewHolder, position: Int) {
-        val friend = friends[position]
+        val friendRequestSendItem = friendRequestSend[position]
         holder.friendFirstName.text =
-            holder.itemView.context.getString(R.string.friend_first_name, friend.firstName)
+            holder.itemView.context.getString(R.string.friend_first_name, friendRequestSendItem.firstName)
         holder.friendLastName.text=
-            holder.itemView.context.getString(R.string.friend_last_name, friend.lastName)
+            holder.itemView.context.getString(R.string.friend_last_name, friendRequestSendItem.lastName)
         holder.friendInitial.text=
-            holder.itemView.context.getString(R.string.friend_initial,friend.friendInitial)
+            holder.itemView.context.getString(R.string.friend_initial,friendRequestSendItem.friendInitial)
     }
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
     }
     override fun getItemCount(): Int {
-        return friends.size
+        return friendRequestSend.size
     }
-    inner class ViewHolder(friendsView: View) : RecyclerView.ViewHolder(friendsView), View.OnClickListener {
-        val friendFirstName: TextView = friendsView.findViewById(R.id.friend_first_name)
-        val friendLastName: TextView = friendsView.findViewById(R.id.friend_last_name)
-        val friendInitial: TextView = friendsView.findViewById(R.id.friend_initial)
-        init {
-            friendsView.setOnClickListener(this)
-        }
-        override fun onClick(v: View?) {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                val friend = friends[position]
-                println("Clicked $friend")
-            }
+    inner class ViewHolder(friendRequestSendView: View) : RecyclerView.ViewHolder(friendRequestSendView) {
+        val friendFirstName: TextView = friendRequestSendView.findViewById(R.id.friend_first_name)
+        val friendLastName: TextView = friendRequestSendView.findViewById(R.id.friend_last_name)
+        val friendInitial: TextView = friendRequestSendView.findViewById(R.id.friend_initial)
+
+
         }
     }
 
 
 
-}

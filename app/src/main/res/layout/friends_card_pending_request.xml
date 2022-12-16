@@ -18,7 +18,7 @@
         android:orientation="horizontal"
         android:weightSum="5">
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/friend_card_view"
+            android:id="@+id/friend_pending_request_cards_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="end"
@@ -112,18 +112,20 @@
                     android:background="@color/purple_300"
                     android:orientation="horizontal"
                     android:padding="8dp">
+
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:src="@drawable/ic_baseline_cancel_40">
-                    </ImageButton>
+                        android:contentDescription="@string/add_friend"
+                        android:src="@drawable/ic_baseline_cancel_40"></ImageButton>
+
                     <ImageButton
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:background="@null"
-                        android:src="@drawable/ic_baseline_check_circle_40">
-                    </ImageButton>
+                        android:contentDescription="@android:string/cancel"
+                        android:src="@drawable/ic_baseline_check_circle_40"></ImageButton>
 
                 </LinearLayout>
 
