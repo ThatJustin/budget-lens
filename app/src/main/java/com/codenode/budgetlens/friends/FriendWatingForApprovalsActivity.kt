@@ -1,11 +1,8 @@
 package com.codenode.budgetlens.friends
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.CompoundButton
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,22 +10,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
-import com.codenode.budgetlens.data.Friends
-import com.codenode.budgetlens.data.UserFriends.Companion.loadFriendsFromAPI
+import com.codenode.budgetlens.data.*
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
-class FriendsPageActivity : AppCompatActivity() {
-    private lateinit var friendList: MutableList<Friends>
-    private var friendsListRecyclerView: RecyclerView? = null
+class FriendWatingForApprovalsActivity : AppCompatActivity() {
+    private lateinit var friendRSList: MutableList<FriendRequestSend>
+    private var friendRSListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var friendAdapter: RecyclerView.Adapter<FriendsRecyclerViewAdapter.ViewHolder>
+    private lateinit var friendRSAdapter: RecyclerView.Adapter<FriendRequestSendRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
     //Todo: For the toggle button
-    // private lateinit var friendRequestSwitch:SwitchMaterial
+   // private lateinit var friendRequestSwitch:SwitchMaterial
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_friends_page)
+        setContentView(R.layout.activity_friend_request_send_list_page)
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.FRIENDS, this, this.window.decorView)
@@ -36,32 +32,37 @@ class FriendsPageActivity : AppCompatActivity() {
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         var additionalData = ""
         //Load Friend List
-        friendList = loadFriendsFromAPI(this, pageSize, additionalData)
+        friendRSList =
+            UserFriendRequestSend.loadFriendRequestSendFromAPI(this, pageSize, additionalData)
         val context = this
-        friendsListRecyclerView = findViewById(R.id.friends_list)
+        friendRSListRecyclerView = findViewById(R.id.friend_request_send_list)
         progressBar.visibility = View.VISIBLE
 
-        if (friendList.isEmpty()) {
-            friendsListRecyclerView!!.visibility = View.GONE
+        if (friendRSList.isEmpty()) {
+            friendRSListRecyclerView!!.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
-        if (friendsListRecyclerView != null) {
-            friendsListRecyclerView!!.setHasFixedSize(true)
+        if (friendRSListRecyclerView != null) {
+            friendRSListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
-            friendsListRecyclerView!!.layoutManager = linearLayoutManager
-            friendAdapter = FriendsRecyclerViewAdapter(friendList)
+            friendRSListRecyclerView!!.layoutManager = linearLayoutManager
+            friendRSAdapter = FriendRequestSendRecyclerViewAdapter(friendRSList)
 
-            friendsListRecyclerView!!.adapter = friendAdapter
+            friendRSListRecyclerView!!.adapter = friendRSAdapter
             progressBar.visibility = View.GONE
-            friendsListRecyclerView!!.addOnScrollListener(object :
+            friendRSListRecyclerView!!.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        friendList = loadFriendsFromAPI(context, pageSize, additionalData)
-                        friendAdapter.notifyDataSetChanged()
+                        friendRSList = UserFriendRequestSend.loadFriendRequestSendFromAPI(
+                            context,
+                            pageSize,
+                            additionalData
+                        )
+                        friendRSAdapter.notifyDataSetChanged()
                     }
                     progressBar.visibility = View.GONE
 
@@ -72,4 +73,5 @@ class FriendsPageActivity : AppCompatActivity() {
 
 
     }
+
 }
