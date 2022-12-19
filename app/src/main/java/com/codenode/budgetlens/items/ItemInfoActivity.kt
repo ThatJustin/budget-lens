@@ -3,10 +3,13 @@ package com.codenode.budgetlens.items
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType.TYPE_CLASS_NUMBER
+import android.text.InputType.TYPE_CLASS_TEXT
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
@@ -105,6 +108,7 @@ class ItemInfoActivity() : AppCompatActivity() {
         })
 
         handleDeleteItem(itemId, position)
+        handleEditItem(itemId, position)
     }
 
     private fun handleDeleteItem(itemId: String?, position: Int) {
@@ -183,4 +187,88 @@ class ItemInfoActivity() : AppCompatActivity() {
             finish()
         }
     }
+
+    private fun handleEditItem(itemId: String?, position: Int) {
+        findViewById<TextView>(R.id.item_info_price)?.setOnClickListener {
+            val editItemName: EditText = EditText(this)
+            editItemName.inputType = TYPE_CLASS_TEXT
+            editItemName.inputType = TYPE_CLASS_NUMBER
+
+            val editItemPrice: EditText = EditText(this)
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Edit Item")
+                .setMessage("Edit item name and price")
+                .setView(editItemName)
+                .setView(editItemPrice)
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Edit") { dialog, _ ->
+                    requestItemEdit(dialog, itemId, position)
+                }
+                .show()
+
+        }
+    }
+
+    private fun requestItemEdit(dialog: DialogInterface, itemId: String?, position: Int) {
+        var success = false
+        val url =
+            "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
+
+        val registrationPost = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .delete()
+            .build()
+        val countDownLatch = CountDownLatch(1)
+        registrationPost.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                success = false
+                e.printStackTrace()
+                countDownLatch.countDown()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            success = true
+                            Log.i("Successful", "Item ID $itemId edited.")
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+                    } else {
+                        Snackbar.make(
+                            findViewById(R.id.toolbar),
+                            "Failed to edit.",
+                            Snackbar.LENGTH_SHORT
+                        ).show()
+                        dialog.dismiss()
+                        Log.e(
+                            "Error",
+                            "Something went wrong ${response.message} ${response.headers}"
+                        )
+                    }
+                }
+                countDownLatch.countDown()
+            }
+        })
+        countDownLatch.await()
+//        if (success) {
+//            dialog.dismiss()
+//            val intent = Intent(this, ItemListActivity::class.java)
+//            intent.putExtra("position", position)
+//            intent.putExtra("price", localPrice)
+//            setResult(ItemListActivity.ITEM_INFO_ACTIVITY, intent)
+//            finish()
+//        }
+    }
+
 }
