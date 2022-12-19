@@ -1,11 +1,10 @@
 package com.codenode.budgetlens.friends
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.CompoundButton
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,9 +13,8 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.FriendRequestReceive
-import com.codenode.budgetlens.data.Friends
 import com.codenode.budgetlens.data.UserFriendRequestReceive.Companion.loadFriendRequestReceiveFromAPI
-import com.codenode.budgetlens.data.UserFriends.Companion.loadFriendsFromAPI
+import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
@@ -33,7 +31,26 @@ class FriendPendingRequestsPageActivity : AppCompatActivity() {
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.FRIENDS, this, this.window.decorView)
+        val toggleButton: MaterialButtonToggleGroup = findViewById(R.id.toggleButton)
+        toggleButton.addOnButtonCheckedListener { toggleButton,checkedId, isChecked->
+            val context = this
+            val activity: Activity = context as Activity
 
+            if(isChecked){
+                when(checkedId){
+                    R.id.show_friend_list -> {
+                        val intent = Intent(context,FriendsPageActivity::class.java)
+                        context.startActivity(intent)
+                        activity.overridePendingTransition(0, 0)
+                    }
+                    R.id.show_friend_request_send_list -> {
+                        val intent = Intent(context,FriendWaitingForApprovalsPageActivity::class.java)
+                        context.startActivity(intent)
+                        activity.overridePendingTransition(0, 0)
+                    }
+                }
+            }
+        }
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         var additionalData = ""
         //Load Friend List

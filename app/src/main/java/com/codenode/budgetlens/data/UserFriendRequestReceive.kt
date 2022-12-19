@@ -20,7 +20,7 @@ class UserFriendRequestReceive {
         fun loadFriendRequestReceiveFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<FriendRequestReceive> {
 
 
-           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/requests_sent/"
+           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/requests_received/"
 //            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friends/pageNumber=${UserFriends.pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
 
