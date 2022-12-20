@@ -5,8 +5,10 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewInteraction
+import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -25,7 +27,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class ReceiptsListPageActivityInstrumentedTests {
+class ReceiptsListPageSortingAndFilteringInstrumentedTests {
 
     private fun ViewInteraction.isDisplayed(): Boolean {
         return try {
@@ -69,26 +71,25 @@ class ReceiptsListPageActivityInstrumentedTests {
         intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
+        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
+        intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
     }
 
     @Test
-    fun test_receipts_list_page_activity_is_displayed_and_scrollable() {
-        // This test checks to see if the receipts list page activity is displayed and scrollable
-        // by first checking if the receipts list page activity is displayed when the "Receipts" button/item
-        // on the navigation bar is clicked and then scrolling down and up the receipts list page activity to make
-        // sure that the receipts list page activity is scrollable
-        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
-        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-        if (onView(withId(R.id.receipts_list)).isDisplayed()) {
-            onView(withId(R.id.receipts_list)).perform(swipeUp())
+    fun test_receipts_list_can_be_sorted() {
+        // This test checks to see if the receipts list can be sorted
+        // by merchant, location, coupon and total
+        if (onView(withId(R.id.receipts_card)).isDisplayed()) {
+            onView(withId(R.id.sort_by_button)).perform(click())
+            onView(withText("Descending")).inRoot(RootMatchers.isPlatformPopup()).perform(click())
             onView(withId(R.id.receipts_list)).perform(swipeDown())
             onView(withId(R.id.receipts_list)).perform(click())
             onView(withId(R.id.relativeLayout)).check(matches(isDisplayed()))
         }
         else {
-            !onView(withId(R.id.receipts_list)).isDisplayed()
+            !onView(withId(R.id.receipts_card)).isDisplayed()
         }
     }
 }

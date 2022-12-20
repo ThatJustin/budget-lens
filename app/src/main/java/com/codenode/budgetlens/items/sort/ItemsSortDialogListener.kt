@@ -1,6 +1,6 @@
 package com.codenode.budgetlens.items.sort
 
-interface ItemSortDialogListener {
+interface ItemsSortDialogListener {
     fun onReturnedSortOptions(
         isPriceAscending: Boolean,
         isPriceDescending: Boolean,

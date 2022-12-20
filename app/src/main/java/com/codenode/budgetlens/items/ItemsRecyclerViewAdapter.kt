@@ -13,7 +13,7 @@ import com.codenode.budgetlens.data.Items
 
 class ItemsRecyclerViewAdapter(
     private val items: MutableList<Items>,
-    val itemListActivity: ItemListActivity
+    val itemListActivity: ItemsListPageActivity
 ) : RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
     override fun onCreateViewHolder(
@@ -21,7 +21,7 @@ class ItemsRecyclerViewAdapter(
         viewType: Int
     ): ItemsRecyclerViewAdapter.ViewHolder {
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_list_model, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.items_list_model, parent, false)
         return ViewHolder(view)
     }
 

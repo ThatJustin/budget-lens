@@ -5,47 +5,78 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="10dp"
-    app:cardElevation="3dp"
     app:cardUseCompatPadding="true"
     android:clickable="true"
     android:focusable="true">
 
-    <LinearLayout
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/receipts_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/merchant_name"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/merchant_name"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            app:layout_constraintTop_toTopOf="@id/receipts_card"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/total_amount"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:text="@string/total_amount"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            app:layout_constraintTop_toBottomOf="@id/merchant_name"/>
+            <LinearLayout
+                android:id="@+id/receipts_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:padding="10dp">
 
-        <TextView
-            android:id="@+id/scan_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:text="@string/scan_date"
-            android:textColor="@color/black"
-            android:textSize="15sp"
-            app:layout_constraintLeft_toRightOf="@+id/merchant_name"/>
+                <LinearLayout
+                    android:id="@+id/merchant_name_and_scan_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-    </LinearLayout>
+                    <TextView
+                        android:id="@+id/merchant_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.25"
+                        android:text="@string/merchant_name"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        app:layout_constraintRight_toLeftOf="@id/scan_date"/>
+
+                    <TextView
+                        android:id="@+id/scan_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.45"
+                        android:text="@string/scan_date"
+                        android:textColor="@color/black"
+                        android:textSize="17sp"
+                        app:layout_constraintBottom_toTopOf="@id/total_amount"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/total_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_amount"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
+                    app:layout_constraintTop_toBottomOf="@+id/merchant_name"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/receipt_image_thumbnail_preview"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="#F0F0F0"
+                android:contentDescription="@string/receipt_image_thumbnail_preview_description"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </com.google.android.material.card.MaterialCardView>

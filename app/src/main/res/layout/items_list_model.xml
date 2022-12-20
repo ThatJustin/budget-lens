@@ -8,7 +8,6 @@
     android:clickable="true"
     android:focusable="true"
     app:cardCornerRadius="10dp"
-
     app:cardUseCompatPadding="true"
     app:strokeColor="@android:color/transparent">
 
@@ -32,7 +31,6 @@
             app:cardUseCompatPadding="true"
             app:strokeColor="@android:color/transparent">
 
-
             <TextView
                 android:id="@+id/months"
                 android:layout_width="match_parent"
@@ -45,8 +43,7 @@
                 android:text="@string/date"
                 android:textColor="#79747E"
                 android:textSize="15sp"
-                android:textStyle="bold" />
-
+                android:textStyle="bold"/>
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -65,7 +62,6 @@
             app:cardUseCompatPadding="true"
             app:strokeColor="@android:color/transparent">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -73,17 +69,14 @@
                 android:orientation="horizontal"
                 android:weightSum="5">
 
-
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:layout_weight="1"
                     android:background="#FFFBFE"
-
                     android:padding="10dp"
-                    app:drawableStartCompat="@drawable/ic_baseline_lock_24" />
-
+                    app:drawableStartCompat="@drawable/ic_baseline_lock_24"/>
 
                 <LinearLayout
                     android:id="@+id/items_detail"
@@ -106,8 +99,7 @@
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="@id/buy_date" />
-
+                        app:layout_constraintTop_toTopOf="@id/buy_date"/>
 
                     <TextView
                         android:id="@+id/buy_date"
@@ -119,9 +111,8 @@
                         android:text="@string/scan_date"
                         android:textColor="@color/black"
                         android:textSize="12sp"
+                        app:layout_constraintTop_toBottomOf="@+id/item_name"/>
 
-
-                        app:layout_constraintTop_toBottomOf="@+id/item_name" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -143,12 +134,14 @@
                         android:text="@string/price"
                         android:textColor="@color/black"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                 </LinearLayout>
 
-
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>
