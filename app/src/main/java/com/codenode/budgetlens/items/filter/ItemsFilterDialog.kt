@@ -14,6 +14,7 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.util.Pair
 import androidx.fragment.app.FragmentManager
 import com.codenode.budgetlens.BuildConfig
@@ -33,7 +34,8 @@ class ItemsFilterDialog(
     private val activityContext: Context,
     themeID: Int,
     private val supportFragmentManager: FragmentManager,
-    private val previousFilterOptions: ItemsFilterOptions
+    private val previousFilterOptions: ItemsFilterOptions,
+    private val isFromSingleReceipt: Boolean = false
 ) : Dialog(activityContext, themeID) {
 
     private val calendar = Calendar.getInstance()
@@ -263,20 +265,28 @@ class ItemsFilterDialog(
      * Handles merchant filter.
      */
     private fun handleMerchant() {
-        //TODO load merchants
-        val items = listOf(
-            ""
-        ).sortedBy { it.lowercase() }
-        val adapter = ArrayAdapter(context, R.layout.list_items, items)
-        merchantOptions.setAdapter(adapter)
+        // If this activity is from viewing a receipts items, there is no merchant to filter
+        // since it's all from the same receipt (same merchant)
+        if (isFromSingleReceipt) {
+            //Hide the merchant filter option in the UI
+            val merchantConstraint = findViewById<ConstraintLayout>(R.id.merchantConstraint)
+            merchantConstraint.visibility = View.GONE
+        } else {
+            //TODO load merchants
+            val items = listOf(
+                ""
+            ).sortedBy { it.lowercase() }
+            val adapter = ArrayAdapter(context, R.layout.list_items, items)
+            merchantOptions.setAdapter(adapter)
 
-        merchantOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
-            filterOptions.merchantName = ""
-            merchantChip.visibility = View.GONE
-            val value = adapter.getItem(pos) ?: ""
-            if (value.isNotEmpty()) {
-                filterOptions.merchantName = value
-                merchantChip.visibility = View.VISIBLE
+            merchantOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
+                filterOptions.merchantName = ""
+                merchantChip.visibility = View.GONE
+                val value = adapter.getItem(pos) ?: ""
+                if (value.isNotEmpty()) {
+                    filterOptions.merchantName = value
+                    merchantChip.visibility = View.VISIBLE
+                }
             }
         }
     }
@@ -373,7 +383,7 @@ class ItemsFilterDialog(
             openDateRangePicker()
         }
 
-        maxPrice.setOnClickListener {
+        endDate.setOnClickListener {
             openDateRangePicker()
         }
     }
