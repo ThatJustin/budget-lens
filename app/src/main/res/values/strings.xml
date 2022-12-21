@@ -83,6 +83,7 @@
     <string name="reminder">Reminders</string>
     <string name="add">+ADD</string>
     <string name="icons">an icon</string>
+    <string name="starred_categories">%1$s</string>
     <string-array name="category_place_holder">
         <item>Groceries</item>
         <item>Entertainment</item>

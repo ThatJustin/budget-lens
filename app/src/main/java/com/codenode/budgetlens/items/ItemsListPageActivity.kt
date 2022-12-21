@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
+import com.codenode.budgetlens.data.Categories
 import com.codenode.budgetlens.data.Items
 import com.codenode.budgetlens.data.UserItems.Companion.loadItemsFromAPI
 import com.codenode.budgetlens.data.UserItems.Companion.pageNumber
@@ -27,14 +28,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, ItemsFilterDialogListener {
+class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
+    ItemsFilterDialogListener {
     //Save an untouched copy for when sorting/filtering is undone
     private lateinit var itemsListUntouched: MutableList<Items>
 
     private lateinit var itemsList: MutableList<Items>
+    private lateinit var starredCategoryList: MutableList<Categories>
     private var itemsListRecyclerView: RecyclerView? = null
+    private var starredCategoriesRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var itemsAdapter: RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>
+    private lateinit var starredCategoryRecyclerViewAdapter : RecyclerView.Adapter<StarredCategoryRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
     var additionalData = ""
     private val sortOptions = SortOptions()
@@ -100,12 +105,19 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, Item
         //load the list
         result = loadItemsFromAPI(this, pageSize, additionalData)
         itemsList = result.first
+        //
+        var category1 = Categories(1,"mycategory1")
+        var category2 = Categories(2,"mycategory2")
+        val mutableList : MutableList<Categories> = arrayListOf(category1,category2)
+        starredCategoryList=mutableList
         itemTotal.text = result.second.toString()
         itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
 
         val context = this
 
         itemsListRecyclerView = findViewById(R.id.items_list)
+        starredCategoriesRecyclerView = findViewById(R.id.category_sort)
+
         progressBar.visibility = View.VISIBLE
 
         if (itemsList.isEmpty()) {
@@ -113,6 +125,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, Item
             progressBar.visibility = View.GONE
         }
 
+        //set item list recycler view
         if (itemsListRecyclerView != null) {
             itemsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
@@ -145,6 +158,49 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, Item
 
                         //Update the adapter items
                         itemsAdapter.notifyDataSetChanged()
+                    }
+                    progressBar.visibility = View.GONE
+                }
+            }
+            )
+        }
+
+        //set category
+        if (starredCategoriesRecyclerView != null) {
+            starredCategoriesRecyclerView!!.setHasFixedSize(true)
+            linearLayoutManager = LinearLayoutManager(this)
+            starredCategoriesRecyclerView!!.layoutManager = linearLayoutManager
+            starredCategoryRecyclerViewAdapter = StarredCategoryRecyclerViewAdapter(starredCategoryList)
+
+            starredCategoriesRecyclerView!!.adapter = starredCategoryRecyclerViewAdapter
+//            progressBar.visibility = View.GONE
+            starredCategoriesRecyclerView!!.addOnScrollListener(object :
+                RecyclerView.OnScrollListener() {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+//                    progressBar.visibility = View.VISIBLE
+                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
+                        //Before loading, revert to the old order
+                        starredCategoryList.clear()
+//                        s.addAll(itemsListUntouched)
+
+                        //Load in more
+
+
+//                        result = loadItemsFromAPI(context, pageSize, additionalData)
+//                        itemsList = result.first
+//                        itemTotal.text = result.second.toString()
+
+
+                        // update the untouched
+//                        itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
+
+                        //Apply whatever sort is set
+                        applyItemSortOptions()
+
+                        //Update the adapter items
+                        starredCategoryRecyclerViewAdapter.notifyDataSetChanged()
                     }
                     progressBar.visibility = View.GONE
                 }
