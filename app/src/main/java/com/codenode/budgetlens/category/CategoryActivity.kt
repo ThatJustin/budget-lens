@@ -6,13 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.load.engine.Resource
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
@@ -36,18 +32,17 @@ class CategoryActivity : AppCompatActivity() {
         val context: Context = this
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
-        CommonComponents.handleNavigationBar(ActivityName.CATEGORY_SETTINGS, this, this.window.decorView)
-
+        CommonComponents.handleNavigationBar(
+            ActivityName.CATEGORY_SETTINGS,
+            this,
+            this.window.decorView
+        )
+        // Make sure the user category list is empty
         UserCategories.userCategories.clear()
-
         categoryList = UserCategories.loadCategoriesFromAPI(this)
 
-        Log.d("Debug List", categoryList.toString())
-
         categoryListRecyclerView = findViewById(R.id.categoryRecyclerView)
-
         if (categoryListRecyclerView != null) {
-            Log.i("INfo", "something")
             categoryListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
             categoryListRecyclerView!!.layoutManager = linearLayoutManager
@@ -66,12 +61,10 @@ class CategoryActivity : AppCompatActivity() {
                 }
             })
 
-//            Functionality for add subcategory popup
-
-            var gotToAddAubCategoryPopUp = Intent(this, AddSubCategoryPopUpActivity::class.java)
-
-            var addSubCategoryButton: ImageButton = findViewById(R.id.addSubcategoryButton)
-            addSubCategoryButton.setOnClickListener{
+            // Functionality for add subcategory popup
+            val gotToAddAubCategoryPopUp = Intent(this, AddSubCategoryPopUpActivity::class.java)
+            val addSubCategoryButton: ImageButton = findViewById(R.id.addSubcategoryButton)
+            addSubCategoryButton.setOnClickListener {
                 startActivity(gotToAddAubCategoryPopUp)
             }
         }

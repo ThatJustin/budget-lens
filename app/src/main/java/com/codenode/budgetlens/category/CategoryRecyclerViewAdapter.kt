@@ -5,16 +5,17 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.ui.layout.Layout
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Category
+import com.codenode.budgetlens.data.UserCategories
 
 
 class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>) :
     RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder>() {
-    var context: Context? = null
+    lateinit var context: Context
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -25,10 +26,17 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
     }
 
     override fun onBindViewHolder(holder: CategoryRecyclerViewAdapter.ViewHolder, position: Int) {
+        val imageStar: ImageView = holder.itemView.findViewById(R.id.image_star)
         val category = categories[position]
-        holder.category_name.text =
+        holder.categoryName.text =
             holder.itemView.context.getString(R.string.category_name, category.category_name)
+        if (category.category_toggle_star) {
+            imageStar.setImageResource(R.drawable.ic_baseline_star_24)
+        } else {
+            imageStar.setImageResource(R.drawable.ic_baseline_star_outline_24)
+        }
     }
+
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
@@ -37,16 +45,28 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
     override fun getItemCount(): Int {
         return categories.size
     }
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        val category_name: TextView = itemView.findViewById(R.id.category_name)
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
+        val categoryName: TextView = itemView.findViewById(R.id.category_name)
+        var imageStar: ImageView = itemView.findViewById(R.id.image_star)
+
         init {
-            itemView.setOnClickListener(this)
+            categoryName.setOnClickListener(this)
+            imageStar.setOnClickListener(this)
         }
+
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val category = categories[position]
-                println("Clicked $category")
+                if (v?.id == imageStar.id) {
+                    UserCategories.toggleStarFromAPI(context, category, imageStar)
+                    println("Clicked Star on category $category")
+                } else {
+                    println("Clicked $category")
+                }
+
             }
         }
     }
