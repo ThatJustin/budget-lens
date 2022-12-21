@@ -14,13 +14,13 @@ import java.util.concurrent.CountDownLatch
 // friends are the relation between, just in case this class is needed so i created like this
 class UserFriendRequestSend {
     companion object{
-        var userFriendRequestSend = mutableListOf<FriendRequestSend>()
+        var userFriendRequestSend = mutableListOf<Friends>()
         var pageNumber = 1
 
-        fun loadFriendRequestSendFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<FriendRequestSend> {
+        fun loadFriendRequestSendFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<Friends> {
 
 
-           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/requests_sent/"
+           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/request/"
 //            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friends/pageNumber=${UserFriends.pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
 
@@ -39,9 +39,9 @@ class UserFriendRequestSend {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                val friendRequestSendObjects= JSONObject(responseBody.toString()).getString("response")
+                                val friendRequestSendObjects= JSONObject(responseBody.toString()).getString("requests_sent")
                                 val friendRequestSend = JSONArray(friendRequestSendObjects)
-                                userFriendRequestSend = mutableListOf<FriendRequestSend>()
+                                userFriendRequestSend = mutableListOf<Friends>()
                                 for (i in 0 until friendRequestSend.length()) {
                                     contentLoadedFromResponse = true
                                     val friendRequestSend = friendRequestSend.getJSONObject(i)
@@ -50,15 +50,13 @@ class UserFriendRequestSend {
                                     val lastName = friendRequestSend.getString("last_name")
                                     val email= friendRequestSend.getString("email")
                                     val initial = firstName[0]
-                                    val isConfirmed = friendRequestSend.getBoolean("confirm")
                                     userFriendRequestSend.add(
-                                        FriendRequestSend(
+                                        Friends(
                                                 userId,
                                                 firstName,
                                                 lastName,
                                                 email,
                                                 initial,
-                                                isConfirmed
 
                                             )
                                         )

@@ -17,7 +17,7 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 
 
 class FriendWaitingForApprovalsPageActivity : AppCompatActivity() {
-    private lateinit var friendRSList: MutableList<FriendRequestSend>
+    private lateinit var friendRSList: MutableList<Friends>
     private var friendRSListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var friendRSAdapter: RecyclerView.Adapter<FriendRequestSendRecyclerViewAdapter.ViewHolder>

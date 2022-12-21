@@ -7,14 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.recyclerview.widget.RecyclerView
+import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.data.FriendRequestReceive
+import com.codenode.budgetlens.common.BearerToken
+import com.codenode.budgetlens.data.Friends
+import com.codenode.budgetlens.data.UserFriendRequestSend
+import com.codenode.budgetlens.data.UserItems
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
+import java.util.concurrent.CountDownLatch
 
 
-class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: MutableList<FriendRequestReceive>) :
+class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: MutableList<Friends>) :
     RecyclerView.Adapter<FriendRequestReceiveRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
     override fun onCreateViewHolder(
@@ -22,7 +35,7 @@ class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: 
         viewType: Int
     ) :FriendRequestReceiveRecyclerViewAdapter.ViewHolder{
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.friends_card_waiting_approval, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.friends_card_pending_request, parent, false)
         return ViewHolder(view)
     }
     override fun onBindViewHolder(holder: FriendRequestReceiveRecyclerViewAdapter.ViewHolder, position: Int) {
@@ -44,6 +57,7 @@ class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: 
     }
     inner class ViewHolder(friendRequestReceiveView: View) : RecyclerView.ViewHolder(friendRequestReceiveView),
     View.OnClickListener{
+
         val friendFirstName: TextView = friendRequestReceiveView.findViewById(R.id.friend_first_name)
         val friendLastName: TextView = friendRequestReceiveView.findViewById(R.id.friend_last_name)
         val friendInitial: TextView = friendRequestReceiveView.findViewById(R.id.friend_initial)
@@ -54,13 +68,15 @@ class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: 
         init {
             friendAcceptRequest.setOnClickListener{
                 val position = adapterPosition
-                friendRequestReceive[position].isConfirmed = true
-                removeFriendRequest(position)
+                acceptFriendRequest(context!!,position)
+                Log.i("Click", "Friend Request at "+ adapterPosition+ " has been clicked")
+
             }
             friendRejectRequest.setOnClickListener{
                 val position = adapterPosition
-                friendRequestReceive[position].isConfirmed = false
-                removeFriendRequest(position)
+                rejectFriendRequest(context!!,position)
+                Log.i("Click", "Friend Request at "+ adapterPosition+ " has been clicked")
+
             }
 
         }
@@ -69,16 +85,99 @@ class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: 
             Log.i("Click", "Friend Request at "+ adapterPosition+ " has been clicked")
         }
         }
+    private fun acceptFriendRequest(context: Context, position: Int){
+        var success = false
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/request/${friendRequestReceive[position].userId}/"
+        val friendRequestEndPoint = OkHttpClient()
+        val mediaType = "application/json".toMediaTypeOrNull()
+        var answer = '1'
+        val body = ("{\r\n" +
+                "    \"answer\": \"${answer}\"\r\n" +
+                "}").trimIndent().toRequestBody(mediaType)
+        val request = Request.Builder()
+            .url(url)
+            .method("PUT",body)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+            .addHeader("Content-Type", "text/plain")
+            .build()
+        friendRequestEndPoint.newCall(request).enqueue(object :Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                success = false
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            success = true
+
+                            Log.i("Successful", "friend request has been accepted")
+
+                    } else {
+                        Log.e("Error", "Something went wrong ${response.message} ${response.headers}"
+                        )
+                    }
+                }
+                removeFriendRequest(position)            }
+            }
+        })
+    }
+    private fun rejectFriendRequest(context: Context,position: Int){
+        var success = false
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/request/${friendRequestReceive[position].userId}/"
+        val friendRequestEndPoint = OkHttpClient()
+        val mediaType = "application/json".toMediaTypeOrNull()
+        var answer = '0'
+        val body = ("{\r\n" +
+                "    \"answer\": \"${answer}\"\r\n" +
+                "}").trimIndent().toRequestBody(mediaType)
+        val request = Request.Builder()
+            .url(url)
+            .method("PUT",body)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+            .addHeader("Content-Type", "text/plain")
+            .build()
+        friendRequestEndPoint.newCall(request).enqueue(object :Callback{
+            override fun onFailure(call: Call, e: IOException) {
+                success = false
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            success = true
+
+                            Log.i("Successful", "friend request has been rejected")
+
+                        } else {
+                            Log.e("Error", "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+                    }
+                    removeFriendRequest(position)            }
+            }
+        })
+    }
+
     private fun removeFriendRequest(position: Int) {
         val activity = context as Activity
         Snackbar.make(
             activity.findViewById<BottomNavigationView>(R.id.bottom_navigation),
-            "Receipt deleted.",
+            "Friend Request Removed.",
             Snackbar.LENGTH_SHORT
         ).show()
         friendRequestReceive.removeAt(position)
         notifyItemRemoved(position)
     }
     }
+
+
 
 

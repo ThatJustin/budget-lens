@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.TextView
-import com.codenode.budgetlens.data.FriendRequestSend
+import com.codenode.budgetlens.data.Friends
 
-class FriendRequestSendRecyclerViewAdapter(private val friendRequestSend: MutableList<FriendRequestSend>) :
+class FriendRequestSendRecyclerViewAdapter(private val friendRequestSend: MutableList<Friends>) :
     RecyclerView.Adapter<FriendRequestSendRecyclerViewAdapter.ViewHolder>() {
     var context: Context? = null
     override fun onCreateViewHolder(
@@ -16,7 +16,7 @@ class FriendRequestSendRecyclerViewAdapter(private val friendRequestSend: Mutabl
         viewType: Int
     ) :FriendRequestSendRecyclerViewAdapter.ViewHolder{
         val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.friends_card_pending_request, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.friends_card_waiting_approval, parent, false)
         return ViewHolder(view)
     }
     override fun onBindViewHolder(holder: FriendRequestSendRecyclerViewAdapter.ViewHolder, position: Int) {

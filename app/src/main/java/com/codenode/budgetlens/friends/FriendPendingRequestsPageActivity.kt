@@ -12,19 +12,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
-import com.codenode.budgetlens.data.FriendRequestReceive
+import com.codenode.budgetlens.data.Friends
 import com.codenode.budgetlens.data.UserFriendRequestReceive.Companion.loadFriendRequestReceiveFromAPI
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class FriendPendingRequestsPageActivity : AppCompatActivity() {
-    private lateinit var friendRRList: MutableList<FriendRequestReceive>
+    private lateinit var friendRRList: MutableList<Friends>
     private var friendRRListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var friendRRAdapter: RecyclerView.Adapter<FriendRequestReceiveRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
-    private lateinit var friendRequestSwitch:SwitchMaterial
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friend_request_receive_list_page)

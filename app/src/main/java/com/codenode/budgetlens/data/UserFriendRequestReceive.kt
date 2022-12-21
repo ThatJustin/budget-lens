@@ -14,13 +14,13 @@ import java.util.concurrent.CountDownLatch
 // friends are the relation between, just in case this class is needed so i created like this
 class UserFriendRequestReceive {
     companion object{
-        var userFriendRequestReceive = mutableListOf<FriendRequestReceive>()
+        var userFriendRequestReceive = mutableListOf<Friends>()
         var pageNumber = 1
 
-        fun loadFriendRequestReceiveFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<FriendRequestReceive> {
+        fun loadFriendRequestReceiveFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<Friends> {
 
 
-           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/requests_received/"
+           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/request/"
 //            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friends/pageNumber=${UserFriends.pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
 
@@ -39,9 +39,9 @@ class UserFriendRequestReceive {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                val friendRequestReceiveObjects= JSONObject(responseBody.toString()).getString("response")
+                                val friendRequestReceiveObjects= JSONObject(responseBody.toString()).getString("requests_received")
                                 val friendRequestReceive = JSONArray(friendRequestReceiveObjects)
-                                userFriendRequestReceive = mutableListOf<FriendRequestReceive>()
+                                userFriendRequestReceive = mutableListOf<Friends>()
                                 for (i in 0 until friendRequestReceive.length()) {
                                     contentLoadedFromResponse = true
                                     val friendRequestReceive = friendRequestReceive.getJSONObject(i)
@@ -50,16 +50,13 @@ class UserFriendRequestReceive {
                                     val lastName = friendRequestReceive.getString("last_name")
                                     val email= friendRequestReceive.getString("email")
                                     val initial = firstName[0]
-                                    val isConfirmed = friendRequestReceive.getBoolean("confirm")
                                     userFriendRequestReceive.add(
-                                        FriendRequestReceive(
+                                        Friends(
                                                 userId,
                                                 firstName,
                                                 lastName,
                                                 email,
-                                                initial,
-                                                isConfirmed
-
+                                                initial
                                             )
                                         )
                                     }
