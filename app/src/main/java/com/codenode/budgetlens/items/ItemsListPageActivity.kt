@@ -168,8 +168,8 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         //set category
         if (starredCategoriesRecyclerView != null) {
             starredCategoriesRecyclerView!!.setHasFixedSize(true)
-            linearLayoutManager = LinearLayoutManager(this)
-            starredCategoriesRecyclerView!!.layoutManager = linearLayoutManager
+//            linearLayoutManager = LinearLayoutManager(this)
+            starredCategoriesRecyclerView!!.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
             starredCategoryRecyclerViewAdapter = StarredCategoryRecyclerViewAdapter(starredCategoryList)
 
             starredCategoriesRecyclerView!!.adapter = starredCategoryRecyclerViewAdapter
@@ -182,7 +182,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
 //                    progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
                         //Before loading, revert to the old order
-                        starredCategoryList.clear()
+//                        starredCategoryList.clear()
 //                        s.addAll(itemsListUntouched)
 
                         //Load in more
