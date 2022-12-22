@@ -54,6 +54,8 @@
                     android:scaleX="0.8"
                     android:scaleY="0.8"
                     android:textColor="@color/purple_300"
+                    android:layout_marginVertical="5dp"
+
                     />
 
 
@@ -63,7 +65,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="2.5"
-                    android:background="@color/purple_300"
+                        android:background="@color/purple_300"
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -111,7 +113,7 @@
                     android:layout_weight="1.5"
                     android:background="@color/purple_300"
                     android:orientation="horizontal"
-                    android:padding="8dp">
+                    android:padding="2dp">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -119,6 +121,8 @@
                         android:id="@+id/reject_request"
                         android:contentDescription="@string/add_friend"
                         android:src="@drawable/ic_baseline_cancel_40"
+                        android:scaleY="0.7"
+                        android:scaleX="0.7"
                         ></ImageView>
 
 
@@ -127,7 +131,9 @@
                         android:layout_height="match_parent"
                         android:id="@+id/accept_request"
                         android:contentDescription="@android:string/cancel"
-                        android:src="@drawable/ic_baseline_check_circle_40"></ImageView>
+                        android:src="@drawable/ic_baseline_check_circle_40"
+                        android:scaleY="0.7"
+                        android:scaleX="0.7"></ImageView>
 
                 </LinearLayout>
 

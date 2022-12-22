@@ -21,10 +21,20 @@ class FriendRequestSendRecyclerViewAdapter(private val friendRequestSend: Mutabl
     }
     override fun onBindViewHolder(holder: FriendRequestSendRecyclerViewAdapter.ViewHolder, position: Int) {
         val friendRequestSendItem = friendRequestSend[position]
+        val firstNameShow:String = if(friendRequestSendItem.firstName.length>7){
+            friendRequestSendItem.firstName.subSequence(0,4).toString()+".."
+        }else
+            friendRequestSendItem.firstName
         holder.friendFirstName.text =
-            holder.itemView.context.getString(R.string.friend_first_name, friendRequestSendItem.firstName)
+            holder.itemView.context.getString(R.string.friend_first_name, firstNameShow)
+        val lastNameShow:String = if(friendRequestSendItem.firstName.length<=5 && friendRequestSendItem.lastName.length>4){
+            friendRequestSendItem.lastName.subSequence(0,3).toString()+".."
+        }else if(friendRequestSendItem.lastName.length>5 && friendRequestSendItem.lastName.length>4){
+            friendRequestSendItem.lastName.subSequence(0,2).toString()+".."
+        }else
+            friendRequestSendItem.lastName
         holder.friendLastName.text=
-            holder.itemView.context.getString(R.string.friend_last_name, friendRequestSendItem.lastName)
+            holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
         holder.friendInitial.text=
             holder.itemView.context.getString(R.string.friend_initial,friendRequestSendItem.friendInitial)
     }
