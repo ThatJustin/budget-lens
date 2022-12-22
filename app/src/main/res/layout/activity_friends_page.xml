@@ -41,11 +41,12 @@
                 android:id="@+id/toggleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/friendsTextView"
-                app:layout_constraintEnd_toEndOf="@+id/friendsTextView"
+                app:layout_constraintEnd_toEndOf="@+id/add_button"
                 app:layout_constraintStart_toStartOf="@+id/friendsTextView"
                 app:layout_constraintTop_toTopOf="@+id/friendsTextView"
+                android:layout_marginRight="100dp"
+
                 >
 
                 <Button
@@ -55,7 +56,10 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/purple_300"
                     app:icon="@drawable/ic_baseline_people_24"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck"
+                    app:strokeColor="@color/purple_300"
+                    android:paddingLeft="30dp"
+                    />
 
                 <Button
                     android:id="@+id/show_friend_request_send_list"
@@ -64,7 +68,9 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/purple_300"
                     app:icon="@drawable/ic_baseline_send_24"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck"
+                    app:strokeColor="@color/purple_300"
+                    android:paddingLeft="30dp"/>
 
                 <Button
                     android:id="@+id/show_friend_request_receive_list"
@@ -73,7 +79,9 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/purple_300"
                     app:icon="@drawable/ic_baseline_call_received_24"
-                    tools:ignore="TouchTargetSizeCheck" />
+                    tools:ignore="TouchTargetSizeCheck"
+                    app:strokeColor="@color/purple_300"
+                    android:paddingLeft="30dp"/>
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
 

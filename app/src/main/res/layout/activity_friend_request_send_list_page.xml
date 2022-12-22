@@ -41,17 +41,23 @@
                 android:id="@+id/toggleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="100dp"
                 app:layout_constraintBottom_toBottomOf="@+id/friendsTextView"
-                app:layout_constraintEnd_toEndOf="@+id/friendsTextView"
+                app:layout_constraintEnd_toEndOf="@+id/add_button"
                 app:layout_constraintStart_toStartOf="@+id/friendsTextView"
-                app:layout_constraintTop_toTopOf="@+id/friendsTextView">
+                app:layout_constraintTop_toTopOf="@+id/friendsTextView"
+
+                >
                 <Button
                     style="@style/Widget.App.Button.OutlinedButton.IconOnly"
                     android:id="@+id/show_friend_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/ic_baseline_people_24"
+                    android:backgroundTint="@color/purple_300"
+                    tools:ignore="TouchTargetSizeCheck"
+                    app:strokeColor="@color/purple_300"
+                    android:paddingLeft="30dp"
                     />
                 <Button
                     style="@style/Widget.App.Button.OutlinedButton.IconOnly"
@@ -59,6 +65,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/ic_baseline_send_24"
+                    android:backgroundTint="@color/purple_300"
+                    tools:ignore="TouchTargetSizeCheck"
+                    app:strokeColor="@color/purple_300"
+                    android:paddingLeft="30dp"
+
                     />
                 <Button
                     style="@style/Widget.App.Button.OutlinedButton.IconOnly"
@@ -66,6 +77,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     app:icon="@drawable/ic_baseline_call_received_24"
+                    android:backgroundTint="@color/purple_300"
+                    tools:ignore="TouchTargetSizeCheck"
+                    app:strokeColor="@color/purple_300"
+                    android:paddingLeft="30dp"
                     />
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
