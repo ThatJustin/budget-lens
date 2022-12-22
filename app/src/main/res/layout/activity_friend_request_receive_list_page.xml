@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/top_app_bar"
-            app:title="Friends Requests Received" />
+            app:title="Friend Requests Received" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/friends_filter_bar"
