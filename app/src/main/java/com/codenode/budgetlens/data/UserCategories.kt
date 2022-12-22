@@ -1,10 +1,12 @@
 package com.codenode.budgetlens.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.widget.ImageView
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.category.CategoryRecyclerViewAdapter
 import com.codenode.budgetlens.common.BearerToken
 import okhttp3.*
 import org.json.JSONArray
@@ -70,6 +72,57 @@ class UserCategories {
                     }
                 }
             })
+        }
+
+        fun deleteSubCategoryFromAPI(
+            context: Context,
+            category: Category,
+            viewHolder: CategoryRecyclerViewAdapter.ViewHolder
+        ) {
+
+            val url =
+                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/categoryName=${category.category_name}"
+
+            val toggleStarUpdate = OkHttpClient()
+
+            val request = Request.Builder()
+                .url(url)
+                .method("DELETE", body = null)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .build()
+
+//            val countDownLatch = CountDownLatch(1)
+            toggleStarUpdate.newCall(request).enqueue(object : Callback {
+
+                override fun onFailure(call: Call, e: java.io.IOException) {
+                    e.printStackTrace()
+                }
+
+                @SuppressLint("NotifyDataSetChanged")
+                @Suppress("Thread")
+                override fun onResponse(call: Call, response: Response) {
+                    Log.i("Response", "Got the response from server")
+                    response.use {
+                        val responseBody = response.body?.string()
+                        if (response.isSuccessful) {
+                            // Remove the category from the list in the frontend list
+                            val position = userCategories.indexOf(category)
+                            userCategories.remove(category)
+                            viewHolder.bindingAdapter!!.notifyItemRemoved(position)
+                        } else {
+                            Log.e(
+                                "Error",
+                                "Something went wrong${responseBody} ${response.message} ${response.headers}"
+                            )
+                        }
+                    }
+                }
+            })
+
+//            countDownLatch.await()
+//            Log.d("Debug List", userCategories.toString())
+//            return userCategories
         }
 
         fun loadCategoriesFromAPI(context: Context): MutableList<Category> {

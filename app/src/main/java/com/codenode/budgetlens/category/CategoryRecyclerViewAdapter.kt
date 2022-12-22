@@ -27,6 +27,7 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
 
     override fun onBindViewHolder(holder: CategoryRecyclerViewAdapter.ViewHolder, position: Int) {
         val imageStar: ImageView = holder.itemView.findViewById(R.id.image_star)
+        val imageGarbage: ImageView = holder.itemView.findViewById(R.id.image_garbage)
         val category = categories[position]
         holder.categoryName.text =
             holder.itemView.context.getString(R.string.category_name, category.category_name)
@@ -34,6 +35,10 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
             imageStar.setImageResource(R.drawable.ic_baseline_star_24)
         } else {
             imageStar.setImageResource(R.drawable.ic_baseline_star_outline_24)
+        }
+
+        if (category.parent_category_id != null) {
+            imageGarbage.setImageResource(R.drawable.ic_baseline_delete_outline_24)
         }
     }
 
@@ -50,21 +55,30 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
         View.OnClickListener {
         val categoryName: TextView = itemView.findViewById(R.id.category_name)
         var imageStar: ImageView = itemView.findViewById(R.id.image_star)
+        val imageGarbage: ImageView = itemView.findViewById(R.id.image_garbage)
 
         init {
             categoryName.setOnClickListener(this)
             imageStar.setOnClickListener(this)
+            imageGarbage.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
                 val category = categories[position]
-                if (v?.id == imageStar.id) {
-                    UserCategories.toggleStarFromAPI(context, category, imageStar)
-                    println("Clicked Star on category $category")
-                } else {
-                    println("Clicked $category")
+                when (v?.id) {
+                    imageStar.id -> {
+                        UserCategories.toggleStarFromAPI(context, category, imageStar)
+                        println("Clicked Star on category $category")
+                    }
+                    imageGarbage.id -> {
+                        UserCategories.deleteSubCategoryFromAPI(context, category, this)
+                        println("Clicked Delete on category $category")
+                    }
+                    else -> {
+                        println("Clicked $category")
+                    }
                 }
 
             }
