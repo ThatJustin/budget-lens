@@ -325,6 +325,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
 
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             filterOptionList.add("category_id=${filterOptions.categoryId}")
+            chipGroup.check(filterOptions.categoryId+1)
         }
         //TODO backend doesn't support this filter yet
 //        if (filterOptions.categoryName.isNotEmpty() && filterOptions.merchantId > -1) {
@@ -423,16 +424,25 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         chip.setChipDrawable(chipDrawable)
         chipGroup.addView(chip)
         chip.setOnClickListener{
-            additionalData = if(chip.isChecked){
+             if(chip.isChecked){
                 if(id!=0){
-                    "?category_id=$id$filteringDataWithoutCategories"
+                    additionalData ="?category_id=$id$filteringDataWithoutCategories"
+                    filterOptions.categoryName=label
+                    filterOptions.categoryId=id+1
+                    handleFilter()
 
                 }else{
-                    "?$filteringDataWithoutCategories"
+                    additionalData ="?$filteringDataWithoutCategories"
+                    filterOptions.categoryName=""
+                    filterOptions.categoryId=-1
+                    handleFilter()
 
                 }
             }else{
-                "?$filteringDataWithoutCategories"
+                 additionalData ="?$filteringDataWithoutCategories"
+                 filterOptions.categoryName=""
+                 filterOptions.categoryId=-1
+                 handleFilter()
 
             }
 
