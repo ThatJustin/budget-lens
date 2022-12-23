@@ -95,7 +95,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         }
     }
     private fun handleChipGroup(){
-        //get thhe starred category lists from api
+        //get the starred category lists from api
         chipGroup = findViewById(R.id.category_chips)
         addChip("All",0, R.style.AllChipStyle)
         val url =
@@ -349,7 +349,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             }
         }
 
-        additionalData = if (isFromSingleReceipt) "$additionalData&$sb" else "?$sb"
+        additionalData = if (isFromSingleReceipt) "$additionalData&$sb" else "$sb"
 
         itemsList.clear()
 

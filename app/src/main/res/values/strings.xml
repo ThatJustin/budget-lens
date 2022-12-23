@@ -24,7 +24,7 @@
     <string name="friend_last_name">%1$s</string>
     <string name="trade_relation">%1$s</string>
     <string name="trade_amount">%1$f</string>
-    <string name="items_total">%1$f</string>
+    <string name="items_total">$ %1$f.2f</string>
     <string name="date">%1$f</string>
     <string name="price">$%1$.2f</string>
     <string name="price_title">Price</string>
@@ -51,7 +51,7 @@
     <string name="total">%1$.2f</string>
     <string name="total_amount">Total Amount($): %1$.2f</string>
     <string name="total_amount_currency">Total Amount(%1s):</string>
-    <string name="total_items_currency">Total (%1s):</string>
+    <string name="total_items_currency">Total :</string>
     <string name="added_by">Added by:</string>
     <string name="view_items">View Items</string>
     <string name="delete">Delete</string>
