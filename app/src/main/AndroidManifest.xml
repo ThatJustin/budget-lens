@@ -131,7 +131,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".friends.FriendPendingRequestsPageActivity"
+            android:name=".friends.requests.FriendPendingRequestsPageActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".friends.FriendsPageActivity">
@@ -140,7 +140,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".friends.FriendWaitingForApprovalsPageActivity"
+            android:name=".friends.requests.FriendWaitingForApprovalsPageActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".friends.FriendsPageActivity">

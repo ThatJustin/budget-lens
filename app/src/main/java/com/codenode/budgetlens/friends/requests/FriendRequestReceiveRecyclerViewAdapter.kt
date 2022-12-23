@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.friends
+package com.codenode.budgetlens.friends.requests
 import android.app.Activity
 import android.content.Context
 import android.util.Log
@@ -7,24 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.RequiresApi
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.data.Friends
-import com.codenode.budgetlens.data.UserFriendRequestSend
-import com.codenode.budgetlens.data.UserItems
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONArray
-import org.json.JSONObject
 import java.io.IOException
-import java.util.concurrent.CountDownLatch
 
 
 class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: MutableList<Friends>) :
@@ -33,12 +26,12 @@ class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ) :FriendRequestReceiveRecyclerViewAdapter.ViewHolder{
+    ) : ViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.friends_card_pending_request, parent, false)
         return ViewHolder(view)
     }
-    override fun onBindViewHolder(holder: FriendRequestReceiveRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val friendRequestReceiveItem = friendRequestReceive[position]
         val firstNameShow:String = if(friendRequestReceiveItem.firstName.length>7){
             friendRequestReceiveItem.firstName.subSequence(0,4).toString()+".."

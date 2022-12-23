@@ -24,6 +24,8 @@ import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import com.codenode.budgetlens.data.UserFriends.Companion.sendFriendRequest
+import com.codenode.budgetlens.friends.requests.FriendPendingRequestsPageActivity
+import com.codenode.budgetlens.friends.requests.FriendWaitingForApprovalsPageActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class FriendsPageActivity : AppCompatActivity() {

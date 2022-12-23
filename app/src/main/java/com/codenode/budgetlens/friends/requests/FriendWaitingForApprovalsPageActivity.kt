@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.friends
+package com.codenode.budgetlens.friends.requests
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -12,22 +12,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
-import com.codenode.budgetlens.data.Friends
-import com.codenode.budgetlens.data.UserFriendRequestReceive.Companion.loadFriendRequestReceiveFromAPI
+import com.codenode.budgetlens.data.*
+import com.codenode.budgetlens.friends.FriendsPageActivity
 import com.google.android.material.button.MaterialButtonToggleGroup
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 
-class FriendPendingRequestsPageActivity : AppCompatActivity() {
-    private lateinit var friendRRList: MutableList<Friends>
-    private var friendRRListRecyclerView: RecyclerView? = null
+class FriendWaitingForApprovalsPageActivity : AppCompatActivity() {
+    private lateinit var friendRSList: MutableList<Friends>
+    private var friendRSListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var friendRRAdapter: RecyclerView.Adapter<FriendRequestReceiveRecyclerViewAdapter.ViewHolder>
+    private lateinit var friendRSAdapter: RecyclerView.Adapter<FriendRequestSendRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_friend_request_receive_list_page)
-
+        setContentView(R.layout.activity_friend_request_send_list_page)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.FRIENDS, this, this.window.decorView)
         val toggleButton: MaterialButtonToggleGroup = findViewById(R.id.toggleButton)
@@ -37,13 +37,13 @@ class FriendPendingRequestsPageActivity : AppCompatActivity() {
 
             if(isChecked){
                 when(checkedId){
-                    R.id.show_friend_list -> {
-                        val intent = Intent(context,FriendsPageActivity::class.java)
+                    R.id.show_friend_request_receive_list -> {
+                        val intent = Intent(context, FriendPendingRequestsPageActivity::class.java)
                         context.startActivity(intent)
                         activity.overridePendingTransition(0, 0)
                     }
-                    R.id.show_friend_request_send_list -> {
-                        val intent = Intent(context,FriendWaitingForApprovalsPageActivity::class.java)
+                    R.id.show_friend_list -> {
+                        val intent = Intent(context, FriendsPageActivity::class.java)
                         context.startActivity(intent)
                         activity.overridePendingTransition(0, 0)
                     }
@@ -53,32 +53,37 @@ class FriendPendingRequestsPageActivity : AppCompatActivity() {
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         var additionalData = ""
         //Load Friend List
-        friendRRList = loadFriendRequestReceiveFromAPI(this, pageSize, additionalData)
+        friendRSList =
+            UserFriendRequestSend.loadFriendRequestSendFromAPI(this, pageSize, additionalData)
         val context = this
-        friendRRListRecyclerView = findViewById(R.id.friend_request_receive_list)
+        friendRSListRecyclerView = findViewById(R.id.friend_request_send_list)
         progressBar.visibility = View.VISIBLE
 
-        if (friendRRList.isEmpty()) {
-            friendRRListRecyclerView!!.visibility = View.GONE
+        if (friendRSList.isEmpty()) {
+            friendRSListRecyclerView!!.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
-        if (friendRRListRecyclerView != null) {
-            friendRRListRecyclerView!!.setHasFixedSize(true)
+        if (friendRSListRecyclerView != null) {
+            friendRSListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
-            friendRRListRecyclerView!!.layoutManager = linearLayoutManager
-            friendRRAdapter = FriendRequestReceiveRecyclerViewAdapter(friendRRList)
+            friendRSListRecyclerView!!.layoutManager = linearLayoutManager
+            friendRSAdapter = FriendRequestSendRecyclerViewAdapter(friendRSList)
 
-            friendRRListRecyclerView!!.adapter = friendRRAdapter
+            friendRSListRecyclerView!!.adapter = friendRSAdapter
             progressBar.visibility = View.GONE
-            friendRRListRecyclerView!!.addOnScrollListener(object :
+            friendRSListRecyclerView!!.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        friendRRList = loadFriendRequestReceiveFromAPI(context, pageSize, additionalData)
-                        friendRRAdapter.notifyDataSetChanged()
+                        friendRSList = UserFriendRequestSend.loadFriendRequestSendFromAPI(
+                            context,
+                            pageSize,
+                            additionalData
+                        )
+                        friendRSAdapter.notifyDataSetChanged()
                     }
                     progressBar.visibility = View.GONE
 
@@ -89,4 +94,5 @@ class FriendPendingRequestsPageActivity : AppCompatActivity() {
 
 
     }
+
 }

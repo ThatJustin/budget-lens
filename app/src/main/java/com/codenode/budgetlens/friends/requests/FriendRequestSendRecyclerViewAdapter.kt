@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.friends
+package com.codenode.budgetlens.friends.requests
 import com.codenode.budgetlens.R
 import android.content.Context
 import android.view.LayoutInflater
@@ -14,12 +14,12 @@ class FriendRequestSendRecyclerViewAdapter(private val friendRequestSend: Mutabl
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ) :FriendRequestSendRecyclerViewAdapter.ViewHolder{
+    ) : ViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.friends_card_waiting_approval, parent, false)
         return ViewHolder(view)
     }
-    override fun onBindViewHolder(holder: FriendRequestSendRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val friendRequestSendItem = friendRequestSend[position]
         val firstNameShow:String = if(friendRequestSendItem.firstName.length>7){
             friendRequestSendItem.firstName.subSequence(0,4).toString()+".."
