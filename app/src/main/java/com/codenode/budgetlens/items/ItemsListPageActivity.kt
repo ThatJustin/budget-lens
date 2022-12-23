@@ -318,7 +318,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     override fun onReturnedFilterOptions(newFilterOptions: ItemsFilterOptions) {
         this.filterOptions = newFilterOptions
         val filterOptionList = ArrayList<String>()
-        val sb = StringBuilder("?")
+        val sb = StringBuilder("")
         additionalData = ""
         filteringDataWithoutCategories = ""
         setAdditionalDataReceiptID()
@@ -349,7 +349,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             }
         }
 
-        additionalData = if (isFromSingleReceipt) "$additionalData&$sb" else "$sb"
+        additionalData = if (isFromSingleReceipt) "$additionalData&$sb" else "?$sb"
 
         itemsList.clear()
 
