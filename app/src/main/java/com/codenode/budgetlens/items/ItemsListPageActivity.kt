@@ -51,6 +51,8 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     private lateinit var itemsAdapter: RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
     var additionalData = ""
+    var filteringDataWithoutCategories = ""
+    var quickSorting = false
     private val sortOptions = SortOptions()
     private var filterOptions = ItemsFilterOptions()
     private lateinit var chipGroup : ChipGroup
@@ -89,7 +91,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     private fun handleChipGroup(){
         //get thhe starred category lists from api
         chipGroup = findViewById(R.id.category_chips)
-        addChip("All",R.style.AllChipStyle)
+        addChip("All",0, R.style.AllChipStyle)
         val url =
             "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/?category_toggle_star=true"
 
@@ -118,7 +120,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
                                 val name = category.getString("category_name")
                                 userCategories.add(Categories(id,name))
 
-                                addChip(name,R.style.ItemSortChipStyle)
+                                addChip(name,id,R.style.ItemSortChipStyle)
 
 
                             }
@@ -146,6 +148,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             }
         })
        Log.i("chips",chipGroup.toString())
+
 
     }
 
@@ -180,11 +183,6 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         itemsList = result.first
 
 
-
-//        var category1 = Categories(1, "mycategory1")
-//        var category2 = Categories(2, "mycategory2")
-//        val mutableList: MutableList<Categories> = arrayListOf(category1, category2)
-//        starredCategoryList=userCategories
         itemTotal.text = result.second.toString()
         itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
 
@@ -303,6 +301,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         val filterOptionList = ArrayList<String>()
         val sb = StringBuilder("?")
         additionalData = ""
+        filteringDataWithoutCategories = ""
 
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             filterOptionList.add("category_id=${filterOptions.categoryId}")
@@ -324,7 +323,9 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             if (i == 0) {
                 sb.append(filterOptionList[i])
             } else {
-                sb.append("&${filterOptionList[i]}")
+                sb.append("&${filterOptionList[i]}"
+                )
+                filteringDataWithoutCategories += "&${filterOptionList[i]}"
             }
         }
 
@@ -348,6 +349,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
 
         //Update the adapter items
         itemsAdapter.notifyDataSetChanged()
+        Log.i("------------------info",additionalData)
     }
 
     /**
@@ -393,7 +395,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         const val ITEM_INFO_ACTIVITY = 6463646
     }
 
-    private fun addChip(label: String,styleRes:Int){
+    private fun addChip(label: String,id:Int,styleRes:Int){
 
         val chip = Chip(this)
         val chipDrawable = ChipDrawable.createFromAttributes(this,null,0, styleRes)
@@ -401,6 +403,43 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         chip.isClickable =true
         chip.setChipDrawable(chipDrawable)
         chipGroup.addView(chip)
+        chip.setOnClickListener{
+            if(!quickSorting){
+                if(id!=0){
+                    additionalData = "?category_id=$id$filteringDataWithoutCategories"
+                    quickSorting=true
+                }else{
+                    additionalData = "?$filteringDataWithoutCategories"
+                    quickSorting=true
+                }
+            }else{
+                additionalData = "?$filteringDataWithoutCategories"
+                quickSorting=false
+            }
+
+
+//            Log.i("------------------info",additionalData)
+            itemsList.clear()
+
+            pageSize = 1
+            pageNumber = 1
+
+            //reload
+            result = loadItemsFromAPI(this, pageSize, additionalData)
+            itemsList = result.first
+            itemTotal.text = result.second.toString()
+
+            // update the untouched
+            itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
+
+            //Apply whatever sort is set
+            applyItemSortOptions()
+
+            //Update the adapter items
+            itemsAdapter.notifyDataSetChanged()
+
+
+        }
 
     }
 
