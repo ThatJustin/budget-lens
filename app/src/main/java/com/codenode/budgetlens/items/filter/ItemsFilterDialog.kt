@@ -59,7 +59,7 @@ class ItemsFilterDialog(
     var filterOptions = ItemsFilterOptions()
 
     var categoryMap = mutableMapOf<Int, String>()
-    var merchantNames = arrayListOf<String>()
+    var merchantMap = mutableMapOf<Int, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -113,6 +113,7 @@ class ItemsFilterDialog(
         //Merchant
         if (filterOptions.merchantName.isNotEmpty()) {
             merchantChip.visibility = View.VISIBLE
+            filterOptions.merchantId = filterOptions.merchantId
             merchantOptions.setText(filterOptions.merchantName)
         }
         //Category
@@ -236,6 +237,7 @@ class ItemsFilterDialog(
             0 -> {
                 merchantChip.isChecked = true
                 filterOptions.merchantName = ""
+                filterOptions.merchantId = -1
                 merchantOptions.text.clear()
             }
             1 -> {
@@ -274,17 +276,21 @@ class ItemsFilterDialog(
             val merchantConstraint = findViewById<ConstraintLayout>(R.id.merchantConstraint)
             merchantConstraint.visibility = View.GONE
         } else {
-            val merchantNames = loadMerchantNames()
-            println(merchantNames)
+            val merchantNamesMap = loadMerchantNames()
+            val merchantNames: MutableList<String> = merchantNamesMap.values.toMutableList()
+                .sortedBy { it.lowercase() } as MutableList<String>
+
             val adapter = ArrayAdapter(context, R.layout.list_items, merchantNames)
             merchantOptions.setAdapter(adapter)
 
             merchantOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
                 filterOptions.merchantName = ""
+                filterOptions.merchantId = -1
                 merchantChip.visibility = View.GONE
                 val value = adapter.getItem(pos) ?: ""
                 if (value.isNotEmpty()) {
                     filterOptions.merchantName = value
+                    filterOptions.merchantId = getKeyByValue(merchantMap, value)
                     merchantChip.visibility = View.VISIBLE
                 }
             }
@@ -294,9 +300,10 @@ class ItemsFilterDialog(
     /**
      * Loads merchants names for the merchant filter.
      */
-    private fun loadMerchantNames(): MutableList<String> {
-        merchantNames.clear()
-
+    private fun loadMerchantNames(): MutableMap<Int, String> {
+        merchantMap.clear()
+        //I do not think anything in the DB begins at index 0
+        categoryMap[0] = ""
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/merchant"
 
         val registrationPost = OkHttpClient()
@@ -326,9 +333,10 @@ class ItemsFilterDialog(
                             val merchants = JSONArray(merchantsArr)
                             for (i in 0 until merchants.length()) {
                                 val merchant = merchants.getJSONObject(i)
+                                val id = merchant.getInt("id")
                                 val name = merchant.getString("name")
                                 if (name.isNotEmpty()) {
-                                    merchantNames.add(name)
+                                    merchantMap[id] = name
                                 }
                             }
                             Log.i("Successful", "Successfully loaded merchant names from API.")
@@ -350,9 +358,7 @@ class ItemsFilterDialog(
             }
         })
         countDownLatch.await()
-        merchantNames.sort()
-        merchantNames.add(0, "")
-        return merchantNames
+        return merchantMap
     }
 
     private fun <K, V> getKeyByValue(hashMap: Map<K, V>, target: V): K {

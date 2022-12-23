@@ -242,9 +242,8 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             filterOptionList.add("category_id=${filterOptions.categoryId}")
         }
-        if (filterOptions.merchantName.isNotEmpty()) {
-            println("filterOptions.merchantName ${filterOptions.merchantName}")
-            filterOptionList.add("merchant_name=${filterOptions.merchantName}")
+        if (filterOptions.merchantName.isNotEmpty() && filterOptions.merchantId > -1) {
+            filterOptionList.add("merchant_id=${filterOptions.merchantId}")
         }
         if (filterOptions.startDate.isNotEmpty() && filterOptions.endDate.isNotEmpty()) {
             filterOptionList.add(
