@@ -52,7 +52,6 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     private var pageSize = 5
     var additionalData = ""
     var filteringDataWithoutCategories = ""
-    var quickSorting = false
     private val sortOptions = SortOptions()
     private var filterOptions = ItemsFilterOptions()
     private lateinit var chipGroup : ChipGroup
@@ -404,21 +403,19 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         chip.setChipDrawable(chipDrawable)
         chipGroup.addView(chip)
         chip.setOnClickListener{
-            if(!quickSorting){
+            additionalData = if(chip.isChecked){
                 if(id!=0){
-                    additionalData = "?category_id=$id$filteringDataWithoutCategories"
-                    quickSorting=true
+                    "?category_id=$id$filteringDataWithoutCategories"
+
                 }else{
-                    additionalData = "?$filteringDataWithoutCategories"
-                    quickSorting=true
+                    "?$filteringDataWithoutCategories"
+
                 }
             }else{
-                additionalData = "?$filteringDataWithoutCategories"
-                quickSorting=false
+                "?$filteringDataWithoutCategories"
+
             }
 
-
-//            Log.i("------------------info",additionalData)
             itemsList.clear()
 
             pageSize = 1
