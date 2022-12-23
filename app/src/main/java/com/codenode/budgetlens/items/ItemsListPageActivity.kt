@@ -58,6 +58,8 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     private lateinit var itemTotal: TextView
     private lateinit var result: Pair<MutableList<Items>, Double>
 
+    private var isFromSingleReceipt = false
+    private var receiptID = -1
     private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.CANADA)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,6 +71,11 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
         itemTotal = findViewById(R.id.items_cost_value)
+
+        isFromSingleReceipt =
+            intent.getBooleanExtra("singleReceiptView", false)
+        receiptID =
+            intent.getIntExtra("receiptID", -1)
 
 
         handleChipGroup()
@@ -161,9 +168,24 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
                 this,
                 R.style.fullscreendialog,
                 supportFragmentManager,
-                filterOptions
+                filterOptions,
+                isFromSingleReceipt
             )
             dialog.show()
+        }
+    }
+
+    /**
+     * Sets the receiptID query param for the "additionalData".
+     * Will only be called when this activity is opened by clicking on a receipts View Item button.
+     */
+    private fun setAdditionalDataReceiptID() {
+        if (isFromSingleReceipt) {
+            if (receiptID == -1) {
+                Log.i("ItemsListPageActivity,", "Tried to open activity with -1 receiptID. ")
+            } else {
+                additionalData = "?receipt=${receiptID}"
+            }
         }
     }
 
@@ -236,8 +258,6 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             }
             )
         }
-
-
     }
 
     class SortOptions {
@@ -301,6 +321,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         val sb = StringBuilder("?")
         additionalData = ""
         filteringDataWithoutCategories = ""
+        setAdditionalDataReceiptID()
 
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             filterOptionList.add("category_id=${filterOptions.categoryId}")
@@ -328,7 +349,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             }
         }
 
-        additionalData = sb.toString()
+        additionalData = if (isFromSingleReceipt) "$additionalData&$sb" else "?$sb"
 
         itemsList.clear()
 
@@ -348,7 +369,6 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
 
         //Update the adapter items
         itemsAdapter.notifyDataSetChanged()
-        Log.i("------------------info",additionalData)
     }
 
     /**
