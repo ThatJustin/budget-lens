@@ -3,6 +3,7 @@ package com.codenode.budgetlens.items
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -27,7 +28,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, ItemsFilterDialogListener {
+class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
+    ItemsFilterDialogListener {
     //Save an untouched copy for when sorting/filtering is undone
     private lateinit var itemsListUntouched: MutableList<Items>
 
@@ -39,10 +41,11 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, Item
     var additionalData = ""
     private val sortOptions = SortOptions()
     private var filterOptions = ItemsFilterOptions()
-
     private lateinit var itemTotal: TextView
     private lateinit var result: Pair<MutableList<Items>, Double>
 
+    private var isFromSingleReceipt = false
+    private var receiptID = -1
     private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.CANADA)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,6 +57,11 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, Item
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
         itemTotal = findViewById(R.id.items_cost_value)
+
+        isFromSingleReceipt =
+            intent.getBooleanExtra("singleReceiptView", false);
+        receiptID =
+            intent.getIntExtra("receiptID", -1);
 
         handleAdapter()
         handleSort()
@@ -81,9 +89,24 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, Item
                 this,
                 R.style.fullscreendialog,
                 supportFragmentManager,
-                filterOptions
+                filterOptions,
+                isFromSingleReceipt
             )
             dialog.show()
+        }
+    }
+
+    /**
+     * Sets the receiptID query param for the "additionalData".
+     * Will only be called when this activity is opened by clicking on a receipts View Item button.
+     */
+    private fun setAdditionalDataReceiptID() {
+        if (isFromSingleReceipt) {
+            if (receiptID == -1) {
+                Log.i("ItemsListPageActivity,", "Tried to open activity with -1 receiptID. ")
+            } else {
+                additionalData = "?receipt=${receiptID}"
+            }
         }
     }
 
@@ -91,6 +114,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, Item
      * Handles RecycleView adapter.
      */
     private fun handleAdapter() {
+        setAdditionalDataReceiptID()
         userItems.clear()
 
         pageNumber = 1
@@ -211,8 +235,9 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, Item
     override fun onReturnedFilterOptions(newFilterOptions: ItemsFilterOptions) {
         this.filterOptions = newFilterOptions
         val filterOptionList = ArrayList<String>()
-        val sb = StringBuilder("?")
-        additionalData = ""
+        val sb = StringBuilder("")
+
+        setAdditionalDataReceiptID();
 
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             filterOptionList.add("category_id=${filterOptions.categoryId}")
@@ -238,7 +263,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener, Item
             }
         }
 
-        additionalData = sb.toString()
+        additionalData = if (isFromSingleReceipt) "$additionalData&$sb" else "?$sb"
 
         itemsList.clear()
 
