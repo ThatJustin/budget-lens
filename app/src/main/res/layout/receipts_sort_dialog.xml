@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/receiptsSortDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="275dp"
+        android:minHeight="255dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/purple_50"
+            android:paddingStart="20dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="15dp"
+            android:text="@string/receipts_sort"
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            android:textSize="15sp"/>
+
+        <TextView
+            style="@style/LabelTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:text="@string/merchant"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            app:selectionRequired="false"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_1"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/ascending"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_2"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/descending"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            style="@style/LabelTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:text="@string/location"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            app:selectionRequired="false"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_3"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/ascending"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_4"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/descending"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            style="@style/LabelTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:text="@string/coupon"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            app:selectionRequired="false"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_5"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/ascending"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_6"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/descending"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            style="@style/LabelTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:text="@string/tax"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            app:selectionRequired="false"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_7"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/ascending"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_8"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/descending"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            style="@style/LabelTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:text="@string/tip"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            app:selectionRequired="false"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_9"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/ascending"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_10"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/descending"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <TextView
+            style="@style/LabelTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:text="@string/total_price"/>
+
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            app:selectionRequired="false"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_11"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/ascending"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_12"
+                style="@style/ReceiptsSortChipStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="@string/descending"/>
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <Button
+            android:id="@+id/save_receipts_sort_options"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#6750A4"
+            android:text="@string/save"/>
+
+    </LinearLayout>
+
+</ScrollView>
