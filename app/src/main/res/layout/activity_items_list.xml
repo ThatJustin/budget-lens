@@ -87,11 +87,28 @@
                 app:layout_constraintTop_toTopOf="@+id/search_bar"
                 app:startIconDrawable="@drawable/search_48px" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/category_sort"
-                android:layout_width="wrap_content"
+            <!--            <androidx.recyclerview.widget.RecyclerView-->
+            <!--                android:id="@+id/category_sort"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:scrollbars="horizontal" />-->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="horizontal" />
+                android:scrollbars="none"
+                >
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/category_chips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    app:selectionRequired="false"
+                    app:singleSelection="true"
+                    >
+
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/items_list"

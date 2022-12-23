@@ -2,17 +2,22 @@ package com.codenode.budgetlens.items
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
+import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Categories
 import com.codenode.budgetlens.data.Items
@@ -24,6 +29,12 @@ import com.codenode.budgetlens.items.filter.ItemsFilterDialogListener
 import com.codenode.budgetlens.items.filter.ItemsFilterOptions
 import com.codenode.budgetlens.items.sort.ItemsSortDialog
 import com.codenode.budgetlens.items.sort.ItemsSortDialogListener
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.chip.ChipGroup
+import okhttp3.*
+import org.json.JSONArray
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,17 +45,15 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     private lateinit var itemsListUntouched: MutableList<Items>
 
     private lateinit var itemsList: MutableList<Items>
-    private lateinit var starredCategoryList: MutableList<Categories>
     private var itemsListRecyclerView: RecyclerView? = null
-    private var starredCategoriesRecyclerView: RecyclerView? = null
+    var userCategories = mutableListOf<Categories>()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var itemsAdapter: RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>
-    private lateinit var starredCategoryRecyclerViewAdapter : RecyclerView.Adapter<StarredCategoryRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
     var additionalData = ""
     private val sortOptions = SortOptions()
     private var filterOptions = ItemsFilterOptions()
-
+    private lateinit var chipGroup : ChipGroup
     private lateinit var itemTotal: TextView
     private lateinit var result: Pair<MutableList<Items>, Double>
 
@@ -60,6 +69,8 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
         itemTotal = findViewById(R.id.items_cost_value)
 
+
+        handleChipGroup()
         handleAdapter()
         handleSort()
         handleFilter()
@@ -74,6 +85,68 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             val dialog = ItemsSortDialog(this, R.style.ItemSortDialog, sortOptions)
             dialog.show()
         }
+    }
+    private fun handleChipGroup(){
+        //get thhe starred category lists from api
+        chipGroup = findViewById(R.id.category_chips)
+        addChip("All",R.style.AllChipStyle)
+        val url =
+            "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/?category_toggle_star=true"
+
+        val itemsRequest = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .method("GET", null)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .addHeader("Content-Type", "application/json")
+            .build()
+        itemsRequest.newCall(request).enqueue(object : Callback {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+
+                        if (responseBody != null) {
+                            val starredCategories = JSONArray(responseBody)
+
+                            for (i in 0 until starredCategories.length()) {
+
+                                val category = starredCategories.getJSONObject(i)
+                                val id = category.getInt("id")
+                                val name = category.getString("category_name")
+                                userCategories.add(Categories(id,name))
+
+                                addChip(name,R.style.ItemSortChipStyle)
+
+
+                            }
+
+                            Log.i("Successful", "Successfully loaded items from API.")
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+                    } else {
+                        Log.e(
+                            "Error",
+                            "Something went wrong ${response.message} ${response.headers}"
+                        )
+                    }
+                }
+
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+
+            }
+        })
+       Log.i("chips",chipGroup.toString())
+
     }
 
     /**
@@ -105,18 +178,20 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         //load the list
         result = loadItemsFromAPI(this, pageSize, additionalData)
         itemsList = result.first
-        //
-        var category1 = Categories(1,"mycategory1")
-        var category2 = Categories(2,"mycategory2")
-        val mutableList : MutableList<Categories> = arrayListOf(category1,category2)
-        starredCategoryList=mutableList
+
+
+
+//        var category1 = Categories(1, "mycategory1")
+//        var category2 = Categories(2, "mycategory2")
+//        val mutableList: MutableList<Categories> = arrayListOf(category1, category2)
+//        starredCategoryList=userCategories
         itemTotal.text = result.second.toString()
         itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
 
         val context = this
 
         itemsListRecyclerView = findViewById(R.id.items_list)
-        starredCategoriesRecyclerView = findViewById(R.id.category_sort)
+//        starredCategoriesRecyclerView = findViewById(R.id.category_sort)
 
         progressBar.visibility = View.VISIBLE
 
@@ -125,7 +200,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             progressBar.visibility = View.GONE
         }
 
-        //set item list recycler view
+//        set item list recycler view
         if (itemsListRecyclerView != null) {
             itemsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
@@ -165,48 +240,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             )
         }
 
-        //set category
-        if (starredCategoriesRecyclerView != null) {
-            starredCategoriesRecyclerView!!.setHasFixedSize(true)
-//            linearLayoutManager = LinearLayoutManager(this)
-            starredCategoriesRecyclerView!!.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false)
-            starredCategoryRecyclerViewAdapter = StarredCategoryRecyclerViewAdapter(starredCategoryList)
 
-            starredCategoriesRecyclerView!!.adapter = starredCategoryRecyclerViewAdapter
-//            progressBar.visibility = View.GONE
-            starredCategoriesRecyclerView!!.addOnScrollListener(object :
-                RecyclerView.OnScrollListener() {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-//                    progressBar.visibility = View.VISIBLE
-                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        //Before loading, revert to the old order
-//                        starredCategoryList.clear()
-//                        s.addAll(itemsListUntouched)
-
-                        //Load in more
-
-
-//                        result = loadItemsFromAPI(context, pageSize, additionalData)
-//                        itemsList = result.first
-//                        itemTotal.text = result.second.toString()
-
-
-                        // update the untouched
-//                        itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
-
-                        //Apply whatever sort is set
-                        applyItemSortOptions()
-
-                        //Update the adapter items
-                        starredCategoryRecyclerViewAdapter.notifyDataSetChanged()
-                    }
-                    progressBar.visibility = View.GONE
-                }
-            }
-            )
-        }
     }
 
     class SortOptions {
@@ -358,4 +392,16 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     companion object {
         const val ITEM_INFO_ACTIVITY = 6463646
     }
+
+    private fun addChip(label: String,styleRes:Int){
+
+        val chip = Chip(this)
+        val chipDrawable = ChipDrawable.createFromAttributes(this,null,0, styleRes)
+        chip.text = label
+        chip.isClickable =true
+        chip.setChipDrawable(chipDrawable)
+        chipGroup.addView(chip)
+
+    }
+
 }
