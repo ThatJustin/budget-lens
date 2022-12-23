@@ -87,11 +87,7 @@
                 app:layout_constraintTop_toTopOf="@+id/search_bar"
                 app:startIconDrawable="@drawable/search_48px" />
 
-            <!--            <androidx.recyclerview.widget.RecyclerView-->
-            <!--                android:id="@+id/category_sort"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:scrollbars="horizontal" />-->
+
             <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -105,6 +101,7 @@
                     android:layout_marginStart="10dp"
                     app:selectionRequired="false"
                     app:singleSelection="true"
+                    app:chipSpacingHorizontal="0dp"
                     >
 
                 </com.google.android.material.chip.ChipGroup>
