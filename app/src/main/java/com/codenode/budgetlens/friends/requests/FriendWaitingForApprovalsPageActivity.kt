@@ -104,7 +104,7 @@ class FriendWaitingForApprovalsPageActivity : AppCompatActivity() {
                         println("[validated] add : email -> " + emailInput.text.toString())
                         UserFriends.sendFriendRequest(this, emailInput)
                         //setContentView(R.layout.activity_friend_page)
-                        val intent = Intent(this, FriendsPageActivity::class.java)
+                        val intent = Intent(this, FriendWaitingForApprovalsPageActivity::class.java)
                         startActivity(intent)
                     }
                 }
@@ -112,7 +112,7 @@ class FriendWaitingForApprovalsPageActivity : AppCompatActivity() {
 
                     dialog.dismiss()
                     //setContentView(R.layout.activity_friend_page)
-                    val intent = Intent(this, FriendsPageActivity::class.java)
+                    val intent = Intent(this, FriendWaitingForApprovalsPageActivity::class.java)
                     startActivity(intent)
                 }
                 .show()
