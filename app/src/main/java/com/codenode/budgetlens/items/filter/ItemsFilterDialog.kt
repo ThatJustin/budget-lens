@@ -25,6 +25,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
 import okhttp3.*
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,6 +59,7 @@ class ItemsFilterDialog(
     var filterOptions = ItemsFilterOptions()
 
     var categoryMap = mutableMapOf<Int, String>()
+    var merchantNames = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -272,11 +274,9 @@ class ItemsFilterDialog(
             val merchantConstraint = findViewById<ConstraintLayout>(R.id.merchantConstraint)
             merchantConstraint.visibility = View.GONE
         } else {
-            //TODO load merchants
-            val items = listOf(
-                ""
-            ).sortedBy { it.lowercase() }
-            val adapter = ArrayAdapter(context, R.layout.list_items, items)
+            val merchantNames = loadMerchantNames()
+            println(merchantNames)
+            val adapter = ArrayAdapter(context, R.layout.list_items, merchantNames)
             merchantOptions.setAdapter(adapter)
 
             merchantOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
@@ -289,6 +289,70 @@ class ItemsFilterDialog(
                 }
             }
         }
+    }
+
+    /**
+     * Loads merchants names for the merchant filter.
+     */
+    private fun loadMerchantNames(): MutableList<String> {
+        merchantNames.clear()
+
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/merchant"
+
+        val registrationPost = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .method("GET", null)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+            .addHeader("Content-Type", "application/json")
+            .build()
+
+        val countDownLatch = CountDownLatch(1)
+
+        registrationPost.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                countDownLatch.countDown()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            val merchantsArr =
+                                JSONObject(responseBody.toString()).getString("merchants")
+                            val merchants = JSONArray(merchantsArr)
+                            for (i in 0 until merchants.length()) {
+                                val merchant = merchants.getJSONObject(i)
+                                val name = merchant.getString("name")
+                                if (name.isNotEmpty()) {
+                                    merchantNames.add(name)
+                                }
+                            }
+                            Log.i("Successful", "Successfully loaded merchant names from API.")
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong \r\n${response.message} ${response.headers}"
+                            )
+                        }
+
+                    } else {
+                        Log.e(
+                            "Error",
+                            "Something went wrong \r\n${response.message} ${response.headers}"
+                        )
+                    }
+                }
+                countDownLatch.countDown()
+            }
+        })
+        countDownLatch.await()
+        merchantNames.sort()
+        merchantNames.add(0, "")
+        return merchantNames
     }
 
     private fun <K, V> getKeyByValue(hashMap: Map<K, V>, target: V): K {

@@ -242,10 +242,10 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             filterOptionList.add("category_id=${filterOptions.categoryId}")
         }
-        //TODO backend doesn't support this filter yet
-//        if (filterOptions.categoryName.isNotEmpty() && filterOptions.merchantId > -1) {
-//            filterOptionList.add("merchant_id=${filterOptions.merchantId}")
-//        }
+        if (filterOptions.merchantName.isNotEmpty()) {
+            println("filterOptions.merchantName ${filterOptions.merchantName}")
+            filterOptionList.add("merchant_name=${filterOptions.merchantName}")
+        }
         if (filterOptions.startDate.isNotEmpty() && filterOptions.endDate.isNotEmpty()) {
             filterOptionList.add(
                 "start_date=${filterOptions.startDate}&end_date=${filterOptions.endDate}"
