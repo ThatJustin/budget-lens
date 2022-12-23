@@ -131,6 +131,12 @@ class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: 
                         )
                     }
                 }
+                    val activity = context as Activity
+                    Snackbar.make(
+                        activity.findViewById<BottomNavigationView>(R.id.bottom_navigation),
+                        "Friend Request Accepted.",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                 removeFriendRequest(position)            }
             }
         })
@@ -171,18 +177,19 @@ class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: 
                             )
                         }
                     }
+                    val activity = context as Activity
+                    Snackbar.make(
+                        activity.findViewById<BottomNavigationView>(R.id.bottom_navigation),
+                        "Friend Request Rejected.",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
                     removeFriendRequest(position)            }
             }
         })
     }
 
     private fun removeFriendRequest(position: Int) {
-        val activity = context as Activity
-        Snackbar.make(
-            activity.findViewById<BottomNavigationView>(R.id.bottom_navigation),
-            "Friend Request Removed.",
-            Snackbar.LENGTH_SHORT
-        ).show()
+
         friendRequestReceive.removeAt(position)
         notifyItemRemoved(position)
     }
