@@ -37,8 +37,6 @@ class FriendsPageActivity : AppCompatActivity() {
     private lateinit var emailInput: EditText
 
 
-    //Todo: For the toggle button
-    // private lateinit var friendRequestSwitch:SwitchMaterial
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_friends_page)
