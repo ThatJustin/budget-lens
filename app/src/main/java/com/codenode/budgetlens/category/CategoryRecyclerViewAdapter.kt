@@ -2,11 +2,18 @@ package com.codenode.budgetlens.category
 
 
 import android.content.Context
+import android.content.Intent
+import android.os.Parcel
+import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Category
@@ -39,7 +46,17 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
 
         if (category.parent_category_id != null) {
             imageGarbage.setImageResource(R.drawable.ic_baseline_delete_outline_24)
+
+            // Go to popup delete page for deleting the sub category
+            val gotToDeleteSubCategoryPopUp =
+                Intent(holder.itemView.context, DeleteSubCategoryPopUpActivity::class.java)
+            // Add the category name as an extra intent value to send to the delete popup page.
+            gotToDeleteSubCategoryPopUp.putExtra("category", category.category_name)
+            imageGarbage.setOnClickListener {
+                holder.itemView.context.startActivity(gotToDeleteSubCategoryPopUp)
+            }
         }
+
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -73,8 +90,7 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
                         println("Clicked Star on category $category")
                     }
                     imageGarbage.id -> {
-                        UserCategories.deleteSubCategoryFromAPI(context, category, this)
-                        println("Clicked Delete on category $category")
+                        println("Deleted SubCategory $category")
                     }
                     else -> {
                         println("Clicked $category")

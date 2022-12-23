@@ -62,7 +62,7 @@
 
     <string name="relatedReceipt">View Related Receipt</string>
     <string name="important_date_placeholder">Nov 02,2022 For Return Deadline</string>
-    <string name= "reminder">Reminders</string>
+    <string name="reminder">Reminders</string>
     <string name="add">+ADD</string>
     <string name="icons">an icon</string>
     <string-array name="category_place_holder">

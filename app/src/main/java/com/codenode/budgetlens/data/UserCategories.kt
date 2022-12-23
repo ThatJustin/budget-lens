@@ -76,8 +76,7 @@ class UserCategories {
 
         fun deleteSubCategoryFromAPI(
             context: Context,
-            category: Category,
-            viewHolder: CategoryRecyclerViewAdapter.ViewHolder
+            category: Category
         ) {
 
             val url =
@@ -92,7 +91,6 @@ class UserCategories {
                 .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
                 .build()
 
-//            val countDownLatch = CountDownLatch(1)
             toggleStarUpdate.newCall(request).enqueue(object : Callback {
 
                 override fun onFailure(call: Call, e: java.io.IOException) {
@@ -107,9 +105,7 @@ class UserCategories {
                         val responseBody = response.body?.string()
                         if (response.isSuccessful) {
                             // Remove the category from the list in the frontend list
-                            val position = userCategories.indexOf(category)
                             userCategories.remove(category)
-                            viewHolder.bindingAdapter!!.notifyItemRemoved(position)
                         } else {
                             Log.e(
                                 "Error",
@@ -119,10 +115,6 @@ class UserCategories {
                     }
                 }
             })
-
-//            countDownLatch.await()
-//            Log.d("Debug List", userCategories.toString())
-//            return userCategories
         }
 
         fun loadCategoriesFromAPI(context: Context): MutableList<Category> {
