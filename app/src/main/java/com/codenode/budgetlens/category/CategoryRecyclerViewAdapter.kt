@@ -23,10 +23,6 @@ import com.codenode.budgetlens.data.Category
 import com.codenode.budgetlens.data.UserCategories
 
 
-private var View.strokeColor: Any
-    get() {}
-    set() {}
-
 class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>) :
     RecyclerView.Adapter<CategoryRecyclerViewAdapter.ViewHolder>() {
     lateinit var context: Context
@@ -59,7 +55,6 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
 //            holder.itemView.setBackgroundColor(Color(0xf7, 0xf2, 0xf9).toArgb())
             holder.itemView.findViewById<ImageView>(R.id.image_category).setImageResource(0)
             holder.itemView.elevation = 0.0F
-            holder.itemView.strokeColor = 
 
             // Go to popup delete page for deleting the sub category
             val gotToDeleteSubCategoryPopUp =
