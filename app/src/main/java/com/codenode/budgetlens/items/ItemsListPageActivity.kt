@@ -54,7 +54,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     var filteringDataWithoutCategories = ""
     private val sortOptions = SortOptions()
     private var filterOptions = ItemsFilterOptions()
-    private lateinit var chipGroup : ChipGroup
+    private lateinit var chipGroup: ChipGroup
     private lateinit var itemTotal: TextView
     private lateinit var result: Pair<MutableList<Items>, Double>
 
@@ -94,10 +94,11 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             dialog.show()
         }
     }
-    private fun handleChipGroup(){
+
+    private fun handleChipGroup() {
         //get the starred category lists from api
         chipGroup = findViewById(R.id.category_chips)
-        addChip("All",0, R.style.AllChipStyle)
+        addChip("All", 0, R.style.AllChipStyle)
         val url =
             "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/?category_toggle_star=true"
 
@@ -124,9 +125,9 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
                                 val category = starredCategories.getJSONObject(i)
                                 val id = category.getInt("id")
                                 val name = category.getString("category_name")
-                                userCategories.add(Categories(id,name))
+                                userCategories.add(Categories(id, name))
 
-                                addChip(name,id,R.style.ItemSortChipStyle)
+                                addChip(name, id, R.style.ItemSortChipStyle)
 
 
                             }
@@ -153,7 +154,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
 
             }
         })
-       Log.i("chips",chipGroup.toString())
+        Log.i("chips", chipGroup.toString())
 
 
     }
@@ -314,7 +315,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     /**
      * A listener that gets back the filters set in the ItemFilterDialog.
      */
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "ResourceType")
     override fun onReturnedFilterOptions(newFilterOptions: ItemsFilterOptions) {
         this.filterOptions = newFilterOptions
         val filterOptionList = ArrayList<String>()
@@ -323,9 +324,12 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         filteringDataWithoutCategories = ""
         setAdditionalDataReceiptID()
 
+
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             filterOptionList.add("category_id=${filterOptions.categoryId}")
-            chipGroup.check(filterOptions.categoryId+1)
+            chipGroup.check(filterOptions.categoryId + 1)
+        } else {
+            chipGroup.check(1)
         }
         //TODO backend doesn't support this filter yet
 //        if (filterOptions.categoryName.isNotEmpty() && filterOptions.merchantId > -1) {
@@ -344,7 +348,8 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             if (i == 0) {
                 sb.append(filterOptionList[i])
             } else {
-                sb.append("&${filterOptionList[i]}"
+                sb.append(
+                    "&${filterOptionList[i]}"
                 )
                 filteringDataWithoutCategories += "&${filterOptionList[i]}"
             }
@@ -415,34 +420,34 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         const val ITEM_INFO_ACTIVITY = 6463646
     }
 
-    private fun addChip(label: String,id:Int,styleRes:Int){
+    private fun addChip(label: String, id: Int, styleRes: Int) {
 
         val chip = Chip(this)
-        val chipDrawable = ChipDrawable.createFromAttributes(this,null,0, styleRes)
+        val chipDrawable = ChipDrawable.createFromAttributes(this, null, 0, styleRes)
         chip.text = label
-        chip.isClickable =true
+        chip.isClickable = true
         chip.setChipDrawable(chipDrawable)
         chipGroup.addView(chip)
-        chip.setOnClickListener{
-             if(chip.isChecked){
-                if(id!=0){
-                    additionalData ="?category_id=$id$filteringDataWithoutCategories"
-                    filterOptions.categoryName=label
-                    filterOptions.categoryId=id+1
+        chip.setOnClickListener {
+            if (chip.isChecked) {
+                if (id != 0) {
+                    additionalData = "?category_id=$id$filteringDataWithoutCategories"
+                    filterOptions.categoryName = label
+                    filterOptions.categoryId = id + 1
                     handleFilter()
 
-                }else{
-                    additionalData ="?$filteringDataWithoutCategories"
-                    filterOptions.categoryName=""
-                    filterOptions.categoryId=-1
+                } else {
+                    additionalData = "?$filteringDataWithoutCategories"
+                    filterOptions.categoryName = ""
+                    filterOptions.categoryId = -1
                     handleFilter()
 
                 }
-            }else{
-                 additionalData ="?$filteringDataWithoutCategories"
-                 filterOptions.categoryName=""
-                 filterOptions.categoryId=-1
-                 handleFilter()
+            } else {
+                additionalData = "?$filteringDataWithoutCategories"
+                filterOptions.categoryName = ""
+                filterOptions.categoryId = -1
+                handleFilter()
 
             }
 
