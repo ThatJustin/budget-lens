@@ -428,20 +428,13 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         chip.setChipDrawable(chipDrawable)
         chipGroup.addView(chip)
         chip.setOnClickListener {
-            if (chip.isChecked) {
-                if (id != 0) {
-                    additionalData = "?category_id=$id$filteringDataWithoutCategories"
-                    filterOptions.categoryName = label
-                    filterOptions.categoryId = id + 1
-                    handleFilter()
 
-                } else {
-                    additionalData = "?$filteringDataWithoutCategories"
-                    filterOptions.categoryName = ""
-                    filterOptions.categoryId = -1
-                    handleFilter()
+            if (id != 0 && chip.isChecked) {
+                additionalData = "?category_id=$id$filteringDataWithoutCategories"
+                filterOptions.categoryName = label
+                filterOptions.categoryId = id + 1
+                handleFilter()
 
-                }
             } else {
                 additionalData = "?$filteringDataWithoutCategories"
                 filterOptions.categoryName = ""
@@ -449,6 +442,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
                 handleFilter()
 
             }
+
 
             itemsList.clear()
 
