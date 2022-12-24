@@ -2,6 +2,7 @@ package com.codenode.budgetlens.items
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -432,6 +433,8 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         val chip = Chip(this)
         val chipDrawable = ChipDrawable.createFromAttributes(this, null, 0, styleRes)
         chip.text = label
+        if (chip.text == "All") chip.setTextColor(Color.WHITE)
+
         chip.isClickable = true
         chip.setChipDrawable(chipDrawable)
         chipGroup.addView(chip)

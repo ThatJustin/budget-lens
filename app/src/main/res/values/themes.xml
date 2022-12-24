@@ -57,8 +57,7 @@
 
     <style name="AllChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
         <item name="chipBackgroundColor">#6750A4</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="checkedIconTint">#1D192B</item>
+        <item name="checkedIconTint">#FFFFFF</item>
 
     </style>
 
