@@ -327,7 +327,15 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
 
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             filterOptionList.add("category_id=${filterOptions.categoryId}")
-            chipGroup.check(filterOptions.categoryId + 1)
+            var id = -1
+            for (i in 0 until userCategories.size) {
+                if (userCategories[i].category_name == filterOptions.categoryName) {
+                    id = i
+                }
+            }
+            chipGroup.check(id + 2)
+
+
         } else {
             chipGroup.check(1)
         }
@@ -432,7 +440,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             if (id != 0 && chip.isChecked) {
                 additionalData = "?category_id=$id$filteringDataWithoutCategories"
                 filterOptions.categoryName = label
-                filterOptions.categoryId = id + 1
+                filterOptions.categoryId = id
                 handleFilter()
 
             } else {
