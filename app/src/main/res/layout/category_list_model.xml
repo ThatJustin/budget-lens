@@ -10,7 +10,7 @@
     android:dividerHeight="0dp"
     android:focusable="true"
     app:cardCornerRadius="30dp"
-    app:cardElevation="0dp"
+    app:cardElevation="10dp"
     app:cardUseCompatPadding="true"
     app:strokeColor="#e7def8">
 
