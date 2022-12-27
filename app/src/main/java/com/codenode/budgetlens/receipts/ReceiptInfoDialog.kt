@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -19,6 +20,7 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserProfile
+import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.*
@@ -34,6 +36,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
 
     private lateinit var receiptInfoDialog: Dialog
     var isDeletedReceipt = false
+
     @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +58,14 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
 
 
         if (receiptInfo.merchant_name != null) {
-            tvMerchantName.text = context.getString(R.string.merchant_name, receiptInfo.merchant_name)
+            tvMerchantName.text =
+                context.getString(R.string.merchant_name, receiptInfo.merchant_name)
+            tvMerchantName.text = tvMerchantName.text.toString()
+                .substring(0, tvMerchantName.text.toString().length - 2)
         } else {
             tvMerchantName.text = context.getString(R.string.merchant_name, "N/A")
+            tvMerchantName.text = tvMerchantName.text.toString()
+                .substring(0, tvMerchantName.text.toString().length - 2)
         }
         tvDateUploaded.text = "0000/00/00 - 00:00" // not yet implemented in Receipt Model
         if (receiptInfo.total_amount != null) {
@@ -66,7 +74,8 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
             tvSplitAmount.text = context.getString(R.string.total, 0.00)
         }
         if (receiptInfo.currency != null) {
-            tvTotalAmountCurrency.text = context.getString(R.string.total_amount_currency, receiptInfo.currency)
+            tvTotalAmountCurrency.text =
+                context.getString(R.string.total_amount_currency, receiptInfo.currency)
         } else {
             tvTotalAmountCurrency.text = context.getString(R.string.total_amount_currency, "N/A")
         }
@@ -77,7 +86,8 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
             val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
             tvReceiptDate.text = context.getString(R.string.scan_date, date)
         }
-        tvAddedBy.text = context.getString(R.string.user_profile_name, " " + UserProfile.getFullName())
+        tvAddedBy.text =
+            context.getString(R.string.user_profile_name, " " + UserProfile.getFullName())
 
 //      tvExpirationDate.text = receiptInfo.important_dates
 //      tvReturnPeriod.text = receiptInfo.important_dates
@@ -89,7 +99,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
 
         receiptInfoDialog = this
 
-        val window = window;
+        val window = window
         if (window != null) {
             // Remove the bar on top with the battery, notifications, service etc
             window.setFlags(
@@ -107,6 +117,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
 
 
     private fun handleListeners() {
+        //handle delete button
         findViewById<Button>(R.id.receipt_info_delete)?.setOnClickListener {
 
             MaterialAlertDialogBuilder(context)
@@ -121,12 +132,21 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
                 .show()
 
         }
-
+        //Handle tool bar
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         toolBar.setNavigationOnClickListener { dismiss() }
         toolBar.setOnMenuItemClickListener {
             dismiss()
             true
+        }
+
+        // handle view items button
+        val viewItems = findViewById<Button>(R.id.receipt_info_view_items)
+        viewItems.setOnClickListener {
+            val itemsListPage = Intent(context, ItemsListPageActivity::class.java)
+            itemsListPage.putExtra("singleReceiptView", true)
+            itemsListPage.putExtra("receiptID", receiptInfo.id)
+            context.startActivity(itemsListPage)
         }
     }
 
@@ -155,7 +175,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
                     if (response.isSuccessful) {
                         val responseBody = response.body?.string()
                         if (responseBody != null) {
-                            isDeletedReceipt = true;
+                            isDeletedReceipt = true
                             dialog.dismiss()
                             receiptInfoDialog.dismiss()
                             Log.i("Successful", "Receipt ID ${receiptInfo.id} deleted.")

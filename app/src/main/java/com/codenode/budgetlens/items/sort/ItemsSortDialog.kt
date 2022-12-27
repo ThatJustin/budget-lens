@@ -9,21 +9,21 @@ import android.view.Window
 import android.widget.Button
 import android.widget.LinearLayout
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.items.ItemListActivity
+import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.google.android.material.chip.Chip
 
 
-class ItemSortDialog(context: Context, themeID: Int, var sortOptions: ItemListActivity.SortOptions) : Dialog(context, themeID) {
-    private var itemSortDialogListener: ItemSortDialogListener? = null
+class ItemsSortDialog(context: Context, themeID: Int, var sortOptions: ItemsListPageActivity.SortOptions) : Dialog(context, themeID) {
+    private var itemsSortDialogListener: ItemsSortDialogListener? = null
     private var activityContext = context;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         //set the listener
-        itemSortDialogListener = activityContext as Activity as ItemSortDialogListener
+        itemsSortDialogListener = activityContext as Activity as ItemsSortDialogListener
 
-        val dialogView: View = layoutInflater.inflate(R.layout.item_sort_dialog, null)
+        val dialogView: View = layoutInflater.inflate(R.layout.items_sort_dialog, null)
         setContentView(dialogView)
 
         // Set the width and height to the min values
@@ -42,10 +42,10 @@ class ItemSortDialog(context: Context, themeID: Int, var sortOptions: ItemListAc
         isNameDescending.isChecked = sortOptions.isNameDescending
 
         //Handle saving
-        val itemSortOptionsBtn = findViewById<Button>(R.id.save_item_sort_options)
+        val itemSortOptionsBtn = findViewById<Button>(R.id.save_items_sort_options)
         itemSortOptionsBtn.setOnClickListener {
-            if (itemSortDialogListener != null) {
-                itemSortDialogListener!!.onReturnedSortOptions(
+            if (itemsSortDialogListener != null) {
+                itemsSortDialogListener!!.onReturnedSortOptions(
                     isPriceAscending.isChecked,
                     isPriceDescending.isChecked,
                     isNameAscending.isChecked,

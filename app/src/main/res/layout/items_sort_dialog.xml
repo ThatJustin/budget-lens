@@ -16,9 +16,9 @@
         android:paddingTop="15dp"
         android:paddingEnd="20dp"
         android:paddingBottom="15dp"
-        android:text="Item Sort"
+        android:text="@string/items_sort"
         android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
-        android:textSize="15sp" />
+        android:textSize="15sp"/>
 
     <TextView
         style="@style/LabelTextStyle"
@@ -27,7 +27,7 @@
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="20dp"
-        android:text="Price" />
+        android:text="@string/price_title"/>
 
     <com.google.android.material.chip.ChipGroup
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="Ascending" />
+            android:text="@string/ascending"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_2"
@@ -50,7 +50,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="Descending" />
+            android:text="@string/descending"/>
+
     </com.google.android.material.chip.ChipGroup>
 
     <TextView
@@ -60,7 +61,7 @@
         android:paddingStart="20dp"
         android:paddingTop="10dp"
         android:paddingEnd="20dp"
-        android:text="Name" />
+        android:text="@string/name"/>
 
     <com.google.android.material.chip.ChipGroup
         android:layout_width="match_parent"
@@ -75,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="Ascending" />
+            android:text="@string/ascending"/>
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_4"
@@ -83,15 +84,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:text="Descending" />
+            android:text="@string/descending"/>
+
     </com.google.android.material.chip.ChipGroup>
 
     <Button
-        android:id="@+id/save_item_sort_options"
+        android:id="@+id/save_items_sort_options"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:backgroundTint="#6750A4"
-        android:text="Save" />
+        android:text="@string/save"/>
 
 </LinearLayout>
