@@ -24,7 +24,7 @@
     <string name="friend_last_name">%1$s</string>
     <string name="trade_relation">%1$s</string>
     <string name="trade_amount">%1$f</string>
-    <string name="items_total">%1$f</string>
+    <string name="items_total">$ %1$f.2f</string>
     <string name="date">%1$f</string>
     <string name="price">$%1$.2f</string>
     <string name="price_title">Price</string>
@@ -51,20 +51,21 @@
     <string name="total">%1$.2f</string>
     <string name="total_amount">Total Amount($): %1$.2f</string>
     <string name="total_amount_currency">Total Amount(%1s):</string>
-    <string name="total_items_currency">Total (%1s):</string>
+    <string name="total_items_currency">Total :</string>
     <string name="added_by">Added by:</string>
     <string name="view_items">View Items</string>
     <string name="delete">Delete</string>
     <string name="add_date">Add Date</string>
     <string name="edit">Edit</string>
     <string name="home">Home</string>
+    <string name="all">ALL</string>
     <string name="receipts">Receipts</string>
     <string name="budget">Budget</string>
     <string name="friends">Friends</string>
     <string name="calendar">Calendar</string>
     <string name="items">Items</string>
     <string name="sort_by">Sort By</string>
-    <string name="request">Request</string>
+    <string name="request">Friend Requests</string>
     <string name="add_friend">Add</string>
     <string name="receipts_sort">Receipts Sort</string>
     <string name="items_sort">Items Sort</string>
@@ -94,10 +95,12 @@
     <string name="reminder">Reminders</string>
     <string name="add">+ADD</string>
     <string name="icons">an icon</string>
+    <string name="starred_categories">%1$s</string>
     <string-array name="category_place_holder">
         <item>Groceries</item>
         <item>Entertainment</item>
         <item>Education</item>
     </string-array>
-
+    <attr name ="ItemSortChipStyle" format="reference"/>
+    <attr name ="AllChipStyle" format="reference"/>
 </resources>

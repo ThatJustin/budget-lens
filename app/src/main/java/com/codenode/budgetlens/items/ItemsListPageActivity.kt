@@ -2,6 +2,8 @@ package com.codenode.budgetlens.items
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,12 +11,16 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
+import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
+import com.codenode.budgetlens.data.Categories
 import com.codenode.budgetlens.data.Items
 import com.codenode.budgetlens.data.UserItems.Companion.loadItemsFromAPI
 import com.codenode.budgetlens.data.UserItems.Companion.pageNumber
@@ -24,6 +30,12 @@ import com.codenode.budgetlens.items.filter.ItemsFilterDialogListener
 import com.codenode.budgetlens.items.filter.ItemsFilterOptions
 import com.codenode.budgetlens.items.sort.ItemsSortDialog
 import com.codenode.budgetlens.items.sort.ItemsSortDialogListener
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.chip.ChipGroup
+import okhttp3.*
+import org.json.JSONArray
+import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -35,12 +47,15 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
 
     private lateinit var itemsList: MutableList<Items>
     private var itemsListRecyclerView: RecyclerView? = null
+    var userCategories = mutableListOf<Categories>()
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var itemsAdapter: RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
     var additionalData = ""
+    var filteringDataWithoutCategories = ""
     private val sortOptions = SortOptions()
     private var filterOptions = ItemsFilterOptions()
+    private lateinit var chipGroup: ChipGroup
     private lateinit var itemTotal: TextView
     private lateinit var result: Pair<MutableList<Items>, Double>
 
@@ -59,10 +74,12 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         itemTotal = findViewById(R.id.items_cost_value)
 
         isFromSingleReceipt =
-            intent.getBooleanExtra("singleReceiptView", false);
+            intent.getBooleanExtra("singleReceiptView", false)
         receiptID =
-            intent.getIntExtra("receiptID", -1);
+            intent.getIntExtra("receiptID", -1)
 
+
+        handleChipGroup()
         handleAdapter()
         handleSort()
         handleFilter()
@@ -77,6 +94,70 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             val dialog = ItemsSortDialog(this, R.style.ItemSortDialog, sortOptions)
             dialog.show()
         }
+    }
+
+    private fun handleChipGroup() {
+        //get the starred category lists from api
+        chipGroup = findViewById(R.id.category_chips)
+        addChip("All", 0, R.style.AllChipStyle)
+        val url =
+            "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/?category_toggle_star=true"
+
+        val itemsRequest = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .method("GET", null)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .addHeader("Content-Type", "application/json")
+            .build()
+        itemsRequest.newCall(request).enqueue(object : Callback {
+            @RequiresApi(Build.VERSION_CODES.O)
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+
+                        if (responseBody != null) {
+                            val starredCategories = JSONArray(responseBody)
+
+                            for (i in 0 until starredCategories.length()) {
+
+                                val category = starredCategories.getJSONObject(i)
+                                val id = category.getInt("id")
+                                val name = category.getString("category_name")
+                                userCategories.add(Categories(id, name))
+
+                                addChip(name, id, R.style.ItemSortChipStyle)
+
+
+                            }
+
+                            Log.i("Successful", "Successfully loaded items from API.")
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+                    } else {
+                        Log.e(
+                            "Error",
+                            "Something went wrong ${response.message} ${response.headers}"
+                        )
+                    }
+                }
+
+            }
+
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+
+            }
+        })
+        Log.i("chips", chipGroup.toString())
+
+
     }
 
     /**
@@ -114,7 +195,6 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
      * Handles RecycleView adapter.
      */
     private fun handleAdapter() {
-        setAdditionalDataReceiptID()
         userItems.clear()
 
         pageNumber = 1
@@ -124,12 +204,16 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         //load the list
         result = loadItemsFromAPI(this, pageSize, additionalData)
         itemsList = result.first
+
+
         itemTotal.text = result.second.toString()
         itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
 
         val context = this
 
         itemsListRecyclerView = findViewById(R.id.items_list)
+//        starredCategoriesRecyclerView = findViewById(R.id.category_sort)
+
         progressBar.visibility = View.VISIBLE
 
         if (itemsList.isEmpty()) {
@@ -137,6 +221,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             progressBar.visibility = View.GONE
         }
 
+//        set item list recycler view
         if (itemsListRecyclerView != null) {
             itemsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
@@ -231,21 +316,33 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     /**
      * A listener that gets back the filters set in the ItemFilterDialog.
      */
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "ResourceType")
     override fun onReturnedFilterOptions(newFilterOptions: ItemsFilterOptions) {
         this.filterOptions = newFilterOptions
         val filterOptionList = ArrayList<String>()
         val sb = StringBuilder("")
+        additionalData = ""
+        filteringDataWithoutCategories = ""
+        setAdditionalDataReceiptID()
 
-        setAdditionalDataReceiptID();
 
         if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
             filterOptionList.add("category_id=${filterOptions.categoryId}")
+            var id = -1
+            for (i in 0 until userCategories.size) {
+                if (userCategories[i].category_name == filterOptions.categoryName) {
+                    id = i
+                }
+            }
+            chipGroup.check(id + 2)
+
+
+        } else {
+            chipGroup.check(1)
         }
-        //TODO backend doesn't support this filter yet
-//        if (filterOptions.categoryName.isNotEmpty() && filterOptions.merchantId > -1) {
-//            filterOptionList.add("merchant_id=${filterOptions.merchantId}")
-//        }
+        if (filterOptions.merchantName.isNotEmpty() && filterOptions.merchantId > -1) {
+            filterOptionList.add("merchant_id=${filterOptions.merchantId}")
+        }
         if (filterOptions.startDate.isNotEmpty() && filterOptions.endDate.isNotEmpty()) {
             filterOptionList.add(
                 "start_date=${filterOptions.startDate}&end_date=${filterOptions.endDate}"
@@ -259,7 +356,10 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
             if (i == 0) {
                 sb.append(filterOptionList[i])
             } else {
-                sb.append("&${filterOptionList[i]}")
+                sb.append(
+                    "&${filterOptionList[i]}"
+                )
+                filteringDataWithoutCategories += "&${filterOptionList[i]}"
             }
         }
 
@@ -327,4 +427,56 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     companion object {
         const val ITEM_INFO_ACTIVITY = 6463646
     }
+
+    private fun addChip(label: String, id: Int, styleRes: Int) {
+
+        val chip = Chip(this)
+        val chipDrawable = ChipDrawable.createFromAttributes(this, null, 0, styleRes)
+        chip.text = label
+        if (chip.text == "All") chip.setTextColor(Color.WHITE)
+
+        chip.isClickable = true
+        chip.setChipDrawable(chipDrawable)
+        chipGroup.addView(chip)
+        chip.setOnClickListener {
+
+            if (id != 0 && chip.isChecked) {
+                additionalData = "?category_id=$id$filteringDataWithoutCategories"
+                filterOptions.categoryName = label
+                filterOptions.categoryId = id
+                handleFilter()
+
+            } else {
+                additionalData = "?$filteringDataWithoutCategories"
+                filterOptions.categoryName = ""
+                filterOptions.categoryId = -1
+                handleFilter()
+
+            }
+
+
+            itemsList.clear()
+
+            pageSize = 1
+            pageNumber = 1
+
+            //reload
+            result = loadItemsFromAPI(this, pageSize, additionalData)
+            itemsList = result.first
+            itemTotal.text = result.second.toString()
+
+            // update the untouched
+            itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
+
+            //Apply whatever sort is set
+            applyItemSortOptions()
+
+            //Update the adapter items
+            itemsAdapter.notifyDataSetChanged()
+
+
+        }
+
+    }
+
 }
