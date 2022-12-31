@@ -48,18 +48,6 @@ class CategoryActivity : AppCompatActivity() {
             categoryListRecyclerView!!.layoutManager = linearLayoutManager
             adapter = CategoryRecyclerViewAdapter(categoryList)
             categoryListRecyclerView!!.adapter = adapter
-            categoryListRecyclerView!!.addOnScrollListener(object :
-                RecyclerView.OnScrollListener() {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        categoryList =
-                            UserCategories.loadCategoriesFromAPI(context)
-                        adapter.notifyDataSetChanged()
-                    }
-                }
-            })
 
             // Functionality for add subcategory popup
             val gotToAddAubCategoryPopUp = Intent(this, AddSubCategoryPopUpActivity::class.java)
