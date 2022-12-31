@@ -184,10 +184,10 @@ class ItemInfoActivity() : AppCompatActivity() {
         countDownLatch.await()
         if (success) {
             dialog.dismiss()
-            val intent = Intent(this, ItemListActivity::class.java)
+            val intent = Intent(this, ItemsListPageActivity::class.java)
             intent.putExtra("position", position)
             intent.putExtra("price", localPrice)
-            setResult(ItemListActivity.ITEM_INFO_ACTIVITY, intent)
+            setResult(ItemsListPageActivity.ITEM_INFO_ACTIVITY, intent)
             finish()
         }
     }

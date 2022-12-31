@@ -14,6 +14,7 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.util.Pair
 import androidx.fragment.app.FragmentManager
 import com.codenode.budgetlens.BuildConfig
@@ -24,16 +25,18 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
 import okhttp3.*
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.CountDownLatch
 
-class ItemFilterDialog(
+class ItemsFilterDialog(
     private val activityContext: Context,
     themeID: Int,
     private val supportFragmentManager: FragmentManager,
-    private val previousFilterOptions: ItemFilterOptions
+    private val previousFilterOptions: ItemsFilterOptions,
+    private val isFromSingleReceipt: Boolean = false
 ) : Dialog(activityContext, themeID) {
 
     private val calendar = Calendar.getInstance()
@@ -52,16 +55,17 @@ class ItemFilterDialog(
     var isMinPriceSet = false
     var isMaxPriceSet = false
 
-    private var itemFilterDialogListener: ItemFilterDialogListener? = null
-    var filterOptions = ItemFilterOptions()
+    private var itemsFilterDialogListener: ItemsFilterDialogListener? = null
+    var filterOptions = ItemsFilterOptions()
 
     var categoryMap = mutableMapOf<Int, String>()
+    var merchantMap = mutableMapOf<Int, String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
 
-        val dialogView: View = layoutInflater.inflate(R.layout.item_filter_dialog, null)
+        val dialogView: View = layoutInflater.inflate(R.layout.items_filter_dialog, null)
         setContentView(dialogView)
         window!!.setLayout(
             WindowManager.LayoutParams.MATCH_PARENT,
@@ -71,24 +75,24 @@ class ItemFilterDialog(
         categoryMap.clear()
 
         //Set listener
-        itemFilterDialogListener = activityContext as Activity as ItemFilterDialogListener
+        itemsFilterDialogListener = activityContext as Activity as ItemsFilterDialogListener
 
         //Active filters
-        activeFilters = findViewById(R.id.active_item_filters_chip_group)
+        activeFilters = findViewById(R.id.active_items_filters_chip_group)
 
         // Merchant
-        merchantOptions = findViewById(R.id.item_filter_merchant_options)
+        merchantOptions = findViewById(R.id.items_filter_merchant_options)
 
         //Category
-        categoryOptions = findViewById(R.id.item_filter_category_options)
+        categoryOptions = findViewById(R.id.items_filter_category_options)
 
         //Date
-        startDate = findViewById(R.id.item_filter_start_date)
-        endDate = findViewById(R.id.item_filter_end_date)
+        startDate = findViewById(R.id.items_filter_start_date)
+        endDate = findViewById(R.id.items_filter_end_date)
 
         //Price
-        minPrice = findViewById(R.id.item_filter_min_price)
-        maxPrice = findViewById(R.id.item_filter_max_price)
+        minPrice = findViewById(R.id.items_filter_min_price)
+        maxPrice = findViewById(R.id.items_filter_max_price)
 
         handleClosingDialog()
         handleChipClicking()
@@ -109,6 +113,7 @@ class ItemFilterDialog(
         //Merchant
         if (filterOptions.merchantName.isNotEmpty()) {
             merchantChip.visibility = View.VISIBLE
+            filterOptions.merchantId = filterOptions.merchantId
             merchantOptions.setText(filterOptions.merchantName)
         }
         //Category
@@ -232,6 +237,7 @@ class ItemFilterDialog(
             0 -> {
                 merchantChip.isChecked = true
                 filterOptions.merchantName = ""
+                filterOptions.merchantId = -1
                 merchantOptions.text.clear()
             }
             1 -> {
@@ -263,22 +269,96 @@ class ItemFilterDialog(
      * Handles merchant filter.
      */
     private fun handleMerchant() {
-        //TODO load merchants
-        val items = listOf(
-            ""
-        ).sortedBy { it.lowercase() }
-        val adapter = ArrayAdapter(context, R.layout.list_item, items)
-        merchantOptions.setAdapter(adapter)
+        // If this activity is from viewing a receipts items, there is no merchant to filter
+        // since it's all from the same receipt (same merchant)
+        if (isFromSingleReceipt) {
+            //Hide the merchant filter option in the UI
+            val merchantConstraint = findViewById<ConstraintLayout>(R.id.merchantConstraint)
+            merchantConstraint.visibility = View.GONE
+        } else {
+            val merchantNamesMap = loadMerchantNames()
+            val merchantNames: MutableList<String> = merchantNamesMap.values.toMutableList()
+                .sortedBy { it.lowercase() } as MutableList<String>
 
-        merchantOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
-            filterOptions.merchantName = ""
-            merchantChip.visibility = View.GONE
-            val value = adapter.getItem(pos) ?: ""
-            if (value.isNotEmpty()) {
-                filterOptions.merchantName = value
-                merchantChip.visibility = View.VISIBLE
+            val adapter = ArrayAdapter(context, R.layout.list_items, merchantNames)
+            merchantOptions.setAdapter(adapter)
+
+            merchantOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
+                filterOptions.merchantName = ""
+                filterOptions.merchantId = -1
+                merchantChip.visibility = View.GONE
+                val value = adapter.getItem(pos) ?: ""
+                if (value.isNotEmpty()) {
+                    filterOptions.merchantName = value
+                    filterOptions.merchantId = getKeyByValue(merchantMap, value)
+                    merchantChip.visibility = View.VISIBLE
+                }
             }
         }
+    }
+
+    /**
+     * Loads merchants names for the merchant filter.
+     */
+    private fun loadMerchantNames(): MutableMap<Int, String> {
+        merchantMap.clear()
+        //I do not think anything in the DB begins at index 0
+        categoryMap[0] = ""
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/merchant"
+
+        val registrationPost = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .method("GET", null)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+            .addHeader("Content-Type", "application/json")
+            .build()
+
+        val countDownLatch = CountDownLatch(1)
+
+        registrationPost.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                countDownLatch.countDown()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            val merchantsArr =
+                                JSONObject(responseBody.toString()).getString("merchants")
+                            val merchants = JSONArray(merchantsArr)
+                            for (i in 0 until merchants.length()) {
+                                val merchant = merchants.getJSONObject(i)
+                                val id = merchant.getInt("id")
+                                val name = merchant.getString("name")
+                                if (name.isNotEmpty()) {
+                                    merchantMap[id] = name
+                                }
+                            }
+                            Log.i("Successful", "Successfully loaded merchant names from API.")
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong \r\n${response.message} ${response.headers}"
+                            )
+                        }
+
+                    } else {
+                        Log.e(
+                            "Error",
+                            "Something went wrong \r\n${response.message} ${response.headers}"
+                        )
+                    }
+                }
+                countDownLatch.countDown()
+            }
+        })
+        countDownLatch.await()
+        return merchantMap
     }
 
     private fun <K, V> getKeyByValue(hashMap: Map<K, V>, target: V): K {
@@ -293,7 +373,7 @@ class ItemFilterDialog(
         val categoryItems: MutableList<String> = categoryItemsMap.values.toMutableList()
             .sortedBy { it.lowercase() } as MutableList<String>
 
-        val adapter = ArrayAdapter(context, R.layout.list_item, categoryItems)
+        val adapter = ArrayAdapter(context, R.layout.list_items, categoryItems)
         categoryOptions.setAdapter(adapter)
         categoryOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
             filterOptions.categoryName = ""
@@ -373,7 +453,7 @@ class ItemFilterDialog(
             openDateRangePicker()
         }
 
-        maxPrice.setOnClickListener {
+        endDate.setOnClickListener {
             openDateRangePicker()
         }
     }
@@ -492,9 +572,9 @@ class ItemFilterDialog(
      * Handles closing the dialog.
      */
     private fun handleClosingDialog() {
-        val closeDialog = findViewById<ImageButton>(R.id.filter_item_dialog_close)
+        val closeDialog = findViewById<ImageButton>(R.id.filter_items_dialog_close)
         closeDialog.setOnClickListener {
-            itemFilterDialogListener?.onReturnedFilterOptions(filterOptions)
+            itemsFilterDialogListener?.onReturnedFilterOptions(filterOptions)
             this.dismiss()
         }
     }

@@ -5,7 +5,8 @@ data class Friends (
     var firstName: String,
     var lastName: String,
     var email: String,
-    var friendInitial: Char
+    var friendInitial: Char,
+
 //    var trade_relation: String,
 //    var trade_amount: Double
     )
