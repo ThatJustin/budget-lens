@@ -1,10 +1,24 @@
 package com.codenode.budgetlens.data
 
 import android.content.Context
+import android.content.Intent
+import android.text.Editable
+import android.text.InputType
+import android.text.TextWatcher
 import android.util.Log
+import android.util.Patterns
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import com.codenode.budgetlens.BuildConfig
+import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
+import com.codenode.budgetlens.friends.FriendsPageActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
@@ -13,14 +27,18 @@ import java.util.concurrent.CountDownLatch
 //Im not sure about this class. since all friends are users,
 // friends are the relation between, just in case this class is needed so i created like this
 class UserFriends {
-    companion object{
+    companion object {
         var userFriends = mutableListOf<Friends>()
         var pageNumber = 1
 
-        fun loadFriendsFromAPI(context: Context, pageSize: Int, additionalData:String): MutableList<Friends> {
+        fun loadFriendsFromAPI(
+            context: Context,
+            pageSize: Int,
+            additionalData: String
+        ): MutableList<Friends> {
 
 
-           val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/"
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/"
 //            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friends/pageNumber=${UserFriends.pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
 
@@ -39,7 +57,8 @@ class UserFriends {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                val friendsObjects= JSONObject(responseBody.toString()).getString("response")
+                                val friendsObjects =
+                                    JSONObject(responseBody.toString()).getString("response")
                                 val friends = JSONArray(friendsObjects)
                                 userFriends = mutableListOf<Friends>()
                                 for (i in 0 until friends.length()) {
@@ -48,30 +67,36 @@ class UserFriends {
                                     val userId = friends.getInt("id")
                                     val firstName = friends.getString("first_name")
                                     val lastName = friends.getString("last_name")
-                                    val email= friends.getString("email")
+                                    val email = friends.getString("email")
                                     val initial = firstName[0]
                                     userFriends.add(
-                                            Friends(
-                                                userId,
-                                                firstName,
-                                                lastName,
-                                                email,
-                                                initial
+                                        Friends(
+                                            userId,
+                                            firstName,
+                                            lastName,
+                                            email,
+                                            initial,
+
                                             )
-                                        )
-                                    }
+                                    )
+                                }
 
                                 if (contentLoadedFromResponse) {
-                                    Log.i("im here bruh","hahahhahahahhahahahah")
+                                    Log.i("im here bruh", "hahahhahahahhahahahah")
                                     //Log.i("if",pageNumber.toString())
                                     //pageNumber++
                                 }
                                 Log.i("Successful", "Successfully loaded Friends from API.")
                             } else {
-                                Log.i("Error", "Something went wrong ${response.message} ${response.headers}")
+                                Log.i(
+                                    "Error",
+                                    "Something went wrong ${response.message} ${response.headers}"
+                                )
                             }
                         } else {
-                            Log.e("Error", "Something went wrong ${response.message} ${response.headers}"
+                            Log.e(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
                             )
                         }
                     }
@@ -87,6 +112,46 @@ class UserFriends {
             // wait for a response before returning
             countDownLatch.await()
             return userFriends
+        }
+
+        fun sendFriendRequest(context: Context, emailInput: EditText) {
+            // TODO: change to correct one l8r
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/request/"
+
+            val registrationPost = OkHttpClient()
+
+            val mediaType = "application/json".toMediaTypeOrNull()
+
+            val body = ("{\r\n" +
+                    "    \"email\": \"${emailInput.text}\"\r\n" +
+                    "}").trimIndent().toRequestBody(mediaType)
+
+            val request = Request.Builder()
+                .url(url)
+                .method("POST", body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .build()
+
+            registrationPost.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: java.io.IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    Log.i("Response", "Got the response from server")
+                    response.use {
+                        if (response.isSuccessful) {
+                            Log.i("Successful", "${response.body?.string()}")
+                        } else {
+                            Log.e(
+                                "Error",
+                                "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
+                            )
+                        }
+                    }
+                }
+            })
         }
     }
 }

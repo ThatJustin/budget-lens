@@ -130,6 +130,24 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".friends.requests.FriendPendingRequestsPageActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".friends.FriendsPageActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".friends.requests.FriendWaitingForApprovalsPageActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".friends.FriendsPageActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
     </application>
 
 </manifest>
