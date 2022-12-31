@@ -24,8 +24,6 @@ class AddSubCategoryPopUpActivity : AppCompatActivity() {
         val height = displayMetrics.heightPixels
 
         window.setLayout((width * 0.7).toInt(), (height * 0.5).toInt())
-//        window.setBackgroundBlurRadius(100)
-//        window.setBackgroundDrawableResource(R.drawable.pop_up)
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
     }
 }

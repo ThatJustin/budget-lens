@@ -51,7 +51,6 @@ class DeleteSubCategoryPopUpActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.delete_question).text =
             "Delete ${category.category_name} from this Category?"
 
-//        goToCategoryActivity.cate
         // Cancel button goes back to category activity
         val cancelButton = findViewById<Button>(R.id.cancel_button)
 

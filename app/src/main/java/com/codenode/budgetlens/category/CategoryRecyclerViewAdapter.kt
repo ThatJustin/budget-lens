@@ -52,7 +52,6 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
             imageGarbage.setImageResource(R.drawable.ic_baseline_delete_outline_24)
 
             holder.itemView.findViewById<LinearLayout>(R.id.category_card).setBackgroundColor(Color(0xf7, 0xf2, 0xf9).toArgb())
-//            holder.itemView.setBackgroundColor(Color(0xf7, 0xf2, 0xf9).toArgb())
             holder.itemView.findViewById<ImageView>(R.id.image_category).setImageResource(0)
             holder.itemView.elevation = 0.0F
 
