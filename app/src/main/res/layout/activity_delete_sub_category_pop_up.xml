@@ -25,18 +25,19 @@
         android:layout_marginTop="28dp"
         android:text="Delete Sub Category"
         android:textSize="22sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/garbage_icon"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/garbage_icon"
         app:layout_constraintTop_toBottomOf="@+id/garbage_icon" />
 
     <TextView
         android:id="@+id/delete_question"
         android:layout_width="222dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="-20dp"
         android:layout_marginTop="16dp"
         android:text="Delete this Category?"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/delete_title"
         app:layout_constraintStart_toStartOf="@+id/delete_title"
         app:layout_constraintTop_toBottomOf="@+id/delete_title" />
 
