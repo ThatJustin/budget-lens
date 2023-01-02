@@ -150,6 +150,7 @@ class UserCategories {
                                     val categoryName = category.getString("category_name")
                                     val categoryToggleStar =
                                         category.getBoolean("category_toggle_star")
+                                    val icon = category.getString("icon")
 
                                     // Create the new category for the user
                                     userCategories.add(
@@ -157,7 +158,8 @@ class UserCategories {
                                             id,
                                             categoryName,
                                             categoryToggleStar,
-                                            null
+                                            null,
+                                            icon
                                         )
                                     )
 
@@ -181,7 +183,8 @@ class UserCategories {
                                                 subId,
                                                 subCategoryName,
                                                 subCategoryToggleStar,
-                                                id // From category variable
+                                                id, // From category variable
+                                                "" // Leave the icon blank for subcategories
                                             )
                                         )
                                     }

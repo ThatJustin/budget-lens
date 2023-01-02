@@ -1,23 +1,19 @@
 package com.codenode.budgetlens.category
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.os.Parcel
-import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Category
 import com.codenode.budgetlens.data.UserCategories
@@ -63,6 +59,10 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
             imageGarbage.setOnClickListener {
                 holder.itemView.context.startActivity(gotToDeleteSubCategoryPopUp)
             }
+        } else {
+            // If its a patent category, update the image icon
+            val id = context.resources.getIdentifier("@drawable/" + category.icon, null, context.packageName)
+            holder.itemView.findViewById<ImageView>(R.id.image_category).setImageResource(id)
         }
 
     }
