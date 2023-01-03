@@ -18,14 +18,38 @@
         android:theme="@style/Theme.BudgetLens"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".category.DeleteSubCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.DeleteSubCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".category.AddSubCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.AddSubCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".category.CategoryActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <provider
-            android:authorities="com.codenode.budgetlens"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.codenode.budgetlens"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity
@@ -84,8 +108,8 @@
         <activity
             android:name=".receipts.ReceiptsListPageActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".home.HomePageActivity">
+            android:parentActivityName=".home.HomePageActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -94,6 +118,13 @@
             android:name=".signup.SignUpActivity"
             android:exported="true"
             android:parentActivityName=".login.LoginActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -124,8 +155,8 @@
         <activity
             android:name=".friends.FriendsPageActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".home.HomePageActivity">
+            android:parentActivityName=".home.HomePageActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
