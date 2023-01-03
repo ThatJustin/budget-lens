@@ -127,7 +127,6 @@ class ItemInfoActivity() : AppCompatActivity() {
                     requestItemDeletion(dialog, itemId, position)
                 }
                 .show()
-
         }
     }
 
