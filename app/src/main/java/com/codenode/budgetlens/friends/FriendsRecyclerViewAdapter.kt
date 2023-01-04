@@ -10,7 +10,7 @@ import android.widget.TextView
 
 class FriendsRecyclerViewAdapter(private val friends: MutableList<Friends>) :
     RecyclerView.Adapter<FriendsRecyclerViewAdapter.ViewHolder>() {
-        var context: Context? = null
+    var context: Context? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -21,10 +21,20 @@ class FriendsRecyclerViewAdapter(private val friends: MutableList<Friends>) :
     }
     override fun onBindViewHolder(holder: FriendsRecyclerViewAdapter.ViewHolder,position: Int) {
         val friend = friends[position]
+        val firstNameShow:String = if(friend.firstName.length>7){
+            friend.firstName.subSequence(0,4).toString()+".."
+        }else
+            friend.firstName
         holder.friendFirstName.text =
-            holder.itemView.context.getString(R.string.friend_first_name, friend.firstName)
+            holder.itemView.context.getString(R.string.friend_first_name, firstNameShow)
+        val lastNameShow:String = if(friend.firstName.length<=5 && friend.lastName.length>4){
+            friend.lastName.subSequence(0,3).toString()+".."
+        }else if(friend.lastName.length>5 && friend.lastName.length>4){
+            friend.lastName.subSequence(0,2).toString()+".."
+        }else
+            friend.lastName
         holder.friendLastName.text=
-            holder.itemView.context.getString(R.string.friend_last_name, friend.lastName)
+            holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
         holder.friendInitial.text=
             holder.itemView.context.getString(R.string.friend_initial,friend.friendInitial)
     }

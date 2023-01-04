@@ -18,14 +18,38 @@
         android:theme="@style/Theme.BudgetLens"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".category.DeleteSubCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.DeleteSubCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".category.AddSubCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.AddSubCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".category.CategoryActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <provider
-            android:authorities="com.codenode.budgetlens"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.codenode.budgetlens"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity
@@ -121,6 +145,13 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".settings.SettingsActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".login.password_reset.NewPasswordActivity"
             android:exported="true">
             <meta-data
@@ -146,8 +177,26 @@
         <activity
             android:name=".friends.FriendsPageActivity"
             android:exported="true"
+            android:parentActivityName=".home.HomePageActivity"
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".friends.requests.FriendPendingRequestsPageActivity"
+            android:exported="true"
             android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".home.HomePageActivity">
+            android:parentActivityName=".friends.FriendsPageActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".friends.requests.FriendWaitingForApprovalsPageActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".friends.FriendsPageActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

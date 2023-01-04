@@ -18,7 +18,7 @@
             android:layout_height="?attr/actionBarSize"
             android:backgroundTint="#FFFBFE"
             app:menu="@menu/top_app_bar"
-            app:title="Items"/>
+            app:title="Items" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/items_sort_by_and_filter_bar"
@@ -35,7 +35,7 @@
                 android:textColor="@color/black"
                 android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="@+id/items_sort_by_and_filter_bar"
-                app:layout_constraintTop_toTopOf="@+id/items_sort_by_and_filter_bar"/>
+                app:layout_constraintTop_toTopOf="@+id/items_sort_by_and_filter_bar" />
 
             <Button
                 android:id="@+id/sort_item_btn_open"
@@ -48,7 +48,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/itemsTextView"
                 app:layout_constraintEnd_toEndOf="@+id/itemsTextView"
                 app:layout_constraintStart_toStartOf="@+id/itemsTextView"
-                app:layout_constraintTop_toTopOf="@+id/itemsTextView"/>
+                app:layout_constraintTop_toTopOf="@+id/itemsTextView" />
 
             <Button
                 android:id="@+id/filter_item_btn_open"
@@ -61,7 +61,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/itemsTextView"
                 app:layout_constraintHorizontal_bias="0.944"
                 app:layout_constraintStart_toStartOf="@+id/itemsTextView"
-                app:layout_constraintTop_toTopOf="@+id/itemsTextView"/>
+                app:layout_constraintTop_toTopOf="@+id/itemsTextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -78,14 +78,34 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
                 android:background="#E7E0EC"
-                android:queryHint="@string/search"
                 android:iconifiedByDefault="false"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:queryBackground="@android:color/transparent"
+                android:queryHint="@string/search"
                 android:singleLine="true"
                 app:layout_constraintTop_toTopOf="@+id/search_bar"
-                app:startIconDrawable="@drawable/search_48px"/>
+                app:startIconDrawable="@drawable/search_48px" />
+
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                >
+
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/category_chips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="10dp"
+                    app:selectionRequired="false"
+                    app:singleSelection="true"
+                    app:chipSpacingHorizontal="0dp"
+                    >
+
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/items_list"
@@ -93,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:padding="10dp"
-                app:layout_constraintTop_toBottomOf="@id/search_bar_text"/>
+                app:layout_constraintTop_toBottomOf="@id/search_bar_text" />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -101,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:indeterminate="true"
-                android:padding="10dp"/>
+                android:padding="10dp" />
 
         </LinearLayout>
 
@@ -112,7 +132,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#AB9494"
-        app:layout_constraintBottom_toTopOf="@+id/items_cost"/>
+        app:layout_constraintBottom_toTopOf="@+id/items_cost" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/items_cost"
@@ -138,9 +158,9 @@
                 android:padding="5dp"
                 android:text="@string/total_items_currency"
                 android:textColor="#6750A4"
-                android:textStyle="bold"
                 android:textSize="12sp"
-                tools:ignore="MissingConstraints"/>
+                android:textStyle="bold"
+                tools:ignore="MissingConstraints" />
 
             <TextView
                 android:id="@+id/items_cost_value"
@@ -148,9 +168,9 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="@string/items_total"
-                tools:ignore="MissingConstraints"
                 android:textSize="36sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                tools:ignore="MissingConstraints" />
 
         </LinearLayout>
 
@@ -167,6 +187,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

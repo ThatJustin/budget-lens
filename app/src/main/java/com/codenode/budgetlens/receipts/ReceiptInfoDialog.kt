@@ -99,7 +99,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
 
         receiptInfoDialog = this
 
-        val window = window;
+        val window = window
         if (window != null) {
             // Remove the bar on top with the battery, notifications, service etc
             window.setFlags(
@@ -175,7 +175,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
                     if (response.isSuccessful) {
                         val responseBody = response.body?.string()
                         if (responseBody != null) {
-                            isDeletedReceipt = true;
+                            isDeletedReceipt = true
                             dialog.dismiss()
                             receiptInfoDialog.dismiss()
                             Log.i("Successful", "Receipt ID ${receiptInfo.id} deleted.")
