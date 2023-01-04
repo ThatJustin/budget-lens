@@ -17,9 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BudgetLens"
-<<<<<<< HEAD
-        android:usesCleartextTraffic="true">
-=======
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
@@ -46,7 +43,7 @@
                 android:value="" />
         </activity>
 
->>>>>>> master
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.codenode.budgetlens"
