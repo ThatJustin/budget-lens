@@ -73,7 +73,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:hint="Location"
-        android:drawableRight="@mipmap/budget"
+        android:drawableRight="@mipmap/location"
         android:inputType="text"
         android:minHeight="48dp"  />
 
