@@ -17,15 +17,44 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BudgetLens"
+<<<<<<< HEAD
         android:usesCleartextTraffic="true">
+=======
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".category.DeleteSubCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.DeleteSubCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".category.AddSubCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.AddSubCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".category.CategoryActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+>>>>>>> master
         <provider
-            android:authorities="com.codenode.budgetlens"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.codenode.budgetlens"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
@@ -43,7 +72,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".items.ItemListActivity"
+            android:name=".items.ItemsListPageActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
@@ -89,8 +118,8 @@
         <activity
             android:name=".receipts.ReceiptsListPageActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".home.HomePageActivity">
+            android:parentActivityName=".home.HomePageActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -99,6 +128,13 @@
             android:name=".signup.SignUpActivity"
             android:exported="true"
             android:parentActivityName=".login.LoginActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -137,8 +173,26 @@
         <activity
             android:name=".friends.FriendsPageActivity"
             android:exported="true"
+            android:parentActivityName=".home.HomePageActivity"
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".friends.requests.FriendPendingRequestsPageActivity"
+            android:exported="true"
             android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".home.HomePageActivity">
+            android:parentActivityName=".friends.FriendsPageActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".friends.requests.FriendWaitingForApprovalsPageActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".friends.FriendsPageActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

@@ -17,7 +17,6 @@ import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
-import org.hamcrest.core.IsNot.not
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -28,7 +27,7 @@ import org.junit.runner.RunWith
 @LargeTest
 class ReceiptsListPageActivityInstrumentedTests {
 
-    fun ViewInteraction.isDisplayed(): Boolean {
+    private fun ViewInteraction.isDisplayed(): Boolean {
         return try {
             check(matches(ViewMatchers.isDisplayed()))
             true
@@ -82,14 +81,14 @@ class ReceiptsListPageActivityInstrumentedTests {
         val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-        if (onView(withId(R.id.receipts_card)).isDisplayed()) {
+        if (onView(withId(R.id.receipts_list)).isDisplayed()) {
             onView(withId(R.id.receipts_list)).perform(swipeUp())
             onView(withId(R.id.receipts_list)).perform(swipeDown())
             onView(withId(R.id.receipts_list)).perform(click())
             onView(withId(R.id.relativeLayout)).check(matches(isDisplayed()))
         }
         else {
-            !onView(withId(R.id.receipts_card)).isDisplayed()
+            !onView(withId(R.id.receipts_list)).isDisplayed()
         }
     }
 }

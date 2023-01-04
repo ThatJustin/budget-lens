@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
+        <item name="ItemSortChipStyle">@style/ItemSortChipStyle</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -32,17 +33,53 @@
         <item name="android:windowIsFloating">true</item>
     </style>
 
+    <style name="Theme.BudgetLens.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.BudgetLens.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.BudgetLens.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.BudgetLens.AddSubCategoryPopUp">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <style name="Theme.BudgetLens.DeleteSubCategoryPopUp">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
     <style name="ItemSortDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:windowBackground">@drawable/popup_background</item>
     </style>
+
     <style name="ItemSortChipStyle" parent="Widget.Material3.Chip.Filter">
         <item name="chipBackgroundColor">@color/chip_background_color</item>
         <item name="android:textColor">@color/chip_text_color</item>
         <item name="checkedIconTint">#1D192B</item>
     </style>
-    <style name="LabelTextStyle" parent="TextAppearance.Material3.LabelMedium">
-<!--        <item name="android:textColor">@color/black</item>-->
-<!--        <item name="android:fontFamily">@font/font_family_roboto</item>-->
+
+    <style name="ReceiptsSortDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:windowBackground">@drawable/popup_background</item>
     </style>
 
+    <style name="ReceiptsSortChipStyle" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+        <item name="android:textColor">@color/chip_text_color</item>
+        <item name="checkedIconTint">#1D192B</item>
+
+
+    </style>
+
+    <style name="AllChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">#6750A4</item>
+        <item name="checkedIconTint">#FFFFFF</item>
+
+    </style>
+
+    <style name="LabelTextStyle" parent="TextAppearance.Material3.LabelMedium">
+        <!--        <item name="android:textColor">@color/black</item>-->
+        <!--        <item name="android:fontFamily">@font/font_family_roboto</item>-->
+    </style>
 </resources>

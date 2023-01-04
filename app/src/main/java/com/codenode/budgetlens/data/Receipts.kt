@@ -10,7 +10,7 @@ data class Receipts (
     var tax: Double?,
     var tip: Double?,
     var coupon: Int?,
-    var currency: String?,
+    var currency: String?
 ) {
     constructor() : this(0, "", "", "", "", 0.0, 0.0, 0.0, 0, "")
 }
