@@ -54,7 +54,7 @@ class BudgetPageActivity : AppCompatActivity() {
 
         AppUtils.setData(textView6, t1, t1s)
         getCosts()
-        Log.e("aaa", t1 + "===" + t1s)
+        Log.e("WWWWWWWW", t1 + "===" + t1s)
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.BUDGET, this, this.window.decorView)

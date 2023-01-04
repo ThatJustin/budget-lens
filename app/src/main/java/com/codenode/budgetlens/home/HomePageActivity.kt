@@ -12,13 +12,16 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.common.ScanningReceiptActivity
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.login.LoginActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_home_page.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -50,10 +53,11 @@ open class HomePageActivity() : AppCompatActivity() {
         val manualReceiptButton:FloatingActionButton = findViewById(R.id.createManual)
         val scanReceiptButton:FloatingActionButton = findViewById(R.id.ScanReceipt)
 
-        val context = this
-
-        manualReceiptButton.setOnClickListener {
-            startActivity(Intent(this,AddReceiptsActivity::class.java))
+        fabut.setOnClickListener {
+            val intent = Intent(this, BudgetPageActivity::class.java)
+            this.overridePendingTransition(0, 0)
+            this.finish()
+            startActivity(intent)
         }
         openAddMenu.setOnClickListener{
             if(AddMenuIsClosed){

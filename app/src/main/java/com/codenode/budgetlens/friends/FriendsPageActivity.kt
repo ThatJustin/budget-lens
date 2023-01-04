@@ -23,10 +23,13 @@ import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
+import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.data.UserFriends.Companion.sendFriendRequest
 import com.codenode.budgetlens.friends.requests.FriendPendingRequestsPageActivity
 import com.codenode.budgetlens.friends.requests.FriendWaitingForApprovalsPageActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.android.synthetic.main.activity_friends_page.*
 
 class FriendsPageActivity : AppCompatActivity() {
     private lateinit var friendList: MutableList<Friends>
@@ -83,7 +86,12 @@ class FriendsPageActivity : AppCompatActivity() {
                 return true
             }
         }
-
+        fabut.setOnClickListener {
+            val intent = Intent(this, BudgetPageActivity::class.java)
+            this.overridePendingTransition(0, 0)
+            this.finish()
+             startActivity(intent)
+        }
         emailInput = EditText(this)
         emailInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         emailInput.hint = "Email address"

@@ -5,31 +5,31 @@ import android.widget.TextView;
 public class AppUtils {
     public static void setData(TextView text ,String mm,String dd){
         switch (mm){
-            case "1":
+            case "01":
                 text.setText("January 01-January "+dd);
                 break;
-            case "2":
+            case "02":
                 text.setText("February 01-February "+dd);
                 break;
-            case "3":
+            case "03":
                 text.setText("March 01-March "+dd);
                 break;
-            case "4":
+            case "04":
                 text.setText("April 01-April "+dd);
                 break;
-            case "5":
+            case "05":
                 text.setText("May 01-May "+dd);
                 break;
-            case "6":
+            case "06":
                 text.setText("June 01-June "+dd);
                 break;
-            case "7":
+            case "07":
                 text.setText("July 01-July "+dd);
                 break;
-            case "8":
+            case "08":
                 text.setText("August 01-August "+dd);
                 break;
-            case "9":
+            case "09":
                 text.setText("September 01-September "+dd);
                 break;
             case "10":

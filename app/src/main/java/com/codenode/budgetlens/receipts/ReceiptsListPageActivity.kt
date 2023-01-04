@@ -1,6 +1,7 @@
 package com.codenode.budgetlens.receipts
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
@@ -9,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
@@ -21,6 +23,8 @@ import com.codenode.budgetlens.receipts.filter.ReceiptsFilterDialogListener
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterOptions
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialog
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialogListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_receipts_list_page.*
 
 class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener,
     ReceiptsFilterDialogListener {
@@ -51,6 +55,12 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         handleAdapter()
         handleSort()
         handleFilter()
+        fabut.setOnClickListener {
+            val intent = Intent(this, BudgetPageActivity::class.java)
+            this.overridePendingTransition(0, 0)
+            this.finish()
+            startActivity(intent)
+        }
     }
 
     /**
