@@ -1,6 +1,7 @@
 package com.codenode.budgetlens.utils;
 
 import android.os.Build;
+import android.util.Log;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -63,10 +64,18 @@ public class HttpUtils {
      * @param res
      */
     public static void post(String token, String urlString, RequestParams params, AsyncHttpResponseHandler res) {
-
+        Log.e("sdadsadsds", "post: "+token );
         client.addHeader("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
         client.addHeader("Authorization", token);
         params.put("token", token);
+        client.post(urlString, params, res);
+    }
+    public static void posts(String token, String urlString, RequestParams params, AsyncHttpResponseHandler res) {
+        Log.e("sdadsadsds", "post: "+urlString );
+        Log.e("sdadsadsds", "params: "+params.toString() );
+        client.addHeader("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
+        client.addHeader("Authorization",""+ token);
+         params.put("token", token);
         client.post(urlString, params, res);
     }
 
