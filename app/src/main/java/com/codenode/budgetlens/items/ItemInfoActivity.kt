@@ -243,6 +243,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                             }
                         }
                     })
+                    recreate()
                 }
                 .show()
         }
@@ -298,6 +299,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                             }
                         }
                     })
+                    recreate()
                 }
                 .show()
         }
