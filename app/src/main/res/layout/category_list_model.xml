@@ -75,6 +75,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:clickable="true"
+                    app:layout_constraintEnd_toStartOf="@+id/image_edit" />
+
+                <ImageView
+                    android:id="@+id/image_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
                     app:layout_constraintEnd_toStartOf="@+id/image_star" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,12 +3,15 @@ package com.codenode.budgetlens.data
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.category.CategoryRecyclerViewAdapter
 import com.codenode.budgetlens.common.BearerToken
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import java.util.concurrent.CountDownLatch
 
@@ -172,6 +175,7 @@ class UserCategories {
                                         val subCategoryName = subCategory.getString("category_name")
                                         val subCategoryToggleStar =
                                             subCategory.getBoolean("category_toggle_star")
+                                        val subCategoryIcon = category.getString("icon")
 
                                         // For now add subcategories the same way as a parent category
                                         // TODO: Make categories and subcategories different. Either create two
@@ -183,8 +187,8 @@ class UserCategories {
                                                 subId,
                                                 subCategoryName,
                                                 subCategoryToggleStar,
-                                                id, // From category variable
-                                                "" // Leave the icon blank for subcategories
+                                                id,
+                                                subCategoryIcon
                                             )
                                         )
                                     }
@@ -211,6 +215,107 @@ class UserCategories {
             countDownLatch.await()
             Log.d("Debug List", userCategories.toString())
             return userCategories
+        }
+
+        fun createNewSubCategoryfromAPI(context: Context, parentCategory: Category, categoryText: EditText, icon: String){
+            val url =
+                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/"
+
+            val registrationPost = OkHttpClient()
+
+            val mediaType = "application/json".toMediaTypeOrNull()
+
+            val body = ("{\n" +
+                    "    \"category_name\": \"${categoryText.text}\",\n" +
+                    "    \"category_toggle_star\": \"False\",\n" +
+                    "    \"parent_category_id\": \"${parentCategory.category_id}\",\n" +
+                    "    \"icon\": \"${icon}\"\n" +
+                    "}").trimIndent().toRequestBody(mediaType)
+
+            print(body)
+
+            val request = Request.Builder()
+                .url(url)
+                .method("POST", body = body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .build()
+            val countDownLatch = CountDownLatch(1)
+            registrationPost.newCall(request).enqueue(object : Callback {
+
+                override fun onFailure(call: Call, e: java.io.IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    response.use {
+                        Log.i("Response", "Got the response from server")
+                        response.use {
+                            if (response.isSuccessful) {
+                                Log.i("Successful", "Category created!")
+                            } else {
+                                Log.e(
+                                    "Error",
+                                    "Something went wrong"
+                                )
+                            }
+                        }
+                    }
+                    countDownLatch.countDown()
+                }
+            })
+
+            // wait for a response before returning
+            countDownLatch.await()
+        }
+
+        fun editCategory(context: Context, Category: Category, categoryText: EditText){
+            val url =
+                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/${Category.category_id}/"
+
+            val registrationPost = OkHttpClient()
+
+            val mediaType = "application/json".toMediaTypeOrNull()
+
+            val body = ("{\n" +
+                    "    \"category_name\": \"${categoryText.text}\",\n" +
+                    "}").trimIndent().toRequestBody(mediaType)
+
+            print(body)
+
+            val request = Request.Builder()
+                .url(url)
+                .method("PUT", body = body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .build()
+            val countDownLatch = CountDownLatch(1)
+            registrationPost.newCall(request).enqueue(object : Callback {
+
+                override fun onFailure(call: Call, e: java.io.IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    response.use {
+                        Log.i("Response", "Got the response from server")
+                        response.use {
+                            if (response.isSuccessful) {
+                                Log.i("Successful", "Category edited!")
+                            } else {
+                                Log.e(
+                                    "Error",
+                                    "Something went wrong"
+                                )
+                            }
+                        }
+                    }
+                    countDownLatch.countDown()
+                }
+            })
+
+            // wait for a response before returning
+            countDownLatch.await()
         }
     }
 }
