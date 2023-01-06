@@ -48,14 +48,14 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
         holder.itemView.findViewById<ImageView>(R.id.image_category).setImageResource(id)
 
         // Go to popup edit page for editing the sub category
-        val gotToEditSubCategoryPopUp =
+        val goToEditCategoryPopUp =
             Intent(holder.itemView.context, EditCategoryPopUpActivity::class.java)
 
         // Add the category name as an extra intent value to send to the edit popup page.
-        gotToEditSubCategoryPopUp.putExtra("category", category.category_name)
+        goToEditCategoryPopUp.putExtra("category", category.category_name)
 
         imageEdit.setOnClickListener {
-            holder.itemView.context.startActivity(gotToEditSubCategoryPopUp)
+            holder.itemView.context.startActivity(goToEditCategoryPopUp)
         }
 
         if (category.parent_category_id != null) {
@@ -92,11 +92,13 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
         val categoryName: TextView = itemView.findViewById(R.id.category_name)
         var imageStar: ImageView = itemView.findViewById(R.id.image_star)
         val imageGarbage: ImageView = itemView.findViewById(R.id.image_garbage)
+        val imageEdit: ImageView = itemView.findViewById(R.id.image_edit)
 
         init {
             categoryName.setOnClickListener(this)
             imageStar.setOnClickListener(this)
             imageGarbage.setOnClickListener(this)
+            imageEdit.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
@@ -110,6 +112,9 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
                     }
                     imageGarbage.id -> {
                         println("Deleted SubCategory $category")
+                    }
+                    imageEdit.id -> {
+                        println("Edited Category $category")
                     }
                     else -> {
                         println("Clicked $category")

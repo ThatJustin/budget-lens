@@ -46,13 +46,15 @@ class AddSubCategoryPopUpActivity : AppCompatActivity() {
         val width = displayMetrics.widthPixels
         val height = displayMetrics.heightPixels
 
-        window.setLayout((width * 0.85).toInt(), (height * 0.5).toInt())
+        window.setLayout((width * 0.85).toInt(), (height * 0.55).toInt())
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT));
 
-        val createSubCategoryButton: Button = findViewById(R.id.createNewCategory)
-        createSubCategoryButton.setOnClickListener {
+        val confirmCreateSubCategoryButton: Button = findViewById(R.id.confirm_button)
+        val cancelCreateSubCategoryButton: Button = findViewById(R.id.cancel_button)
+
+        confirmCreateSubCategoryButton.setOnClickListener {
             if(categoryText.text.toString()!=""){
-                UserCategories.createNewSubCategoryfromAPI(this, parentCategory, categoryText, icon)
+                UserCategories.createNewSubCategoryFromAPI(this, parentCategory, categoryText, icon)
                 val intent = Intent(this, CategoryActivity::class.java)
                 startActivity(intent)
             }
@@ -60,6 +62,11 @@ class AddSubCategoryPopUpActivity : AppCompatActivity() {
                 Toast.makeText(this,"Category name cannot be empty", Toast.LENGTH_SHORT).show()
             }
 
+        }
+
+        cancelCreateSubCategoryButton.setOnClickListener {
+            val intent = Intent(this, CategoryActivity::class.java)
+            startActivity(intent)
         }
     }
 }

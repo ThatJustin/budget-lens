@@ -10,6 +10,8 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Category
@@ -31,7 +33,7 @@ class EditCategoryPopUpActivity : AppCompatActivity() {
         val width = displayMetrics.widthPixels
         val height = displayMetrics.heightPixels
 
-        window.setLayout((width * 0.7).toInt(), (height * 0.3).toInt())
+        window.setLayout((width * 0.85).toInt(), (height * 0.35).toInt())
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         // Create the Intent to go back to the category activity page
@@ -47,6 +49,10 @@ class EditCategoryPopUpActivity : AppCompatActivity() {
             }
         }
 
+        // Change the text in the popup to reflect the activity
+        findViewById<TextView>(R.id.edit_title).text =
+            "Edit ${category.category_name} Category"
+
         // Cancel button goes back to category activity
         val cancelButton = findViewById<Button>(R.id.edit_cancel_button)
         val newName = findViewById<EditText>(R.id.editCategoryNameText)
@@ -58,8 +64,13 @@ class EditCategoryPopUpActivity : AppCompatActivity() {
         // Confirm button goes back to category activity and edits the category name
         val confirmButton = findViewById<Button>(R.id.edit_confirm_button)
         confirmButton.setOnClickListener {
-            UserCategories.editCategory(this, category, newName)
-            startActivity(goToCategoryActivity)
+            if(newName.text.toString()!=""){
+                UserCategories.editCategory(this, category, newName)
+                startActivity(goToCategoryActivity)
+            }
+            else{
+                Toast.makeText(this,"Category name cannot be empty", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

@@ -217,7 +217,7 @@ class UserCategories {
             return userCategories
         }
 
-        fun createNewSubCategoryfromAPI(context: Context, parentCategory: Category, categoryText: EditText, icon: String){
+        fun createNewSubCategoryFromAPI(context: Context, parentCategory: Category, categoryText: EditText, icon: String){
             val url =
                 "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/"
 
@@ -231,8 +231,6 @@ class UserCategories {
                     "    \"parent_category_id\": \"${parentCategory.category_id}\",\n" +
                     "    \"icon\": \"${icon}\"\n" +
                     "}").trimIndent().toRequestBody(mediaType)
-
-            print(body)
 
             val request = Request.Builder()
                 .url(url)
@@ -271,17 +269,15 @@ class UserCategories {
 
         fun editCategory(context: Context, Category: Category, categoryText: EditText){
             val url =
-                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/${Category.category_id}/"
+                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/${Category.category_name}/"
 
             val registrationPost = OkHttpClient()
 
             val mediaType = "application/json".toMediaTypeOrNull()
 
             val body = ("{\n" +
-                    "    \"category_name\": \"${categoryText.text}\",\n" +
+                    "    \"category_name\": \"${categoryText.text}\"\n" +
                     "}").trimIndent().toRequestBody(mediaType)
-
-            print(body)
 
             val request = Request.Builder()
                 .url(url)
