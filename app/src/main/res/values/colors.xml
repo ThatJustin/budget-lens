@@ -18,4 +18,11 @@
     <color name="orangeDarkColor">#FF5722</color>
 
     <color name="BudgetLensTitle">#1A73E9</color>
+    <color name="material_dynamic_primary50">#1A73E9</color>
+    <color name="purple">#6750A4</color>
+    <color name="circle_1">#BAAEFE</color>
+    <color name="transparent">#00000000</color>
+    <color name="text333">#333333</color>
+    <color name="text666">#666666</color>
+    <color name="text999">#999999</color>
 </resources>

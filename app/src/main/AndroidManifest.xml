@@ -51,7 +51,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -108,8 +107,23 @@
         <activity
             android:name=".receipts.ReceiptsListPageActivity"
             android:exported="true"
-            android:parentActivityName=".home.HomePageActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:parentActivityName=".home.HomePageActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".budget.BudgetPageActivity"
+            android:exported="true"
+            android:parentActivityName=".home.HomePageActivity">>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".budget.BudgetSpendingTrendActivity"
+            android:exported="true"
+            android:parentActivityName=".home.HomePageActivity">>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

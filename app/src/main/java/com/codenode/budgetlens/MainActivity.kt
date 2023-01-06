@@ -14,9 +14,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         GlobalSharedPreferences.load(this)
-
         val loginActivityBtn: ImageButton = findViewById(R.id.LoginActivityBtn)
         loginActivityBtn.setOnClickListener() {
             val intent : Intent = if (BearerToken.exists(this)) {
