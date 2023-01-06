@@ -42,7 +42,7 @@ class BudgetPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_budget_page)
         var textView6 = findViewById<TextView>(R.id.textView6);
-        val time = System.currentTimeMillis() //long now = android.os.SystemClock.uptimeMillis();
+        val time = System.currentTimeMillis()
 
         val format = SimpleDateFormat("MM")
         val d1 = Date(time)
@@ -67,28 +67,9 @@ class BudgetPageActivity : AppCompatActivity() {
         }
 
         grid = findViewById<ExpandableHeightGridView>(R.id.grid_view)
-        /*  var trend = Trend()
-          trend.icon = R.drawable.restaurant
-          trend.name = "Restaurant"
-          trendlist.add(trend)
 
-          trend = Trend()
-          trend.icon = R.drawable.bar
-          trend.name = "Bar"
-          trendlist.add(trend)
 
-          trend = Trend()
-          trend.icon = R.drawable.clothing
-          trend.name = "Clothing"
-          trendlist.add(trend)
-
-          trend = Trend()
-          trend.icon = R.drawable.grocery
-          trend.name = "Grocery"
-          trendlist.add(trend)*/
-        //AddAdapter()
-
-        val screenWidth = windowManager.defaultDisplay.width // the width of the screen
+        val screenWidth = windowManager.defaultDisplay.width
         val view1: View = layoutInflater.inflate(R.layout.dialog_add, null)
         mMyDialog = MyDialog(this, view1, true, true)
         val mainLayout: LinearLayout = view1.findViewById(R.id.mainlayout)
@@ -115,8 +96,11 @@ class BudgetPageActivity : AppCompatActivity() {
     }
 
     fun AddAdapter() {
-
-        Log.e("Response", "trendlistr---"+trendlist.toString())
+        if (trendlist.size > 0) {
+            tip.visibility=View.GONE
+        }else{
+            tip.visibility=View.VISIBLE
+        }
         adapter = CategoryAdapter(this, trendlist)
         grid!!.isFocusable = false;
         grid!!.isExpanded = true
@@ -172,11 +156,7 @@ class BudgetPageActivity : AppCompatActivity() {
                 responseString: String,
                 throwable: Throwable
             ) {
-                Toast.makeText(
-                    this@BudgetPageActivity,
-                    "Failed to add a category, please try again",
-                    Toast.LENGTH_SHORT
-                ).show()
+
             }
 
             override fun onSuccess(
@@ -214,7 +194,7 @@ class BudgetPageActivity : AppCompatActivity() {
             .url(url)
             .method("GET", null)
             .addHeader("Content-Type", "application/json")
-            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)!!}")
             .build()
 
         registrationPost.newCall(request).enqueue(object : Callback {

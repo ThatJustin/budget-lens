@@ -104,7 +104,6 @@ public class PieChartView extends View implements ValueAnimator.AnimatorUpdateLi
         rectFSelected.top = -width / 2 + charRi / 1.5f;
         rectFSelected.bottom = width / 2 - charRi / 1.5f;
 
-        // this.tittleSize = 1.5F * (width - charRi * 2) / (6 * tittleStr.length());
         this.priceSize = width/8F;
         this.tittleSize = this.priceSize/2.5F;
         setMeasuredDimension(width, height);
@@ -145,9 +144,7 @@ public class PieChartView extends View implements ValueAnimator.AnimatorUpdateLi
                 canvas.drawArc(rectF, startAngleTemp - 1.5f, 360F * datas[i] / dataSum + 1.5f, false, paintArc);
             } else if (this.ACTION_ == this.ACTION_ENLARGE) {
                 if (curColorIndex == i && datas.length > 1) {
-                    //setRectFSelected();
-                    //canvas.drawArc(rectFSelected, startAngleTemp + 2f, 360F * datas[i] / dataSum - 5.5f, false, paintArc);
-                    canvas.drawArc(rectF, startAngleTemp - 1.5f, 360F * datas[i] / dataSum + 1.5f, false, paintArc);
+                   canvas.drawArc(rectF, startAngleTemp - 1.5f, 360F * datas[i] / dataSum + 1.5f, false, paintArc);
                 } else {
                     canvas.drawArc(rectF, startAngleTemp - 1.5f, 360F * datas[i] / dataSum + 1.5f, false, paintArc);
                 }
@@ -201,13 +198,11 @@ public class PieChartView extends View implements ValueAnimator.AnimatorUpdateLi
                 }
                 int pixel = bitmap.getPixel((int) curtX, (int) curtY);
                 setDrawingCacheEnabled(false);
-                //get the color RGB
                 int redValue = Color.red(pixel);
                 int blueValue = Color.blue(pixel);
                 int greenValue = Color.green(pixel);
                 int tarIndex = 0;
-                //String curColorHex = ColorUtil.toHex(redValue, greenValue, blueValue);
-                String curColorHex = String.format("#%02x%02x%02x", redValue, blueValue, greenValue);
+                 String curColorHex = String.format("#%02x%02x%02x", redValue, blueValue, greenValue);
 
                 for (int i = 0; i < arcColors.length; i++) {
                     if (curColorHex.equals(arcColors[i])) {

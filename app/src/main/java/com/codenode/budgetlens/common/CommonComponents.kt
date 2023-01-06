@@ -39,14 +39,6 @@ class CommonComponents {
         ) {
             val activity: Activity = context as Activity
 
-       /*     val fabut =
-                view.findViewById<BottomNavigationView>(R.id.fabut)
-            fabut.setOnClickListener {
-                val intent = Intent(context, BudgetPageActivity::class.java)
-                activity.overridePendingTransition(0, 0)
-                activity.finish()
-                context.startActivity(intent)
-            }*/
             val myBottomNavigationView =
                 view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 

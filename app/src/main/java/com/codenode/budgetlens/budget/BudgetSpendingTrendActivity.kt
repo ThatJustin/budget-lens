@@ -27,7 +27,7 @@ class BudgetSpendingTrendActivity : AppCompatActivity() {
         trend.name = "Clothing"
         trendlist.add(trend)
 
-        val adaptor = TrendAdaptor(trendlist, baseContext)
-        trendList.adapter = adaptor
+        val adapter = TrendAdapter(trendlist, baseContext)
+        trendList.adapter = adapter
     }
 }

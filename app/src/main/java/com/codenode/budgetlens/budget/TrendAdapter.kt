@@ -11,8 +11,8 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Trend
 
 
-class TrendAdaptor(private val dataSet: List<Trend>, val context: Context) :
-    RecyclerView.Adapter<TrendAdaptor.ViewHolder>() {
+class TrendAdapter(private val dataSet: List<Trend>, val context: Context) :
+    RecyclerView.Adapter<TrendAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val titleTv: TextView

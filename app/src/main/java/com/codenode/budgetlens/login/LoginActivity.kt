@@ -38,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val context = this as Context
-        println(1111)
         val goToHomePageActivity = Intent(this, HomePageActivity::class.java)
 
         val loginButton: Button = findViewById(R.id.checkCredentials)
@@ -72,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/loginEndpoint/"
-            println(url)
+
             val registrationPost = OkHttpClient()
 
             val mediaType = "application/json".toMediaTypeOrNull()
