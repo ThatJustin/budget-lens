@@ -38,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val context = this as Context
-
         val goToHomePageActivity = Intent(this, HomePageActivity::class.java)
 
         val loginButton: Button = findViewById(R.id.checkCredentials)

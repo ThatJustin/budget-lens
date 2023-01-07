@@ -22,4 +22,5 @@ public class TypeAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
         helper.setGone(R.id.iv_add,!TextUtils.equals(str,"add"));
 
     }
+
 }

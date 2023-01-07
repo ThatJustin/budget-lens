@@ -12,6 +12,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
@@ -20,7 +21,9 @@ import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.login.LoginActivity
 import com.codenode.budgetlens.manualReceipt.Receipt
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_home_page.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -64,6 +67,12 @@ open class HomePageActivity() : AppCompatActivity() {
             context.overridePendingTransition(0, 0)
         }*/
 
+        fabut.setOnClickListener {
+            val intent = Intent(this, BudgetPageActivity::class.java)
+            this.overridePendingTransition(0, 0)
+            this.finish()
+            startActivity(intent)
+        }
         openAddMenu.setOnClickListener{
             if(AddMenuIsClosed){
                 openAddMenu.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)

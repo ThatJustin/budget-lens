@@ -31,7 +31,7 @@
             android:id="@+id/et_input"
             android:background="#90ffffff"
             android:lines="4"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp_10"
             android:layout_width="match_parent"
             android:layout_height="50dp"/>
         <View
