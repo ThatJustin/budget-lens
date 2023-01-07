@@ -175,7 +175,6 @@ open class Receipt() : AppCompatActivity() {
                         })
                     builder?.show()
                 }
-//                Log.i("11111:",position.toString())
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}

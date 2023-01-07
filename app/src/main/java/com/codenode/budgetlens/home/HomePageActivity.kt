@@ -60,12 +60,6 @@ open class HomePageActivity() : AppCompatActivity() {
         manualReceiptButton.setOnClickListener {
             startActivity(Intent(this,AddReceiptsActivity::class.java))
         }
-     /*   manualReceiptButton.setOnClickListener{
-            val intent = Intent(context, Receipt::class.java)
-            context.startActivity(intent)
-            context.finish()
-            context.overridePendingTransition(0, 0)
-        }*/
 
         fabut.setOnClickListener {
             val intent = Intent(this, BudgetPageActivity::class.java)
