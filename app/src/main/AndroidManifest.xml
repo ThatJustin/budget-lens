@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -42,6 +43,7 @@
                 android:value="" />
         </activity>
 
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.codenode.budgetlens"
@@ -51,6 +53,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <activity
+            android:name=".home.AddReceiptsActivity"
+            android:exported="false">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -154,6 +162,14 @@
             android:name=".login.password_reset.PasswordResetActivity"
             android:exported="true"
             android:parentActivityName=".login.LoginActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".manualReceipt.Receipt"
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

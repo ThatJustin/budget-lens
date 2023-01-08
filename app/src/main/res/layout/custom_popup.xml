@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_5"
-        android:paddingVertical="@dimen/dp_10"
+        android:paddingVertical="10dp"
         android:minWidth="100dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 </LinearLayout>

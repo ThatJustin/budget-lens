@@ -1,7 +1,7 @@
 package com.codenode.budgetlens.utils;
 
 import android.os.Build;
-
+import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -15,8 +15,7 @@ import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 public class HttpUtils {
 
     public static final String TAG = "HttpUtils";
-    private static AsyncHttpClient client = new AsyncHttpClient(); // visualize the object
-
+    private static AsyncHttpClient client = new AsyncHttpClient(); //
     static {
 
 
@@ -24,6 +23,8 @@ public class HttpUtils {
 
         try {
             String versionCode = Build.VERSION.RELEASE; // The version of the device's system
+   client.addHeader("version", versionCode);// system version
+
   client.addHeader("version", versionCode);// system version
 
             client.addHeader("platform", "Android");
@@ -50,6 +51,14 @@ client.setSSLSocketFactory(sf);
         client.addHeader("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
         client.addHeader("Authorization", token);
         params.put("token", token);
+        client.post(urlString, params, res);
+    }
+    public static void posts(String token, String urlString, RequestParams params, AsyncHttpResponseHandler res) {
+        Log.e("sdadsadsds", "post: "+urlString );
+        Log.e("sdadsadsds", "params: "+params.toString() );
+        client.addHeader("Content-type", "application/x-www-form-urlencoded;charset=UTF-8");
+        client.addHeader("Authorization",""+ token);
+         params.put("token", token);
         client.post(urlString, params, res);
     }
 

@@ -9,13 +9,13 @@
     android:layout_width="15dp"
     android:layout_height="15dp"
     android:visibility="gone"
-    android:layout_marginLeft="@dimen/dp_10"
+    android:layout_marginLeft="10dp"
     android:src="@mipmap/icon_add"/>
     <TextView
         android:id="@+id/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp_10"
+        android:padding="10dp"
         android:textColor="@color/text333"
-        android:textSize="@dimen/sp_14" />
+        android:textSize="14sp" />
 </LinearLayout>

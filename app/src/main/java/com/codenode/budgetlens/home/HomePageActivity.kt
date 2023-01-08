@@ -19,6 +19,8 @@ import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.common.ScanningReceiptActivity
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.login.LoginActivity
+import com.codenode.budgetlens.manualReceipt.Receipt
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_home_page.*
@@ -52,6 +54,12 @@ open class HomePageActivity() : AppCompatActivity() {
         val openAddMenu: FloatingActionButton = findViewById(R.id.addReceipts)
         val manualReceiptButton:FloatingActionButton = findViewById(R.id.createManual)
         val scanReceiptButton:FloatingActionButton = findViewById(R.id.ScanReceipt)
+
+        val context = this
+
+        manualReceiptButton.setOnClickListener {
+            startActivity(Intent(this,AddReceiptsActivity::class.java))
+        }
 
         fabut.setOnClickListener {
             val intent = Intent(this, BudgetPageActivity::class.java)
