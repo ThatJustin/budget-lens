@@ -15,6 +15,20 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="MyDialog" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <!--window frame -->
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <!--add a shadow  -->
+        <item name="android:windowIsTranslucent">false</item><!--half transparent-->
+        <!-- Disappear when clicking somewhere else -->
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <!-- dim:blurry background when pop up the dialog -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- background transparent -->
+        <item name="android:windowBackground">@color/transparent</item>
+    </style>
     <style name="fullscreendialog" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
@@ -31,6 +45,27 @@
         <item name="android:windowFullscreen">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
+    </style>
+    <style name="Hyperlink">
+        <item name="android:textColor">#3498db</item>
+        <item name="android:background">@drawable/hyperlink_underline</item>
+    </style>
+
+    <style name="Theme.BudgetLens.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="Theme.BudgetLens.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="Theme.BudgetLens.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Theme.BudgetLens.AddSubCategoryPopUp">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <style name="Theme.BudgetLens.DeleteSubCategoryPopUp">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
     <style name="Theme.BudgetLens.NoActionBar">

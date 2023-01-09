@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -60,6 +61,11 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <activity
+            android:name=".home.AddReceiptsActivity"
+            android:exported="false">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -123,6 +129,22 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".budget.BudgetPageActivity"
+            android:exported="true"
+            android:parentActivityName=".home.HomePageActivity">>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".budget.BudgetSpendingTrendActivity"
+            android:exported="true"
+            android:parentActivityName=".home.HomePageActivity">>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".signup.SignUpActivity"
             android:exported="true"
             android:parentActivityName=".login.LoginActivity">
@@ -148,6 +170,14 @@
             android:name=".login.password_reset.PasswordResetActivity"
             android:exported="true"
             android:parentActivityName=".login.LoginActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".manualReceipt.Receipt"
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

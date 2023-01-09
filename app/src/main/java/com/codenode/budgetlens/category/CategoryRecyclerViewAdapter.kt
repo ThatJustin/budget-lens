@@ -1,6 +1,7 @@
 package com.codenode.budgetlens.category
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import android.widget.TextView
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.recyclerview.widget.RecyclerView
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Category
 import com.codenode.budgetlens.data.UserCategories
@@ -63,6 +65,7 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
             imageGarbage.setImageResource(R.drawable.ic_baseline_delete_outline_24)
 
             holder.itemView.findViewById<LinearLayout>(R.id.category_card).setBackgroundColor(Color(0xf7, 0xf2, 0xf9).toArgb())
+            holder.itemView.findViewById<ImageView>(R.id.image_category).setImageResource(0)
             holder.itemView.elevation = 0.0F
 
             // Go to popup delete page for deleting the sub category
@@ -76,6 +79,7 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
                 holder.itemView.context.startActivity(gotToDeleteSubCategoryPopUp)
             }
         }
+
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
