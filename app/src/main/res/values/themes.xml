@@ -68,23 +68,6 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
-    <style name="Theme.BudgetLens.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.BudgetLens.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="Theme.BudgetLens.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-    <style name="Theme.BudgetLens.AddSubCategoryPopUp">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowCloseOnTouchOutside">true</item>
-    </style>
-
-    <style name="Theme.BudgetLens.DeleteSubCategoryPopUp">
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowCloseOnTouchOutside">true</item>
-    </style>
-
     <style name="Theme.BudgetLens.EditCategoryPopUp">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowCloseOnTouchOutside">true</item>
