@@ -28,6 +28,14 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".category.EditCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.EditCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".category.AddSubCategoryPopUpActivity"
             android:exported="true"
             android:theme="@style/Theme.BudgetLens.AddSubCategoryPopUp">
@@ -42,7 +50,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -115,7 +122,8 @@
         <activity
             android:name=".receipts.ReceiptsListPageActivity"
             android:exported="true"
-            android:parentActivityName=".home.HomePageActivity">
+            android:parentActivityName=".home.HomePageActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

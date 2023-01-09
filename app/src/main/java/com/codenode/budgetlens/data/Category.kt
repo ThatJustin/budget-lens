@@ -6,10 +6,10 @@ package com.codenode.budgetlens.data
  */
 data class Category(
     var category_id: Int,
-    var category_name: String,
+    var category_name: String?,
     var category_toggle_star: Boolean,
     var parent_category_id: Int?,
-    var icon: String
+    var icon: String?
 
 ) {
     constructor() : this(0, "", false, 0, "")

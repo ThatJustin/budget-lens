@@ -68,6 +68,11 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
+    <style name="Theme.BudgetLens.EditCategoryPopUp">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
     <style name="ItemSortDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:windowBackground">@drawable/popup_background</item>
     </style>

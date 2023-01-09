@@ -34,6 +34,7 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
     override fun onBindViewHolder(holder: CategoryRecyclerViewAdapter.ViewHolder, position: Int) {
         val imageStar: ImageView = holder.itemView.findViewById(R.id.image_star)
         val imageGarbage: ImageView = holder.itemView.findViewById(R.id.image_garbage)
+        val imageEdit: ImageView = holder.itemView.findViewById(R.id.image_edit)
         val category = categories[position]
         holder.categoryName.text =
             holder.itemView.context.getString(R.string.category_name, category.category_name)
@@ -42,27 +43,40 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
         } else {
             imageStar.setImageResource(R.drawable.ic_baseline_star_outline_24)
         }
+        imageEdit.setImageResource(R.drawable.ic_baseline_edit_black_24)
+
+        // update the image icon
+        val id = context.resources.getIdentifier("@drawable/" + category.icon, null, context.packageName)
+        holder.itemView.findViewById<ImageView>(R.id.image_category).setImageResource(id)
+
+        // Go to popup edit page for editing the sub category
+        val goToEditCategoryPopUp =
+            Intent(holder.itemView.context, EditCategoryPopUpActivity::class.java)
+
+        // Add the category name as an extra intent value to send to the edit popup page.
+        goToEditCategoryPopUp.putExtra("category", category.category_name)
+
+        imageEdit.setOnClickListener {
+            holder.itemView.context.startActivity(goToEditCategoryPopUp)
+        }
 
         if (category.parent_category_id != null) {
             // Add garbage bin to subcategories
             imageGarbage.setImageResource(R.drawable.ic_baseline_delete_outline_24)
 
             holder.itemView.findViewById<LinearLayout>(R.id.category_card).setBackgroundColor(Color(0xf7, 0xf2, 0xf9).toArgb())
-            holder.itemView.findViewById<ImageView>(R.id.image_category).setImageResource(0)
             holder.itemView.elevation = 0.0F
 
             // Go to popup delete page for deleting the sub category
             val gotToDeleteSubCategoryPopUp =
                 Intent(holder.itemView.context, DeleteSubCategoryPopUpActivity::class.java)
+
             // Add the category name as an extra intent value to send to the delete popup page.
             gotToDeleteSubCategoryPopUp.putExtra("category", category.category_name)
+
             imageGarbage.setOnClickListener {
                 holder.itemView.context.startActivity(gotToDeleteSubCategoryPopUp)
             }
-        } else {
-            // If its a patent category, update the image icon
-            val id = context.resources.getIdentifier("@drawable/" + category.icon, null, context.packageName)
-            holder.itemView.findViewById<ImageView>(R.id.image_category).setImageResource(id)
         }
 
     }
@@ -81,11 +95,13 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
         val categoryName: TextView = itemView.findViewById(R.id.category_name)
         var imageStar: ImageView = itemView.findViewById(R.id.image_star)
         val imageGarbage: ImageView = itemView.findViewById(R.id.image_garbage)
+        val imageEdit: ImageView = itemView.findViewById(R.id.image_edit)
 
         init {
             categoryName.setOnClickListener(this)
             imageStar.setOnClickListener(this)
             imageGarbage.setOnClickListener(this)
+            imageEdit.setOnClickListener(this)
         }
 
         override fun onClick(v: View?) {
@@ -99,6 +115,9 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
                     }
                     imageGarbage.id -> {
                         println("Deleted SubCategory $category")
+                    }
+                    imageEdit.id -> {
+                        println("Edited Category $category")
                     }
                     else -> {
                         println("Clicked $category")

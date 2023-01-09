@@ -30,6 +30,101 @@
         app:menu="@menu/top_app_bar"
         app:title="Categories" />
 
+    <LinearLayout
+        android:id="@+id/category_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="#f7f2f9"
+        app:layout_constraintBottom_toTopOf="@+id/category_subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topAppBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_category"
+                android:layout_width="24dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                app:tint="@color/purple_300"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/category_title_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_baseline_category_24" />
+
+            <TextView
+                android:id="@+id/category_title_text"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="Categories Configuration"
+                android:textColor="@color/purple_300"
+                android:textSize="18dp"
+                app:layout_constraintBottom_toBottomOf="@+id/image_category"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_category"
+                app:layout_constraintTop_toTopOf="@+id/image_category" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/category_subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f7f2f9"
+        android:padding="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/categoryRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/category_title">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/category_name"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:gravity='center_vertical'
+                android:text="All Categories"
+                android:textSize="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <Button
+                android:id="@+id/addSubcategoryButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:gravity='center_vertical'
+                android:backgroundTint="@color/purple_300"
+                android:text="Add New Sub Category"
+                android:textSize="14dp"
+                android:textColor="#f7f2f9"
+                android:layout_marginEnd="20dp"
+                app:icon="@drawable/ic_baseline_add_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.944"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/category_name"
+                app:layout_constraintTop_toTopOf="@+id/category_name" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/category_text"
         android:layout_width="wrap_content"
@@ -43,30 +138,13 @@
         android:id="@+id/categoryRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="0dp"
         android:background="#f7f2f9"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topAppBar" />
+        app:layout_constraintTop_toBottomOf="@+id/category_subtitle" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/categoryRecyclerView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/topAppBar"
-        app:layout_constraintVertical_bias="0.5">
 
-        <ImageButton
-            android:id="@+id/addSubcategoryButton"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:backgroundTint="#6a53a6"
-            android:contentDescription="Add subcategory button"
-            android:outlineProvider="paddedBounds"
-            app:srcCompat="@drawable/ic_baseline_add_24" />
-    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
