@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,7 +52,7 @@ class CategoryActivity : AppCompatActivity() {
 
             // Functionality for add subcategory popup
             val gotToAddAubCategoryPopUp = Intent(this, AddSubCategoryPopUpActivity::class.java)
-            val addSubCategoryButton: ImageButton = findViewById(R.id.addSubcategoryButton)
+            val addSubCategoryButton: Button = findViewById(R.id.addSubcategoryButton)
             addSubCategoryButton.setOnClickListener {
                 startActivity(gotToAddAubCategoryPopUp)
             }

@@ -60,8 +60,7 @@
 
     <Spinner
         android:id="@+id/chooseCategory"
-        style="@style/Widget.AppCompat.Spinner.DropDown"
-        android:background="@color/white"
+        style="Widget.AppCompat.Spinner.DropDown.ActionBar"
         android:layout_width="275dp"
         android:layout_height="60dp"
         android:layout_marginTop="12dp"
@@ -76,11 +75,13 @@
         android:layout_width="275dp"
         android:layout_height="60dp"
         android:hint="Category Name"
+        android:background="@color/white"
         android:layout_marginTop="12dp"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3">
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        >
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/categoryNameText"

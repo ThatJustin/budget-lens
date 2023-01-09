@@ -31,6 +31,7 @@ class CategoryDropdownAdapter(var context: Context, private val categories: Muta
         }
 
         viewHolder.bind(categories[position], context)
+        view.setBackgroundColor(Color.WHITE)
 
         return view
     }
@@ -64,6 +65,7 @@ class CategoryDropdownAdapter(var context: Context, private val categories: Muta
         private val categoryIcon: ImageView = view.findViewById(R.id.imageView)
 
         fun bind(category: Category, context: Context) {
+
             categoryName.text = category.category_name
             if (category.icon != "") {
                 val id = context.resources.getIdentifier("@drawable/" + category.icon, null, context.packageName)
