@@ -102,6 +102,6 @@
         <item>Entertainment</item>
         <item>Education</item>
     </string-array>
-    <attr name ="ItemSortChipStyle" format="reference"/>
-    <attr name ="AllChipStyle" format="reference"/>
+    <attr name="ItemSortChipStyle" format="reference" />
+    <attr name="AllChipStyle" format="reference" />
 </resources>

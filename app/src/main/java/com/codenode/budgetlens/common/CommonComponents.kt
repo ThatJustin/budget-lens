@@ -3,7 +3,6 @@ package com.codenode.budgetlens.common
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.view.Gravity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.budget.BudgetPageActivity
+import com.codenode.budgetlens.calendar.CalendarListActivity
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.friends.FriendsPageActivity
 import com.codenode.budgetlens.home.HomePageActivity
@@ -87,6 +87,10 @@ class CommonComponents {
 //                            val intent = Intent(context, CalendarActivity::class.java)
 //                            context.startActivity(intent)
 //                            activity.overridePendingTransition(0, 0)
+                            val intent = Intent(context, CalendarListActivity::class.java)
+                            context.startActivity(intent)
+                            activity.finish()
+                            activity.overridePendingTransition(0, 0)
                         }
                         true
                     }
@@ -103,11 +107,14 @@ class CommonComponents {
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
             val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar)
             //Set the name of the profile to the first sub menu item
-            val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
-            if (subProfile != null) {
-                subProfile.title =
-                    UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
+            if (topAppBar.menu.size()>0){
+                val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
+                if (subProfile != null) {
+                    subProfile.title =
+                        UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
+                }
             }
+
 
             topAppBar.setNavigationOnClickListener {
                 // Handle navigation icon press
