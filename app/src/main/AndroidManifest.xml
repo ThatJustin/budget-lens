@@ -76,11 +76,17 @@
 
         <uses-library
             android:name="org.apache.http.legacy"
-            android:required="false" />
-
+            android:required="false"/>
+        <activity
+            android:name=".itemSplit.ChooseFriendActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".itemSplit.SplitItemListActivity"
+            android:exported="false"/>
         <activity
             android:name=".home.AddReceiptsActivity"
-            android:exported="false"></activity>
+            android:exported="false"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
