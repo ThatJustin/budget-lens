@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -18,16 +19,53 @@
         android:theme="@style/Theme.BudgetLens"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".category.DeleteSubCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.DeleteSubCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".category.EditCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.EditCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".category.AddSubCategoryPopUpActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BudgetLens.AddSubCategoryPopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".category.CategoryActivity"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <provider
-            android:authorities="com.codenode.budgetlens"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.codenode.budgetlens"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
+        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <activity
+            android:name=".home.AddReceiptsActivity"
+            android:exported="false">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -84,8 +122,24 @@
         <activity
             android:name=".receipts.ReceiptsListPageActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".home.HomePageActivity">
+            android:parentActivityName=".home.HomePageActivity"
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".budget.BudgetPageActivity"
+            android:exported="true"
+            android:parentActivityName=".home.HomePageActivity">>
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".budget.BudgetSpendingTrendActivity"
+            android:exported="true"
+            android:parentActivityName=".home.HomePageActivity">>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -94,6 +148,13 @@
             android:name=".signup.SignUpActivity"
             android:exported="true"
             android:parentActivityName=".login.LoginActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -114,6 +175,14 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".manualReceipt.Receipt"
+            android:exported="true"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".common.ScanningReceiptActivity"
             android:exported="true"
             android:parentActivityName=".MainActivity">
@@ -124,8 +193,26 @@
         <activity
             android:name=".friends.FriendsPageActivity"
             android:exported="true"
+            android:parentActivityName=".home.HomePageActivity"
+            android:windowSoftInputMode="adjustPan">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".friends.requests.FriendPendingRequestsPageActivity"
+            android:exported="true"
             android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".home.HomePageActivity">
+            android:parentActivityName=".friends.FriendsPageActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".friends.requests.FriendWaitingForApprovalsPageActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".friends.FriendsPageActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

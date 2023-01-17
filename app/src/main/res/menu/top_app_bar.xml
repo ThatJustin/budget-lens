@@ -18,6 +18,10 @@
                 android:title="Edit Profile" />
 
             <item
+                android:id="@+id/settings"
+                android:icon="@drawable/car_ui_icon_settings"
+                android:title="Settings" />
+            <item
                 android:id="@+id/logout"
                 android:title="Logout"
                 android:icon="@drawable/ic_baseline_logout_24"/>

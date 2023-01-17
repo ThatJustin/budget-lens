@@ -9,14 +9,16 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="189dp"
+        tools:layout_editor_absoluteY="261dp">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:menu="@menu/top_app_bar"
-        app:title="Friends" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar"
+            app:title="Friends" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/friends_filter_bar"
@@ -35,52 +37,89 @@
                 app:layout_constraintStart_toStartOf="@+id/friends_filter_bar"
                 app:layout_constraintTop_toTopOf="@+id/friends_filter_bar" />
 
-            <Button
-                android:id="@+id/request_button"
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/request"
-                app:icon="@drawable/ic_baseline_add_alert_24"
                 app:layout_constraintBottom_toBottomOf="@+id/friendsTextView"
-                app:layout_constraintEnd_toEndOf="@+id/friendsTextView"
+                app:layout_constraintEnd_toEndOf="@+id/add_button"
                 app:layout_constraintStart_toStartOf="@+id/friendsTextView"
                 app:layout_constraintTop_toTopOf="@+id/friendsTextView"
-                android:backgroundTint="@color/purple_300"/>
+                android:layout_marginRight="100dp"
+
+                >
+
+                <Button
+                    android:id="@+id/show_friend_list"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/purple_300"
+                    app:icon="@drawable/ic_baseline_people_24"
+                    tools:ignore="TouchTargetSizeCheck"
+                    app:strokeColor="@color/purple_300"
+                    android:paddingLeft="30dp"
+                    />
+
+                <Button
+                    android:id="@+id/show_friend_request_send_list"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/purple_300"
+                    app:icon="@drawable/ic_baseline_send_24"
+                    tools:ignore="TouchTargetSizeCheck"
+                    app:strokeColor="@color/purple_300"
+                    android:paddingLeft="30dp"/>
+
+                <Button
+                    android:id="@+id/show_friend_request_receive_list"
+                    style="@style/Widget.App.Button.OutlinedButton.IconOnly"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/purple_300"
+                    app:icon="@drawable/ic_baseline_call_received_24"
+                    tools:ignore="TouchTargetSizeCheck"
+                    app:strokeColor="@color/purple_300"
+                    android:paddingLeft="30dp"/>
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
 
             <Button
                 android:id="@+id/add_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/purple_300"
                 android:text="@string/add_friend"
                 app:icon="@drawable/ic_baseline_add_24"
                 app:layout_constraintBottom_toBottomOf="@+id/friendsTextView"
                 app:layout_constraintEnd_toEndOf="@+id/friendsTextView"
                 app:layout_constraintHorizontal_bias="0.944"
                 app:layout_constraintStart_toStartOf="@+id/friendsTextView"
-                app:layout_constraintTop_toTopOf="@+id/friendsTextView"
-                android:backgroundTint="@color/purple_300"/>
+                app:layout_constraintTop_toTopOf="@+id/friendsTextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:orientation="vertical">
 
-        <SearchView
-            android:id="@+id/search_bar_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:background="#E8DEF8"
-            android:iconifiedByDefault="false"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:queryBackground="@android:color/transparent"
-            android:queryHint="@string/search"
-            android:singleLine="true"
-            app:layout_constraintTop_toTopOf="@+id/search_bar"
-            app:startIconDrawable="@drawable/search_48px" />
+            <SearchView
+                android:id="@+id/search_bar_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:background="#E8DEF8"
+                android:iconifiedByDefault="false"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:queryBackground="@android:color/transparent"
+                android:queryHint="@string/search"
+                android:singleLine="true"
+                app:layout_constraintTop_toTopOf="@+id/search_bar"
+                app:startIconDrawable="@drawable/search_48px" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/friends_list"
@@ -100,6 +139,7 @@
 
 
     </com.google.android.material.appbar.AppBarLayout>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
@@ -112,4 +152,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_nav_menu" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabut"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="40dp"
+        app:backgroundTint="@color/purple"
+        app:fabCustomSize="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:maxImageSize="40dp"
+        app:srcCompat="@drawable/budget"
+        app:tint="@color/white" />
 </androidx.constraintlayout.widget.ConstraintLayout>

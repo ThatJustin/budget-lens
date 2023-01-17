@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/pop_up"
+    tools:context=".category.EditCategoryPopUpActivity">
+
+    <ImageView
+        android:id="@+id/edit_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_edit_black_24" />
+
+    <TextView
+        android:id="@+id/edit_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Edit Sub Category"
+        android:textSize="24sp"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_icon" />
+
+    <TextView
+        android:id="@+id/edit_question"
+        android:layout_width="275dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="16dp"
+        android:text="Please Input New Category Name:"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/edit_title"
+        app:layout_constraintStart_toStartOf="@+id/edit_title"
+        app:layout_constraintTop_toBottomOf="@+id/edit_title" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/editCategoryName"
+        android:layout_width="275dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:hint="Category Name"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_question">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editCategoryNameText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:textAlignment="center"
+            android:textSize="50px" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <Button
+        android:id="@+id/edit_cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#DED5EA"
+        android:text="@android:string/cancel"
+        android:textColor="@color/purple_300"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/edit_confirm_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editCategoryName" />
+
+    <Button
+        android:id="@+id/edit_confirm_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="60dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#DED5EA"
+        android:text="Confirm"
+        android:textColor="@color/purple_300"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/edit_cancel_button"
+        app:layout_constraintTop_toBottomOf="@+id/editCategoryName" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

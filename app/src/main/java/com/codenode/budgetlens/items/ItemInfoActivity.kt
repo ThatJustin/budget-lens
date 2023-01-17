@@ -3,10 +3,12 @@ package com.codenode.budgetlens.items
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType.*
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
@@ -18,6 +20,8 @@ import com.codenode.budgetlens.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
@@ -28,6 +32,8 @@ class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var itemPrice: TextView
     private lateinit var itemName: TextView
     private lateinit var itemOwner: TextView
+    private var newItemName: String = ""
+    private var newItemPrice: String = ""
 
     private var localPrice = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +76,6 @@ class ItemInfoActivity() : AppCompatActivity() {
                 e.printStackTrace()
             }
 
-
             override fun onResponse(call: Call, response: Response) {
                 response.use {
                     if (response.isSuccessful) {
@@ -105,6 +110,8 @@ class ItemInfoActivity() : AppCompatActivity() {
         })
 
         handleDeleteItem(itemId, position)
+        handleEditItemPrice(itemId, position)
+        handleEditItemName(itemId, position)
     }
 
     private fun handleDeleteItem(itemId: String?, position: Int) {
@@ -120,7 +127,6 @@ class ItemInfoActivity() : AppCompatActivity() {
                     requestItemDeletion(dialog, itemId, position)
                 }
                 .show()
-
         }
     }
 
@@ -183,4 +189,120 @@ class ItemInfoActivity() : AppCompatActivity() {
             finish()
         }
     }
+
+    private fun handleEditItemPrice(itemId: String?, position: Int){
+        findViewById<TextView>(R.id.item_info_price)?.setOnClickListener {
+            val editItemName: EditText = EditText(this)
+            editItemName.inputType = TYPE_CLASS_TEXT
+            val editItemPrice: EditText = EditText(this)
+            editItemPrice.inputType = TYPE_CLASS_PHONE
+
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Edit Item")
+                .setMessage("Edit Item Price")
+                .setView(editItemName)
+                .setView(editItemPrice)
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Edit") { dialog, _ ->
+                    newItemPrice = editItemPrice.text.toString()
+                    val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
+                    val registrationPost = OkHttpClient()
+                    val mediaType = "application/json".toMediaTypeOrNull()
+
+                    val body = ("{\r\n" +
+                            "    \"price\": \"${newItemPrice}\"\r\n" +
+                            "}").trimIndent().toRequestBody(mediaType)
+
+                    val request = Request.Builder()
+                        .url(url)
+                        .method("PATCH", body)
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+                        .build()
+                    registrationPost.newCall(request).enqueue(object : Callback {
+                        override fun onFailure(call: Call, e: IOException) {
+                            e.printStackTrace()
+                        }
+
+                        override fun onResponse(call: Call, response: Response) {
+                            Log.i("Response", "Got the response from server")
+                            response.use {
+                                if (response.isSuccessful) {
+                                    val responseBody = response.body?.string()
+                                    if (responseBody != null) {
+                                        Log.i("Successful", "Item ID $itemId edited.")
+                                    } else {
+                                        Log.i(
+                                            "Error",
+                                            "Something went wrong ${response.message} ${response.headers}"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    recreate()
+                }
+                .show()
+        }
+    }
+
+    private fun handleEditItemName(itemId: String?, position: Int) {
+        findViewById<TextView>(R.id.item_info_name)?.setOnClickListener {
+            val editItemName: EditText = EditText(this)
+            editItemName.inputType = TYPE_CLASS_TEXT
+
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Edit Item")
+                .setMessage("Edit Item Name")
+                .setView(editItemName)
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setPositiveButton("Edit") { dialog, _ ->
+                    newItemName = editItemName.text.toString()
+                    val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
+                    val registrationPost = OkHttpClient()
+                    val mediaType = "application/json".toMediaTypeOrNull()
+
+                    val body = ("{\r\n" +
+                            "    \"name\": \"${newItemName}\"\r\n" +
+                            "}").trimIndent().toRequestBody(mediaType)
+
+                    val request = Request.Builder()
+                        .url(url)
+                        .method("PATCH", body)
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+                        .build()
+                    registrationPost.newCall(request).enqueue(object : Callback {
+                        override fun onFailure(call: Call, e: IOException) {
+                            e.printStackTrace()
+                        }
+
+                        override fun onResponse(call: Call, response: Response) {
+                            Log.i("Response", "Got the response from server")
+                            response.use {
+                                if (response.isSuccessful) {
+                                    val responseBody = response.body?.string()
+                                    if (responseBody != null) {
+                                        Log.i("Successful", "Item ID $itemId edited.")
+                                    } else {
+                                        Log.i(
+                                            "Error",
+                                            "Something went wrong ${response.message} ${response.headers}"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    recreate()
+                }
+                .show()
+        }
+    }
+
 }
