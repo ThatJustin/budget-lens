@@ -235,12 +235,13 @@
 
         <Button
             android:id="@+id/receipt_info_delete"
-            android:layout_width="150dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="25dp"
             android:layout_marginBottom="50dp"
+            android:backgroundTint="@color/red"
             android:text="@string/delete" />
 
         <Button
@@ -254,8 +255,21 @@
             android:text="@string/add_date" />
 
         <Button
-            android:id="@+id/receipt_info_edit"
+            android:id="@+id/receipt_info_split"
             android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="50dp"
+            android:layout_toStartOf="@+id/receipt_info_edit"
+            android:layout_toEndOf="@+id/receipt_info_delete"
+            android:text="@string/split" />
+
+        <Button
+            android:id="@+id/receipt_info_edit"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
