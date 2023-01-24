@@ -36,6 +36,7 @@
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
+        android:background="@drawable/button_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -60,63 +61,69 @@
 
             <TextView
                 android:id="@+id/tvMerchantName"
-                android:layout_width="247dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="9dp"
+                android:layout_toEndOf="@+id/receipt_info_merchant_icon"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="0dp"
                 android:textColor="@color/purple_700"
                 android:textSize="18sp"
+                android:text="Costco"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvReceiptDate"
-                android:layout_width="278dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvMerchantName"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="9dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="0dp"
-                android:text="@string/scan_date"
+                android:layout_toEndOf="@+id/tvMerchantName"
+                android:text=" - 2069/04/20 4:20 PM"
                 android:textSize="18sp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/tvTotalAmountSection"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/receipt_info_merchant_icon"
+                android:layout_below="@+id/tvReceiptDate"
+                android:layout_alignParentEnd="true"
+
+                android:layout_marginStart="5dp"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvTotalAmountCurrency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_amount_currency"
+                    android:textSize="18sp"
+
+                    android:paddingEnd="0dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvTotalAmount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="420.60"
+                    android:textSize="18sp"
+                    android:textColor="@color/purple_700"
+                    android:textStyle="bold" />
+            </LinearLayout>
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/tvTotalAmountSection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/llmerchant"
-            android:layout_marginStart="5dp"
-            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/tvTotalAmountCurrency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/total_amount_currency"
-                android:textSize="18sp"
-                android:paddingStart="82dp"
-                android:paddingEnd="0dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/tvTotalAmount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="@string/total"
-                android:textSize="18sp"
-                android:textColor="@color/purple_700"
-                android:textStyle="bold" />
-        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvReceiptImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvTotalAmountSection"
+            android:layout_below="@id/llmerchant"
             android:layout_margin="5dp"
             app:cardBackgroundColor="#D1C4E9"
             app:cardCornerRadius="10dp">
@@ -223,7 +230,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-<!--        <Button-->
+        <!--        <Button-->
 <!--            android:id="@+id/receipt_info_view_items"-->
 <!--            android:layout_width="150dp"-->
 <!--            android:layout_height="wrap_content"-->
@@ -236,49 +243,108 @@
 <!--            android:text="@string/view_items"-->
 <!--            android:textColor="#757575" />-->
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/receipt_info_view_items"
-            android:layout_width="150dp"
+        <TextView
+            android:id="@+id/lab_importdata"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/receipt_info_delete"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginBottom="45dp"
-            app:backgroundTint="@android:color/transparent"
-            app:strokeColor="@color/green"
-            app:strokeWidth="1dp"
-            android:text="@string/view_items"
-            android:textColor="#757575" />
+            android:layout_below="@id/llAddedBy"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="91dp"
+            android:text="Important Dates:"
+            android:textColor="@color/red"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/receipt_info_delete"
-            android:layout_width="150dp"
+        <TextView
+            android:id="@+id/txt_return_period"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
+            android:layout_below="@id/lab_importdata"
+            android:layout_marginStart="15dp"
+
+            android:layout_marginTop="17dp"
+            android:text="Return Period:  2022/02/16"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/txt_expiration_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_return_period"
+            android:layout_marginStart="15dp"
+
+            android:layout_marginTop="13dp"
+            android:text="Expiration Date:  2022/02/28"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/lay_bottom_btn"
+            android:layout_margin="10dp"
+            android:weightSum="5">
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/receipt_info_view_items"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                app:backgroundTint="@android:color/transparent"
+                app:strokeColor="@color/purple"
+                app:strokeWidth="1dp"
+                android:text="@string/view_items"
+                android:textColor="#6e5ca5" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/receipt_info_add_important_date"
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:layout_height="wrap_content"
+                android:text="@string/add_date" />
+        </LinearLayout>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/lay_bottom_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginBottom="50dp"
-            android:text="@string/delete" />
+            android:gravity="bottom"
+            android:layout_margin="0dp"
+            android:weightSum="3"
+            >
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/receipt_info_delete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
 
-        <Button
-            android:id="@+id/receipt_info_add_important_date"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/receipt_info_edit"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="45dp"
-            android:text="@string/add_date" />
+                app:backgroundTint="@android:color/holo_red_light"
+                android:text="@string/delete"
+                android:layout_margin="5dp"/>
+            <Button
+                android:id="@+id/receipt_info_edit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
 
-        <Button
-            android:id="@+id/receipt_info_edit"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginEnd="25dp"
-            android:layout_marginBottom="50dp"
-            android:text="@string/edit" />
+                android:layout_margin="5dp"
+                android:text="@string/edit" />
+
+            <Button
+                android:id="@+id/receipt_info_split_bill"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="5dp"
+                android:text="@string/split_bill" />
+        </LinearLayout>
+
+
+
+
+
+
+
+
 
 
     </RelativeLayout>

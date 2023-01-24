@@ -50,13 +50,14 @@
     <string name="close_dialog_preview_description">Close Dialog.</string>
     <string name="total">%1$.2f</string>
     <string name="total_amount">Total Amount($): %1$.2f</string>
-    <string name="total_amount_currency">Total Amount(%1s):</string>
+    <string name="total_amount_currency">Total Amount($):</string>
     <string name="total_items_currency">Total :</string>
     <string name="added_by">Added by:</string>
     <string name="view_items">View Items</string>
     <string name="delete">Delete</string>
     <string name="add_date">Add Important Date</string>
     <string name="edit">Edit</string>
+    <string name="split_bill">Split Bill</string>
     <string name="home">Home</string>
     <string name="all">ALL</string>
     <string name="receipts">Receipts</string>
