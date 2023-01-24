@@ -6,14 +6,17 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
+import android.text.InputType
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentManager
 import com.bumptech.glide.Glide
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
@@ -30,7 +33,10 @@ import java.util.*
 
 
 //Open already uploaded receipt
-class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
+class ReceiptInfoDialog(
+    context: Context,
+    receipt: Receipts
+) : Dialog(context) {
 
     var receiptInfo = receipt
 
@@ -147,6 +153,68 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
             itemsListPage.putExtra("singleReceiptView", true)
             itemsListPage.putExtra("receiptID", receiptInfo.id)
             context.startActivity(itemsListPage)
+        }
+
+        //handle add important date button
+        handleAddImportantDateButton()
+    }
+
+    /**
+     * Handles everything related to the add important date button.
+     */
+    private fun handleAddImportantDateButton() {
+        val addImportantDate = findViewById<Button>(R.id.receipt_info_add_important_date)
+
+        //Encapsulate everything in a LinearLayout
+        val layout = LinearLayout(context, null, 0)
+        layout.orientation = LinearLayout.VERTICAL
+        layout.setPadding(50, 0, 50, 0)
+
+        // An EditText Field will be used for the title
+        val importantDateTitle = EditText(context)
+        importantDateTitle.maxLines = 1
+        //backend has a max length of 36, respect it here
+        importantDateTitle.filters = arrayOf(InputFilter.LengthFilter(36))
+        importantDateTitle.inputType = InputType.TYPE_CLASS_TEXT
+        layout.addView(importantDateTitle)
+
+        //Calendar to select a date
+        val calendar = CalendarView(context)
+        layout.addView(calendar)
+
+        //Create the dialog
+        val dialog = MaterialAlertDialogBuilder(context)
+            .setTitle("Add Important Date")
+            .setMessage("Enter a description for the date and select the date.\r\n\r\nDescription:")
+            .setView(layout)
+            .setNegativeButton("Cancel") { dialog, _ ->
+                importantDateTitle.setText("")
+                dialog.dismiss()
+            }
+            .setPositiveButton("Add", null)
+            .create()
+
+        // Check when a user inputs a title to enable/disable the Add button
+        importantDateTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                dialog.getButton(BUTTON_POSITIVE).isEnabled = s.isNotEmpty()
+            }
+            override fun afterTextChanged(s: Editable) {}
+        })
+
+        addImportantDate.setOnClickListener {
+            dialog.show()
+            dialog.getButton(BUTTON_POSITIVE).isEnabled = false
+
+            dialog.getButton(BUTTON_POSITIVE).setOnClickListener {
+
+                //TODO Either send API request before closing or after closing...
+
+                //clean up for next time
+                importantDateTitle.setText("")
+                dialog.dismiss()
+            }
         }
     }
 
