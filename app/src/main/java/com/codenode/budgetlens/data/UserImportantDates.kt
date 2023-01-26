@@ -22,8 +22,6 @@ class UserImportantDates {
          * `imageStar`: The ImageView of the star in order for the star to be updated
          *
          */
-
-
         fun loadImportantDatesFromAPI(
             context: Context,
             itemId: String?
@@ -59,7 +57,6 @@ class UserImportantDates {
                                 for (i in 0 until importantDatesListTemp.length()) {
                                     val date = importantDatesListTemp.getJSONObject(i)
                                     val id = date.getInt("id")
-                                    val user = date.getInt("user")
                                     val item = date.getInt("item")
                                     val dateString = date.getString("date")
                                     val description = date.getString("description")
@@ -68,15 +65,11 @@ class UserImportantDates {
                                             id,
                                             dateString,
                                             description,
-                                            user,
                                             item
                                         )
                                     )
                                 }
-
-
                             }
-
                             Log.i(
                                 "Successful",
                                 "Displayed Category string list successfully${responseBody}"
@@ -140,7 +133,5 @@ class UserImportantDates {
                 }
             })
         }
-
-
     }
 }
