@@ -26,18 +26,24 @@ import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Friends
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserFriends
+import com.codenode.budgetlens.data.UserFriends.Companion.userFriends
 import com.codenode.budgetlens.data.UserReceipts
 import com.codenode.budgetlens.friends.FriendsPageActivity
 import com.codenode.budgetlens.friends.FriendsRecyclerViewAdapter
 import com.codenode.budgetlens.friends.FriendsSelectRecyclerViewAdapter
 import com.codenode.budgetlens.friends.requests.FriendPendingRequestsPageActivity
 import com.codenode.budgetlens.friends.requests.FriendWaitingForApprovalsPageActivity
+import com.codenode.budgetlens.items.ItemInfoActivity
+import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.internal.bind.TypeAdapters.STRING
 import kotlinx.android.synthetic.main.activity_friends_page.*
+import javax.xml.xpath.XPathConstants.STRING
 
 class ReceiptSplitFriendSelect : AppCompatActivity() {
 
+    private val selectedList: MutableList<Int> = ArrayList()
     private lateinit var friendList: MutableList<Friends>
     private var friendsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -45,26 +51,24 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
     private var pageSize = 5
     private lateinit var emailInput: EditText
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_friends_page)
+        setContentView(R.layout.activity_receipt_split_friend_select)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.FRIENDS, this, this.window.decorView)
-        val addFriendButton: Button = findViewById(R.id.add_button)
-        val toggleButton: CheckBox = findViewById(R.id.toggleButton)
-        toggleButton.setOnCheckedChangeListener { toggleButton, isChecked ->
-            val context: Context = this
-            val activity: Activity = context as Activity
-
-            if (isChecked) {
-                //do something if checked
-            }
-        }
-
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
+        val HamdleSplitByTotal: Button = findViewById(R.id.split_by_total)
+        val HamdleSplitByItem: Button = findViewById(R.id.split_by_item)
         var additionalData = ""
+
         //Load Friend List
         friendList = UserFriends.loadFriendsFromAPI(this, pageSize, additionalData)
+        userFriends.add(Friends(10, "John", "Cena", "cantseeme@gmail.com", 'J',))
+        userFriends.add(Friends(11, "Bobby", "Lee", "madtv@gmail.com", 'B',))
+        userFriends.add(Friends(12, "Mateo", "Palomino", "mateo_palomino@gmail.com", 'T',))
+        userFriends.add(Friends(13, "Luffy D", "Monkey", "pirateKing@gmail.com", 'K',))
+
         val context = this
         friendsListRecyclerView = findViewById(R.id.friends_list)
         progressBar.visibility = View.VISIBLE
@@ -77,7 +81,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
             friendsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
             friendsListRecyclerView!!.layoutManager = linearLayoutManager
-            friendAdapter = FriendsSelectRecyclerViewAdapter(friendList)
+            friendAdapter = FriendsSelectRecyclerViewAdapter(friendList, selectedList)
 
             friendsListRecyclerView!!.adapter = friendAdapter
             progressBar.visibility = View.GONE
@@ -96,7 +100,31 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
 
                 }
             })
+            HamdleSplitByTotal.setOnClickListener{
+                // SELECTEDLIST VALUE RETURNS THE LIST OF CHECKED/SELECTED
+                // FRIENDS FROM THE RECYCLER VIEW ADAPTER TO THIS MAIN ACTIVITY
+                //
+                // SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
+                Log.i("Click", "Show "+selectedList)
+//                val intent = Intent(this, ???::class.java)
+//                intent.putExtra("itemId", selectedList.toString())
+//                startActivityForResult(intent, ???)
+
+            }
+
+            HamdleSplitByItem.setOnClickListener{
+                // SELECTEDLIST VALUE RETURNS THE LIST OF CHECKED/SELECTED
+                // FRIENDS FROM THE RECYCLER VIEW ADAPTER TO THIS MAIN ACTIVITY
+                //
+                // SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
+                Log.i("Click", "Show "+selectedList)
+//                val intent = Intent(this, ???::class.java)
+//                intent.putExtra("itemId", selectedList.toString())
+//                startActivityForResult(intent, ???)
+            }
+
         }
+
     }
 
 }

@@ -1,16 +1,19 @@
 package com.codenode.budgetlens.friends
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Friends
 
-class FriendsSelectRecyclerViewAdapter(private val friends: MutableList<Friends>) :
+class FriendsSelectRecyclerViewAdapter(private val friends: MutableList<Friends>, val selectedList: MutableList<Int>) :
     RecyclerView.Adapter<FriendsSelectRecyclerViewAdapter.ViewHolder>() {
+//    val selectedList: MutableList<Int> = ArrayList()
     var context: Context? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -28,9 +31,9 @@ class FriendsSelectRecyclerViewAdapter(private val friends: MutableList<Friends>
             friend.firstName
         holder.friendFirstName.text =
             holder.itemView.context.getString(R.string.friend_first_name, firstNameShow)
-        val lastNameShow:String = if(friend.firstName.length<=5 && friend.lastName.length>4){
+        val lastNameShow:String = if(friend.firstName.length<=5 && friend.lastName.length>8){
             friend.lastName.subSequence(0,3).toString()+".."
-        }else if(friend.lastName.length>5 && friend.lastName.length>4){
+        }else if(friend.lastName.length>5 && friend.lastName.length>8){
             friend.lastName.subSequence(0,2).toString()+".."
         }else
             friend.lastName
@@ -53,8 +56,24 @@ class FriendsSelectRecyclerViewAdapter(private val friends: MutableList<Friends>
         val friendFirstName: TextView = friendsView.findViewById(R.id.friend_first_name)
         val friendLastName: TextView = friendsView.findViewById(R.id.friend_last_name)
         val friendInitial: TextView = friendsView.findViewById(R.id.friend_initial)
+        val selectFriend: CheckBox = friendsView.findViewById(R.id.friend_select)
         init {
             friendsView.setOnClickListener(this)
+            selectFriend.setOnCheckedChangeListener{friendsView, isChecked ->
+                val position = adapterPosition
+                /*
+                ADD FRIEND ID TO LIST IF CHECKED, ELSE REMOVE FROM LIST.
+                 */
+                if(isChecked){
+                    Log.i("Click", "Show "+friends[position].userId)
+                    selectedList.add(friends[position].userId)
+                    Log.i("Click", "added something to: "+selectedList)
+                }else{
+                    Log.i("uncheck ", "Show "+friends[position].userId)
+                    selectedList.remove(friends[position].userId)
+                    Log.i("uncheck", "removed something from: "+selectedList)
+                }
+            }
         }
         override fun onClick(v: View?) {
             val position = adapterPosition

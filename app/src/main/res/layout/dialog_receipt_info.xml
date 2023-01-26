@@ -231,7 +231,8 @@
             android:layout_alignParentStart="true"
             android:layout_marginStart="25dp"
             android:layout_marginBottom="45dp"
-            android:text="@string/view_items" />
+            android:text="@string/view_items"
+            android:backgroundTint="@color/purple_300" />
 
         <Button
             android:id="@+id/receipt_info_delete"
@@ -252,7 +253,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="45dp"
-            android:text="@string/add_date" />
+            android:text="@string/add_date"
+            android:backgroundTint="@color/purple_300" />
 
         <Button
             android:id="@+id/receipt_info_split"
@@ -265,7 +267,8 @@
             android:layout_marginBottom="50dp"
             android:layout_toStartOf="@+id/receipt_info_edit"
             android:layout_toEndOf="@+id/receipt_info_delete"
-            android:text="@string/split" />
+            android:text="@string/split"
+            android:backgroundTint="@color/purple_300" />
 
         <Button
             android:id="@+id/receipt_info_edit"
@@ -275,7 +278,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="50dp"
-            android:text="@string/edit" />
+            android:text="@string/edit"
+            android:backgroundTint="@color/purple_300" />
 
 
     </RelativeLayout>
