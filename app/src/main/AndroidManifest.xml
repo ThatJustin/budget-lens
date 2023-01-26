@@ -28,14 +28,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".items.DeleteImportantDatePopUpActivity"
-            android:exported="true"
-            android:theme="@style/Theme.BudgetLens.DeleteSubCategoryPopUp">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".category.EditCategoryPopUpActivity"
             android:exported="true"
             android:theme="@style/Theme.BudgetLens.EditCategoryPopUp">
@@ -69,11 +61,13 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
         <activity
             android:name=".home.AddReceiptsActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -210,8 +204,8 @@
         <activity
             android:name=".friends.requests.FriendPendingRequestsPageActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".friends.FriendsPageActivity">
+            android:parentActivityName=".friends.FriendsPageActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -219,8 +213,8 @@
         <activity
             android:name=".friends.requests.FriendWaitingForApprovalsPageActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-            android:parentActivityName=".friends.FriendsPageActivity">
+            android:parentActivityName=".friends.FriendsPageActivity"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

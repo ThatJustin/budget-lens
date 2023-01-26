@@ -94,7 +94,7 @@ class UserImportantDates {
         fun deleteImportantDatesFromAPI(
             context: Context,
             date: ImportantDates
-        ) {
+        ): Boolean {
 
             val url =
                 "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/important_dates/delete/${date.id}/"
@@ -107,22 +107,24 @@ class UserImportantDates {
                 .addHeader("Content-Type", "application/json")
                 .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
                 .build()
-
+            var isSuccessful = false;
+            val countDownLatch = CountDownLatch(1)
             toggleStarUpdate.newCall(request).enqueue(object : Callback {
 
                 override fun onFailure(call: Call, e: java.io.IOException) {
                     e.printStackTrace()
+                    countDownLatch.countDown()
                 }
 
-                @SuppressLint("NotifyDataSetChanged")
                 @Suppress("Thread")
                 override fun onResponse(call: Call, response: Response) {
                     Log.i("Response", "Got the response from server")
                     response.use {
                         val responseBody = response.body?.string()
                         if (response.isSuccessful) {
-                            // Remove the category from the list in the frontend list
+                            isSuccessful = true
                             userImportantDates.remove(date)
+                            countDownLatch.countDown()
                         } else {
                             Log.e(
                                 "Error",
@@ -132,6 +134,8 @@ class UserImportantDates {
                     }
                 }
             })
+            countDownLatch.await()
+            return isSuccessful
         }
     }
 }
