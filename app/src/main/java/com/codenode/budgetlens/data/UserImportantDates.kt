@@ -1,5 +1,6 @@
 package com.codenode.budgetlens.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.codenode.budgetlens.BuildConfig
@@ -23,7 +24,10 @@ class UserImportantDates {
          */
 
 
-        fun loadImportantDatesFromAPI(context: Context, itemId: String?): MutableList<ImportantDates> {
+        fun loadImportantDatesFromAPI(
+            context: Context,
+            itemId: String?
+        ): MutableList<ImportantDates> {
             //get the important dates data
             val importantDateUrl =
                 "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/important_dates/${itemId}/"
@@ -94,6 +98,48 @@ class UserImportantDates {
             return userImportantDates
         }
 
+        fun deleteImportantDatesFromAPI(
+            context: Context,
+            date: ImportantDates
+        ) {
+
+            val url =
+                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/important_dates/delete/${date.id}/"
+
+            val toggleStarUpdate = OkHttpClient()
+
+            val request = Request.Builder()
+                .url(url)
+                .method("DELETE", body = null)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .build()
+
+            toggleStarUpdate.newCall(request).enqueue(object : Callback {
+
+                override fun onFailure(call: Call, e: java.io.IOException) {
+                    e.printStackTrace()
+                }
+
+                @SuppressLint("NotifyDataSetChanged")
+                @Suppress("Thread")
+                override fun onResponse(call: Call, response: Response) {
+                    Log.i("Response", "Got the response from server")
+                    response.use {
+                        val responseBody = response.body?.string()
+                        if (response.isSuccessful) {
+                            // Remove the category from the list in the frontend list
+                            userImportantDates.remove(date)
+                        } else {
+                            Log.e(
+                                "Error",
+                                "Something went wrong${responseBody} ${response.message} ${response.headers}"
+                            )
+                        }
+                    }
+                }
+            })
+        }
 
 
     }

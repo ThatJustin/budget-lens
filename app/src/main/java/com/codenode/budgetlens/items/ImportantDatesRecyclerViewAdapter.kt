@@ -2,9 +2,11 @@ package com.codenode.budgetlens.items
 
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
@@ -45,17 +47,29 @@ class ImportantDatesRecyclerViewAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
         val importantDateString: TextView = itemView.findViewById(R.id.important_date_date)
-
+        private val importantDatesGarbage:ImageView = itemView.findViewById(R.id.remove_important_dates)
         init {
             itemView.setOnClickListener(this)
+            importantDatesGarbage.setOnClickListener(this)
+
         }
 
         override fun onClick(v: View?) {
-//            val position = adapterPosition
-//            if (position != RecyclerView.NO_POSITION) {
-//                val important_date = important_dates[position]
-//                itemInforActivity.openItemInfoActivity(item, position)
-//            }
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val importantDate = important_dates[position]
+                when(v?.id){
+                    importantDatesGarbage.id ->{
+                        println("Deleted Important dates on date $importantDate")
+                        val goToDeleteImportantDatesPopUp = Intent(context,DeleteImportantDatePopUpActivity::class.java)
+                        goToDeleteImportantDatesPopUp.putExtra("id", importantDate.id)
+
+                        context?.startActivity(goToDeleteImportantDatesPopUp)
+                    }
+                }
+            }
         }
+
+
     }
 }

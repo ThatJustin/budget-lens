@@ -119,14 +119,6 @@ class ItemInfoActivity() : AppCompatActivity() {
             }
         })
 
-
-
-
-
-
-
-
-
         handleAdapter(itemId)
         handleDeleteItem(itemId, position)
         handleEditItemPrice(itemId, position)
@@ -148,6 +140,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                 .show()
         }
     }
+
 
     private fun handleAdapter(itemId: String?) {
         userImportantDates.clear()

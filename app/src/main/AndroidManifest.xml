@@ -22,6 +22,14 @@
         <activity
             android:name=".category.DeleteSubCategoryPopUpActivity"
             android:exported="true"
+            android:theme="@style/Theme.BudgetLens.DeleteImportantDatePopUp">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".items.DeleteImportantDatePopUpActivity"
+            android:exported="true"
             android:theme="@style/Theme.BudgetLens.DeleteSubCategoryPopUp">
             <meta-data
                 android:name="android.app.lib_name"
@@ -131,7 +139,7 @@
         <activity
             android:name=".budget.BudgetPageActivity"
             android:exported="true"
-            android:parentActivityName=".home.HomePageActivity">>
+            android:parentActivityName=".home.HomePageActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -139,7 +147,7 @@
         <activity
             android:name=".budget.BudgetSpendingTrendActivity"
             android:exported="true"
-            android:parentActivityName=".home.HomePageActivity">>
+            android:parentActivityName=".home.HomePageActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
