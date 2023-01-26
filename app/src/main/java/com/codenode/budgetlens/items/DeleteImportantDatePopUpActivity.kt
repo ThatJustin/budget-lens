@@ -53,6 +53,8 @@ class DeleteImportantDatePopUpActivity : AppCompatActivity() {
         val cancelButton = findViewById<Button>(R.id.cancel_button)
 
         cancelButton.setOnClickListener {
+            goToItemInfoActivity.putExtra("itemId", date.item.toString())
+            goToItemInfoActivity.putExtra("position", itemPosition)
             startActivity(goToItemInfoActivity)
         }
 
