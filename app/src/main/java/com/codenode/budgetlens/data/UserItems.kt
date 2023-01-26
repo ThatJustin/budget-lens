@@ -63,7 +63,6 @@ class UserItems {
                                     val id = item.getInt("id")
                                     val name = item.getString("name")
                                     val price = item.getDouble("price")
-                                    val importantDates = item.getString("important_dates")
                                     val scanDate = item.getString("scan_date")
                                     var month = "Error"
                                     when (scanDate.substring(5, 7)) {
@@ -92,7 +91,6 @@ class UserItems {
                                             id,
                                             name,
                                             price,
-                                            importantDates,
                                             displayDate
                                         )
                                     )
