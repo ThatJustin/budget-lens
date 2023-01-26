@@ -91,7 +91,7 @@
     <string name="new_sub_category">New Sub Category</string>
 
     <string name="relatedReceipt">View Related Receipt</string>
-    <string name="important_date_placeholder">%1$s</string>
+    <string name="important_date_date">%1$s</string>
     <string name="reminder">Reminders</string>
     <string name="add">+ADD</string>
     <string name="icons">an icon</string>
@@ -105,6 +105,6 @@
         <item>Entertainment</item>
         <item>Education</item>
     </string-array>
-    <attr name ="ItemSortChipStyle" format="reference"/>
-    <attr name ="AllChipStyle" format="reference"/>
+    <attr name="ItemSortChipStyle" format="reference" />
+    <attr name="AllChipStyle" format="reference" />
 </resources>

@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.codenode.budgetlens.data.UserImportantDates.Companion.userImportantDates
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.BuildConfig
@@ -34,6 +35,7 @@ class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var autoCompleteTextView: AutoCompleteTextView
     private lateinit var importantDatesList: MutableList<ImportantDates>
+    private lateinit var linearLayoutManager: LinearLayoutManager
     private var importantDatesRecyclerView: RecyclerView? = null
     private lateinit var datesAdapter: RecyclerView.Adapter<ImportantDatesRecyclerViewAdapter.ViewHolder>
     private lateinit var itemPrice: TextView
@@ -116,15 +118,16 @@ class ItemInfoActivity() : AppCompatActivity() {
                 }
             }
         })
-        importantDatesList = UserImportantDates.loadImportantDatesFromAPI(this,itemId)
-        importantDatesList.clear()
-        importantDatesRecyclerView = findViewById(R.id.important_dates_list)
-        if(importantDatesRecyclerView!=null){
-            importantDatesRecyclerView!!.setHasFixedSize(true)
-            importantDatesRecyclerView!!.layoutManager = LinearLayoutManager(this)
-            datesAdapter = ImportantDatesRecyclerViewAdapter(importantDatesList)
-            importantDatesRecyclerView!!.adapter = datesAdapter
-        }
+
+
+
+
+
+
+
+
+
+        handleAdapter(itemId)
         handleDeleteItem(itemId, position)
         handleEditItemPrice(itemId, position)
         handleEditItemName(itemId, position)
@@ -143,6 +146,20 @@ class ItemInfoActivity() : AppCompatActivity() {
                     requestItemDeletion(dialog, itemId, position)
                 }
                 .show()
+        }
+    }
+
+    private fun handleAdapter(itemId: String?) {
+        userImportantDates.clear()
+        importantDatesList = UserImportantDates.loadImportantDatesFromAPI(this, itemId)
+        Log.i("--------------", importantDatesList.toString())
+        importantDatesRecyclerView = findViewById(R.id.important_dates_list)
+        if (importantDatesRecyclerView != null) {
+            importantDatesRecyclerView!!.setHasFixedSize(true)
+            linearLayoutManager = LinearLayoutManager(this)
+            importantDatesRecyclerView!!.layoutManager = linearLayoutManager
+            datesAdapter = ImportantDatesRecyclerViewAdapter(importantDatesList)
+            importantDatesRecyclerView!!.adapter = datesAdapter
         }
     }
 
