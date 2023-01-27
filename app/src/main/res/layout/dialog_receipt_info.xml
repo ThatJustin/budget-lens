@@ -230,7 +230,7 @@
             android:layout_above="@+id/receipt_info_delete"
             android:layout_alignParentStart="true"
             android:layout_marginStart="25dp"
-            android:layout_marginBottom="45dp"
+            android:layout_marginBottom="15dp"
             android:text="@string/view_items"
             android:backgroundTint="@color/purple_300" />
 
@@ -241,7 +241,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginStart="25dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="80dp"
             android:backgroundTint="@color/red"
             android:text="@string/delete" />
 
@@ -252,7 +252,7 @@
             android:layout_above="@+id/receipt_info_edit"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="25dp"
-            android:layout_marginBottom="45dp"
+            android:layout_marginBottom="15dp"
             android:text="@string/add_date"
             android:backgroundTint="@color/purple_300" />
 
@@ -264,7 +264,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="25dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="80dp"
             android:layout_toStartOf="@+id/receipt_info_edit"
             android:layout_toEndOf="@+id/receipt_info_delete"
             android:text="@string/split"
@@ -277,7 +277,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="25dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="80dp"
             android:text="@string/edit"
             android:backgroundTint="@color/purple_300" />
 
