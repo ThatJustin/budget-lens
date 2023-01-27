@@ -13,7 +13,6 @@ import android.text.TextWatcher
 import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import com.codenode.budgetlens.data.UserImportantDates.Companion.userImportantDates
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.BuildConfig
@@ -158,7 +157,8 @@ class ItemInfoActivity() : AppCompatActivity() {
 
         //Update with the newly selected date
         calendar.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            selectedDate = "$year-${month + 1}-$dayOfMonth"
+            selectedDate =
+                "$year-${String.format("%02d", (month + 1))}-${String.format("%02d", dayOfMonth)}"
         }
 
         layout.addView(calendar)
@@ -191,12 +191,16 @@ class ItemInfoActivity() : AppCompatActivity() {
             dialog.getButton(BUTTON_POSITIVE).isEnabled = false
 
             dialog.getButton(BUTTON_POSITIVE).setOnClickListener {
-
-                requestAddImportantDate(
+                //Request backend api to add the reminder
+                val isSuccess = UserImportantDates.requestAddImportantDate(
+                    this,
                     itemId.toString(),
                     selectedDate.toString(),
                     description.text.toString()
                 )
+                //Update the adapter and inform the user of the outcome
+                addImportantDate(isSuccess)
+
                 //clean up for next time
                 description.setText("")
 
@@ -205,61 +209,24 @@ class ItemInfoActivity() : AppCompatActivity() {
         }
     }
 
-    private fun requestAddImportantDate(itemId: String, date: String, description: String) {
-        val importantDate = OkHttpClient()
-        val body: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
-            .addFormDataPart("item", itemId)
-            .addFormDataPart("date", date)
-            .addFormDataPart("description", description)
-            .build()
 
-        val request = Request.Builder()
-            .url("http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/important_dates/")
-            .method("POST", body)
-            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
-            .addHeader("Content-Type", "text/plain")
-            .build()
+    private fun addImportantDate(isSuccess: Boolean) {
+        val snackBarMsg = if (isSuccess) "Reminder added." else "Failed to add reminder."
 
-        importantDate.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-            }
+        if (isSuccess) {
+            //Update the list
+            importantDatesList = UserImportantDates.userImportantDates
 
-            override fun onResponse(call: Call, response: Response) {
-                Log.i("Response", "Got the response from server")
-                response.use {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body?.string()
-                        if (responseBody != null) {
-                            // TODO update recycle view
+            //Added to the end, I do not know if there's a specific order yet
+            datesAdapter.notifyItemInserted(importantDatesList.size - 1)
+        }
 
-                            Snackbar.make(
-                                activity.findViewById<BottomNavigationView>(R.id.bottom_navigation),
-                                "Reminder added.",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-
-                            Log.i("Successful", "Successfully added important date.")
-                        } else {
-                            Snackbar.make(
-                                activity.findViewById<BottomNavigationView>(R.id.bottom_navigation),
-                                "Unable to add reminder.",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
-                            Log.i(
-                                "[Error 1]",
-                                "Something went wrong \r\n${response.message}\r\n${response.headers}"
-                            )
-                        }
-                    } else {
-                        Log.e(
-                            "[Error 2]",
-                            "Something went wrong \r\n${response.message}\r\n${response.headers}"
-                        )
-                    }
-                }
-            }
-        })
+        //send a snackbar to update the user of their action
+        Snackbar.make(
+            activity.findViewById<BottomNavigationView>(R.id.bottom_navigation),
+            snackBarMsg,
+            Snackbar.LENGTH_SHORT
+        ).show()
     }
 
     private fun handleDeleteItem(itemId: String?, position: Int) {
@@ -280,7 +247,7 @@ class ItemInfoActivity() : AppCompatActivity() {
 
 
     private fun handleAdapter(itemId: String?) {
-        userImportantDates.clear()
+        UserImportantDates.userImportantDates.clear()
         importantDatesList = UserImportantDates.loadImportantDatesFromAPI(this, itemId)
         Log.i("--------------", importantDatesList.toString())
         importantDatesRecyclerView = findViewById(R.id.important_dates_list)
