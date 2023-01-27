@@ -86,12 +86,6 @@
     <style name="ItemSortDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="android:windowBackground">@drawable/popup_background</item>
     </style>
-
-    <style name="ImportantDateDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
-<!--        <item name="android:windowBackground">@drawable/popup_background</item>-->
-
-    </style>
-
     <style name="ItemSortChipStyle" parent="Widget.Material3.Chip.Filter">
         <item name="chipBackgroundColor">@color/chip_background_color</item>
         <item name="android:textColor">@color/chip_text_color</item>
