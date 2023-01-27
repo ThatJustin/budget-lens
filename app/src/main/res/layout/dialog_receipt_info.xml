@@ -243,40 +243,6 @@
 <!--            android:text="@string/view_items"-->
 <!--            android:textColor="#757575" />-->
 
-        <TextView
-            android:id="@+id/lab_importdata"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/llAddedBy"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="91dp"
-            android:text="Important Dates:"
-            android:textColor="@color/red"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txt_return_period"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/lab_importdata"
-            android:layout_marginStart="15dp"
-
-            android:layout_marginTop="17dp"
-            android:text="Return Period:  2022/02/16"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/txt_expiration_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txt_return_period"
-            android:layout_marginStart="15dp"
-
-            android:layout_marginTop="13dp"
-            android:text="Expiration Date:  2022/02/28"
-            android:textSize="18sp" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
