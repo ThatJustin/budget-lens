@@ -34,6 +34,7 @@
                 android:layout_marginStart="16dp"
                 android:textColor="@color/black"
                 android:textSize="22sp"
+                android:text="@string/title_of_list_receipts"
                 app:layout_constraintStart_toStartOf="@+id/items_sort_by_and_filter_bar"
                 app:layout_constraintTop_toTopOf="@+id/items_sort_by_and_filter_bar" />
 
@@ -71,7 +72,7 @@
             android:layout_margin="10dp"
             android:orientation="vertical">
 
-            <SearchView
+            <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_bar_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

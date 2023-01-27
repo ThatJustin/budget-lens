@@ -50,7 +50,7 @@ class ItemsRecyclerViewAdapter(
         View.OnClickListener {
         val itemName: TextView = itemView.findViewById(R.id.item_name)
         val itemPrice: TextView = itemView.findViewById(R.id.item_price)
-        val itemDate: TextView = itemView.findViewById(R.id.months)
+        val itemDate: TextView = itemView.findViewById(R.id.item_tax)
 
         init {
             itemView.setOnClickListener(this)
