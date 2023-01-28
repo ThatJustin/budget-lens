@@ -90,7 +90,7 @@
                     android:layout_weight="1.5">
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/filledTextField"
+                        android:id="@+id/split_value"
                         style="?attr/textInputFilledStyle"
                         android:layout_width="100dp"
                         android:layout_height="50dp"
