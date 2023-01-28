@@ -12,12 +12,14 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserProfile
+import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -38,7 +40,7 @@ class ReceiptInfoDialog(
     private lateinit var receiptInfoDialog: Dialog
     var isDeletedReceipt = false
 
-    @SuppressLint("InflateParams")
+    @SuppressLint("InflateParams", "StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -130,6 +132,7 @@ class ReceiptInfoDialog(
                 .show()
 
         }
+
         //Handle tool bar
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         toolBar.setNavigationOnClickListener { dismiss() }
@@ -146,6 +149,13 @@ class ReceiptInfoDialog(
             itemsListPage.putExtra("receiptID", receiptInfo.id)
             context.startActivity(itemsListPage)
         }
+
+        //handle split bill button
+        findViewById<Button>(R.id.receipt_info_split_bill)?.setOnClickListener {
+            val goToSplitBillPageActivity = Intent(context, ReceiptSplitFriendSelect::class.java)
+            context.startActivity(goToSplitBillPageActivity)
+        }
+
     }
 
 
