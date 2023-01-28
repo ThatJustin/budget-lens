@@ -11,11 +11,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.codenode.budgetlens.data.UserImportantDates.Companion.userImportantDates
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
+import com.codenode.budgetlens.data.ImportantDates
+import com.codenode.budgetlens.data.UserImportantDates
 import com.codenode.budgetlens.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -29,6 +34,10 @@ import java.util.concurrent.CountDownLatch
 class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var autoCompleteTextView: AutoCompleteTextView
+    private lateinit var importantDatesList: MutableList<ImportantDates>
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private var importantDatesRecyclerView: RecyclerView? = null
+    private lateinit var datesAdapter: RecyclerView.Adapter<ImportantDatesRecyclerViewAdapter.ViewHolder>
     private lateinit var itemPrice: TextView
     private lateinit var itemName: TextView
     private lateinit var itemOwner: TextView
@@ -42,6 +51,7 @@ class ItemInfoActivity() : AppCompatActivity() {
         setContentView(R.layout.activity_item_info)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
+
         //get the item Id from the previous page
 
         val itemId: String? = intent.getStringExtra("itemId")
@@ -109,6 +119,7 @@ class ItemInfoActivity() : AppCompatActivity() {
             }
         })
 
+        handleAdapter(itemId)
         handleDeleteItem(itemId, position)
         handleEditItemPrice(itemId, position)
         handleEditItemName(itemId, position)
@@ -129,6 +140,22 @@ class ItemInfoActivity() : AppCompatActivity() {
                 .show()
         }
     }
+
+
+    private fun handleAdapter(itemId: String?) {
+        userImportantDates.clear()
+        importantDatesList = UserImportantDates.loadImportantDatesFromAPI(this, itemId)
+        Log.i("--------------", importantDatesList.toString())
+        importantDatesRecyclerView = findViewById(R.id.important_dates_list)
+        if (importantDatesRecyclerView != null) {
+            importantDatesRecyclerView!!.setHasFixedSize(true)
+            linearLayoutManager = LinearLayoutManager(this)
+            importantDatesRecyclerView!!.layoutManager = linearLayoutManager
+            datesAdapter = ImportantDatesRecyclerViewAdapter(importantDatesList)
+            importantDatesRecyclerView!!.adapter = datesAdapter
+        }
+    }
+
 
     private fun requestItemDeletion(dialog: DialogInterface, itemId: String?, position: Int) {
         var success = false
@@ -190,7 +217,7 @@ class ItemInfoActivity() : AppCompatActivity() {
         }
     }
 
-    private fun handleEditItemPrice(itemId: String?, position: Int){
+    private fun handleEditItemPrice(itemId: String?, position: Int) {
         findViewById<TextView>(R.id.item_info_price)?.setOnClickListener {
             val editItemName: EditText = EditText(this)
             editItemName.inputType = TYPE_CLASS_TEXT

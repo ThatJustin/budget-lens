@@ -257,7 +257,7 @@
             android:backgroundTint="@color/purple_300" />
 
         <Button
-            android:id="@+id/receipt_info_split"
+            android:id="@+id/receipt_info_split_bill"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

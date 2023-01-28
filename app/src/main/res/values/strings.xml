@@ -96,12 +96,15 @@
     <string name="new_sub_category">New Sub Category</string>
 
     <string name="relatedReceipt">View Related Receipt</string>
-    <string name="important_date_placeholder">Nov 02,2022 For Return Deadline</string>
+    <string name="important_date_date">%1$s</string>
     <string name="reminder">Reminders</string>
     <string name="add">+ADD</string>
     <string name="icons">an icon</string>
     <string name="starred_categories">%1$s</string>
     <string name="create">+ CREATE</string>
+    <string name="delete_sub_category">Delete Sub Category</string>
+    <string name="delete_this_category">Delete this Category?</string>
+    <string name="confirm">Confirm</string>
     <string-array name="category_place_holder">
         <item>Groceries</item>
         <item>Entertainment</item>
