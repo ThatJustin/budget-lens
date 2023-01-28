@@ -10,9 +10,7 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.codenode.budgetlens.BuildConfig
@@ -30,7 +28,10 @@ import java.util.*
 
 
 //Open already uploaded receipt
-class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
+class ReceiptInfoDialog(
+    context: Context,
+    receipt: Receipts
+) : Dialog(context) {
 
     var receiptInfo = receipt
 
@@ -88,9 +89,6 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
         }
         tvAddedBy.text =
             context.getString(R.string.user_profile_name, " " + UserProfile.getFullName())
-
-//      tvExpirationDate.text = receiptInfo.important_dates
-//      tvReturnPeriod.text = receiptInfo.important_dates
 
         //TODO Glide to another thread, it's costly on the main UI thread
         imageReceipt.scaleType = ImageView.ScaleType.CENTER

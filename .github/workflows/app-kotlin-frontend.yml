@@ -19,7 +19,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Code
         uses: actions/checkout@v2.3.2
-        
+
       - name: Setup Java JDK
         uses: actions/setup-java@v3
         with:
@@ -38,6 +38,9 @@ jobs:
         with:
           name: app_unit_test
           path: app/build/reports/tests/testDebugUnitTest
+      # Build APK
+      - name: Build APK
+        run: bash ./gradlew assembleDebug --stacktrace
       # Upload APK
       - name: APK Upload
         uses: actions/upload-artifact@v2
