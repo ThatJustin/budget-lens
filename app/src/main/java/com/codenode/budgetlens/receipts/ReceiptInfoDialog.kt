@@ -14,12 +14,14 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserProfile
+import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -132,6 +134,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
                 .show()
 
         }
+
         //Handle tool bar
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         toolBar.setNavigationOnClickListener { dismiss() }
@@ -148,6 +151,13 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
             itemsListPage.putExtra("receiptID", receiptInfo.id)
             context.startActivity(itemsListPage)
         }
+
+        //handle split bill button
+        findViewById<Button>(R.id.receipt_info_split)?.setOnClickListener {
+            val goToSplitBillPageActivity = Intent(context, ReceiptSplitFriendSelect::class.java)
+            context.startActivity(goToSplitBillPageActivity)
+        }
+
     }
 
 
