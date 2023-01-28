@@ -1,12 +1,18 @@
 package com.codenode.budgetlens.data
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.codenode.budgetlens.BuildConfig
+import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import okhttp3.*
 import org.json.JSONArray
+import org.json.JSONObject
+import java.io.IOException
 import java.util.concurrent.CountDownLatch
 
 class UserImportantDates {
@@ -124,13 +130,80 @@ class UserImportantDates {
                         if (response.isSuccessful) {
                             isSuccessful = true
                             userImportantDates.remove(date)
-                            countDownLatch.countDown()
                         } else {
                             Log.e(
                                 "Error",
                                 "Something went wrong${responseBody} ${response.message} ${response.headers}"
                             )
                         }
+                        countDownLatch.countDown()
+                    }
+                }
+            })
+            countDownLatch.await()
+            return isSuccessful
+        }
+
+        fun requestAddImportantDate(
+            context: Context,
+            itemId: String,
+            date: String,
+            description: String
+        ): Boolean {
+            val importantDate = OkHttpClient()
+            val body: RequestBody = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart("item", itemId)
+                .addFormDataPart("date", date)
+                .addFormDataPart("description", description)
+                .build()
+
+            val request = Request.Builder()
+                .url("http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/important_dates/")
+                .method("POST", body)
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .addHeader("Content-Type", "text/plain")
+                .build()
+            val countDownLatch = CountDownLatch(1)
+            var isSuccessful = false
+            importantDate.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                    countDownLatch.countDown()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    Log.i("Response", "Got the response from server")
+                    response.use {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body?.string()
+                            if (responseBody != null) {
+                                val id =
+                                    JSONObject(responseBody.toString()).getInt("id")
+
+                                userImportantDates.add(
+                                    ImportantDates(
+                                        id,
+                                        date,
+                                        description,
+                                        Integer.parseInt(itemId)
+                                    )
+                                )
+                                isSuccessful = true
+
+                                Log.i("Successful", "Successfully added important date.")
+                            } else {
+                                Log.i(
+                                    "[Error 1]",
+                                    "Something went wrong \r\n${response.message}\r\n${response.headers}"
+                                )
+                            }
+                        } else {
+                            Log.e(
+                                "[Error 2]",
+                                "Something went wrong \r\n${response.message}\r\n${response.headers}"
+                            )
+                        }
+                        countDownLatch.countDown()
                     }
                 }
             })
