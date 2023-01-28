@@ -58,16 +58,17 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.FRIENDS, this, this.window.decorView)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
-        val HamdleSplitByTotal: Button = findViewById(R.id.split_by_total)
-        val HamdleSplitByItem: Button = findViewById(R.id.split_by_item)
+        val handleSplitByTotal: Button = findViewById(R.id.split_by_total)
+        val handleSplitByItem: Button = findViewById(R.id.split_by_item)
         var additionalData = ""
 
         //Load Friend List
         friendList = UserFriends.loadFriendsFromAPI(this, pageSize, additionalData)
-        userFriends.add(Friends(10, "John", "Cena", "cantseeme@gmail.com", 'J',))
-        userFriends.add(Friends(11, "Bobby", "Lee", "madtv@gmail.com", 'B',))
-        userFriends.add(Friends(12, "Mateo", "Palomino", "mateo_palomino@gmail.com", 'T',))
-        userFriends.add(Friends(13, "Luffy D", "Monkey", "pirateKing@gmail.com", 'K',))
+        //Testing out the page with some fake friends
+//        userFriends.add(Friends(10, "John", "Cena", "cantseeme@gmail.com", 'J',))
+//        userFriends.add(Friends(11, "Bobby", "Lee", "madtv@gmail.com", 'B',))
+//        userFriends.add(Friends(12, "Mateo", "Palomino", "mateo_palomino@gmail.com", 'T',))
+//        userFriends.add(Friends(13, "Luffy D", "Monkey", "pirateKing@gmail.com", 'K',))
 
         val context = this
         friendsListRecyclerView = findViewById(R.id.friends_list)
@@ -100,11 +101,8 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
 
                 }
             })
-            HamdleSplitByTotal.setOnClickListener{
-                // SELECTEDLIST VALUE RETURNS THE LIST OF CHECKED/SELECTED
-                // FRIENDS FROM THE RECYCLER VIEW ADAPTER TO THIS MAIN ACTIVITY
-                //
-                // SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
+            handleSplitByTotal.setOnClickListener{
+                // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
                 Log.i("Click", "Show "+selectedList)
 //                val intent = Intent(this, ???::class.java)
 //                intent.putExtra("itemId", selectedList.toString())
@@ -112,11 +110,8 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
 
             }
 
-            HamdleSplitByItem.setOnClickListener{
-                // SELECTEDLIST VALUE RETURNS THE LIST OF CHECKED/SELECTED
-                // FRIENDS FROM THE RECYCLER VIEW ADAPTER TO THIS MAIN ACTIVITY
-                //
-                // SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
+            handleSplitByItem.setOnClickListener{
+                // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
                 Log.i("Click", "Show "+selectedList)
 //                val intent = Intent(this, ???::class.java)
 //                intent.putExtra("itemId", selectedList.toString())
