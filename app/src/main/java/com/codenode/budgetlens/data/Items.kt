@@ -6,5 +6,5 @@ data class Items(
     var price: Double,
     var scan_dates: String
 ) {
-    constructor() : this( 0, "", 0.0, "")
+    constructor() : this(0, "", 0.0, "")
 }
