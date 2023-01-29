@@ -1,6 +1,7 @@
 package com.codenode.budgetlens.items
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.DialogInterface.BUTTON_POSITIVE
 import android.content.Intent
@@ -46,7 +47,7 @@ class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var itemOwner: TextView
     private var newItemName: String = ""
     private var newItemPrice: String = ""
-
+    var categoryMap = mutableMapOf<Int, String>()
     private var localPrice = 0.0
 
     val activity = this as Activity
@@ -65,10 +66,13 @@ class ItemInfoActivity() : AppCompatActivity() {
 
         //create category arrays
         //here is where you get the array from the database
-        val categories = resources.getStringArray(R.array.category_place_holder)
+
+        val categoryItemsMap = loadCategories()
+        val categoryItems: MutableList<String> = categoryItemsMap.values.toMutableList()
+            .sortedBy { it.lowercase() } as MutableList<String>
 
         //apply the adapter to the dropdown menu
-        val arrayAdapter = ArrayAdapter(this, R.layout.category_dropdown_item, categories)
+        val arrayAdapter = ArrayAdapter(this, R.layout.list_items, categoryItems)
         autoCompleteTextView = findViewById(R.id.category_dropdown)
         autoCompleteTextView.setAdapter(arrayAdapter)
 
@@ -76,6 +80,10 @@ class ItemInfoActivity() : AppCompatActivity() {
         itemPrice = findViewById(R.id.item_info_price)
         itemName = findViewById(R.id.item_info_name)
         itemOwner = findViewById(R.id.item_original_owner)
+
+
+
+
 
 
         //get the item data
@@ -98,6 +106,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                         val responseBody = response.body?.string()
                         if (responseBody != null) {
                             val itemArray = JSONArray(responseBody.toString())
+                            Log.i("w",responseBody.toString())
                             val item = itemArray.getJSONObject(0)
                             val price = item.getString("price")
                             val name = item.getString("name")
@@ -124,6 +133,24 @@ class ItemInfoActivity() : AppCompatActivity() {
                 }
             }
         })
+
+        autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+            // get the selected item
+            val item = parent.getItemAtPosition(position)
+
+            // show a prompt or perform any other action here
+            AlertDialog.Builder(this)
+                .setTitle("Is ${itemName.text} Always  $item? ")
+                .setMessage("If it is, we will create a rule to categorize its past and future transaction as $item")
+                .setPositiveButton("Yes") { _, _ ->
+                    // perform your action here
+                    //todo: use the rules api to save the rules
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
 
         handleAdapter(itemId)
         handleDeleteItem(itemId, position)
@@ -434,6 +461,63 @@ class ItemInfoActivity() : AppCompatActivity() {
                 }
                 .show()
         }
+    }
+
+    private fun loadCategories(): MutableMap<Int, String> {
+        categoryMap.clear()
+        //I do not think anything in the DB begins at index 0
+        categoryMap[0] = ""
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category"
+
+        val registrationPost = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .method("GET", null)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .addHeader("Content-Type", "application/json")
+            .build()
+
+        val countDownLatch = CountDownLatch(1)
+
+        registrationPost.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                countDownLatch.countDown()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            val categories = JSONArray(responseBody.toString())
+                            for (i in 0 until categories.length()) {
+                                val category = categories.getJSONObject(i)
+                                val id = category.getInt("id")
+                                val categoryName = category.getString("category_name")
+                                categoryMap[id] = categoryName
+                            }
+                            Log.i("Successful", "Successfully loaded categories from API.")
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+
+                    } else {
+                        Log.e(
+                            "Error",
+                            "Something went wrong ${response.message} ${response.headers}"
+                        )
+                    }
+                }
+                countDownLatch.countDown()
+            }
+        })
+        countDownLatch.await()
+        return categoryMap
     }
 
 }
