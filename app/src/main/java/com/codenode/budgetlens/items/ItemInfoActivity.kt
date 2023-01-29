@@ -75,15 +75,11 @@ class ItemInfoActivity() : AppCompatActivity() {
         categoryDropDown = findViewById(R.id.category_dropdown)
         categoryDropDown.setAdapter(arrayAdapter)
 
+
         //setup item display fields
         itemPrice = findViewById(R.id.item_info_price)
         itemName = findViewById(R.id.item_info_name)
         itemOwner = findViewById(R.id.item_original_owner)
-
-
-
-
-
 
         //get the item data
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/"
@@ -114,9 +110,10 @@ class ItemInfoActivity() : AppCompatActivity() {
                                 itemPrice.text = price
                                 itemName.text = name
                                 itemOwner.text = user
+                                categoryDropDown.setText(item.getString("category_name"))
+
                             }
                             localPrice = price.toDouble()
-
                         } else {
                             Log.i(
                                 "Error",
