@@ -110,7 +110,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                                 itemPrice.text = price
                                 itemName.text = name
                                 itemOwner.text = user
-                                categoryDropDown.setText(item.getString("category_name"))
+                                categoryDropDown.setText(item.getString("category_name"),false)
 
                             }
                             localPrice = price.toDouble()
