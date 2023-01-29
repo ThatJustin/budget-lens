@@ -1,7 +1,6 @@
 package com.codenode.budgetlens.items
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.DialogInterface.BUTTON_POSITIVE
 import android.content.Intent
@@ -37,7 +36,7 @@ import java.util.concurrent.CountDownLatch
 
 class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var autoCompleteTextView: AutoCompleteTextView
+    private lateinit var categoryDropDown: AutoCompleteTextView
     private lateinit var importantDatesList: MutableList<ImportantDates>
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var importantDatesRecyclerView: RecyclerView? = null
@@ -73,8 +72,8 @@ class ItemInfoActivity() : AppCompatActivity() {
 
         //apply the adapter to the dropdown menu
         val arrayAdapter = ArrayAdapter(this, R.layout.list_items, categoryItems)
-        autoCompleteTextView = findViewById(R.id.category_dropdown)
-        autoCompleteTextView.setAdapter(arrayAdapter)
+        categoryDropDown = findViewById(R.id.category_dropdown)
+        categoryDropDown.setAdapter(arrayAdapter)
 
         //setup item display fields
         itemPrice = findViewById(R.id.item_info_price)
@@ -134,23 +133,97 @@ class ItemInfoActivity() : AppCompatActivity() {
             }
         })
 
-        autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
+        categoryDropDown.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
             // get the selected item
             val item = parent.getItemAtPosition(position)
 
             // show a prompt or perform any other action here
-            AlertDialog.Builder(this)
-                .setTitle("Is ${itemName.text} Always  $item? ")
-                .setMessage("If it is, we will create a rule to categorize its past and future transaction as $item")
-                .setPositiveButton("Yes") { _, _ ->
-                    // perform your action here
-                    //todo: use the rules api to save the rules
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Is ${itemName.text} Always labeled as  $item? ")
+                .setMessage("If it is, this spending and all spendings under this label will change to  $item")
+                .setPositiveButton("Apply To All Spendings") { _, _ ->
+                    val regexValue =  itemName.text
+                    val itemId = id
+                    val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/rules/add/"
+
+                    // make the post request
+                    val request = Request.Builder()
+                        .url(url)
+                        .url(url)
+                        .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+                        .addHeader("Content-Type", "application/json")
+                        .post(
+                            FormBody.Builder()
+                                .add("regex", regexValue.toString())
+                                .add("category", itemId.toString())
+                                .build()
+                        )
+                        .build()
+
+                    val client = OkHttpClient()
+                    client.newCall(request).enqueue(object : Callback {
+                        override fun onFailure(call: Call, e: IOException) {
+                            // handle the failure
+                        }
+
+                        override fun onResponse(call: Call, response: Response) {
+                            if (response.isSuccessful) {
+                                runOnUiThread {
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Successful",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            } else {
+                                // handle the unsuccessful response
+                            }
+                        }
+                    })
                 }
-                .setNegativeButton("No") { dialog, _ ->
-                    dialog.dismiss()
+                .setNegativeButton("Just this spending") { dialog, _ ->
+                    val newItemCategory = id
+                    val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
+                    val registrationPost = OkHttpClient()
+                    val mediaType = "application/json".toMediaTypeOrNull()
+
+                    val body = ("{\r\n" +
+                            "    \"category_id\": \"${newItemCategory}\"\r\n" +
+                            "}").trimIndent().toRequestBody(mediaType)
+
+                    val request = Request.Builder()
+                        .url(url)
+                        .method("PATCH", body)
+                        .addHeader("Content-Type", "application/json")
+                        .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+                        .build()
+                    registrationPost.newCall(request).enqueue(object : Callback {
+                        override fun onFailure(call: Call, e: IOException) {
+                            e.printStackTrace()
+                        }
+
+                        override fun onResponse(call: Call, response: Response) {
+                            Log.i("Response", "Got the response from server")
+                            response.use {
+                                if (response.isSuccessful) {
+                                    val responseBody = response.body?.string()
+                                    if (responseBody != null) {
+                                        Log.i("Successful", "Item ${itemName.text} edited.")
+                                    } else {
+                                        Log.i(
+                                            "Error",
+                                            "Something went wrong ${response.message} ${response.headers}"
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    })
+                    recreate()
                 }
                 .show()
         }
+
 
         handleAdapter(itemId)
         handleDeleteItem(itemId, position)
