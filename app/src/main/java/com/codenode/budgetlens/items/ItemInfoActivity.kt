@@ -63,24 +63,21 @@ class ItemInfoActivity() : AppCompatActivity() {
         val itemId: String? = intent.getStringExtra("itemId")
         val position: Int = intent.getIntExtra("position", -1)
 
-        //create category arrays
-        //here is where you get the array from the database
-
-        val categoryItemsMap = loadCategories()
-        val categoryItems: MutableList<String> = categoryItemsMap.values.toMutableList()
-            .sortedBy { it.lowercase() } as MutableList<String>
-
-        //apply the adapter to the dropdown menu
-        val arrayAdapter = ArrayAdapter(this, R.layout.list_items, categoryItems)
-        categoryDropDown = findViewById(R.id.category_dropdown)
-        categoryDropDown.setAdapter(arrayAdapter)
-
-
         //setup item display fields
         itemPrice = findViewById(R.id.item_info_price)
         itemName = findViewById(R.id.item_info_name)
         itemOwner = findViewById(R.id.item_original_owner)
 
+        handleCategories(itemId)
+        handleGetItemData(itemId)
+        handleAdapter(itemId)
+        handleDeleteItem(itemId, position)
+        handleEditItemPrice(itemId, position)
+        handleEditItemName(itemId, position)
+        handleAddImportantDateButton(itemId)
+    }
+
+    private fun handleGetItemData(itemId: String?) {
         //get the item data
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/"
         val itemsRequest = OkHttpClient()
@@ -101,7 +98,6 @@ class ItemInfoActivity() : AppCompatActivity() {
                         val responseBody = response.body?.string()
                         if (responseBody != null) {
                             val itemArray = JSONArray(responseBody.toString())
-                            Log.i("w",responseBody.toString())
                             val item = itemArray.getJSONObject(0)
                             val price = item.getString("price")
                             val name = item.getString("name")
@@ -110,8 +106,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                                 itemPrice.text = price
                                 itemName.text = name
                                 itemOwner.text = user
-                                categoryDropDown.setText(item.getString("category_name"),false)
-
+                                categoryDropDown.setText(item.getString("category_name"), false)
                             }
                             localPrice = price.toDouble()
                         } else {
@@ -129,17 +124,23 @@ class ItemInfoActivity() : AppCompatActivity() {
                 }
             }
         })
-
-        handleCategoryOnChange(itemId)
-
-        handleAdapter(itemId)
-        handleDeleteItem(itemId, position)
-        handleEditItemPrice(itemId, position)
-        handleEditItemName(itemId, position)
-        handleAddImportantDateButton(itemId)
     }
 
-    private fun handleCategoryOnChange(itemId: String?) {
+    /**
+     * Handles the item category loading and assigning.
+     */
+    private fun handleCategories(itemId: String?) {
+        //Load the categories
+        val categoryItemsMap = loadCategories()
+        val categoryItems: MutableList<String> = categoryItemsMap.values.toMutableList()
+            .sortedBy { it.lowercase() } as MutableList<String>
+
+        //apply the adapter to the dropdown menu
+        val arrayAdapter = ArrayAdapter(this, R.layout.list_items, categoryItems)
+        categoryDropDown = findViewById(R.id.category_dropdown)
+        categoryDropDown.setAdapter(arrayAdapter)
+
+        //Handle when the dropdonn is clicked
         categoryDropDown.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
                 // get the selected item
@@ -147,8 +148,8 @@ class ItemInfoActivity() : AppCompatActivity() {
 
                 // show a prompt or perform any other action here
                 MaterialAlertDialogBuilder(this)
-                    .setTitle("Is ${itemName.text} Always labeled as  $item? ")
-                    .setMessage("If it is, this spending and all spendings under this label will change to  $item")
+                    .setTitle("Is ${itemName.text} Always labeled as $item?")
+                    .setMessage("If it is, this spending and all spendings under this label will change to $item,")
                     .setPositiveButton("Apply To All Spendings") { _, _ ->
                         val regexValue = itemName.text
                         val itemId = id
