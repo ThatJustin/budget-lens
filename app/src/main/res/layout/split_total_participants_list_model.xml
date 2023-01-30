@@ -55,7 +55,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="5dp"
-                    android:layout_weight="2.5"
+                    android:layout_weight="2"
                     android:orientation="horizontal">
 
                     <TextView
@@ -107,6 +107,23 @@
                             android:textSize="18dp"
                             android:textStyle="bold" />
                     </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/trade_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:orientation="horizontal"
+                    android:padding="2dp">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:id="@+id/reject_request"
+                        android:contentDescription="@string/add_friend"
+                        android:src="@drawable/ic_baseline_cancel_24_purple"
+                        ></ImageView>
+
                 </LinearLayout>
 
             </LinearLayout>

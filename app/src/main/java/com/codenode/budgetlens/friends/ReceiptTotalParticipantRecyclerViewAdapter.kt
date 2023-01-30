@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Friends
 
-class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableList<Friends>, val selectedList: MutableList<Int>) :
+class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableList<Friends>) :
     RecyclerView.Adapter<ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder>() {
-//    val selectedList: MutableList<Int> = ArrayList()
+    //val selectedList: MutableList<Int> = ArrayList()
     var context: Context? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
