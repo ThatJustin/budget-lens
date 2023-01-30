@@ -36,7 +36,7 @@ import java.util.concurrent.CountDownLatch
 
 class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var autoCompleteTextView: AutoCompleteTextView
+    private lateinit var categoryDropDown: AutoCompleteTextView
     private lateinit var importantDatesList: MutableList<ImportantDates>
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var importantDatesRecyclerView: RecyclerView? = null
@@ -46,7 +46,7 @@ class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var itemOwner: TextView
     private var newItemName: String = ""
     private var newItemPrice: String = ""
-
+    var categoryMap = mutableMapOf<Int, String>()
     private var localPrice = 0.0
 
     val activity = this as Activity
@@ -63,21 +63,21 @@ class ItemInfoActivity() : AppCompatActivity() {
         val itemId: String? = intent.getStringExtra("itemId")
         val position: Int = intent.getIntExtra("position", -1)
 
-        //create category arrays
-        //here is where you get the array from the database
-        val categories = resources.getStringArray(R.array.category_place_holder)
-
-        //apply the adapter to the dropdown menu
-        val arrayAdapter = ArrayAdapter(this, R.layout.category_dropdown_item, categories)
-        autoCompleteTextView = findViewById(R.id.category_dropdown)
-        autoCompleteTextView.setAdapter(arrayAdapter)
-
         //setup item display fields
         itemPrice = findViewById(R.id.item_info_price)
         itemName = findViewById(R.id.item_info_name)
         itemOwner = findViewById(R.id.item_original_owner)
 
+        handleCategories(itemId)
+        handleGetItemData(itemId)
+        handleAdapter(itemId)
+        handleDeleteItem(itemId, position)
+        handleEditItemPrice(itemId, position)
+        handleEditItemName(itemId, position)
+        handleAddImportantDateButton(itemId)
+    }
 
+    private fun handleGetItemData(itemId: String?) {
         //get the item data
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/"
         val itemsRequest = OkHttpClient()
@@ -106,9 +106,9 @@ class ItemInfoActivity() : AppCompatActivity() {
                                 itemPrice.text = price
                                 itemName.text = name
                                 itemOwner.text = user
+                                categoryDropDown.setText(item.getString("category_name"), false)
                             }
                             localPrice = price.toDouble()
-
                         } else {
                             Log.i(
                                 "Error",
@@ -124,12 +124,114 @@ class ItemInfoActivity() : AppCompatActivity() {
                 }
             }
         })
+    }
 
-        handleAdapter(itemId)
-        handleDeleteItem(itemId, position)
-        handleEditItemPrice(itemId, position)
-        handleEditItemName(itemId, position)
-        handleAddImportantDateButton(itemId)
+    /**
+     * Handles the item category loading and assigning.
+     */
+    private fun handleCategories(itemId: String?) {
+        //Load the categories
+        val categoryItemsMap = loadCategories()
+        val categoryItems: MutableList<String> = categoryItemsMap.values.toMutableList()
+            .sortedBy { it.lowercase() } as MutableList<String>
+
+        //apply the adapter to the dropdown menu
+        val arrayAdapter = ArrayAdapter(this, R.layout.list_items, categoryItems)
+        categoryDropDown = findViewById(R.id.category_dropdown)
+        categoryDropDown.setAdapter(arrayAdapter)
+
+        //Handle when the dropdonn is clicked
+        categoryDropDown.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                // get the selected item
+                val item = parent.getItemAtPosition(position)
+
+                // show a prompt or perform any other action here
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Is ${itemName.text} Always labeled as $item?")
+                    .setMessage("If it is, this spending and all spendings under this label will change to $item,")
+                    .setPositiveButton("Apply To All Spendings") { _, _ ->
+                        val regexValue = itemName.text
+                        val itemId = id
+                        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/rules/add/"
+
+                        // make the post request
+                        val request = Request.Builder()
+                            .url(url)
+                            .url(url)
+                            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+                            .addHeader("Content-Type", "application/json")
+                            .post(
+                                FormBody.Builder()
+                                    .add("regex", regexValue.toString())
+                                    .add("category", itemId.toString())
+                                    .build()
+                            )
+                            .build()
+
+                        val client = OkHttpClient()
+                        client.newCall(request).enqueue(object : Callback {
+                            override fun onFailure(call: Call, e: IOException) {
+                                // handle the failure
+                            }
+
+                            override fun onResponse(call: Call, response: Response) {
+                                if (response.isSuccessful) {
+                                    runOnUiThread {
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Successful",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                } else {
+                                    // handle the unsuccessful response
+                                }
+                            }
+                        })
+                    }
+                    .setNegativeButton("Just this spending") { dialog, _ ->
+                        val newItemCategory = id
+                        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
+                        val registrationPost = OkHttpClient()
+                        val mediaType = "application/json".toMediaTypeOrNull()
+
+                        val body = ("{\r\n" +
+                                "    \"category_id\": \"${newItemCategory}\"\r\n" +
+                                "}").trimIndent().toRequestBody(mediaType)
+
+                        val request = Request.Builder()
+                            .url(url)
+                            .method("PATCH", body)
+                            .addHeader("Content-Type", "application/json")
+                            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+                            .build()
+                        registrationPost.newCall(request).enqueue(object : Callback {
+                            override fun onFailure(call: Call, e: IOException) {
+                                e.printStackTrace()
+                            }
+
+                            override fun onResponse(call: Call, response: Response) {
+                                Log.i("Response", "Got the response from server")
+                                response.use {
+                                    if (response.isSuccessful) {
+                                        val responseBody = response.body?.string()
+                                        if (responseBody != null) {
+                                            Log.i("Successful", "Item ${itemName.text} edited.")
+                                        } else {
+                                            Log.i(
+                                                "Error",
+                                                "Something went wrong ${response.message} ${response.headers}"
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                        recreate()
+                    }
+                    .show()
+            }
     }
 
     private fun handleAddImportantDateButton(itemId: String?) {
@@ -434,6 +536,63 @@ class ItemInfoActivity() : AppCompatActivity() {
                 }
                 .show()
         }
+    }
+
+    private fun loadCategories(): MutableMap<Int, String> {
+        categoryMap.clear()
+        //I do not think anything in the DB begins at index 0
+        categoryMap[0] = ""
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category"
+
+        val registrationPost = OkHttpClient()
+        val request = Request.Builder()
+            .url(url)
+            .method("GET", null)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .addHeader("Content-Type", "application/json")
+            .build()
+
+        val countDownLatch = CountDownLatch(1)
+
+        registrationPost.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+                countDownLatch.countDown()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                Log.i("Response", "Got the response from server")
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            val categories = JSONArray(responseBody.toString())
+                            for (i in 0 until categories.length()) {
+                                val category = categories.getJSONObject(i)
+                                val id = category.getInt("id")
+                                val categoryName = category.getString("category_name")
+                                categoryMap[id] = categoryName
+                            }
+                            Log.i("Successful", "Successfully loaded categories from API.")
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+
+                    } else {
+                        Log.e(
+                            "Error",
+                            "Something went wrong ${response.message} ${response.headers}"
+                        )
+                    }
+                }
+                countDownLatch.countDown()
+            }
+        })
+        countDownLatch.await()
+        return categoryMap
     }
 
 }
