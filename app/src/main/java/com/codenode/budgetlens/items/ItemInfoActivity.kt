@@ -130,103 +130,107 @@ class ItemInfoActivity() : AppCompatActivity() {
             }
         })
 
-        categoryDropDown.onItemClickListener = AdapterView.OnItemClickListener { parent, view, position, id ->
-            // get the selected item
-            val item = parent.getItemAtPosition(position)
-
-            // show a prompt or perform any other action here
-            MaterialAlertDialogBuilder(this)
-                .setTitle("Is ${itemName.text} Always labeled as  $item? ")
-                .setMessage("If it is, this spending and all spendings under this label will change to  $item")
-                .setPositiveButton("Apply To All Spendings") { _, _ ->
-                    val regexValue =  itemName.text
-                    val itemId = id
-                    val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/rules/add/"
-
-                    // make the post request
-                    val request = Request.Builder()
-                        .url(url)
-                        .url(url)
-                        .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
-                        .addHeader("Content-Type", "application/json")
-                        .post(
-                            FormBody.Builder()
-                                .add("regex", regexValue.toString())
-                                .add("category", itemId.toString())
-                                .build()
-                        )
-                        .build()
-
-                    val client = OkHttpClient()
-                    client.newCall(request).enqueue(object : Callback {
-                        override fun onFailure(call: Call, e: IOException) {
-                            // handle the failure
-                        }
-
-                        override fun onResponse(call: Call, response: Response) {
-                            if (response.isSuccessful) {
-                                runOnUiThread {
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Successful",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                            } else {
-                                // handle the unsuccessful response
-                            }
-                        }
-                    })
-                }
-                .setNegativeButton("Just this spending") { dialog, _ ->
-                    val newItemCategory = id
-                    val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
-                    val registrationPost = OkHttpClient()
-                    val mediaType = "application/json".toMediaTypeOrNull()
-
-                    val body = ("{\r\n" +
-                            "    \"category_id\": \"${newItemCategory}\"\r\n" +
-                            "}").trimIndent().toRequestBody(mediaType)
-
-                    val request = Request.Builder()
-                        .url(url)
-                        .method("PATCH", body)
-                        .addHeader("Content-Type", "application/json")
-                        .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
-                        .build()
-                    registrationPost.newCall(request).enqueue(object : Callback {
-                        override fun onFailure(call: Call, e: IOException) {
-                            e.printStackTrace()
-                        }
-
-                        override fun onResponse(call: Call, response: Response) {
-                            Log.i("Response", "Got the response from server")
-                            response.use {
-                                if (response.isSuccessful) {
-                                    val responseBody = response.body?.string()
-                                    if (responseBody != null) {
-                                        Log.i("Successful", "Item ${itemName.text} edited.")
-                                    } else {
-                                        Log.i(
-                                            "Error",
-                                            "Something went wrong ${response.message} ${response.headers}"
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    })
-                    recreate()
-                }
-                .show()
-        }
-
+        handleCategoryOnChange(itemId)
 
         handleAdapter(itemId)
         handleDeleteItem(itemId, position)
         handleEditItemPrice(itemId, position)
         handleEditItemName(itemId, position)
         handleAddImportantDateButton(itemId)
+    }
+
+    private fun handleCategoryOnChange(itemId: String?) {
+        categoryDropDown.onItemClickListener =
+            AdapterView.OnItemClickListener { parent, view, position, id ->
+                // get the selected item
+                val item = parent.getItemAtPosition(position)
+
+                // show a prompt or perform any other action here
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Is ${itemName.text} Always labeled as  $item? ")
+                    .setMessage("If it is, this spending and all spendings under this label will change to  $item")
+                    .setPositiveButton("Apply To All Spendings") { _, _ ->
+                        val regexValue = itemName.text
+                        val itemId = id
+                        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/rules/add/"
+
+                        // make the post request
+                        val request = Request.Builder()
+                            .url(url)
+                            .url(url)
+                            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+                            .addHeader("Content-Type", "application/json")
+                            .post(
+                                FormBody.Builder()
+                                    .add("regex", regexValue.toString())
+                                    .add("category", itemId.toString())
+                                    .build()
+                            )
+                            .build()
+
+                        val client = OkHttpClient()
+                        client.newCall(request).enqueue(object : Callback {
+                            override fun onFailure(call: Call, e: IOException) {
+                                // handle the failure
+                            }
+
+                            override fun onResponse(call: Call, response: Response) {
+                                if (response.isSuccessful) {
+                                    runOnUiThread {
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Successful",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                } else {
+                                    // handle the unsuccessful response
+                                }
+                            }
+                        })
+                    }
+                    .setNegativeButton("Just this spending") { dialog, _ ->
+                        val newItemCategory = id
+                        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
+                        val registrationPost = OkHttpClient()
+                        val mediaType = "application/json".toMediaTypeOrNull()
+
+                        val body = ("{\r\n" +
+                                "    \"category_id\": \"${newItemCategory}\"\r\n" +
+                                "}").trimIndent().toRequestBody(mediaType)
+
+                        val request = Request.Builder()
+                            .url(url)
+                            .method("PATCH", body)
+                            .addHeader("Content-Type", "application/json")
+                            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+                            .build()
+                        registrationPost.newCall(request).enqueue(object : Callback {
+                            override fun onFailure(call: Call, e: IOException) {
+                                e.printStackTrace()
+                            }
+
+                            override fun onResponse(call: Call, response: Response) {
+                                Log.i("Response", "Got the response from server")
+                                response.use {
+                                    if (response.isSuccessful) {
+                                        val responseBody = response.body?.string()
+                                        if (responseBody != null) {
+                                            Log.i("Successful", "Item ${itemName.text} edited.")
+                                        } else {
+                                            Log.i(
+                                                "Error",
+                                                "Something went wrong ${response.message} ${response.headers}"
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                        recreate()
+                    }
+                    .show()
+            }
     }
 
     private fun handleAddImportantDateButton(itemId: String?) {
