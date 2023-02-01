@@ -17,6 +17,7 @@ import com.codenode.budgetlens.data.Friends
 import com.codenode.budgetlens.data.UserFriends.Companion.loadFriendsFromAPI
 import com.google.android.material.button.MaterialButtonToggleGroup
 import android.content.Context
+import android.content.DialogInterface
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
@@ -27,7 +28,6 @@ import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.data.UserFriends.Companion.sendFriendRequest
 import com.codenode.budgetlens.friends.requests.FriendPendingRequestsPageActivity
 import com.codenode.budgetlens.friends.requests.FriendWaitingForApprovalsPageActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.android.synthetic.main.activity_friends_page.*
 
@@ -70,27 +70,14 @@ class FriendsPageActivity : AppCompatActivity() {
                 if (toggleButton.checkedButtonId == View.NO_ID) {
                     Log.i("Message", "Nothing Selected")
                 }
-
             }
         }
 
-        fun validateEmail(): Boolean {
-            if (emailInput.length() == 0) {
-                emailInput.error = "This field is required"
-                return false
-            } else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput.text.toString()).matches()) {
-                emailInput.error = "This field is not a valid email address"
-                return false
-            } else {
-                emailInput.error = null
-                return true
-            }
-        }
         fabut.setOnClickListener {
             val intent = Intent(this, BudgetPageActivity::class.java)
             this.overridePendingTransition(0, 0)
             this.finish()
-             startActivity(intent)
+            startActivity(intent)
         }
         emailInput = EditText(this)
         emailInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
@@ -98,10 +85,7 @@ class FriendsPageActivity : AppCompatActivity() {
 
         emailInput.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(
-                s: CharSequence?,
-                start: Int,
-                count: Int,
-                after: Int
+                s: CharSequence?, start: Int, count: Int, after: Int
             ) {
             }
 
@@ -109,40 +93,30 @@ class FriendsPageActivity : AppCompatActivity() {
                 validateEmail()
             }
 
-            override fun afterTextChanged(s: Editable?) { /* dont care */
-            }
+            override fun afterTextChanged(s: Editable?) {}
         })
 
+        val friendAddDialog = MaterialAlertDialogBuilder(this).setTitle("Add Friend")
+            .setMessage("Enter the email of the friend you want to add").setView(emailInput)
+            .setPositiveButton("Add", null)
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }.create()
+
         addFriendButton.setOnClickListener {
-            MaterialAlertDialogBuilder(this)
-                .setTitle("Add Friend")
-                .setMessage("Enter the email of the friend you want to add")
-                .setView(emailInput)
-
-                .setPositiveButton("Add") { dialog, which ->
-                    println(this@FriendsPageActivity)
-                    if (validateEmail()) {
-                        println("[validated] add : email -> " + emailInput.text.toString())
-                        sendFriendRequest(this, emailInput)
-                        //setContentView(R.layout.activity_friend_page)
-                        val intent = Intent(this, FriendsPageActivity::class.java)
-                        startActivity(intent)
-                    }
+            friendAddDialog.show()
+            friendAddDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
+                if (validateEmail()) {
+                    Log.i("FriendPageActivity", "[validated] add : email -> ${emailInput.text}")
+                    sendFriendRequest(this, emailInput)
+                    friendAddDialog.dismiss()
                 }
-                .setNegativeButton("Cancel") { dialog, which ->
-
-                    dialog.dismiss()
-                    //setContentView(R.layout.activity_friend_page)
-                    val intent = Intent(this, FriendsPageActivity::class.java)
-                    startActivity(intent)
-                }
-                .show()
+            }
         }
 
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
-        var additionalData = ""
         //Load Friend List
-        friendList = loadFriendsFromAPI(this, pageSize, additionalData)
+        friendList = loadFriendsFromAPI(this, pageSize, "")
         val context = this
         friendsListRecyclerView = findViewById(R.id.friends_list)
         progressBar.visibility = View.VISIBLE
@@ -151,6 +125,7 @@ class FriendsPageActivity : AppCompatActivity() {
             friendsListRecyclerView!!.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
+
         if (friendsListRecyclerView != null) {
             friendsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
@@ -159,20 +134,31 @@ class FriendsPageActivity : AppCompatActivity() {
 
             friendsListRecyclerView!!.adapter = friendAdapter
             progressBar.visibility = View.GONE
-            friendsListRecyclerView!!.addOnScrollListener(object :
-                RecyclerView.OnScrollListener() {
+            friendsListRecyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        friendList = loadFriendsFromAPI(context, pageSize, additionalData)
+                        friendList = loadFriendsFromAPI(context, pageSize, "")
                         friendAdapter.notifyDataSetChanged()
                     }
                     progressBar.visibility = View.GONE
-
                 }
             })
+        }
+    }
+
+    fun validateEmail(): Boolean {
+        return if (emailInput.length() == 0) {
+            emailInput.error = "This field is required."
+            false
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(emailInput.text.toString()).matches()) {
+            emailInput.error = "This field is not a valid email address."
+            false
+        } else {
+            emailInput.error = null
+            true
         }
     }
 }
