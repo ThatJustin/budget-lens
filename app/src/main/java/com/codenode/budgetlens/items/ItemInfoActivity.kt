@@ -20,7 +20,7 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
-import com.codenode.budgetlens.common.Utilities
+import com.codenode.budgetlens.utils.AppUtils
 import com.codenode.budgetlens.data.ImportantDates
 import com.codenode.budgetlens.data.UserImportantDates
 import com.codenode.budgetlens.databinding.ActivityMainBinding
@@ -252,7 +252,7 @@ class ItemInfoActivity() : AppCompatActivity() {
 
         //Calendar to select a date
         val calendar = CalendarView(this)
-        var selectedDate = Utilities.convertDateToFormat(
+        var selectedDate = AppUtils.convertDateToFormat(
             calendar.date,
             "yyyy-MM-dd"
         ) // by default the current date
