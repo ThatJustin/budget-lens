@@ -19,6 +19,8 @@ import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Costs
 import com.codenode.budgetlens.data.Trend
 import com.codenode.budgetlens.data.Tyepnames
+import com.codenode.budgetlens.home.HomePageActivity
+import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.codenode.budgetlens.utils.AppUtils
 import com.codenode.budgetlens.utils.HttpUtils
 import com.codenode.budgetlens.utils.MyDialog
@@ -41,7 +43,10 @@ class BudgetPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_budget_page)
-        var textView6 = findViewById<TextView>(R.id.textView6);
+        var textView6 = findViewById<TextView>(R.id.textView6)
+        var spendingTrends = findViewById<TextView>(R.id.textView10)
+
+        val goToItemsListActivity = Intent(this, ItemsListPageActivity::class.java)
         val time = System.currentTimeMillis()
 
         val format = SimpleDateFormat("MM")
@@ -93,6 +98,11 @@ class BudgetPageActivity : AppCompatActivity() {
             box.isChecked=false
         }
         getType()
+
+        spendingTrends.setOnClickListener() {
+            startActivity(goToItemsListActivity)
+            }
+
     }
 
     fun AddAdapter() {

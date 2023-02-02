@@ -22,6 +22,7 @@
     <string name="friend_initial">%1$s</string>
     <string name="friend_first_name">%1$s</string>
     <string name="friend_last_name">%1$s</string>
+    <string name="friend_email">%1$s</string>
     <string name="trade_relation">%1$s</string>
     <string name="trade_amount">%1$f</string>
     <string name="items_total">$ %1$f.2f</string>
@@ -50,13 +51,17 @@
     <string name="close_dialog_preview_description">Close Dialog.</string>
     <string name="total">%1$.2f</string>
     <string name="total_amount">Total Amount($): %1$.2f</string>
-    <string name="total_amount_currency">Total Amount(%1s):</string>
+    <string name="total_amount_currency">Total Amount($):</string>
     <string name="total_items_currency">Total :</string>
+    <string name="choose_friends">Choose the participants</string>
     <string name="added_by">Added by:</string>
     <string name="view_items">View Items</string>
+    <string name="split_total">Split by Total</string>
+    <string name="split_item">Split by Item</string>
     <string name="delete">Delete</string>
-    <string name="add_date">Add Date</string>
+    <string name="add_date">Add Important Date</string>
     <string name="edit">Edit</string>
+    <string name="split_bill">Split Bill</string>
     <string name="home">Home</string>
     <string name="all">ALL</string>
     <string name="receipts">Receipts</string>
