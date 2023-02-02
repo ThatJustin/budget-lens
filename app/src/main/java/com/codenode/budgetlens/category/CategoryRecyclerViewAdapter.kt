@@ -37,7 +37,8 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
         val imageEdit: ImageView = holder.itemView.findViewById(R.id.image_edit)
         val category = categories[position]
         holder.categoryName.text =
-            holder.itemView.context.getString(R.string.category_name, category.category_name)
+            holder.itemView.context.getString(R.string.category_name, category.category_name).lowercase()
+
         if (category.category_toggle_star) {
             imageStar.setImageResource(R.drawable.ic_baseline_star_24)
         } else {
