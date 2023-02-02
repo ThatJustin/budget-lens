@@ -100,6 +100,7 @@ class FriendsPageActivity : AppCompatActivity() {
             .setMessage("Enter the email of the friend you want to add").setView(emailInput)
             .setPositiveButton("Add", null)
             .setNegativeButton("Cancel") { dialog, _ ->
+                emailInput.text.clear()
                 dialog.dismiss()
             }.create()
 
@@ -109,6 +110,7 @@ class FriendsPageActivity : AppCompatActivity() {
                 if (validateEmail()) {
                     Log.i("FriendPageActivity", "[validated] add : email -> ${emailInput.text}")
                     sendFriendRequest(this, emailInput)
+                    emailInput.text.clear()
                     friendAddDialog.dismiss()
                 }
             }
