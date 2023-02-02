@@ -49,7 +49,7 @@
         android:background="#FFFFFF"
         android:backgroundTint="#FFFFFF"
         android:hint="@string/password"
-        app:endIconMode="password_toggle"
+        app:passwordToggleEnabled="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
             android:id="@+id/passwordText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:endIconMode="password_toggle" />
+            android:inputType="textPassword"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
