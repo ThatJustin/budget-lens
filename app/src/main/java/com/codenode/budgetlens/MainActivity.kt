@@ -15,14 +15,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         GlobalSharedPreferences.load(this)
-        val loginActivityBtn: ImageButton = findViewById(R.id.LoginActivityBtn)
-        loginActivityBtn.setOnClickListener() {
-            val intent : Intent = if (BearerToken.exists(this)) {
-                Intent(this, HomePageActivity::class.java)
-            } else {
-                Intent(this, LoginActivity::class.java)
-            }
-            startActivity(intent)
+        
+        //if they have a token, they can go to the home page
+        val intent: Intent = if (BearerToken.exists(this)) {
+            Intent(this, HomePageActivity::class.java)
+        } else { //otherwise they must register or login
+            Intent(this, LoginActivity::class.java)
         }
+        startActivity(intent)
+        // removes this activity from the stack, prevents users from going back
+        finish()
     }
 }
