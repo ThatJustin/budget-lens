@@ -86,12 +86,7 @@ class FriendsPageActivity : AppCompatActivity() {
                 return true
             }
         }
-        fabut.setOnClickListener {
-            val intent = Intent(this, BudgetPageActivity::class.java)
-            this.overridePendingTransition(0, 0)
-            this.finish()
-             startActivity(intent)
-        }
+
         emailInput = EditText(this)
         emailInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         emailInput.hint = "Email address"
