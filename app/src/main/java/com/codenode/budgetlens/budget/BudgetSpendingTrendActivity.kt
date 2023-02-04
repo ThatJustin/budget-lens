@@ -13,7 +13,7 @@ class BudgetSpendingTrendActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_budget_spending_trend)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
-        CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
+        CommonComponents.handleNavigationBar(ActivityName.ALL_SPENDING_TRENDS, this, this.window.decorView)
 
         val layoutManager =
             LinearLayoutManager(baseContext, LinearLayoutManager.VERTICAL, false)
