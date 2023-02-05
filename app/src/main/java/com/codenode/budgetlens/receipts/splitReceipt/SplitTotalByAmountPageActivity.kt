@@ -18,6 +18,8 @@ import com.google.android.material.button.MaterialButtonToggleGroup
 
 class SplitTotalByAmountPageActivity : AppCompatActivity() {
     private lateinit var participantList: MutableList<Friends>
+    private lateinit var friendsList: MutableList<Friends>
+
     private var participantListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var participantAdapter: RecyclerView.Adapter<ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder>
@@ -30,7 +32,19 @@ class SplitTotalByAmountPageActivity : AppCompatActivity() {
         val toggleButton: MaterialButtonToggleGroup = findViewById(R.id.splitTotalToggleButton)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         var additionalData = ""
-        participantList = loadFriendsFromAPI(this, pageSize, additionalData)
+        val participantIdArray = intent.getIntegerArrayListExtra("itemId")
+
+        friendsList = loadFriendsFromAPI(this, pageSize, additionalData)
+        val participantsIdSet : Set<Int>
+        if (participantIdArray != null) {
+            participantsIdSet = participantIdArray.toSet()
+            for (Friend in friendsList) {
+                if (participantsIdSet.contains(Friend.userId)) {
+                    participantList.add(Friend)
+                }
+            }
+        }else print("No friends was selected as participants")
+
         val context = this
         participantListRecyclerView = findViewById(R.id.participants_list)
         progressBar.visibility = View.VISIBLE

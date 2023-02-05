@@ -35,6 +35,7 @@ import com.codenode.budgetlens.friends.requests.FriendPendingRequestsPageActivit
 import com.codenode.budgetlens.friends.requests.FriendWaitingForApprovalsPageActivity
 import com.codenode.budgetlens.items.ItemInfoActivity
 import com.codenode.budgetlens.items.ItemsListPageActivity
+import com.codenode.budgetlens.receipts.splitReceipt.SplitTotalByAmountPageActivity
 import com.google.android.material.button.MaterialButtonToggleGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.gson.internal.bind.TypeAdapters.STRING
@@ -43,7 +44,7 @@ import javax.xml.xpath.XPathConstants.STRING
 
 class ReceiptSplitFriendSelect : AppCompatActivity() {
 
-    private val selectedList: MutableList<Int> = ArrayList()
+    private val selectedList: ArrayList<Int> = ArrayList()
     private lateinit var friendList: MutableList<Friends>
     private var friendsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -104,9 +105,9 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
             handleSplitByTotal.setOnClickListener{
                 // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
                 Log.i("Click", "Show "+selectedList)
-//                val intent = Intent(this, ???::class.java)
-//                intent.putExtra("itemId", selectedList.toString())
-//                startActivityForResult(intent, ???)
+                val intent = Intent(this, SplitTotalByAmountPageActivity::class.java)
+                intent.putIntegerArrayListExtra("itemId", selectedList)
+                startActivity(intent)
 
             }
 
