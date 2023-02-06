@@ -55,12 +55,6 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         handleAdapter()
         handleSort()
         handleFilter()
-        fabut.setOnClickListener {
-            val intent = Intent(this, BudgetPageActivity::class.java)
-            this.overridePendingTransition(0, 0)
-            this.finish()
-            startActivity(intent)
-        }
     }
 
     /**
