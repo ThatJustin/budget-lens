@@ -105,6 +105,7 @@
     <string name="delete_sub_category">Delete Sub Category</string>
     <string name="delete_this_category">Delete this Category?</string>
     <string name="confirm">Confirm</string>
+    <string name="save_filter">Save</string>
     <string-array name="category_place_holder">
         <item>Groceries</item>
         <item>Entertainment</item>
