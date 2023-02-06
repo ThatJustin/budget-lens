@@ -55,7 +55,7 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
         val friendFirstName: TextView = friendsView.findViewById(R.id.participants_first_name)
         val friendLastName: TextView = friendsView.findViewById(R.id.participants_last_name)
         val friendInitial: TextView = friendsView.findViewById(R.id.participants_initial)
-        val friendSplitValue: TextView = friendsView.findViewById(R.id.split_value)
+        //val friendSplitValue: TextView = friendsView.findViewById(R.id.split_value)
         init {
             friendsView.setOnClickListener(this)
         }

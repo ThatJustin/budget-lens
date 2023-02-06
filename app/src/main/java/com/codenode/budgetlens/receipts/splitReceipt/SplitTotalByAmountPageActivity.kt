@@ -3,6 +3,7 @@ package com.codenode.budgetlens.receipts.splitReceipt
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ProgressBar
@@ -12,12 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Friends
 import com.codenode.budgetlens.data.UserFriends.Companion.loadFriendsFromAPI
+import com.codenode.budgetlens.data.UserFriends.Companion.userFriends
 import com.codenode.budgetlens.friends.FriendsRecyclerViewAdapter
 import com.codenode.budgetlens.friends.ReceiptTotalParticipantRecyclerViewAdapter
 import com.google.android.material.button.MaterialButtonToggleGroup
+import kotlin.math.log
 
 class SplitTotalByAmountPageActivity : AppCompatActivity() {
-    private lateinit var participantList: MutableList<Friends>
+    private var participantList = mutableListOf<Friends>()
     private lateinit var friendsList: MutableList<Friends>
 
     private var participantListRecyclerView: RecyclerView? = null
@@ -33,17 +36,21 @@ class SplitTotalByAmountPageActivity : AppCompatActivity() {
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         var additionalData = ""
         val participantIdArray = intent.getIntegerArrayListExtra("itemId")
-
+        Log.i("ReadSelectedList","The selected list is "+ participantIdArray.toString())
         friendsList = loadFriendsFromAPI(this, pageSize, additionalData)
-        val participantsIdSet : Set<Int>
-        if (participantIdArray != null) {
-            participantsIdSet = participantIdArray.toSet()
-            for (Friend in friendsList) {
-                if (participantsIdSet.contains(Friend.userId)) {
-                    participantList.add(Friend)
+            if (participantIdArray != null) {
+                for (item in participantIdArray) {
+                    for (Friend in friendsList) {
+                        if(Friend.userId == item){
+                            participantList.add(Friend)
+                            Log.i("addParticipant","Friend "+Friend.userId+" has been added to the participants list")
+                        }
+                    }
                 }
+            }else{
+                Log.i("NonSelectedParticipants","There is no participants been selected")
             }
-        }else print("No friends was selected as participants")
+
 
         val context = this
         participantListRecyclerView = findViewById(R.id.participants_list)
