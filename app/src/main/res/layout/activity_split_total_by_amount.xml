@@ -86,8 +86,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
+
+            android:orientation="vertical"
+            android:background="@color/purple_300_0.1">
 
 
             <androidx.recyclerview.widget.RecyclerView
@@ -95,7 +96,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                app:layout_constraintTop_toBottomOf="@id/search_bar_text" />
+                app:layout_constraintTop_toBottomOf="@id/search_bar_text"
+                />
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -126,14 +128,15 @@
                     android:clickable="true"
                     android:text="Cancel"
                     android:backgroundTint="@color/red"
-                    android:paddingHorizontal="65dp"
+                    android:paddingHorizontal="50dp"
                     android:layout_marginHorizontal="20dp"/>
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:text="@string/confirm"
-                    android:paddingHorizontal="65dp"
+                    android:paddingHorizontal="50dp"
+                    android:layout_marginRight="20dp"
                     />
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

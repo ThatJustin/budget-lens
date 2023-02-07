@@ -29,6 +29,8 @@ class SplitTotalByAmountPageActivity : AppCompatActivity() {
     private var pageSize = 5
     private lateinit var emailInput: EditText
 
+
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_split_total_by_amount)

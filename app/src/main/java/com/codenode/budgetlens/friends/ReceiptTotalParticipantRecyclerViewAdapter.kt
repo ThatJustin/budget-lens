@@ -1,11 +1,12 @@
 package com.codenode.budgetlens.friends
 
 import android.content.Context
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
+import android.widget.EditText
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
@@ -13,7 +14,10 @@ import com.codenode.budgetlens.data.Friends
 
 class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableList<Friends>) :
     RecyclerView.Adapter<ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder>() {
-    //val selectedList: MutableList<Int> = ArrayList()
+    val participantsIdList: MutableList<Int> = ArrayList()
+    val splitAmount: MutableList<Double> = ArrayList()
+    var isOnTextChanged: Boolean = false
+    var amountLeft: Double = 0.0
     var context: Context? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -41,8 +45,6 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
             holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
         holder.friendInitial.text=
             holder.itemView.context.getString(R.string.friend_initial,friend.friendInitial)
-    /*    holder.friendSplitValue.text=
-            holder.itemView.context.getString(R.string.split_value,friend.splitValue)*/
     }
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -55,10 +57,26 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
         val friendFirstName: TextView = friendsView.findViewById(R.id.participants_first_name)
         val friendLastName: TextView = friendsView.findViewById(R.id.participants_last_name)
         val friendInitial: TextView = friendsView.findViewById(R.id.participants_initial)
-        //val friendSplitValue: TextView = friendsView.findViewById(R.id.split_value)
+        val friendSplitValue: EditText = friendsView.findViewById(R.id.split_value)
+
         init {
             friendsView.setOnClickListener(this)
+            friendSplitValue.addTextChangedListener(object: TextWatcher{
+                override fun afterTextChanged(s: Editable) {
+
+                }
+
+                override fun beforeTextChanged(s: CharSequence, start: Int,
+                                               count: Int, after: Int) {
+                }
+
+                override fun onTextChanged(s: CharSequence, start: Int,
+                                           before: Int, count: Int) {
+                    isOnTextChanged = true
+                }
+            })
         }
+
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
@@ -66,6 +84,7 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
                 println("Clicked $friend")
             }
         }
+
     }
 
 
