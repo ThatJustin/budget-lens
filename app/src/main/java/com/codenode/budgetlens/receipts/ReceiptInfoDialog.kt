@@ -10,16 +10,16 @@ import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserProfile
+import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -30,14 +30,17 @@ import java.util.*
 
 
 //Open already uploaded receipt
-class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
+class ReceiptInfoDialog(
+    context: Context,
+    receipt: Receipts
+) : Dialog(context) {
 
     var receiptInfo = receipt
 
     private lateinit var receiptInfoDialog: Dialog
     var isDeletedReceipt = false
 
-    @SuppressLint("InflateParams")
+    @SuppressLint("InflateParams", "StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -89,9 +92,6 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
         tvAddedBy.text =
             context.getString(R.string.user_profile_name, " " + UserProfile.getFullName())
 
-//      tvExpirationDate.text = receiptInfo.important_dates
-//      tvReturnPeriod.text = receiptInfo.important_dates
-
         //TODO Glide to another thread, it's costly on the main UI thread
         imageReceipt.scaleType = ImageView.ScaleType.CENTER
         Glide.with(context).load(receiptInfo.receipt_image)
@@ -132,6 +132,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
                 .show()
 
         }
+
         //Handle tool bar
         val toolBar = findViewById<Toolbar>(R.id.toolbar)
         toolBar.setNavigationOnClickListener { dismiss() }
@@ -148,6 +149,13 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
             itemsListPage.putExtra("receiptID", receiptInfo.id)
             context.startActivity(itemsListPage)
         }
+
+        //handle split bill button
+        findViewById<Button>(R.id.receipt_info_split_bill)?.setOnClickListener {
+            val goToSplitBillPageActivity = Intent(context, ReceiptSplitFriendSelect::class.java)
+            context.startActivity(goToSplitBillPageActivity)
+        }
+
     }
 
 

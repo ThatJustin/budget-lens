@@ -19,8 +19,10 @@ import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.codenode.budgetlens.settings.SettingsActivity
+import com.codenode.budgetlens.utils.AppUtils
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -43,42 +45,40 @@ class CommonComponents {
             val myBottomNavigationView =
                 view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
+            //Handles the floating budget button
+            view.findViewById<FloatingActionButton>(R.id.fabut)?.setOnClickListener {
+                AppUtils.changeActivity(activity, BudgetPageActivity::class.java, 0, 0)
+            }
+
+            //handles bottom navbar navigation
             myBottomNavigationView.setOnItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.home -> {
                         if (currentActivityName != ActivityName.HOME) {
-                            val intent = Intent(context, HomePageActivity::class.java)
-                            activity.overridePendingTransition(0, 0)
-                            activity.finish()
-                            context.startActivity(intent)
+                            AppUtils.changeActivity(activity, HomePageActivity::class.java, 0, 0)
                         }
                         true
                     }
                     R.id.receipts -> {
                         if (currentActivityName != ActivityName.RECEIPTS) {
-                            val intent = Intent(context, ReceiptsListPageActivity::class.java)
-                            activity.overridePendingTransition(0, 0)
-                            activity.finish()
-                            context.startActivity(intent)
+                            AppUtils.changeActivity(
+                                activity,
+                                ReceiptsListPageActivity::class.java,
+                                0,
+                                0
+                            )
                         }
                         true
                     }
                     R.id.budget -> {
                         if (currentActivityName != ActivityName.BUDGET) {
-                            //Might open a menu?
-                            val intent = Intent(context, BudgetPageActivity::class.java)
-                            activity.overridePendingTransition(0, 0)
-                            activity.finish()
-                            context.startActivity(intent)
+                            AppUtils.changeActivity(activity, BudgetPageActivity::class.java, 0, 0)
                         }
                         true
                     }
                     R.id.friends -> {
                         if (currentActivityName != ActivityName.FRIENDS) {
-                            val intent = Intent(context, FriendsPageActivity::class.java)
-                            context.startActivity(intent)
-                            activity.finish()
-                            activity.overridePendingTransition(0, 0)
+                            AppUtils.changeActivity(activity, FriendsPageActivity::class.java, 0, 0)
                         }
                         true
                     }
@@ -94,7 +94,6 @@ class CommonComponents {
                         }
                         true
                     }
-
                     else -> false
                 }
             }
@@ -173,50 +172,7 @@ class CommonComponents {
                         true
                     }
                     R.id.logout -> {
-                        val intent: Intent = Intent(context, LoginActivity::class.java)
-
-                        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/logoutEndpoint/"
-
-                        val registrationPost = OkHttpClient()
-
-                        val mediaType = "application/json".toMediaTypeOrNull()
-
-                        val body = ("").trimIndent().toRequestBody(mediaType)
-
-                        val request = Request.Builder()
-                            .url(url)
-                            .method("DELETE", body)
-                            .addHeader("Content-Type", "application/json")
-                            .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
-                            .build()
-
-                        registrationPost.newCall(request).enqueue(object : Callback {
-                            override fun onFailure(call: Call, e: IOException) {
-                                e.printStackTrace()
-                            }
-
-                            override fun onResponse(call: Call, response: Response) {
-                                Log.i("Response", "Got the response from server")
-                                response.use {
-                                    if (response.isSuccessful) {
-                                        val responseBody = response.body?.string()
-                                        if (responseBody != null) {
-                                            Log.i("Successful", "Logout Successful.")
-                                            BearerToken.delete(context)
-                                            context.startActivity(intent)
-                                        } else {
-                                            Log.i("Empty", "Something went wrong${response.body?.string()}")
-                                        }
-
-                                    } else {
-                                        Log.e(
-                                            "Error",
-                                            "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
-                                        )
-                                    }
-                                }
-                            }
-                        })
+                        requestLogoutAPI(context)
                         true
                     }
                     else -> false
@@ -224,9 +180,51 @@ class CommonComponents {
             }
         }
 
-        fun handleAddingReceipts(){
+        private fun requestLogoutAPI(context: Context) {
+            val intent = Intent(context, LoginActivity::class.java)
 
+            val url =
+                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/logoutEndpoint/"
+
+            val registrationPost = OkHttpClient()
+            val mediaType = "application/json".toMediaTypeOrNull()
+            val body = ("").trimIndent().toRequestBody(mediaType)
+            val request = Request.Builder()
+                .url(url)
+                .method("DELETE", body)
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .build()
+
+            registrationPost.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    Log.i("Response", "Got the response from server")
+                    response.use {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body?.string()
+                            if (responseBody != null) {
+                                Log.i("Successful", "Logout Successful.")
+                                BearerToken.delete(context)
+                                context.startActivity(intent)
+                            } else {
+                                Log.i(
+                                    "Empty",
+                                    "Something went wrong${response.body?.string()}"
+                                )
+                            }
+                        } else {
+                            Log.e(
+                                "Error",
+                                "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
+                            )
+                        }
+                    }
+                }
+            })
         }
-
     }
 }
