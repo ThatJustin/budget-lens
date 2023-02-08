@@ -14,6 +14,7 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.util.Pair
 import androidx.fragment.app.FragmentManager
@@ -572,7 +573,7 @@ class ItemsFilterDialog(
      * Handles closing the dialog.
      */
     private fun handleClosingDialog() {
-        val closeDialog = findViewById<ImageButton>(R.id.filter_items_dialog_close)
+        val closeDialog = findViewById<TextView>(R.id.filter_items_dialog_close)
         closeDialog.setOnClickListener {
             itemsFilterDialogListener?.onReturnedFilterOptions(filterOptions)
             this.dismiss()
