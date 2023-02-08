@@ -8,12 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Receipts
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity.Companion.VIEW_ITEMS_SCROLL_STATE_CHANGE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_receipts_list_page.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -23,16 +22,13 @@ class ReceiptsRecyclerViewAdapter :
     private var receipts: MutableList<Receipts> = mutableListOf()
     private var unsortedReceipts: MutableList<Receipts> = mutableListOf()
 
-    fun changeDataSet(receiptList: MutableList<Receipts>) {
-        setReceipts(receiptList)
+    fun changeDataSet(receiptList: MutableList<Receipts>, viewItemRequestType: Int) {
+        setReceipts(receiptList, viewItemRequestType)
 
-        setUnsortedReceipts(receiptList)
+        setUnsortedReceipts(receiptList, viewItemRequestType)
 
         notifyDataSetChanged()
         checkShowRecyclerView()
-
-        println("receipts ${receipts.size}")
-        println("item count after $itemCount")
     }
 
     override fun onCreateViewHolder(
@@ -138,12 +134,9 @@ class ReceiptsRecyclerViewAdapter :
         if (receipts.isEmpty()) {
             receiptsListRecyclerView!!.visibility = View.GONE
             emptyViewMsg.visibility = View.VISIBLE
-            println("here434343")
-
         } else {
             receiptsListRecyclerView!!.visibility = View.VISIBLE
             emptyViewMsg.visibility = View.GONE
-            println("here54543534534634")
         }
     }
 
@@ -157,20 +150,21 @@ class ReceiptsRecyclerViewAdapter :
     /**
      * Returns the mutable list of unsorted receipts.
      */
-    fun getUnsortedReceipts(): MutableList<Receipts> {
+    private fun getUnsortedReceipts(): MutableList<Receipts> {
         return unsortedReceipts
     }
 
-    fun setReceipts(receiptList: MutableList<Receipts>) {
-        println("setReceipts input ${receiptList.size}")
-
-        receipts.clear()
+    private fun setReceipts(receiptList: MutableList<Receipts>, viewItemRequestType: Int = -1) {
+        if (viewItemRequestType != VIEW_ITEMS_SCROLL_STATE_CHANGE) {
+            receipts.clear()
+        }
         receipts.addAll(receiptList)
-        println("setReceipts AFTER ${receipts.size}")
     }
 
-    fun setUnsortedReceipts(receiptList: MutableList<Receipts>) {
-        unsortedReceipts.clear()
+    private fun setUnsortedReceipts(receiptList: MutableList<Receipts>, viewItemRequestType: Int = -1) {
+        if (viewItemRequestType != VIEW_ITEMS_SCROLL_STATE_CHANGE) {
+            unsortedReceipts.clear()
+        }
         unsortedReceipts.addAll(receiptList)
     }
 

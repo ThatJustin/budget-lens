@@ -23,7 +23,6 @@ import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialog
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialogListener
 import com.codenode.budgetlens.utils.HttpResponseListener
 import kotlinx.android.synthetic.main.activity_receipts_list_page.*
-import java.util.concurrent.Executors
 
 class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener,
     ReceiptsFilterDialogListener, HttpResponseListener {
@@ -147,12 +146,12 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         )
         val receiptsList = (mutableList as MutableList<Receipts>).map { it.copy() }.toMutableList()
 
-        //Apply whatever sort is set
-        applyReceiptsSortOptions()
 
         //Update the adapter items
         runOnUiThread {
-            receiptsAdapter.changeDataSet(receiptsList)
+            //Apply whatever sort is set
+            applyReceiptsSortOptions()
+            receiptsAdapter.changeDataSet(receiptsList, viewItemRequestType)
         }
     }
 
@@ -208,7 +207,9 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         sortOptions.isTotalAscending = isTotalAscending
         sortOptions.isTotalDescending = isTotalDescending
 
-        applyReceiptsSortOptions()
+        runOnUiThread {
+            applyReceiptsSortOptions()
+        }
     }
 
     /**
@@ -306,6 +307,7 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
 
         additionalData = sb.toString()
 
+        //We need to set the page number back to 1 when changing the entire dataset
         pageNumber = 1
 
         //request
@@ -313,9 +315,9 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
     }
 
     companion object {
-        private val VIEW_ITEMS_FIRST_LOAD = 0
-        private val VIEW_ITEMS_SCROLL_STATE_CHANGE = 1
-        private val VIEW_ITEM_FILTER = 3
-        private val VIEW_ITEMS_SEARCH = 4
+        val VIEW_ITEMS_FIRST_LOAD = 0
+        val VIEW_ITEMS_SCROLL_STATE_CHANGE = 1
+        val VIEW_ITEM_FILTER = 3
+        val VIEW_ITEMS_SEARCH = 4
     }
 }
