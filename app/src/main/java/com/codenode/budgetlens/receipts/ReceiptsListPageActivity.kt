@@ -2,9 +2,8 @@ package com.codenode.budgetlens.receipts
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.view.View
+import android.util.Log
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,35 +13,31 @@ import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
-import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
+import com.codenode.budgetlens.data.UserReceipts.Companion.requestReceiptsFromAPI
 import com.codenode.budgetlens.data.UserReceipts.Companion.pageNumber
-import com.codenode.budgetlens.data.UserReceipts.Companion.userReceipts
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity.ReceiptsListPageActivity.pageSize
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterDialog
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterDialogListener
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterOptions
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialog
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialogListener
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.codenode.budgetlens.utils.HttpResponseListener
 import kotlinx.android.synthetic.main.activity_receipts_list_page.*
+import java.util.concurrent.Executors
 
 class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener,
-    ReceiptsFilterDialogListener {
+    ReceiptsFilterDialogListener, HttpResponseListener {
 
     object ReceiptsListPageActivity {
         var pageSize = 5
     }
 
-    private lateinit var receiptsList: MutableList<Receipts>
     private var receiptsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var receiptsAdapter: RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>
+    private lateinit var receiptsAdapter: ReceiptsRecyclerViewAdapter
     private val sortOptions = SortOptions()
     private var filterOptions = ReceiptsFilterOptions()
     var additionalData = ""
-
-    //Save an untouched copy for when sorting/filtering is undone
-    private lateinit var receiptsListUntouched: MutableList<Receipts>
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
@@ -94,91 +89,75 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
      * Handles RecycleView adapter.
      */
     private fun handleAdapter() {
-        userReceipts.clear()
         pageNumber = 1
 
-        val searchBar: SearchView = findViewById(R.id.search_bar_text)
-        val progressBar: ProgressBar = findViewById(R.id.progressBar)
-
-        //load the list
-        receiptsList = loadReceiptsFromAPI(this, pageSize, additionalData)
-        receiptsListUntouched = receiptsList.map { it.copy() }.toMutableList()
-
         val context = this
+        val searchBar: SearchView = findViewById(R.id.search_bar_text)
         receiptsListRecyclerView = findViewById(R.id.receipts_list)
-        progressBar.visibility = View.VISIBLE
-        if (receiptsList.isEmpty()) {
-            receiptsListRecyclerView!!.visibility = View.GONE
-            progressBar.visibility = View.GONE
-        }
+
+        //request receipts from backend
+        requestReceiptsFromAPI(VIEW_ITEMS_FIRST_LOAD, this, pageSize, additionalData)
+
         if (receiptsListRecyclerView != null) {
             receiptsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
             receiptsListRecyclerView!!.layoutManager = linearLayoutManager
-            receiptsAdapter = ReceiptsRecyclerViewAdapter(receiptsList)
+            receiptsAdapter = ReceiptsRecyclerViewAdapter()
             receiptsListRecyclerView!!.adapter = receiptsAdapter
-            progressBar.visibility = View.GONE
+
             receiptsListRecyclerView!!.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    progressBar.visibility = View.VISIBLE
                     super.onScrollStateChanged(recyclerView, newState)
-                    progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        //Before loading, revert to the old order
-                        receiptsList.clear()
-                        receiptsList.addAll(receiptsListUntouched)
-
-                        //Load in more
-                        receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-
-                        // update the untouched
-                        receiptsListUntouched = receiptsList.map { it.copy() }.toMutableList()
-
-                        //Apply whatever sort is set
-                        applyReceiptsSortOptions()
-
-                        //Update the adapter items
-                        receiptsAdapter.notifyDataSetChanged()
+                        //request receipts
+                        requestReceiptsFromAPI(
+                            VIEW_ITEMS_SCROLL_STATE_CHANGE,
+                            context,
+                            pageSize,
+                            additionalData
+                        )
                     }
-                    progressBar.visibility = View.GONE
                 }
             })
 
             //listener for search bar input
             searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                @SuppressLint("NotifyDataSetChanged")
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    //clean the data, otherwise the search will based on the previous search
-                    additionalData = ""
-                    receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-                    receiptsAdapter.notifyDataSetChanged()
-
-                    //perform the search
-                    additionalData += "?search=" + searchBar.query
-                    userReceipts.clear()
-                    receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-                    receiptsAdapter.notifyDataSetChanged()
+                    //No need to do anything here
                     return true
                 }
 
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    //clean the data, otherwise the search will based on the previous search
-                    additionalData = ""
-                    receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-                    receiptsAdapter.notifyDataSetChanged()
-
-                    //perform the search
-                    additionalData += "?search=" + searchBar.query
-                    userReceipts.clear()
-                    receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-                    receiptsAdapter.notifyDataSetChanged()
+                    //Since we are fetching items with new parameters, reset the page number to 1
+                    pageNumber = 1
+                    requestReceiptsFromAPI(VIEW_ITEMS_SEARCH, context, pageSize, "?search=$newText")
                     return true
                 }
             })
         }
+    }
+
+    override fun onHttpSuccess(viewItemRequestType: Int, mutableList: MutableList<*>) {
+        Log.i(
+            "Receipts-OnHttpSuccess",
+            "An Http request triggered by type $viewItemRequestType was successful."
+        )
+        val receiptsList = (mutableList as MutableList<Receipts>).map { it.copy() }.toMutableList()
+
+        //Apply whatever sort is set
+        applyReceiptsSortOptions()
+
+        //Update the adapter items
+        runOnUiThread {
+            receiptsAdapter.changeDataSet(receiptsList)
+        }
+    }
+
+    override fun onHttpError() {
+        Log.i("Receipts-OnHttpError", "An Http error was returned.")
     }
 
     class SortOptions {
@@ -194,6 +173,10 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         var isTipDescending = false
         var isTotalAscending = false
         var isTotalDescending = false
+
+        override fun toString(): String {
+            return "SortOptions(isMerchantAscending=$isMerchantAscending, isMerchantDescending=$isMerchantDescending, isLocationAscending=$isLocationAscending, isLocationDescending=$isLocationDescending, isCouponAscending=$isCouponAscending, isCouponDescending=$isCouponDescending, isTaxAscending=$isTaxAscending, isTaxDescending=$isTaxDescending, isTipAscending=$isTipAscending, isTipDescending=$isTipDescending, isTotalAscending=$isTotalAscending, isTotalDescending=$isTotalDescending)"
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -226,9 +209,6 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         sortOptions.isTotalDescending = isTotalDescending
 
         applyReceiptsSortOptions()
-
-        //Update adapter of changes
-        receiptsAdapter.notifyDataSetChanged()
     }
 
     /**
@@ -236,10 +216,12 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
      */
     private fun applyReceiptsSortOptions() {
         // Restore receiptsList to the untouched state
-        receiptsList.clear()
-        receiptsList.addAll(receiptsListUntouched)
+        receiptsAdapter.revertAppliedSort()
 
-        //Sort
+        // Sort
+        //Here we grab the clean receipts and make a deep copy using toMutableList
+        //this is to prevent no items from being shown when applySort calls setReceipts which clears (same reference is cleared)
+        val receiptsList = receiptsAdapter.getReceipts().toMutableList()
         if (sortOptions.isMerchantAscending) {
             receiptsList.sortBy { it.merchant_name }
         }
@@ -276,6 +258,9 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         if (sortOptions.isTotalDescending) {
             receiptsList.sortByDescending { it.total_amount }
         }
+
+        //Apply the sort
+        receiptsAdapter.applySort(receiptsList)
     }
 
     /**
@@ -306,7 +291,8 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
             filterOptionList.add("total=${filterOptions.total}")
         }
         if (filterOptions.scanDateStart.isNotEmpty() && filterOptions.scanDateEnd.isNotEmpty()) {
-            filterOptionList.add("scan_date_start=${filterOptions.scanDateStart}&scan_date_end=${filterOptions.scanDateEnd}"
+            filterOptionList.add(
+                "scan_date_start=${filterOptions.scanDateStart}&scan_date_end=${filterOptions.scanDateEnd}"
             )
         }
 
@@ -319,22 +305,17 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         }
 
         additionalData = sb.toString()
-        println("additionalData $additionalData")
-
-        receiptsList.clear()
 
         pageNumber = 1
 
-        //reload
-        receiptsList = loadReceiptsFromAPI(this, pageSize, additionalData)
+        //request
+        requestReceiptsFromAPI(VIEW_ITEM_FILTER, this, pageSize, additionalData)
+    }
 
-        // update the untouched
-        receiptsListUntouched = receiptsList.map { it.copy() }.toMutableList()
-
-        //Apply whatever sort is set
-        applyReceiptsSortOptions()
-
-        //Update the adapter items
-        receiptsAdapter.notifyDataSetChanged()
+    companion object {
+        private val VIEW_ITEMS_FIRST_LOAD = 0
+        private val VIEW_ITEMS_SCROLL_STATE_CHANGE = 1
+        private val VIEW_ITEM_FILTER = 3
+        private val VIEW_ITEMS_SEARCH = 4
     }
 }

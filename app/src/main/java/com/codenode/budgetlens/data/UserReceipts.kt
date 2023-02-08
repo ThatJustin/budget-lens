@@ -1,9 +1,11 @@
 package com.codenode.budgetlens.data
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.common.BearerToken
+import com.codenode.budgetlens.utils.HttpResponseListener
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -13,15 +15,16 @@ import java.util.concurrent.CountDownLatch
 class UserReceipts {
 
     companion object {
-        var userReceipts = mutableListOf<Receipts>()
         var pageNumber = 1
+        private var httpResponseListener: HttpResponseListener? = null
 
         //TODO move this to another thread
-        fun loadReceiptsFromAPI(context: Context, pageSize: Int,additionalData:String): MutableList<Receipts> {
-
+        fun requestReceiptsFromAPI(viewItemRequestType: Int, context: Context, pageSize: Int, additionalData:String) {
+            httpResponseListener = context as Activity as HttpResponseListener
+            val userReceipts = mutableListOf<Receipts>()
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"+additionalData
             var contentLoadedFromResponse = false
-
+            println("url $url")
             val receiptsRequest = OkHttpClient()
             val request = Request.Builder()
                 .url(url)
@@ -29,7 +32,7 @@ class UserReceipts {
                 .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
                 .addHeader("Content-Type", "application/json")
                 .build()
-            val countDownLatch = CountDownLatch(1)
+
             receiptsRequest.newCall(request).enqueue(object : Callback {
                 override fun onResponse(call: Call, response: Response) {
                     Log.i("Response", "Got the response from server")
@@ -53,10 +56,13 @@ class UserReceipts {
                                     val coupon = receipt.getInt("coupon")
                                     val currency = receipt.getString("currency")
                                     userReceipts.add(Receipts(id, merchant, scanDate, receiptImage, location, total, tax, tip, coupon, currency))
+                                    println("Adding receipt to list with ID $id")
                                 }
                                 if (contentLoadedFromResponse) {
                                     pageNumber++
+                                    println("pageNumber $pageNumber")
                                 }
+                                httpResponseListener?.onHttpSuccess(viewItemRequestType, userReceipts)
                                 Log.i("Successful", "Successfully loaded receipts from API.")
                             } else {
                                 Log.i("Error", "Something went wrong ${response.message} ${response.headers}")
@@ -66,18 +72,14 @@ class UserReceipts {
                             )
                         }
                     }
-                    countDownLatch.countDown()
                 }
 
                 override fun onFailure(call: Call, e: IOException) {
                     e.printStackTrace()
-                    countDownLatch.countDown()
+                    httpResponseListener?.onHttpError()
                 }
             })
-
-            // wait for a response before returning
-            countDownLatch.await()
-            return userReceipts
+            println("API userReceipts ${userReceipts}")
         }
     }
 }
