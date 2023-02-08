@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Receipts
-import com.codenode.budgetlens.receipts.ReceiptsListPageActivity.Companion.VIEW_ITEMS_SCROLL_STATE_CHANGE
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
@@ -21,15 +21,6 @@ class ReceiptsRecyclerViewAdapter :
     private var context: Context? = null
     private var receipts: MutableList<Receipts> = mutableListOf()
     private var unsortedReceipts: MutableList<Receipts> = mutableListOf()
-
-    fun changeDataSet(receiptList: MutableList<Receipts>, viewItemRequestType: Int) {
-        setReceipts(receiptList, viewItemRequestType)
-
-        setUnsortedReceipts(receiptList, viewItemRequestType)
-
-        notifyDataSetChanged()
-        checkShowRecyclerView()
-    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -62,14 +53,16 @@ class ReceiptsRecyclerViewAdapter :
             holder.totalAmount.text =
                 holder.itemView.context.getString(R.string.total_amount, receipt.total_amount)
         }
-        if (receipt.receipt_image == null) {
+        if (receipt.receipt_image == "null" || receipt.receipt_image!!.isEmpty()) {
+            //If it''s null, just load the default, yes it's "null" lol
             holder.receiptImage.scaleType = ImageView.ScaleType.CENTER
-//            Glide.with(holder.itemView.context).load(receipt.receipt_image)
-//                .placeholder(R.drawable.ic_baseline_receipt_long_24).into(holder.receiptImage)
+            Glide.with(holder.itemView.context).load(R.drawable.ic_baseline_receipt_long_24)
+                .into(holder.receiptImage)
         } else {
             holder.receiptImage.scaleType = ImageView.ScaleType.CENTER
-//            Glide.with(holder.itemView.context).load(receipt.receipt_image)
-//                .into(holder.receiptImage)
+            Glide.with(holder.itemView.context).load(receipt.receipt_image)
+                .placeholder(R.drawable.ic_baseline_receipt_long_24)
+                .into(holder.receiptImage)
         }
     }
 
@@ -109,6 +102,9 @@ class ReceiptsRecyclerViewAdapter :
         }
     }
 
+    /**
+     * Removes a receipt at the selected position and sends a snackbar message to indicate that to the user.
+     */
     private fun removeReceipt(position: Int) {
         val activity = context as Activity
         Snackbar.make(
@@ -141,46 +137,74 @@ class ReceiptsRecyclerViewAdapter :
     }
 
     /**
-     * Returns the mutable list of receipts.
+     * Returns a deep copy mutable list of unsorted receipts.
      */
-    fun getReceipts(): MutableList<Receipts> {
-        return receipts
-    }
-
-    /**
-     * Returns the mutable list of unsorted receipts.
-     */
-    private fun getUnsortedReceipts(): MutableList<Receipts> {
-        return unsortedReceipts
-    }
-
-    private fun setReceipts(receiptList: MutableList<Receipts>, viewItemRequestType: Int = -1) {
-        if (viewItemRequestType != VIEW_ITEMS_SCROLL_STATE_CHANGE) {
-            receipts.clear()
-        }
-        receipts.addAll(receiptList)
-    }
-
-    private fun setUnsortedReceipts(receiptList: MutableList<Receipts>, viewItemRequestType: Int = -1) {
-        if (viewItemRequestType != VIEW_ITEMS_SCROLL_STATE_CHANGE) {
-            unsortedReceipts.clear()
-        }
-        unsortedReceipts.addAll(receiptList)
+    fun getUnsortedReceipts(): MutableList<Receipts> {
+        return unsortedReceipts.toMutableList()
     }
 
     /**
      * Reverts the currently applied sorting options from the receipts.
      */
     fun revertAppliedSort() {
-        setReceipts(getUnsortedReceipts())
+        this.receipts.clear()
+        this.receipts.addAll(getUnsortedReceipts())
     }
 
     /**
-     * Applies the current sort options to the receipts and makes a backup to be called by revertAppliedSort when a new sort is applied.
-     * The new sort is applied and reflected in the data set.
+     * Updates the currently viewable receipts with the sorted version.
      */
-    fun applySort(receiptsList: MutableList<Receipts>) {
-        setReceipts(receiptsList)
+    fun sortReceipts(sortedReceiptList: MutableList<Receipts>) {
+        this.receipts.clear()
+        this.receipts.addAll(sortedReceiptList)
+        notifyDataSetChanged()
+        checkShowRecyclerView()
+    }
+
+    /**
+     * Adds new receipts to the viewable recyclerview.
+     */
+    fun addReceipts(
+        receiptsList: MutableList<Receipts>,
+        applyReceiptsSortOptions: (MutableList<Receipts>) -> MutableList<Receipts>
+    ) {
+        unsortedReceipts.addAll(receiptsList)
+        revertAppliedSort()
+        val sortedReceipts: MutableList<Receipts> = applyReceiptsSortOptions(getUnsortedReceipts())
+        receipts.clear()
+        receipts.addAll(sortedReceipts)
+        notifyDataSetChanged()
+        checkShowRecyclerView()
+    }
+
+    /**
+     * Modifies the recycler view to show the searched receipts.
+     */
+    fun addSearchedReceipts(
+        receiptsList: MutableList<Receipts>,
+        applyReceiptsSortOptions: (MutableList<Receipts>) -> MutableList<Receipts>
+    ) {
+        unsortedReceipts.clear()
+        unsortedReceipts.addAll(receiptsList)
+        val sortedReceipts: MutableList<Receipts> = applyReceiptsSortOptions(receiptsList)
+        receipts.clear()
+        receipts.addAll(sortedReceipts)
+        notifyDataSetChanged()
+        checkShowRecyclerView()
+    }
+
+    /**
+     * Modifies the recycler view to show the filtered receipts.
+     */
+    fun addFilteredReceipts(
+        receiptsList: MutableList<Receipts>,
+        applyReceiptsSortOptions: (MutableList<Receipts>) -> MutableList<Receipts>
+    ) {
+        unsortedReceipts.clear()
+        unsortedReceipts.addAll(receiptsList)
+        val sortedReceipts: MutableList<Receipts> = applyReceiptsSortOptions(receiptsList)
+        receipts.clear()
+        receipts.addAll(sortedReceipts)
         notifyDataSetChanged()
         checkShowRecyclerView()
     }
