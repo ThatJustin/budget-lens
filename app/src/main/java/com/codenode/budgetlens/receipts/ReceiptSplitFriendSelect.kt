@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.budget.BudgetPageActivity
+import com.codenode.budgetlens.calendar.CalendarListActivity
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Friends
@@ -51,6 +52,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
     private var pageSize = 5
     private lateinit var emailInput: EditText
 
+    var additionalData = ""
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +62,6 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         val handleSplitByTotal: Button = findViewById(R.id.split_by_total)
         val handleSplitByItem: Button = findViewById(R.id.split_by_item)
-        var additionalData = ""
 
         //Load Friend List
         friendList = UserFriends.loadFriendsFromAPI(this, pageSize, additionalData)
@@ -113,13 +114,21 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
             handleSplitByItem.setOnClickListener{
                 // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
                 Log.i("Click", "Show "+selectedList)
-//                val intent = Intent(this, ???::class.java)
-//                intent.putExtra("itemId", selectedList.toString())
-//                startActivityForResult(intent, ???)
+                val intent = Intent(this,  CalendarListActivity::class.java)
+                intent.putExtra("itemId", selectedList.toString())
+                startActivityForResult(intent, 100)
             }
 
         }
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode==101){
+            friendList =
+                UserFriends.loadFriendsFromAPI(this, pageSize, additionalData)
+            friendAdapter.notifyDataSetChanged()
+        }
+    }
 }
