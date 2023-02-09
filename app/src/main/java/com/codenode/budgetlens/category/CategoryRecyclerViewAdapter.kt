@@ -40,7 +40,6 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
         var newCategoryStringArray: Array<String> = emptyArray()
         for (categoryWord in categoryStringArray){
             newCategoryStringArray += categoryWord.replaceFirstChar { it.uppercaseChar() }
-            println(newCategoryStringArray[0])
         }
         holder.categoryName.text = newCategoryStringArray.joinToString(" ")
 
