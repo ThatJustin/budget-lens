@@ -30,6 +30,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
     private var pageSize = 5
     private lateinit var emailInput: EditText
     private var receiptTotalValue:Double = 0.0
+
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,14 +44,8 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
         val receiptTotalValue = intent.getDoubleExtra("receipt total",0.0)
         val receiptId = intent.getIntExtra("receiptID",0)
 
-
         //Load Friend List
         friendList = UserFriends.loadFriendsFromAPI(this, pageSize, additionalData)
-        //Testing out the page with some fake friends
-//        userFriends.add(Friends(10, "John", "Cena", "cantseeme@gmail.com", 'J',))
-//        userFriends.add(Friends(11, "Bobby", "Lee", "madtv@gmail.com", 'B',))
-//        userFriends.add(Friends(12, "Mateo", "Palomino", "mateo_palomino@gmail.com", 'T',))
-//        userFriends.add(Friends(13, "Luffy D", "Monkey", "pirateKing@gmail.com", 'K',))
 
         val context = this
         friendsListRecyclerView = findViewById(R.id.friends_list)
@@ -83,27 +78,35 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
 
                 }
             })
+
             handleSplitByTotal.setOnClickListener{
                 // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
-                Log.i("Click", "Show "+selectedList)
+                Log.i("Click", "Show $selectedList")
                 val intent = Intent(this, SplitReceiptTotalPageActivity::class.java)
                 intent.putIntegerArrayListExtra("itemId", selectedList)
                 intent.putExtra("receipt total",receiptTotalValue)
                 intent.putExtra("receiptID", receiptId)
                 startActivity(intent)
-
             }
 
             handleSplitByItem.setOnClickListener{
                 // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
-          /*      Log.i("Click", "Show "+selectedList)
-                val intent = Intent(this, ???::class.java)
-                intent.putExtra("itemId", selectedList.toString())
-                startActivity(intent)*/
+                var ids=intent.getIntExtra("ids", -1)
+                val intent = Intent(this,  SplitItemListActivity::class.java)
+                intent.putExtra("ids", ids)
+                intent.putExtra("selectedList", ArrayList(selectedList))
+                startActivityForResult(intent, 100)
             }
-
         }
-
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode==101){
+            friendList =
+                UserFriends.loadFriendsFromAPI(this, pageSize, "")
+            friendAdapter.notifyDataSetChanged()
+        }
+    }
 }
