@@ -21,6 +21,7 @@ import com.codenode.budgetlens.settings.SettingsActivity
 import com.codenode.budgetlens.utils.AppUtils
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -43,6 +44,12 @@ class CommonComponents {
             val myBottomNavigationView =
                 view.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
+            //Handles the floating budget button
+            view.findViewById<FloatingActionButton>(R.id.fabut)?.setOnClickListener {
+                AppUtils.changeActivity(activity, BudgetPageActivity::class.java, 0, 0)
+            }
+
+            //handles bottom navbar navigation
             myBottomNavigationView.setOnItemSelectedListener { item ->
                 when (item.itemId) {
                     R.id.home -> {

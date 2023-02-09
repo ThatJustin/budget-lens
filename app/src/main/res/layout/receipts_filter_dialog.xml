@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/receipts_filter_dialog"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     tools:context=".receipts.ReceiptInfoDialog">
 
@@ -33,14 +33,20 @@
                 app:contentInsetStartWithNavigation="0dp"
                 app:title="Receipts Filter">
 
-                <ImageButton
+                <TextView
                     android:id="@+id/filter_receipts_dialog_close"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:contentDescription="@string/close_dialog_preview_description"
-                    android:src="@drawable/ic_baseline_close_24"
-                    tools:ignore="TouchTargetSizeCheck"/>
+                    android:layout_weight="1"
+                    android:background="@color/transparent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:maxLines="1"
+                    android:text="@string/save_filter"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    tools:ignore="TouchTargetSizeCheck" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -63,7 +69,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/active_receipts_filters_chip_group"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView11"
@@ -75,7 +81,7 @@
                 android:text="@string/active_filters"
                 app:drawableStartCompat="@drawable/ic_outline_filter_list_20"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider1"/>
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/active_receipts_filters_chip_group"
@@ -97,7 +103,7 @@
                     android:checked="true"
                     android:text="@string/merchant"
                     android:visibility="gone"
-                    app:checkedIconVisible="false"/>
+                    app:checkedIconVisible="false" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_2"
@@ -107,7 +113,7 @@
                     android:checked="true"
                     android:text="@string/location"
                     android:visibility="gone"
-                    app:checkedIconVisible="false"/>
+                    app:checkedIconVisible="false" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_3"
@@ -117,7 +123,7 @@
                     android:checked="true"
                     android:text="@string/currency"
                     android:visibility="gone"
-                    app:checkedIconVisible="false"/>
+                    app:checkedIconVisible="false" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_4"
@@ -127,7 +133,7 @@
                     android:checked="true"
                     android:text="@string/coupon"
                     android:visibility="gone"
-                    app:checkedIconVisible="false"/>
+                    app:checkedIconVisible="false" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_5"
@@ -137,7 +143,7 @@
                     android:checked="true"
                     android:text="@string/total_price"
                     android:visibility="gone"
-                    app:checkedIconVisible="false"/>
+                    app:checkedIconVisible="false" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_6"
@@ -147,7 +153,7 @@
                     android:checked="true"
                     android:text="@string/date_title"
                     android:visibility="gone"
-                    app:checkedIconVisible="false"/>
+                    app:checkedIconVisible="false" />
 
             </com.google.android.material.chip.ChipGroup>
 
@@ -171,7 +177,7 @@
                 app:dividerInsetStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -183,7 +189,7 @@
                 android:text="@string/merchant"
                 app:drawableStartCompat="@drawable/ic_outline_shopping_cart_20"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider2"/>
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/receipts_filter_merchant_text_input_layer"
@@ -207,7 +213,7 @@
                     android:hint="@string/merchant_selection"
                     android:inputType="none"
                     android:paddingVertical="5dp"
-                    android:popupBackground="#F3EDF7"/>
+                    android:popupBackground="#F3EDF7" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -231,7 +237,7 @@
                 app:dividerInsetStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView13"
@@ -243,7 +249,7 @@
                 android:text="@string/location"
                 app:drawableStartCompat="@drawable/map_20px"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider3"/>
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/receipts_filter_location_text_input_layer"
@@ -267,7 +273,7 @@
                     android:hint="@string/location_selection"
                     android:inputType="none"
                     android:paddingVertical="5dp"
-                    android:popupBackground="#F3EDF7"/>
+                    android:popupBackground="#F3EDF7" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -291,7 +297,7 @@
                 app:dividerInsetStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -303,7 +309,7 @@
                 android:text="@string/currency"
                 app:drawableStartCompat="@drawable/ic_outline_monetization_on_20"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider4"/>
+                app:layout_constraintTop_toBottomOf="@+id/divider4" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/receipts_filter_currency_text_input_layer"
@@ -327,7 +333,7 @@
                     android:hint="@string/currency_selection"
                     android:inputType="none"
                     android:paddingVertical="5dp"
-                    android:popupBackground="#F3EDF7"/>
+                    android:popupBackground="#F3EDF7" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -351,7 +357,7 @@
                 app:dividerInsetStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView16"
@@ -363,7 +369,7 @@
                 android:text="@string/coupon"
                 app:drawableStartCompat="@drawable/local_activity_20px"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider6"/>
+                app:layout_constraintTop_toBottomOf="@+id/divider6" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/receipts_filter_coupon_text_input_layer"
@@ -387,7 +393,7 @@
                     android:hint="@string/coupon_selection"
                     android:inputType="none"
                     android:paddingVertical="5dp"
-                    android:popupBackground="#F3EDF7"/>
+                    android:popupBackground="#F3EDF7" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -411,7 +417,7 @@
                 app:dividerInsetStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView17"
@@ -423,7 +429,7 @@
                 android:text="@string/total_price"
                 app:drawableStartCompat="@drawable/ic_baseline_attach_money_20"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider8"/>
+                app:layout_constraintTop_toBottomOf="@+id/divider8" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/receipts_filter_total_text_input_layer"
@@ -447,7 +453,7 @@
                     android:hint="@string/total_selection"
                     android:inputType="none"
                     android:paddingVertical="5dp"
-                    android:popupBackground="#F3EDF7"/>
+                    android:popupBackground="#F3EDF7" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -471,7 +477,7 @@
                 app:dividerInsetStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/textView18"
@@ -483,7 +489,7 @@
                 android:text="@string/date_title"
                 app:drawableStartCompat="@drawable/ic_outline_calendar_month_20"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider9"/>
+                app:layout_constraintTop_toBottomOf="@+id/divider9" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/receipts_filter_scan_date_start_text_input_layer"
@@ -513,7 +519,7 @@
                     android:focusableInTouchMode="false"
                     android:hint="@string/start_date"
                     android:inputType="numberDecimal"
-                    android:popupBackground="#F3EDF7"/>
+                    android:popupBackground="#F3EDF7" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -545,7 +551,7 @@
                     android:focusableInTouchMode="false"
                     android:hint="@string/end_date"
                     android:inputType="numberDecimal"
-                    android:popupBackground="#F3EDF7"/>
+                    android:popupBackground="#F3EDF7" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -556,7 +562,7 @@
                 android:layout_marginTop="67dp"
                 app:layout_constraintEnd_toStartOf="@+id/receipts_filter_scan_date_end_text_input_layer"
                 app:layout_constraintStart_toEndOf="@+id/receipts_filter_scan_date_start_text_input_layer"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
