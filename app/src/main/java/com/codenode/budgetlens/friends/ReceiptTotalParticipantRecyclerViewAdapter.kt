@@ -1,5 +1,6 @@
 package com.codenode.budgetlens.friends
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,10 +15,10 @@ import com.codenode.budgetlens.data.Friends
 
 class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableList<Friends>) :
     RecyclerView.Adapter<ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder>() {
-    val participantsIdList: MutableList<Int> = ArrayList()
-    val splitAmount: MutableList<Double> = ArrayList()
+    val participantsIdArray: MutableList<Int> = ArrayList()
+    val splitAmountArray: MutableList<Double> = ArrayList()
     var isOnTextChanged: Boolean = false
-    var amountLeft: Double = 0.0
+    var splitAmountTotal: Double = 0.0
     var context: Context? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -27,7 +28,9 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
             LayoutInflater.from(parent.context).inflate(R.layout.split_total_participants_list_model, parent, false)
         return ViewHolder(view)
     }
-    override fun onBindViewHolder(holder: ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder, @SuppressLint(
+        "RecyclerView"
+    ) position: Int) {
         val friend = friends[position]
         val firstNameShow:String = if(friend.firstName.length>7){
             friend.firstName.subSequence(0,4).toString()+".."
@@ -45,6 +48,47 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
             holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
         holder.friendInitial.text=
             holder.itemView.context.getString(R.string.friend_initial,friend.friendInitial)
+        val friendId = friend.userId;
+        val friendSplitValue = holder.friendSplitValue
+        friendSplitValue.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(s: CharSequence, start: Int,
+                                           count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int,
+                                       before: Int, count: Int) {
+                isOnTextChanged = true
+
+            }
+            override fun afterTextChanged(s: Editable) {
+                splitAmountTotal = 0.0
+                if(isOnTextChanged){
+                    isOnTextChanged = false
+
+                    for(i in 0..position){
+                        val curPos = position
+                        if(i != position){
+                            splitAmountArray.add(0.0);
+                        }else{
+                            splitAmountArray.add(0.0);
+                            splitAmountArray[curPos] = s.toString().toDouble();
+
+
+                        }
+
+                    }
+                    try {
+
+                    }catch (e: java.lang.NumberFormatException){
+
+                    }
+                }
+
+            }
+
+
+        })
+
     }
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -59,22 +103,9 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
         val friendInitial: TextView = friendsView.findViewById(R.id.participants_initial)
         val friendSplitValue: EditText = friendsView.findViewById(R.id.split_value)
 
+
         init {
             friendsView.setOnClickListener(this)
-            friendSplitValue.addTextChangedListener(object: TextWatcher{
-                override fun afterTextChanged(s: Editable) {
-
-                }
-
-                override fun beforeTextChanged(s: CharSequence, start: Int,
-                                               count: Int, after: Int) {
-                }
-
-                override fun onTextChanged(s: CharSequence, start: Int,
-                                           before: Int, count: Int) {
-                    isOnTextChanged = true
-                }
-            })
         }
 
         override fun onClick(v: View?) {
