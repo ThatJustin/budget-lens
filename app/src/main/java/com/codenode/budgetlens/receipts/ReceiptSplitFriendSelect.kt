@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,8 +27,6 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var friendAdapter: RecyclerView.Adapter<FriendsSelectRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
-    private lateinit var emailInput: EditText
-    private var receiptTotalValue:Double = 0.0
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +37,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         val handleSplitByTotal: Button = findViewById(R.id.split_by_total)
         val handleSplitByItem: Button = findViewById(R.id.split_by_item)
-        var additionalData = ""
+        val additionalData = ""
         val receiptTotalValue = intent.getDoubleExtra("receipt total",0.0)
         val receiptId = intent.getIntExtra("receiptID",0)
 
@@ -91,7 +88,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
 
             handleSplitByItem.setOnClickListener{
                 // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
-                var ids=intent.getIntExtra("ids", -1)
+                val ids = intent.getIntExtra("ids", -1)
                 val intent = Intent(this,  SplitItemListActivity::class.java)
                 intent.putExtra("ids", ids)
                 intent.putExtra("selectedList", ArrayList(selectedList))
@@ -100,6 +97,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     @SuppressLint("NotifyDataSetChanged")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
