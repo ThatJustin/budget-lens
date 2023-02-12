@@ -104,18 +104,13 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
             })
             handleSplitByTotal.setOnClickListener{
                 // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
-                Log.i("Click", "Show "+selectedList)
-//                val intent = Intent(this, ???::class.java)
-//                intent.putExtra("itemId", selectedList.toString())
-//                startActivityForResult(intent, ???)
-
             }
 
             handleSplitByItem.setOnClickListener{
                 // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
-                Log.i("Click", "Show "+selectedList)
+                var ids=intent.getStringExtra("ids")
                 val intent = Intent(this,  CalendarListActivity::class.java)
-                intent.putExtra("itemId", selectedList.toString())
+                intent.putExtra("ids", ids)
                 startActivityForResult(intent, 100)
             }
 

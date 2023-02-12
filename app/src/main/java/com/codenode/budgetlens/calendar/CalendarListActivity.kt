@@ -2,6 +2,7 @@ package com.codenode.budgetlens.calendar
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.fastjson.JSON
 import com.codenode.budgetlens.BuildConfig
@@ -51,7 +52,8 @@ class CalendarListActivity : AppCompatActivity() {
     }
     private fun getData() {
 
-        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/itemsplit/sharedAmountList/"
+        var ids=intent.getStringExtra("ids")
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/itemsplit/sharedAmountList/"+ids+"/"
         HttpUtils.get("Bearer ${BearerToken.getToken(this)}", url, object : TextHttpResponseHandler() {
             override fun onFailure(
                 statusCode: Int,

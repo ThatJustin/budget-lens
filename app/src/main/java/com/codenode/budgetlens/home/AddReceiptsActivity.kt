@@ -9,6 +9,9 @@ import android.os.Bundle
 import android.os.Message
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +23,7 @@ import com.codenode.budgetlens.data.Merchant
 import com.codenode.budgetlens.utils.CustomBubbleAttachPopup
 import com.codenode.budgetlens.utils.GlideEngine
 import com.codenode.budgetlens.utils.HttpUtils
+import com.codenode.budgetlens.utils.MyDialog
 import com.loopj.android.http.RequestParams
 import com.loopj.android.http.TextHttpResponseHandler
 import com.luck.picture.lib.PictureSelector
@@ -29,13 +33,16 @@ import com.lxj.xpopup.XPopup
 import com.lxj.xpopup.core.BasePopupView
 import cz.msebera.android.httpclient.Header
 import kotlinx.android.synthetic.main.activity_add_receipts.*
+import kotlinx.android.synthetic.main.dialog_additem.view.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import org.json.JSONObject
 import java.io.File
 import java.io.IOException
+import java.math.BigDecimal
 import java.util.*
 
 
@@ -43,6 +50,8 @@ class AddReceiptsActivity : AppCompatActivity() {
     var ctx = this;
     var path = "http://192.168.2.15:8000/media/uploads/lake-snow-Annecy-ice-clouds-montagne-1016845-wallhere.com_2bVhZU3.jpg"
     var popview: BasePopupView? = null
+
+    var Tprice="0"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_receipts)
@@ -193,12 +202,7 @@ class AddReceiptsActivity : AppCompatActivity() {
 
             return
         }
-        Log.e("dsadasd", "Submit: " + tx1.text.toString())
-      /*  if (TextUtils.isEmpty(path)) {
-            Toast.makeText(this, "Please choose img", Toast.LENGTH_SHORT).show()
-            return
-        }*/
-        //getupload(path)
+
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/manualReceipts/"
         val params = RequestParams()
         params.put("merchant", merchant)
@@ -243,12 +247,98 @@ class AddReceiptsActivity : AppCompatActivity() {
                         "Successful",
                         Toast.LENGTH_SHORT
                     ).show()
-                    finish()
+                    Tprice=tx4.text.toString()
+                      ids=JSONObject(responseString).getString("id");
+                    addItem()
                     Log.i("Response", "responseString" + responseString)
                 }
             })
     }
+    var ids=""
+    fun addItem() {
+        val screenWidth = windowManager.defaultDisplay.width
+        val view1: View = layoutInflater.inflate(R.layout.dialog_additem, null)
+        var mMyDialog = MyDialog(this, view1, false, false)
+        val mainLayout: LinearLayout = view1.findViewById(R.id.mainlayout)
+        val lp: ViewGroup.LayoutParams = mainLayout.getLayoutParams()
+        lp.width = screenWidth
+        mainLayout.setLayoutParams(lp)
+        mMyDialog.show()
+        view1.tv_sure.setOnClickListener {
+            view1.tv_sure.visibility=View.GONE
+            view1.tv_resure.visibility=View.VISIBLE
+            view1.tv_cancel.visibility=View.VISIBLE
+            postData(view1.tv_name.text.toString().trim(),view1.tv_price.text.toString().trim())
+            view1.tv_name.setText("")
+            view1.tv_price.setText("")
+        }
+        view1.tv_resure.setOnClickListener {
+            if (TextUtils.isEmpty(view1.tv_price.text.toString().trim())) {
+                Toast.makeText(this, "Please entry a price", Toast.LENGTH_SHORT).show()
+            }
+            postData(view1.tv_name.text.toString().trim(),view1.tv_price.text.toString().trim())
+            view1.tv_name.setText("")
+            view1.tv_price.setText("")
+        }
+        view1.tv_cancel.setOnClickListener {
+            mMyDialog.dismiss()
+            finish()
+        }
+    }
+    fun sub(v1: String?, v2: String?): BigDecimal? {
+        val b1 = BigDecimal(v1)
+        val b2 = BigDecimal(v2)
+        return b1.subtract(b2)
+    }
+    private fun postData( name:String,price:String) {
+        var Tprices:Int= sub(Tprice,price)!!.toInt()
+        if (Tprices<0){
+            Toast.makeText(
+                this@AddReceiptsActivity,
+                "Failed to add , please try again price",
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+        Tprice=Tprices.toString()
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/add/"
+          val params = RequestParams()
+        params.put("name", name)
+        params.put("price", price)
+        params.put("user", "1")
+        params.put("category_id", 5)
+        params.put("important_dates", "2022-12-01")
+        params.put("receipt", ids)
+        HttpUtils.post(
+            "Bearer ${BearerToken.getToken(this)}",
+            url,params,
+            object : TextHttpResponseHandler() {
+                override fun onFailure(
+                    statusCode: Int,
+                    headers: Array<Header>,
+                    responseString: String,
+                    throwable: Throwable
+                ) {
+                    Toast.makeText(
+                        this@AddReceiptsActivity,
+                        "Failed to add , please try again",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
+                override fun onSuccess(
+                    statusCode: Int,
+                    headers: Array<Header>,
+                    responseString: String
+                ) {
+                    Toast.makeText(
+                        this@AddReceiptsActivity,
+                        "Successful",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+    }
     private val MEDIA_TYPE_PNG = "image/png".toMediaTypeOrNull()
     private val client: OkHttpClient = OkHttpClient()
 
