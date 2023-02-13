@@ -1,9 +1,11 @@
 package com.codenode.budgetlens.friends
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,14 +20,18 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
     val participantsIdArray: MutableList<Int> = ArrayList()
     val splitAmountArray: MutableList<Double> = ArrayList()
     var isOnTextChanged: Boolean = false
-    var splitAmountTotal: Double = 0.0
+    var splitAmountFinalTotal: Double = 0.0
     var context: Context? = null
+    var textViewTotalSplitAmount : TextView?=null
+    var rootView : View? = null
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ) :ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder{
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.split_total_participants_list_model, parent, false)
+        rootView = (context as Activity).window.decorView.findViewById(android.R.id.content)
+        textViewTotalSplitAmount = rootView?.findViewById(R.id.percentage_left)
         return ViewHolder(view)
     }
     override fun onBindViewHolder(holder: ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder, @SuppressLint(
@@ -61,31 +67,49 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
 
             }
             override fun afterTextChanged(s: Editable) {
-                splitAmountTotal = 0.0
-                if(isOnTextChanged){
+                splitAmountFinalTotal = 0.0
+                if (isOnTextChanged) {
                     isOnTextChanged = false
-
-                    for(i in 0..position){
-                        val curPos = position
-                        if(i != position){
-                            splitAmountArray.add(0.0);
-                        }else{
-                            splitAmountArray.add(0.0);
-                            splitAmountArray[curPos] = s.toString().toDouble();
-
+                    try {
+                        for (i in 0..position) {
+                            val curPos = position
+                            if (i != position) {
+                                splitAmountArray.add(0.0);
+                            } else {
+                                splitAmountArray.add(0.0);
+                                splitAmountArray[curPos] = s.toString().toDouble();
+                                break;
+                            }
 
                         }
+                        for (i in 0 until splitAmountArray.size) {
 
+                            val tempSplitAmountTotal = splitAmountArray[i]
+                            splitAmountFinalTotal += tempSplitAmountTotal
+                        }
+
+                        textViewTotalSplitAmount!!.text=splitAmountFinalTotal.toString()
+
+                    } catch (e: java.lang.NumberFormatException) {
+                        splitAmountFinalTotal = 0.0
+                        for(i in 0..position){
+                            Log.d("TimesRemoved", " : " + i);
+                            val  newPos = position;
+                            if(i==newPos){
+                                splitAmountArray[newPos] = 0.0;
+                            }
+                        }
+                        for(i in 0 until splitAmountArray.size){
+                            val tempSplitAmountTotal = splitAmountArray[i]
+                            splitAmountFinalTotal += tempSplitAmountTotal
+
+                        }
+                        textViewTotalSplitAmount!!.text=splitAmountFinalTotal.toString()
                     }
-                    try {
 
-                    }catch (e: java.lang.NumberFormatException){
 
-                    }
                 }
-
             }
-
 
         })
 

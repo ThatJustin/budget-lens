@@ -172,18 +172,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/total_items_currency"
+                android:text="Percentage Left (%):"
                 android:textColor="#6750A4"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 tools:ignore="MissingConstraints" />
 
             <TextView
-                android:id="@+id/items_cost_value"
+                android:id="@+id/percentage_left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/items_total"
+                android:text="@string/percentage_left"
                 android:textSize="36sp"
                 android:textStyle="bold"
                 tools:ignore="MissingConstraints" />
