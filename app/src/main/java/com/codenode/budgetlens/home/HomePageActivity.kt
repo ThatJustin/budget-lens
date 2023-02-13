@@ -61,12 +61,6 @@ open class HomePageActivity() : AppCompatActivity() {
             startActivity(Intent(this,AddReceiptsActivity::class.java))
         }
 
-        fabut.setOnClickListener {
-            val intent = Intent(this, BudgetPageActivity::class.java)
-            this.overridePendingTransition(0, 0)
-            this.finish()
-            startActivity(intent)
-        }
         openAddMenu.setOnClickListener{
             if(AddMenuIsClosed){
                 openAddMenu.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)

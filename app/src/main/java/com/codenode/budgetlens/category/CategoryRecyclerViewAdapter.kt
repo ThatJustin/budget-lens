@@ -1,7 +1,6 @@
 package com.codenode.budgetlens.category
 
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -13,7 +12,6 @@ import android.widget.TextView
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.recyclerview.widget.RecyclerView
-import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Category
 import com.codenode.budgetlens.data.UserCategories
@@ -36,8 +34,15 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
         val imageGarbage: ImageView = holder.itemView.findViewById(R.id.image_garbage)
         val imageEdit: ImageView = holder.itemView.findViewById(R.id.image_edit)
         val category = categories[position]
-        holder.categoryName.text =
-            holder.itemView.context.getString(R.string.category_name, category.category_name)
+
+        // For outputing the strings in the right format, (Pascal Casing)
+        var categoryStringArray = holder.itemView.context.getString(R.string.category_name, category.category_name).split(" ")
+        var newCategoryStringArray: Array<String> = emptyArray()
+        for (categoryWord in categoryStringArray){
+            newCategoryStringArray += categoryWord.replaceFirstChar { it.uppercaseChar() }
+        }
+        holder.categoryName.text = newCategoryStringArray.joinToString(" ")
+
         if (category.category_toggle_star) {
             imageStar.setImageResource(R.drawable.ic_baseline_star_24)
         } else {
