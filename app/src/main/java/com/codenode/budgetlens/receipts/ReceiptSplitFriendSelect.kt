@@ -51,7 +51,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
     private lateinit var friendAdapter: RecyclerView.Adapter<FriendsSelectRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
     private lateinit var emailInput: EditText
-
+    private var receiptTotalValue:Double = 0.0
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +62,8 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
         val handleSplitByTotal: Button = findViewById(R.id.split_by_total)
         val handleSplitByItem: Button = findViewById(R.id.split_by_item)
         var additionalData = ""
+        val receiptTotalValue = intent.getDoubleExtra("receipt total",0.0)
+
 
         //Load Friend List
         friendList = UserFriends.loadFriendsFromAPI(this, pageSize, additionalData)
@@ -107,6 +109,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
                 Log.i("Click", "Show "+selectedList)
                 val intent = Intent(this, SplitTotalByAmountPageActivity::class.java)
                 intent.putIntegerArrayListExtra("itemId", selectedList)
+                intent.putExtra("receipt total",receiptTotalValue)
                 startActivity(intent)
 
             }

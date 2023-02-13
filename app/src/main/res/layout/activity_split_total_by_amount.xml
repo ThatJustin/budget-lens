@@ -123,14 +123,16 @@
                 app:layout_constraintBottom_toBottomOf="@+id/split_total_buttons"
                 >
                 <Button
+                    android:id="@+id/cancel_split_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:text="Cancel"
                     android:backgroundTint="@color/red"
                     android:paddingHorizontal="50dp"
-                    android:layout_marginHorizontal="20dp"/>
+                    android:layout_marginHorizontal="30dp"/>
                 <Button
+                    android:id="@+id/confirm_split_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:clickable="true"

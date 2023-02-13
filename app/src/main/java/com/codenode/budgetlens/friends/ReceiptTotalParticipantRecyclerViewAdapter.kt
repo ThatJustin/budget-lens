@@ -15,15 +15,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Friends
 
-class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableList<Friends>) :
+class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableList<Friends>,
+                                                 val splitAmountArray: MutableList<Double> = ArrayList()) :
     RecyclerView.Adapter<ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder>() {
-    val participantsIdArray: MutableList<Int> = ArrayList()
-    val splitAmountArray: MutableList<Double> = ArrayList()
     var isOnTextChanged: Boolean = false
     var splitAmountFinalTotal: Double = 0.0
     var context: Context? = null
     var textViewTotalSplitAmount : TextView?=null
     var rootView : View? = null
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -54,8 +54,10 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
             holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
         holder.friendInitial.text=
             holder.itemView.context.getString(R.string.friend_initial,friend.friendInitial)
-        val friendId = friend.userId;
         val friendSplitValue = holder.friendSplitValue
+
+        splitAmountFinalTotal = textViewTotalSplitAmount!!.text.toString().toDouble()
+        var tempAmount = splitAmountFinalTotal
         friendSplitValue.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence, start: Int,
                                            count: Int, after: Int) {
@@ -67,7 +69,8 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
 
             }
             override fun afterTextChanged(s: Editable) {
-                splitAmountFinalTotal = 0.0
+                splitAmountFinalTotal = tempAmount
+
                 if (isOnTextChanged) {
                     isOnTextChanged = false
                     try {
@@ -85,13 +88,13 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
                         for (i in 0 until splitAmountArray.size) {
 
                             val tempSplitAmountTotal = splitAmountArray[i]
-                            splitAmountFinalTotal += tempSplitAmountTotal
+                            splitAmountFinalTotal -= tempSplitAmountTotal
                         }
 
                         textViewTotalSplitAmount!!.text=splitAmountFinalTotal.toString()
 
                     } catch (e: java.lang.NumberFormatException) {
-                        splitAmountFinalTotal = 0.0
+                        splitAmountFinalTotal = tempAmount
                         for(i in 0..position){
                             Log.d("TimesRemoved", " : " + i);
                             val  newPos = position;
@@ -101,7 +104,7 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
                         }
                         for(i in 0 until splitAmountArray.size){
                             val tempSplitAmountTotal = splitAmountArray[i]
-                            splitAmountFinalTotal += tempSplitAmountTotal
+                            splitAmountFinalTotal -= tempSplitAmountTotal
 
                         }
                         textViewTotalSplitAmount!!.text=splitAmountFinalTotal.toString()
@@ -109,9 +112,11 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
 
 
                 }
+                Log.i("split amount array",splitAmountArray.toString())
             }
 
         })
+
 
     }
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -141,7 +146,6 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
         }
 
     }
-
 
 
 }
