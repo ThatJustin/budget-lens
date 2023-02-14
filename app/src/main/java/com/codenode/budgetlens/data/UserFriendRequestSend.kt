@@ -61,6 +61,22 @@ class UserFriendRequestSend {
                                             )
                                         )
                                     }
+                                val friendInviteSendObjects= JSONObject(responseBody.toString()).getString("invites_sent")
+                                val friendInviteSend = JSONArray(friendInviteSendObjects)
+                                for (i in 0 until friendInviteSend.length()) {
+                                    val friendInviteSend = friendInviteSend.getJSONObject(i)
+                                    val email = friendInviteSend.getString("email")
+                                    val initial = email[0]
+                                    userFriendRequestSend.add(
+                                        Friends(
+                                            null,
+                                            null,
+                                            null,
+                                            email,
+                                            initial,
+                                        )
+                                    )
+                                }
 
                                 if (contentLoadedFromResponse) {
                                     Log.i("im here bruh","hahahhahahahhahahahah")

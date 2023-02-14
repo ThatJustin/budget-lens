@@ -33,18 +33,18 @@ class FriendRequestReceiveRecyclerViewAdapter(private val friendRequestReceive: 
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val friendRequestReceiveItem = friendRequestReceive[position]
-        val firstNameShow:String = if(friendRequestReceiveItem.firstName.length>7){
-            friendRequestReceiveItem.firstName.subSequence(0,4).toString()+".."
+        val firstNameShow:String = if(friendRequestReceiveItem.firstName!!.length>7){
+            friendRequestReceiveItem.firstName!!.subSequence(0,4).toString()+".."
         }else
-            friendRequestReceiveItem.firstName
+            friendRequestReceiveItem.firstName!!
         holder.friendFirstName.text =
             holder.itemView.context.getString(R.string.friend_first_name, firstNameShow)
-        val lastNameShow:String = if(friendRequestReceiveItem.firstName.length<=5 && friendRequestReceiveItem.lastName.length>4){
-            friendRequestReceiveItem.lastName.subSequence(0,3).toString()+".."
-        }else if(friendRequestReceiveItem.lastName.length>5 && friendRequestReceiveItem.lastName.length>4){
-            friendRequestReceiveItem.lastName.subSequence(0,2).toString()+".."
+        val lastNameShow:String = if(friendRequestReceiveItem.firstName!!.length<=5 && friendRequestReceiveItem.lastName!!.length>4){
+            friendRequestReceiveItem.lastName!!.subSequence(0,3).toString()+".."
+        }else if(friendRequestReceiveItem.lastName!!.length>5 && friendRequestReceiveItem.lastName!!.length>4){
+            friendRequestReceiveItem.lastName!!.subSequence(0,2).toString()+".."
         }else
-            friendRequestReceiveItem.lastName
+            friendRequestReceiveItem.lastName!!
         holder.friendLastName.text=
             holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
         holder.friendInitial.text=
