@@ -62,7 +62,7 @@
                     android:gravity="center"
                     android:textSize="16dp"
                     android:textColor="@color/white"
-                    android:background="#a45050"
+                    android:background="@drawable/shape_21"
                     android:paddingVertical="@dimen/dp_10"
                     android:text="Cancel"/>
                 <TextView
@@ -72,7 +72,7 @@
                     android:layout_marginLeft="15dp"
                     android:layout_weight="1.3"
                     android:gravity="center"
-                    android:background="#6750a4"
+                    android:background="@drawable/shape_20"
                     android:paddingVertical="@dimen/dp_10"
                     android:textSize="16dp"
                     android:textColor="@color/white"
