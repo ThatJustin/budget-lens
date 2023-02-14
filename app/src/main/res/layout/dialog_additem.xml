@@ -60,10 +60,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:gravity="center"
-                android:background="@drawable/shape_button"
+                android:background="@drawable/shape_20"
                 android:paddingVertical="14dp"
                 android:text="ADD"
-                android:textColor="#8a78b8"
+                android:textColor="#ffffff"
                 android:textSize="16sp" />
 
             <TextView
@@ -75,9 +75,9 @@
                 android:gravity="center"
                 android:visibility="gone"
                 android:paddingVertical="14dp"
-                android:background="@drawable/shape_button"
+                android:background="@drawable/shape_20"
                 android:text="Another Item"
-                android:textColor="#8a78b8"
+                android:textColor="#fff"
                 android:textSize="16sp" />
 
             <TextView
@@ -87,11 +87,11 @@
                 android:visibility="gone"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
-                android:background="@drawable/shape_button"
+                android:background="@drawable/shape_21"
                 android:gravity="center"
                 android:paddingVertical="14dp"
                 android:text="Cancel"
-                android:textColor="#8a78b8"
+                android:textColor="#fff"
                 android:textSize="16sp" />
 
 
