@@ -14,7 +14,7 @@
 <RelativeLayout
     android:layout_width="0dp"
     android:layout_height="wrap_content"
-    android:minHeight="90dp"
+    android:minHeight="100dp"
     android:layout_weight="1">
 <ImageView
     android:id="@+id/iv_img"
@@ -42,7 +42,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:padding="15dp"
+            android:paddingHorizontal="15dp"
             android:gravity="center"
             android:background="@drawable/shape_line_20"
             android:orientation="vertical">
@@ -57,9 +57,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tax:37.98"
-                android:visibility="gone"
-                android:textSize="12sp"
+                android:text="Your bill:37.98"
+                android:textSize="10sp"
+                android:visibility="invisible"
                 android:layout_marginTop="5dp"
                 android:textColor="#6750A4"/>
             <TextView
@@ -70,7 +70,7 @@
                 android:text="Split"
                 android:textSize="14sp"
                 android:background="@drawable/shape_20"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:textColor="#fff"/>
         </LinearLayout>
     </LinearLayout>
