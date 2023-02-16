@@ -46,17 +46,8 @@
                 app:layout_constraintBottom_toBottomOf="@+id/splitTotalTextView"
                 app:layout_constraintStart_toStartOf="@+id/splitTotalTextView"
                 app:layout_constraintTop_toTopOf="@+id/splitTotalTextView"
-                app:singleSelection="true">
-
-                <Button
-                    android:id="@+id/PercentageButton"
-                    style="?attr/materialButtonOutlinedStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="45dp"
-                    android:text="Percentage"
-                    app:icon="@drawable/ic_baseline_percent_24"
-                    />
+                app:singleSelection="true"
+                app:checkedButton="@id/AmountButton">
 
                 <Button
                     style="?attr/materialButtonOutlinedStyle"
@@ -67,6 +58,16 @@
                     app:icon="@drawable/ic_baseline_attach_money_20"
                     android:paddingHorizontal="55dp"
                     />
+                <Button
+                    android:id="@+id/PercentageButton"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="45dp"
+                    android:text="Percentage"
+                    app:icon="@drawable/ic_baseline_percent_24"
+                    />
+
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -117,34 +118,45 @@
 
             app:strokeColor="@android:color/transparent"
             >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/split_total_buttons"
-                >
-                <Button
-                    android:id="@+id/cancel_split_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:text="Cancel"
-                    android:backgroundTint="@color/red"
-                    android:paddingHorizontal="50dp"
-                    android:layout_marginHorizontal="30dp"/>
-                <Button
-                    android:id="@+id/confirm_split_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:text="@string/confirm"
-                    android:paddingHorizontal="50dp"
-                    android:layout_marginRight="20dp"
-                    />
-            </LinearLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFBFE"
+        app:layout_constraintBottom_toTopOf="@+id/split_total_cost"
+        app:strokeColor="@android:color/transparent"
+        app:titleCentered="true"
+        android:layout_marginBottom="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@+id/buttons"
+            >
+            <Button
+                android:id="@+id/cancel_split_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="Cancel"
+                android:backgroundTint="@color/red"
+                android:paddingHorizontal="50dp"
+                android:layout_marginHorizontal="30dp"/>
+            <Button
+                android:id="@+id/confirm_split_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:text="@string/confirm"
+                android:paddingHorizontal="50dp"
+                android:layout_marginRight="20dp"
+                />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -155,12 +167,14 @@
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:strokeColor="@android:color/transparent"
         app:titleCentered="true">
+
         <com.google.android.material.divider.MaterialDivider
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/split_total_cost"
             app:dividerThickness="2dp"
-            app:dividerColor="@color/black"/>
+            app:dividerColor="@color/black"
+            android:id="@+id/divider"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

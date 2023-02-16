@@ -35,7 +35,7 @@ class SplitReceiptTotalPageActivity : AppCompatActivity() {
     private lateinit var confirmButton: Button
     private lateinit var cancelButton: Button
     private var receiptTotalAmountPassed: Double = 0.0
-    var isPercentageChecked: Boolean = true
+    var isPercentageChecked: Boolean = false
     var splitValueArray: MutableList<Double> = ArrayList()
 
     @SuppressLint("SuspiciousIndentation")
