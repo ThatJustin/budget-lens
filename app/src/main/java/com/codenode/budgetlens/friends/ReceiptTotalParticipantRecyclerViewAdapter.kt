@@ -38,18 +38,18 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val participantsList: M
         "RecyclerView"
     ) position: Int) {
         val friend = participantsList[position]
-        val firstNameShow:String = if(friend.firstName.length>7){
-            friend.firstName.subSequence(0,4).toString()+".."
+        val firstNameShow:String = if(friend.firstName!!.length>7){
+            friend.firstName!!.subSequence(0,4).toString()+".."
         }else
-            friend.firstName
+            friend.firstName!!
         holder.friendFirstName.text =
             holder.itemView.context.getString(R.string.friend_first_name, firstNameShow)
-        val lastNameShow:String = if(friend.firstName.length<=5 && friend.lastName.length>8){
-            friend.lastName.subSequence(0,3).toString()+".."
-        }else if(friend.lastName.length>5 && friend.lastName.length>8){
-            friend.lastName.subSequence(0,2).toString()+".."
+        val lastNameShow:String = if(friend.firstName!!.length<=5 && friend.lastName!!.length>4){
+            friend.lastName!!.subSequence(0,3).toString()+".."
+        }else if(friend.lastName!!.length>5 && friend.lastName!!.length>4){
+            friend.lastName!!.subSequence(0,2).toString()+".."
         }else
-            friend.lastName
+            friend.lastName!!
         holder.friendLastName.text=
             holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
         holder.friendInitial.text=
