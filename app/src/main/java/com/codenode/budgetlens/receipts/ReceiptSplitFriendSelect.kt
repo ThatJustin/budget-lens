@@ -1,46 +1,24 @@
 package com.codenode.budgetlens.receipts
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.InputType
-import android.text.TextWatcher
 import android.util.Log
-import android.util.Patterns
 import android.view.View
 import android.widget.Button
-import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ProgressBar
-import android.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Friends
-import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserFriends
-import com.codenode.budgetlens.data.UserFriends.Companion.userFriends
-import com.codenode.budgetlens.data.UserReceipts
-import com.codenode.budgetlens.friends.FriendsPageActivity
-import com.codenode.budgetlens.friends.FriendsRecyclerViewAdapter
 import com.codenode.budgetlens.friends.FriendsSelectRecyclerViewAdapter
-import com.codenode.budgetlens.friends.requests.FriendPendingRequestsPageActivity
-import com.codenode.budgetlens.friends.requests.FriendWaitingForApprovalsPageActivity
-import com.codenode.budgetlens.items.ItemInfoActivity
-import com.codenode.budgetlens.items.ItemsListPageActivity
-import com.codenode.budgetlens.receipts.splitReceipt.SplitTotalByAmountPageActivity
-import com.google.android.material.button.MaterialButtonToggleGroup
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.gson.internal.bind.TypeAdapters.STRING
+import com.codenode.budgetlens.receipts.splitReceipt.SplitReceiptTotalPageActivity
 import kotlinx.android.synthetic.main.activity_friends_page.*
-import javax.xml.xpath.XPathConstants.STRING
 
 class ReceiptSplitFriendSelect : AppCompatActivity() {
 
@@ -63,6 +41,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
         val handleSplitByItem: Button = findViewById(R.id.split_by_item)
         var additionalData = ""
         val receiptTotalValue = intent.getDoubleExtra("receipt total",0.0)
+        val receiptId = intent.getIntExtra("receiptID",0)
 
 
         //Load Friend List
@@ -107,9 +86,10 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
             handleSplitByTotal.setOnClickListener{
                 // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
                 Log.i("Click", "Show "+selectedList)
-                val intent = Intent(this, SplitTotalByAmountPageActivity::class.java)
+                val intent = Intent(this, SplitReceiptTotalPageActivity::class.java)
                 intent.putIntegerArrayListExtra("itemId", selectedList)
                 intent.putExtra("receipt total",receiptTotalValue)
+                intent.putExtra("receiptID", receiptId)
                 startActivity(intent)
 
             }

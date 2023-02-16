@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Friends
 
-class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableList<Friends>,
-                                                 val splitAmountArray: MutableList<Double> = ArrayList()) :
+class ReceiptTotalParticipantRecyclerViewAdapter(private val participantsList: MutableList<Friends>,
+                                                 private var splitAmountArray: MutableList<Double> = ArrayList(), private val receiptTotalValue:Double) :
     RecyclerView.Adapter<ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder>() {
     var isOnTextChanged: Boolean = false
     var splitAmountFinalTotal: Double = 0.0
@@ -31,13 +31,13 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.split_total_participants_list_model, parent, false)
         rootView = (context as Activity).window.decorView.findViewById(android.R.id.content)
-        textViewTotalSplitAmount = rootView?.findViewById(R.id.percentage_left)
+        textViewTotalSplitAmount = rootView?.findViewById(R.id.total_value_left)
         return ViewHolder(view)
     }
     override fun onBindViewHolder(holder: ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder, @SuppressLint(
         "RecyclerView"
     ) position: Int) {
-        val friend = friends[position]
+        val friend = participantsList[position]
         val firstNameShow:String = if(friend.firstName.length>7){
             friend.firstName.subSequence(0,4).toString()+".."
         }else
@@ -55,8 +55,9 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
         holder.friendInitial.text=
             holder.itemView.context.getString(R.string.friend_initial,friend.friendInitial)
         val friendSplitValue = holder.friendSplitValue
+        splitAmountFinalTotal = receiptTotalValue
+        Log.i("data","Receipt Total Value is $receiptTotalValue and Split Amount Final Total is $splitAmountFinalTotal")
 
-        splitAmountFinalTotal = textViewTotalSplitAmount!!.text.toString().toDouble()
         var tempAmount = splitAmountFinalTotal
         friendSplitValue.addTextChangedListener(object: TextWatcher{
             override fun beforeTextChanged(s: CharSequence, start: Int,
@@ -74,11 +75,19 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
                 if (isOnTextChanged) {
                     isOnTextChanged = false
                     try {
+                        Log.v("hello", " " + splitAmountFinalTotal)
+                        //Remember deleting duplicate 0 elements
                         for (i in 0..position) {
                             val curPos = position
                             if (i != position) {
+                                if(splitAmountArray.size>participantsList.size){
+                                   splitAmountArray = splitAmountArray.subList(0,participantsList.size)
+                                }
                                 splitAmountArray.add(0.0);
                             } else {
+                                if(splitAmountArray.size>participantsList.size){
+                                    splitAmountArray =  splitAmountArray.subList(0,participantsList.size)
+                                }
                                 splitAmountArray.add(0.0);
                                 splitAmountArray[curPos] = s.toString().toDouble();
                                 break;
@@ -96,10 +105,9 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
                     } catch (e: java.lang.NumberFormatException) {
                         splitAmountFinalTotal = tempAmount
                         for(i in 0..position){
-                            Log.d("TimesRemoved", " : " + i);
-                            val  newPos = position;
-                            if(i==newPos){
-                                splitAmountArray[newPos] = 0.0;
+                            Log.d("TimesRemoved", " : $i");
+                            if (i == position) {
+                                splitAmountArray[position] = 0.0;
                             }
                         }
                         for(i in 0 until splitAmountArray.size){
@@ -124,7 +132,7 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
         context = recyclerView.context
     }
     override fun getItemCount(): Int {
-        return friends.size
+        return participantsList.size
     }
     inner class ViewHolder(friendsView: View) : RecyclerView.ViewHolder(friendsView), View.OnClickListener {
         val friendFirstName: TextView = friendsView.findViewById(R.id.participants_first_name)
@@ -140,7 +148,7 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val friends: MutableLis
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                val friend = friends[position]
+                val friend = participantsList[position]
                 println("Clicked $friend")
             }
         }

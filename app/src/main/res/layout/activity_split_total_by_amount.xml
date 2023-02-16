@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".receipts.splitReceipt.SplitTotalByAmountPageActivity">
+    tools:context=".receipts.splitReceipt.SplitReceiptTotalPageActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
@@ -46,16 +46,16 @@
                 app:layout_constraintBottom_toBottomOf="@+id/splitTotalTextView"
                 app:layout_constraintStart_toStartOf="@+id/splitTotalTextView"
                 app:layout_constraintTop_toTopOf="@+id/splitTotalTextView"
+                app:singleSelection="true">
 
-                >
                 <Button
-                    style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/PercentageButton"
+                    style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Percentage"
-                    app:icon="@drawable/ic_baseline_attach_money_20"
                     android:paddingHorizontal="45dp"
+                    android:text="Percentage"
+                    app:icon="@drawable/ic_baseline_percent_24"
                     />
 
                 <Button
@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Amount"
-                    app:icon="@drawable/ic_baseline_percent_24"
+                    app:icon="@drawable/ic_baseline_attach_money_20"
                     android:paddingHorizontal="55dp"
                     />
 
@@ -174,18 +174,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Percentage Left (%):"
+                android:text="Amount Left"
                 android:textColor="#6750A4"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 tools:ignore="MissingConstraints" />
 
             <TextView
-                android:id="@+id/percentage_left"
+                android:id="@+id/total_value_left"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/percentage_left"
+                android:text="@string/amount_left"
                 android:textSize="36sp"
                 android:textStyle="bold"
                 tools:ignore="MissingConstraints" />
@@ -207,18 +207,4 @@
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_nav_menu" />
 
-   <!-- <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabut"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="40dp"
-        app:backgroundTint="@color/purple"
-        app:fabCustomSize="80dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:maxImageSize="40dp"
-        app:srcCompat="@drawable/budget"
-        app:tint="@color/white"
-        tools:ignore="SpeakableTextPresentCheck" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
