@@ -1,6 +1,7 @@
 package com.codenode.budgetlens.data
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.GlobalSharedPreferences
+import com.codenode.budgetlens.home.HomePageActivity
+import com.codenode.budgetlens.login.LoginActivity
 import com.google.gson.Gson
 import okhttp3.*
 import org.json.JSONObject
@@ -38,7 +41,7 @@ class UserProfile {
             }
         }
 
-        fun loadProfileFromAPI(context: Context) {
+        fun loadProfileFromAPI(context: Context,activity:LoginActivity) {
 
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/userprofile/"
 
@@ -80,6 +83,11 @@ class UserProfile {
                                     telephoneNumber,
                                     context,
                                     null
+                                )
+                                activity.finish()
+                                context.startActivity(
+                                    Intent(context,
+                                        HomePageActivity::class.java)
                                 )
 
                                 Log.i("Successful", "Successfully loaded profile from API.")

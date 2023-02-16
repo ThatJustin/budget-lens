@@ -40,9 +40,6 @@ open class HomePageActivity() : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home_page)
 
-        CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
-        CommonComponents.handleNavigationBar(ActivityName.HOME, this, this.window.decorView)
-
         onBackPressedDispatcher.addCallback(
             this /* lifecycle owner */,
             object : OnBackPressedCallback(true) {
@@ -89,5 +86,11 @@ open class HomePageActivity() : AppCompatActivity() {
             scanReceiptButton.alpha = 0.0F
             this.startActivity(intent)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
+        CommonComponents.handleNavigationBar(ActivityName.HOME, this, this.window.decorView)
     }
 }
