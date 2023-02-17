@@ -33,7 +33,8 @@
             android:background="@drawable/shape_line_5"
             android:hint="Please add your category name here "
             android:textColor="#333333"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:singleLine="true" />
 
 
         <LinearLayout
