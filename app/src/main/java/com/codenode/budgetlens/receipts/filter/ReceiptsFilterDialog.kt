@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.core.util.Pair
 import androidx.fragment.app.FragmentManager
 import com.codenode.budgetlens.BuildConfig
@@ -752,7 +753,7 @@ class ReceiptsFilterDialog(
      * Handles closing the dialog.
      */
     private fun handleClosingDialog() {
-        val closeDialog = findViewById<ImageButton>(R.id.filter_receipts_dialog_close)
+        val closeDialog = findViewById<TextView>(R.id.filter_receipts_dialog_close)
         closeDialog.setOnClickListener {
             receiptsFilterDialogListener?.onReturnedFilterOptions(filterOptions)
             this.dismiss()
