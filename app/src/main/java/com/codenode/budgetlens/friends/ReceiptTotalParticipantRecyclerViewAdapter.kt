@@ -2,6 +2,7 @@ package com.codenode.budgetlens.friends
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.Notification
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Friends
@@ -96,8 +98,16 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val participantsList: M
                         }
                         for (i in 0 until splitAmountArray.size) {
 
-                            val tempSplitAmountTotal = splitAmountArray[i]
-                            splitAmountFinalTotal -= tempSplitAmountTotal
+                            var tempSplitAmountTotal = splitAmountArray[i]
+                            if(splitAmountFinalTotal - tempSplitAmountTotal >= 0 ){
+                                splitAmountFinalTotal -= tempSplitAmountTotal
+                            }else{
+                                splitAmountArray[i] = 0.0
+                                friendSplitValue.setText(" ")
+                                Toast.makeText(context,"You Can Not Input Number Exceed the Total Value", Toast.LENGTH_SHORT).show()
+                                continue
+                            }
+
                         }
 
                         textViewTotalSplitAmount!!.text=splitAmountFinalTotal.toString()
@@ -112,8 +122,15 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val participantsList: M
                         }
                         for(i in 0 until splitAmountArray.size){
                             val tempSplitAmountTotal = splitAmountArray[i]
-                            splitAmountFinalTotal -= tempSplitAmountTotal
 
+                            if(splitAmountFinalTotal - tempSplitAmountTotal >= 0 ){
+                                splitAmountFinalTotal -= tempSplitAmountTotal
+                            }else{
+                                splitAmountArray[i] = 0.0
+                                friendSplitValue.setText(" ")
+                                Toast.makeText(context,"You Can Not Input Number Exceed the Total Value", Toast.LENGTH_SHORT).show()
+                                continue
+                            }
                         }
                         textViewTotalSplitAmount!!.text=splitAmountFinalTotal.toString()
                     }

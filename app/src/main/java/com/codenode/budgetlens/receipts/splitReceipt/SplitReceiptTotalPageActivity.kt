@@ -8,9 +8,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
@@ -22,6 +24,11 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButtonToggleGroup
 import kotlinx.coroutines.*
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONArray
+import org.json.JSONObject
 
 class SplitReceiptTotalPageActivity : AppCompatActivity() {
     private var participantList = mutableListOf<Friends>()
@@ -154,7 +161,7 @@ class SplitReceiptTotalPageActivity : AppCompatActivity() {
                 splitValueArray = splitValueArray.subList(0, participantList.size)
                 Log.i("Split Amount Array", "Split Amount Array is $splitValueArray")
                 Log.i("Participants List", "Participant List is $participantIdArray")
-    /*            val client = OkHttpClient.Builder()
+                val client = OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
                     .build()
 
@@ -204,7 +211,7 @@ class SplitReceiptTotalPageActivity : AppCompatActivity() {
                         "Error",
                         "Something went wrong${splitValueResponse.body?.string()} ${splitValueResponse.message} ${splitValueResponse.headers}"
                     )
-                }*/
+                }
 
 
             }
