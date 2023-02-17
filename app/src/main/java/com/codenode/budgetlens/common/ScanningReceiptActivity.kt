@@ -135,12 +135,11 @@ class ScanningReceiptActivity : AppCompatActivity() {
 
     private fun confirm(context: Context, goToHomePageActivity: Intent) {
 
+        //TODO: UPDATE THE API FOR SAVING PICTURE AS A RECEIPT AS SOON AS AMIR PUSHES PR
+
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/"
-
         val registrationPost = OkHttpClient()
-
         val mediaType = "text/plain".toMediaTypeOrNull()
-
         val requestBody = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("receipt_image", tempFile,
@@ -154,7 +153,6 @@ class ScanningReceiptActivity : AppCompatActivity() {
             .addFormDataPart("currency","USD")
             .addFormDataPart("important_dates","1999-01-01")
             .build()
-
         val request = Request.Builder()
             .url(url)
             .method("POST", requestBody)
