@@ -82,7 +82,8 @@
         android:textColor="@color/text666"
         android:drawableRight="@mipmap/location"
         android:inputType="text"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx4"
@@ -96,7 +97,8 @@
         android:textColor="@color/text666"
         android:drawableRight="@mipmap/budget"
         android:inputType="numberDecimal"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx5"
@@ -110,7 +112,8 @@
         android:textColorHint="@color/text666"
         android:textColor="@color/text666"
         android:hint="tax"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx6"
@@ -124,7 +127,8 @@
         android:textColorHint="@color/text666"
         android:textColor="@color/text666"
         android:drawableRight="@mipmap/budget"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx7"
         android:layout_width="match_parent"
@@ -136,7 +140,8 @@
         android:textColorHint="@color/text666"
         android:textColor="@color/text666"
         android:drawableRight="@mipmap/budget"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/tvCurrency"
@@ -160,7 +165,8 @@
         android:hint="receipt text"
         android:visibility="gone"
         android:drawableRight="@mipmap/ic_rili"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/filledButton"

@@ -50,7 +50,8 @@
         app:layout_constraintBottom_toTopOf="@+id/firstName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/firstName"
@@ -65,7 +66,8 @@
         app:layout_constraintBottom_toTopOf="@+id/lastName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/lastName"
@@ -80,7 +82,8 @@
         app:layout_constraintBottom_toTopOf="@+id/telephoneNumber"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/telephoneNumber"
@@ -95,7 +98,8 @@
         app:layout_constraintBottom_toTopOf="@+id/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/password"
@@ -111,7 +115,8 @@
         app:layout_constraintBottom_toTopOf="@+id/confirmPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/confirmPassword"
@@ -126,7 +131,8 @@
         app:layout_constraintBottom_toTopOf="@+id/filledButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/outlinedButton"
