@@ -41,6 +41,67 @@ class UserProfile {
             }
         }
 
+        fun loadProfileFromAPIs(context: Context) {
+
+            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/userprofile/"
+
+            val registrationPost = OkHttpClient()
+            val request = Request.Builder()
+                .url(url)
+                .method("GET", null)
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .addHeader("Content-Type", "application/json")
+                .build()
+
+            registrationPost.newCall(request).enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    e.printStackTrace()
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    response.use {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body?.string()
+                            if (responseBody != null) {
+                                val jsonObject = JSONObject(responseBody.toString())
+                                //Parse the bearer token from response
+                                val username = jsonObject.getString("username")
+                                val firstName = jsonObject.getString("first_name")
+                                val lastName = jsonObject.getString("last_name")
+                                val email = jsonObject.getString("email")
+                                val telephoneNumber = jsonObject.getString("telephone_number")
+
+                                //After loading from API, save it to shared preference for persistence
+                                //and update the user profile
+                                updateProfile(
+                                    false,
+                                    username,
+                                    firstName,
+                                    lastName,
+                                    email,
+                                    telephoneNumber,
+                                    context,
+                                    null
+                                )
+
+                                Log.i("Successful", "Successfully loaded profile from API.")
+                            } else {
+                                Log.i(
+                                    "Error",
+                                    "Something went wrong ${response.message} ${response.headers}"
+                                )
+                            }
+
+                        } else {
+                            Log.e(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+                    }
+                }
+            })
+        }
         fun loadProfileFromAPI(context: Context,activity:LoginActivity) {
 
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/userprofile/"

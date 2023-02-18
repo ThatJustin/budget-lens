@@ -90,6 +90,7 @@ open class HomePageActivity() : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        UserProfile.loadProfileFromAPIs(this)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.HOME, this, this.window.decorView)
     }
