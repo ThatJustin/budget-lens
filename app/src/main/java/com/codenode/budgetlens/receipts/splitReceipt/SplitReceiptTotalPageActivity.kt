@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.ActivityName
+import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Friends
 import com.codenode.budgetlens.data.UserFriends.Companion.loadFriendsFromAPI
@@ -44,7 +45,7 @@ class SplitReceiptTotalPageActivity : AppCompatActivity() {
     private var receiptTotalAmountPassed: Double = 0.0
     var isPercentageChecked: Boolean = false
     var splitValueArray: MutableList<Double> = ArrayList()
-
+    private var receiptId: Int = 0
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,7 @@ class SplitReceiptTotalPageActivity : AppCompatActivity() {
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
         var additionalData = ""
         val participantIdArray = intent.getIntegerArrayListExtra("itemId")
-        val receiptId = intent.getIntExtra("receiptID",0)
+        receiptId = intent.getIntExtra("receiptID",0)
         receiptTotalAmountPassed = intent.getDoubleExtra("receipt total", 0.0)
         var receiptTotalValue = receiptTotalAmountPassed
         cancelButton = findViewById(R.id.cancel_split_button)
@@ -161,60 +162,88 @@ class SplitReceiptTotalPageActivity : AppCompatActivity() {
                 splitValueArray = splitValueArray.subList(0, participantList.size)
                 Log.i("Split Amount Array", "Split Amount Array is $splitValueArray")
                 Log.i("Participants List", "Participant List is $participantIdArray")
-                val client = OkHttpClient.Builder()
-                    .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
-                    .build()
-
-                // for sending the participants list
-                val participantsRequestBody = JSONObject().apply {
-                    put("get_user_list", JSONArray(participantList))
-                }
-                val participantsBody = participantsRequestBody.toString().toRequestBody("application/json".toMediaTypeOrNull())
-                val participantsListRequest = Request.Builder()
-                    .url("http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/itemsplit/sharedUsers/item_id=<$receiptId>/")
-                    .post(participantsBody)
-                    .build()
-
-                // Send the first request
-                val participantsListResponse = client.newCall(participantsListRequest).execute()
-
-                // for sending the split value array list
-                val requestBody2 = JSONObject().apply {
-                    put("get_shared_amount", JSONArray(splitValueArray))
-                }
-                val splitValueBody = requestBody2.toString().toRequestBody("application/json".toMediaTypeOrNull())
-                val splitValueRequest = Request.Builder()
-                    .url("http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/itemsplit/sharedAmount/item_id=<$receiptId>/")
-                    .post(splitValueBody)
-                    .build()
-
-                // Send the second request
-                val splitValueResponse = client.newCall(splitValueRequest).execute()
-                if(participantsListResponse.isSuccessful&&splitValueResponse.isSuccessful){
-                    val participantsListResponseBody = participantsListResponse.body?.string()
-                    val splitValueResponseBody = splitValueResponse.body?.string()
-                    if(participantsListResponseBody != null && splitValueResponseBody != null){
-                        Toast.makeText(this,"The Split form has been submitted successfully", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, ReceiptsListPageActivity::class.java)
-                        startActivity(intent)
-                    }else{
-                        Log.i("Empty", "Something went wrong${participantsListResponse.body?.string()}")
-                        Log.i("Empty", "Something went wrong${splitValueResponse.body?.string()}")
-                    }
-
-                }else{
-                    Log.e(
-                        "Error",
-                        "Something went wrong${participantsListResponse.body?.string()} ${participantsListResponse.message} ${participantsListResponse.headers}"
-                    )
-                    Log.e(
-                        "Error",
-                        "Something went wrong${splitValueResponse.body?.string()} ${splitValueResponse.message} ${splitValueResponse.headers}"
-                    )
-                }
-
+                postData(context)
 
             }
+        }
+
+
+    }
+    private fun postData(context: SplitReceiptTotalPageActivity) = CoroutineScope(Dispatchers.IO).launch {
+        Log.i("ReceiptID","ReceiptID is $receiptId")
+        val client = OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
+            .build()
+
+        // for sending the receipt total split by amount
+        if (!isPercentageChecked){
+            val sendAmountRequestBody = JSONObject().apply {
+                put("receipt",receiptId)
+                put("shared_user_ids", JSONArray(participantList))
+                put("shared_amount",JSONArray(splitValueArray))
+            }
+            val splitByAmountBody = sendAmountRequestBody.toString().toRequestBody("application/json".toMediaTypeOrNull())
+            val sendByAmountRequest = Request.Builder()
+                .url("http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/itemsplitAmount/")
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .post(splitByAmountBody)
+                .build()
+
+            // Send the first request
+            val sendByAmountResponse = client.newCall(sendByAmountRequest).execute()
+            if(sendByAmountResponse.isSuccessful){
+                val sendByAmountResponseBody = sendByAmountResponse.body?.string()
+                if(sendByAmountResponseBody != null){
+                    Toast.makeText(context,"The Split form has been submitted successfully", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(context, ReceiptsListPageActivity::class.java)
+                    startActivity(intent)
+                    Log.i("Successful","The post was successful")
+                }else{
+                    Log.i("Empty", "Something went wrong${sendByAmountResponse.body?.string()}")
+                }
+
+            }else{
+                Log.e(
+                    "Error",
+                    "Something went wrong${sendByAmountResponse.body?.string()} ${sendByAmountResponse.message} ${sendByAmountResponse.headers}"
+                )
+            }
+
+
+        }else{
+            // for sending the split value by Percentage
+            val splitByPercentageRequestBody = JSONObject().apply {
+                put("receipt",receiptId)
+                put("shared_user_ids", JSONArray(participantList))
+                put("shared_amount",JSONArray(splitValueArray))
+            }
+            val splitByPercentageBody = splitByPercentageRequestBody.toString().toRequestBody("application/json".toMediaTypeOrNull())
+            val splitByPercentageRequest = Request.Builder()
+                .url("http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/itemsplitPercentage/")
+                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
+                .post(splitByPercentageBody)
+                .build()
+
+            // Send the second request
+            val splitByPercentageResponse = client.newCall(splitByPercentageRequest).execute()
+            if(splitByPercentageResponse.isSuccessful){
+                val splitValueResponseBody = splitByPercentageResponse.body?.string()
+                if(splitValueResponseBody != null){
+                    Toast.makeText(context,"The Split form has been submitted successfully", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(context, ReceiptsListPageActivity::class.java)
+                    startActivity(intent)
+                    Log.i("Successful","The post was successful")
+                }else{
+                    Log.i("Empty", "Something went wrong${splitByPercentageResponse.body?.string()}")
+                }
+
+            }else{
+                Log.e(
+                    "Error",
+                    "Something went wrong${splitByPercentageResponse.body?.string()} ${splitByPercentageResponse.message} ${splitByPercentageResponse.headers}"
+                )
+            }
+
         }
 
 
