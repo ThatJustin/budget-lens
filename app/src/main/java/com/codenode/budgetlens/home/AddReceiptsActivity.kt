@@ -193,6 +193,27 @@ class AddReceiptsActivity : AppCompatActivity() {
 
             return
         }
+        if (TextUtils.isEmpty( tx1.text.toString())){
+            return
+        }
+       /* if (TextUtils.isEmpty( tx2.text.toString())){
+            return
+        }*/
+        if (TextUtils.isEmpty( tx3.text.toString())){
+            return
+        }
+        if (TextUtils.isEmpty( tx4.text.toString())){
+            return
+        }
+        if (TextUtils.isEmpty( tx5.text.toString())){
+            return
+        }
+        if (TextUtils.isEmpty( tx6.text.toString())){
+            return
+        }
+        if (TextUtils.isEmpty( tx7.text.toString())){
+            return
+        }
         Log.e("dsadasd", "Submit: " + tx1.text.toString())
       /*  if (TextUtils.isEmpty(path)) {
             Toast.makeText(this, "Please choose img", Toast.LENGTH_SHORT).show()
