@@ -62,7 +62,8 @@
             android:inputType="text"
             android:hint="first name"
             android:ems="10"
-            android:stretchColumns="0" />
+            android:stretchColumns="0"
+            android:nextFocusForward="@+id/lastName" />
 
         <EditText
             android:id="@+id/lastName"

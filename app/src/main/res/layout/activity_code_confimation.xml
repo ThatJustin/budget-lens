@@ -58,7 +58,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableEnd="@drawable/ic_baseline_lock_24"
-            android:hint="Code" />
+            android:hint="Code"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
