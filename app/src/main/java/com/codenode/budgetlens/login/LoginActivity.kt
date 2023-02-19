@@ -38,7 +38,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val context = this as Context
-        val goToHomePageActivity = Intent(this, HomePageActivity::class.java)
 
         val loginButton: Button = findViewById(R.id.checkCredentials)
         val resetButton: Button = findViewById(R.id.forgorPass)
@@ -104,10 +103,9 @@ class LoginActivity : AppCompatActivity() {
 
                                 //Save token and load profile (if it already exists, it just updates )
                                 BearerToken.saveToken(token, context)
-                                UserProfile.loadProfileFromAPI(context)
+                                UserProfile.loadProfileFromAPI(context,this@LoginActivity)
 
                                 Log.i("Successful", "Login successful.")
-                                startActivity(goToHomePageActivity)
                             } else {
                                 Log.i("Empty", "Something went wrong ${response.body?.string()}")
                             }

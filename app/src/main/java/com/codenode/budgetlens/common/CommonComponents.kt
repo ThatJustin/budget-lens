@@ -6,10 +6,14 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TableLayout
 import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.BuildConfig
+import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.data.UserProfile
@@ -22,6 +26,7 @@ import com.codenode.budgetlens.utils.AppUtils
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.edit_profile_dialog.view.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -112,6 +117,11 @@ class CommonComponents {
                 when (menuItem.itemId) {
                     R.id.profile_icon -> {
                         //Do nothing
+                        if (subProfile != null) {
+                            subProfile.title =
+                                UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
+                        }
+
                         true
                     }
                     R.id.sub_profile -> {
@@ -124,8 +134,12 @@ class CommonComponents {
                         val dialogView: View =
                             layoutInflater.inflate(R.layout.edit_profile_dialog, null)
                         builder.setView(dialogView)
+
                         val dialog = builder.create()
-                        dialog.show()
+                        if(!dialog.isShowing){
+
+                            dialog.show()
+                        }
 
                         val firstName =
                             dialogView.findViewById<View>(R.id.firstName_edit) as EditText

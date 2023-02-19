@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/mainlayouts"
     android:orientation="horizontal">
 
     <TextView
@@ -148,4 +150,15 @@
         tools:layout_editor_absoluteY="657dp" />
 
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteX="55dp"
+        tools:layout_editor_absoluteY="657dp" />
 </TableLayout>
