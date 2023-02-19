@@ -24,7 +24,9 @@ import android.text.TextWatcher
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import com.codenode.budgetlens.budget.BudgetPageActivity
+import com.codenode.budgetlens.data.UserFriends
 import com.codenode.budgetlens.data.UserFriends.Companion.sendFriendRequest
 import com.codenode.budgetlens.friends.requests.FriendPendingRequestsPageActivity
 import com.codenode.budgetlens.friends.requests.FriendWaitingForApprovalsPageActivity
@@ -103,7 +105,15 @@ class FriendsPageActivity : AppCompatActivity() {
             friendAddDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
                 if (validateEmail()) {
                     Log.i("FriendPageActivity", "[validated] add : email -> ${emailInput.text}")
-                    sendFriendRequest(this, emailInput)
+                    UserFriends.sendFriendRequest(this, emailInput,
+                        onFailed = {
+                            showToast(it)
+                        }, onSuccess = {
+                            showToast(it)
+                        })
+
+                  //  sendFriendRequest(this, emailInput)
+
                     emailInput.text.clear()
                     friendAddDialog.dismiss()
                 }
@@ -155,6 +165,13 @@ class FriendsPageActivity : AppCompatActivity() {
         } else {
             emailInput.error = null
             true
+        }
+    }
+
+
+    fun showToast(message: String){
+        runOnUiThread {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
         }
     }
 }

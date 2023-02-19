@@ -114,10 +114,11 @@ class UserFriends {
             return userFriends
         }
 
-        fun sendFriendRequest(context: Context, emailInput: EditText) {
+        fun sendFriendRequest(context: Context, emailInput: EditText, onSuccess: ((String) -> Unit)? =null,
+                              onFailed: ((String) -> Unit)? =null) {
             // TODO: change to correct one l8r
             val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/friend/request/"
-
+            var emailAddress = emailInput.text.toString()
             val registrationPost = OkHttpClient()
 
             val mediaType = "application/json".toMediaTypeOrNull()
@@ -142,11 +143,20 @@ class UserFriends {
                     Log.i("Response", "Got the response from server")
                     response.use {
                         if (response.isSuccessful) {
-                            Log.i("Successful", "${response.body?.string()}")
+                            val strBody =response.body?.string()
+                            if (strBody.isNullOrBlank()){
+                                onSuccess?.invoke("Invite sent successfully")
+                                return
+                            }
+                            val jsonObj = JSONObject(strBody)
+                            onSuccess?.invoke(jsonObj.getString("response").plus("to $emailAddress"))
+                            Log.i("Successful", "$strBody $emailAddress")
                         } else {
+                            val message = response.body?.string() ?: "Send invite has failed"
+                            onFailed?.invoke(message)
                             Log.e(
                                 "Error",
-                                "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
+                                "Something went wrong $message ${response.message} ${response.headers}"
                             )
                         }
                     }
