@@ -196,9 +196,6 @@ class AddReceiptsActivity : AppCompatActivity() {
         if (TextUtils.isEmpty( tx1.text.toString())){
             return
         }
-       /* if (TextUtils.isEmpty( tx2.text.toString())){
-            return
-        }*/
         if (TextUtils.isEmpty( tx3.text.toString())){
             return
         }
