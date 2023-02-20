@@ -149,10 +149,14 @@ class UserFriends {
                                 return
                             }
                             val jsonObj = JSONObject(strBody)
-                            onSuccess?.invoke(jsonObj.getString("response").plus("to $emailAddress"))
+                            var apiMessage = jsonObj.getString("response")
+                            if(apiMessage.endsWith(".")){
+                                apiMessage = apiMessage.substring(0, apiMessage.length-1)
+                            }
+                            onSuccess?.invoke(apiMessage.plus(": $emailAddress"))
                             Log.i("Successful", "$strBody $emailAddress")
                         } else {
-                            val message = response.body?.string() ?: "Send invite has failed"
+                            val message = response.body?.string()?.noQuote() ?: "Send invite has failed"
                             onFailed?.invoke(message)
                             Log.e(
                                 "Error",
@@ -164,4 +168,9 @@ class UserFriends {
             })
         }
     }
+}
+
+fun String.noQuote(): String{
+    val len = this.length-2
+    return this.substring(1, len)
 }

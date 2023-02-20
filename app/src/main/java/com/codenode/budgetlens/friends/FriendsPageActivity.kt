@@ -22,15 +22,18 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.data.UserFriends
 import com.codenode.budgetlens.data.UserFriends.Companion.sendFriendRequest
 import com.codenode.budgetlens.friends.requests.FriendPendingRequestsPageActivity
 import com.codenode.budgetlens.friends.requests.FriendWaitingForApprovalsPageActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_friends_page.*
 
 class FriendsPageActivity : AppCompatActivity() {
@@ -75,6 +78,7 @@ class FriendsPageActivity : AppCompatActivity() {
             }
         }
 
+        val rootView = findViewById<ConstraintLayout>(R.id.root_layout)
         emailInput = EditText(this)
         emailInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         emailInput.hint = "Email address"
@@ -107,12 +111,10 @@ class FriendsPageActivity : AppCompatActivity() {
                     Log.i("FriendPageActivity", "[validated] add : email -> ${emailInput.text}")
                     UserFriends.sendFriendRequest(this, emailInput,
                         onFailed = {
-                            showToast(it)
+                            showToast(rootView, it)
                         }, onSuccess = {
-                            showToast(it)
+                            showToast(rootView, it)
                         })
-
-                  //  sendFriendRequest(this, emailInput)
 
                     emailInput.text.clear()
                     friendAddDialog.dismiss()
@@ -169,9 +171,9 @@ class FriendsPageActivity : AppCompatActivity() {
     }
 
 
-    fun showToast(message: String){
+    fun showToast(rootView: View, message: String){
         runOnUiThread {
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            Snackbar.make(this, rootView, message, Snackbar.LENGTH_SHORT).show()
         }
     }
 }
