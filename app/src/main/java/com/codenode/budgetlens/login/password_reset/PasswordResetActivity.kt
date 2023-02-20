@@ -29,6 +29,14 @@ class PasswordResetActivity : AppCompatActivity() {
 
         emailAddress = findViewById(R.id.emailInput)
 
+        val builder = AlertDialog.Builder(this@PasswordResetActivity)
+        builder.setTitle("Error!")
+        builder.setCancelable(true)
+        builder.setNegativeButton("Cancel"
+        ) { p0, p1 ->
+        }
+        val dialog = builder.create()
+
         //This will redirect the user to the code confirmation page
         sendEmailButton.setOnClickListener {
             //Verify the input is entered
@@ -75,20 +83,13 @@ class PasswordResetActivity : AppCompatActivity() {
                             var errResponse = response.body?.string()
 
                             if (errResponse?.trim()?.startsWith("<") ==true){
-                                errResponse = "An unknown server error has occurred"
+                                errResponse = "An unknown server error has occurred."
                             }
 
                             runOnUiThread {
-                                emailAddress.error = "Please enter a valid email"
-                                val builder = AlertDialog.Builder(this@PasswordResetActivity)
-                                builder.setTitle("Error!")
-                                builder.setMessage(errResponse)
-                                builder.setCancelable(true)
-                                builder.setNegativeButton("Cancel"
-                                ) { p0, p1 ->
-
-                                }
-                                val dialog = builder.create()
+                                emailAddress.error = "Please enter a valid email."
+                                dialog.setMessage(errResponse)
+                                //builder.setMessage(errResponse)
                                 dialog.show()
                             }
                             Log.e(
