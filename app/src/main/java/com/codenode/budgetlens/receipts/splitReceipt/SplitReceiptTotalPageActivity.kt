@@ -174,6 +174,12 @@ class SplitReceiptTotalPageActivity : AppCompatActivity(),
                 }
 
                 splitValueArray = splitValueArray.subList(0, participantList.size)
+                if(isPercentageChecked){
+                    splitValueArray.forEachIndexed{ index,value->
+                        splitValueArray[index] =  value/100
+
+                    }
+                }
                 Log.i("Split Amount Array", "Split Amount Array is $splitValueArray")
                 Log.i("Participants List", "Participant List is $participantIdArray")
                 isPercentageChecked = toggleButton.checkedButtonId == R.id.PercentageButton
