@@ -172,6 +172,6 @@ class UserFriends {
 
 
 fun String.noQuote(): String{
-    val len = this.length-2
-    return this.substring(1, len)
+    val len = this.length-1
+    return this.trim().substring(1, len)
 }
