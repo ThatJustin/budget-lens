@@ -149,7 +149,7 @@ class UserFriends {
                                 return
                             }
                             val jsonObj = JSONObject(strBody)
-                            onSuccess?.invoke(jsonObj.getString("response").plus("to $emailAddress"))
+                            onSuccess?.invoke(jsonObj.getString("response").plus("$emailAddress"))
                             Log.i("Successful", "$strBody $emailAddress")
                         } else {
                             val message = response.body?.string() ?: "Send invite has failed"
