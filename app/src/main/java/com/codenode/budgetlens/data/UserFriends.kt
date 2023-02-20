@@ -149,7 +149,7 @@ class UserFriends {
                                 return
                             }
                             val jsonObj = JSONObject(strBody)
-                            var apiMessage = jsonObj.getString("response")
+                            var apiMessage = jsonObj.getString("response").trim()
                             if(apiMessage.endsWith(".")){
                                 apiMessage = apiMessage.substring(0, apiMessage.length-1)
                             }
@@ -169,6 +169,7 @@ class UserFriends {
         }
     }
 }
+
 
 fun String.noQuote(): String{
     val len = this.length-2
