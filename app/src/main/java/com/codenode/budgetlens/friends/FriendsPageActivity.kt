@@ -111,9 +111,9 @@ class FriendsPageActivity : AppCompatActivity() {
                     Log.i("FriendPageActivity", "[validated] add : email -> ${emailInput.text}")
                     UserFriends.sendFriendRequest(this, emailInput,
                         onFailed = {
-                            showToast(rootView, it)
+                            showSnackbar(rootView, it)
                         }, onSuccess = {
-                            showToast(rootView, it)
+                            showSnackbar(rootView, it)
                         })
 
                     emailInput.text.clear()
@@ -171,7 +171,7 @@ class FriendsPageActivity : AppCompatActivity() {
     }
 
 
-    fun showToast(rootView: View, message: String){
+    fun showSnackbar(rootView: View, message: String){
         runOnUiThread {
             Snackbar.make(this, rootView, message, Snackbar.LENGTH_SHORT).show()
         }
