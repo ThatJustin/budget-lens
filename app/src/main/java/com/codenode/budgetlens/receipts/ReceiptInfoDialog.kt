@@ -39,7 +39,7 @@ class ReceiptInfoDialog(
 
     private lateinit var receiptInfoDialog: Dialog
     var isDeletedReceipt = false
-
+    private var receiptTotalValue: Double = 0.0
     @SuppressLint("InflateParams", "StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,8 +73,10 @@ class ReceiptInfoDialog(
         tvDateUploaded.text = "0000/00/00 - 00:00" // not yet implemented in Receipt Model
         if (receiptInfo.total_amount != null) {
             tvSplitAmount.text = context.getString(R.string.total, receiptInfo.total_amount)
+            receiptTotalValue = tvSplitAmount.text.toString().toDouble()
         } else {
             tvSplitAmount.text = context.getString(R.string.total, 0.00)
+            receiptTotalValue = tvSplitAmount.text.toString().toDouble()
         }
         if (receiptInfo.currency != null) {
             tvTotalAmountCurrency.text =
@@ -153,6 +155,8 @@ class ReceiptInfoDialog(
         //handle split bill button
         findViewById<Button>(R.id.receipt_info_split_bill)?.setOnClickListener {
             val goToSplitBillPageActivity = Intent(context, ReceiptSplitFriendSelect::class.java)
+            goToSplitBillPageActivity.putExtra("receipt total",receiptTotalValue)
+            goToSplitBillPageActivity.putExtra("receiptID", receiptInfo.id)
             context.startActivity(goToSplitBillPageActivity)
         }
 

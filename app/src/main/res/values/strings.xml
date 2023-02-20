@@ -90,7 +90,7 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
+    <string name="split_value">%1$s</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="new_sub_category">New Sub Category</string>
@@ -106,6 +106,9 @@
     <string name="delete_this_category">Delete this Category?</string>
     <string name="confirm">Confirm</string>
     <string name="save_filter">Save</string>
+    <string name="label">label</string>
+    <string name="percentage_left">%1$s</string>
+    <string name="amount_left">%1$s</string>
     <string-array name="category_place_holder">
         <item>Groceries</item>
         <item>Entertainment</item>
