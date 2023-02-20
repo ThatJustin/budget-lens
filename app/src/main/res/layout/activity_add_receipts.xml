@@ -34,12 +34,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
         android:drawableRight="@mipmap/ic_down"
         android:hint="please choose a merchant"
         android:paddingVertical="16dp"
-        android:text=""
-        android:textColor="@color/text333"
-        android:textSize="14dp" />
+        android:textSize="20dp"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"  />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx1"
@@ -50,6 +51,8 @@
         android:layout_marginBottom="10dp"
         android:drawableRight="@mipmap/ic_rili"
         android:focusable="false"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:hint="Scan date"
         android:minHeight="48dp" />
 
@@ -62,6 +65,8 @@
         android:layout_marginBottom="10dp"
         android:hint="http//192.168.219:8000//receipt-images1111669934941jpg"
         android:inputType="text"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:focusable="false"
         android:minHeight="48dp" />
 
@@ -73,9 +78,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:hint="Location"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:drawableRight="@mipmap/location"
         android:inputType="text"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx4"
@@ -85,9 +93,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:hint="total"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:drawableRight="@mipmap/budget"
         android:inputType="numberDecimal"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx5"
@@ -98,8 +109,11 @@
         android:layout_marginBottom="10dp"
         android:drawableRight="@mipmap/budget"
         android:inputType="numberDecimal"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:hint="tax"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx6"
@@ -110,8 +124,11 @@
         android:layout_marginBottom="10dp"
         android:inputType="numberDecimal"
         android:hint="tip"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:drawableRight="@mipmap/budget"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx7"
         android:layout_width="match_parent"
@@ -120,8 +137,11 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:hint="coupon"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:drawableRight="@mipmap/budget"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/tvCurrency"
@@ -143,8 +163,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:hint="receipt text"
+        android:visibility="gone"
         android:drawableRight="@mipmap/ic_rili"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/filledButton"

@@ -87,7 +87,8 @@
         app:layout_constraintBottom_toTopOf="@+id/location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/total"
@@ -103,7 +104,8 @@
         app:layout_constraintBottom_toTopOf="@+id/location"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/location"
@@ -119,7 +121,8 @@
         app:layout_constraintBottom_toTopOf="@+id/filledButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/timeOfSale"
@@ -135,7 +138,8 @@
         app:layout_constraintBottom_toTopOf="@+id/filledButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/warranties"
@@ -151,7 +155,8 @@
         app:layout_constraintBottom_toTopOf="@+id/returnDate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/returnDate"
@@ -167,7 +172,8 @@
         app:layout_constraintBottom_toTopOf="@+id/filledButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/filledButton"

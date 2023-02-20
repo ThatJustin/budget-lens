@@ -33,7 +33,8 @@
             android:lines="4"
             android:layout_marginTop="@dimen/dp_10"
             android:layout_width="match_parent"
-            android:layout_height="50dp"/>
+            android:layout_height="50dp"
+            android:singleLine="true" />
         <View
             android:background="#ff0"
             android:layout_width="match_parent"
