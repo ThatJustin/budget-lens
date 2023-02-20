@@ -89,7 +89,6 @@ class PasswordResetActivity : AppCompatActivity() {
                             runOnUiThread {
                                 emailAddress.error = "Please enter a valid email."
                                 dialog.setMessage(errResponse)
-                                //builder.setMessage(errResponse)
                                 dialog.show()
                             }
                             Log.e(
