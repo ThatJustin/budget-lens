@@ -2,7 +2,6 @@ package com.codenode.budgetlens.friends
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Notification
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -18,7 +18,7 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Friends
 
 class ReceiptTotalParticipantRecyclerViewAdapter(private val participantsList: MutableList<Friends>,
-                                                 private var splitAmountArray: MutableList<Double> = ArrayList(), private val receiptTotalValue:Double) :
+                                                 private var splitAmountArray: MutableList<Double> = ArrayList(), private val receiptTotalValue:Double, private val listener: OnDataChangeListener) :
     RecyclerView.Adapter<ReceiptTotalParticipantRecyclerViewAdapter.ViewHolder>() {
     var isOnTextChanged: Boolean = false
     var splitAmountFinalTotal: Double = 0.0
@@ -77,7 +77,7 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val participantsList: M
                 if (isOnTextChanged) {
                     isOnTextChanged = false
                     try {
-                        Log.v("hello", " " + splitAmountFinalTotal)
+                        Log.v("splitAmountFinalTotal", " " + splitAmountFinalTotal)
                         //Remember deleting duplicate 0 elements
                         for (i in 0..position) {
                             val curPos = position
@@ -156,10 +156,17 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val participantsList: M
         val friendLastName: TextView = friendsView.findViewById(R.id.participants_last_name)
         val friendInitial: TextView = friendsView.findViewById(R.id.participants_initial)
         val friendSplitValue: EditText = friendsView.findViewById(R.id.split_value)
+        val participantsRemoved: ImageView = friendsView.findViewById(R.id.reject_request)
 
 
         init {
             friendsView.setOnClickListener(this)
+            participantsRemoved.setOnClickListener{
+                val position = adapterPosition
+                removeFriendRequest(position)
+                Log.i("Click", "Friend Request at "+ adapterPosition+ " has been clicked")
+
+            }
         }
 
         override fun onClick(v: View?) {
@@ -169,7 +176,23 @@ class ReceiptTotalParticipantRecyclerViewAdapter(private val participantsList: M
                 println("Clicked $friend")
             }
         }
+        private fun removeFriendRequest(position: Int) {
+            participantsList.removeAt(position)
+            splitAmountFinalTotal+= splitAmountArray[position]
+            textViewTotalSplitAmount!!.text=splitAmountFinalTotal.toString()
+            splitAmountArray.removeAt(position)
+            notifyItemRemoved(position)
+            listener.onDataChanged(participantsList,splitAmountArray,splitAmountFinalTotal)
+        }
 
+
+    }
+    interface OnDataChangeListener {
+        fun onDataChanged(
+            participantsList: MutableList<Friends>,
+            splitAmountArray: MutableList<Double>,
+            splitAmountFinalTotal: Double
+        )
     }
 
 
