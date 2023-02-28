@@ -39,7 +39,6 @@ class LoginPageActivityInstrumentedTests {
     @Before
     fun setup() {
         clearStorage()
-        onView(withId(R.id.LoginActivityBtn)).perform(click())
         val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)

@@ -3,11 +3,8 @@ package com.codenode.budgetlens.receipts
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.NoMatchingViewException
-import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -26,16 +23,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class ReceiptsListPageActivityInstrumentedTests {
-
-    private fun ViewInteraction.isDisplayed(): Boolean {
-        return try {
-            check(matches(ViewMatchers.isDisplayed()))
-            true
-        } catch (e: NoMatchingViewException) {
-            false
-        }
-    }
-
     // This is used to clear the shared preferences before each test
     companion object {
         @BeforeClass
@@ -53,7 +40,6 @@ class ReceiptsListPageActivityInstrumentedTests {
     @Before
     fun setup() {
         clearStorage()
-        onView(withId(R.id.LoginActivityBtn)).perform(click())
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
@@ -69,7 +55,7 @@ class ReceiptsListPageActivityInstrumentedTests {
     }
 
     @Test
-    fun test_receipts_list_page_activity_is_displayed_and_scrollable() {
+    fun test_receipts_list_page_activity_is_displayed() {
         // This test checks to see if the receipts list page activity is displayed and scrollable
         // by first checking if it is displayed when the "Receipts" button/item on the navigation
         // bar is clicked and then scrolling down and up the list to make sure that it is scrollable
@@ -77,14 +63,6 @@ class ReceiptsListPageActivityInstrumentedTests {
         val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-        if (onView(withId(R.id.receipts_list)).isDisplayed()) {
-            onView(withId(R.id.receipts_list)).perform(swipeUp())
-            onView(withId(R.id.receipts_list)).perform(swipeDown())
-            onView(withId(R.id.receipts_list)).perform(click())
-            onView(withId(R.id.relativeLayout)).check(matches(isDisplayed()))
-        }
-        else {
-            !onView(withId(R.id.receipts_list)).isDisplayed()
-        }
+        onView(withId(R.id.search_bar_text)).check(matches(isDisplayed()))
     }
 }

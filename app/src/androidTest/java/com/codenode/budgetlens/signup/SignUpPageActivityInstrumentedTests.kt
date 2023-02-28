@@ -40,7 +40,6 @@ class SignUpPageActivityInstrumentedTests {
     @Before
     fun setup() {
         clearStorage()
-        onView(withId(R.id.LoginActivityBtn)).perform(click())
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
@@ -69,19 +68,54 @@ class SignUpPageActivityInstrumentedTests {
     }
 
     @Test
-    fun test_registration_with_invalid_telephone_number_input_field() {
+    fun test_registration_with_invalid_email_input_field() {
+        // This is an invalid email input field
+        onView(withId(R.id.email)).perform(typeText("43r34"), closeSoftKeyboard()).check(matches(withText("43r34")))
+
+        onView(withId(R.id.firstName)).perform(typeText("Tester"), closeSoftKeyboard()).check(matches(withText("Tester")))
+        onView(withId(R.id.lastName)).perform(typeText("Tester"), closeSoftKeyboard()).check(matches(withText("Tester")))
+        onView(withId(R.id.telephoneNumber)).perform(typeText("+15145390682"), closeSoftKeyboard()).check(matches(withText("+15145390682")))
+        onView(withId(R.id.password)).perform(typeText("tester_password"), closeSoftKeyboard()).check(matches(withText("tester_password")))
+        onView(withId(R.id.confirmPassword)).perform(typeText("tester_password"), closeSoftKeyboard()).check(matches(withText("tester_password")))
+
+        onView(withId(R.id.filledButton)).perform(click())
+
+        // This checks that the email input field-specific error message is displayed and shown to the user
+        onView(withId(R.id.email)).check(matches(hasErrorText("This field is not a valid email address")))
+    }
+
+    @Test
+    fun test_registration_with_invalid_password_size_input_field() {
         onView(withId(R.id.email)).perform(typeText("tester_email@yahoo.com"), closeSoftKeyboard()).check(matches(withText("tester_email@yahoo.com")))
         onView(withId(R.id.firstName)).perform(typeText("Tester"), closeSoftKeyboard()).check(matches(withText("Tester")))
         onView(withId(R.id.lastName)).perform(typeText("Tester"), closeSoftKeyboard()).check(matches(withText("Tester")))
+        onView(withId(R.id.telephoneNumber)).perform(typeText("+15145390682"), closeSoftKeyboard()).check(matches(withText("+15145390682")))
 
-        // This is an invalid telephone number input field
-        onView(withId(R.id.telephoneNumber)).perform(typeText("+912012185234"), closeSoftKeyboard()).check(matches(withText("+912012185234")))
-        onView(withId(R.id.password)).perform(typeText("tester_password"), closeSoftKeyboard()).check(matches(withText("tester_password")))
-        onView(withId(R.id.confirmPassword)).perform(typeText("tester_password"), closeSoftKeyboard()).check(matches(withText("tester_password")))
+        // This is an invalid password input field
+        onView(withId(R.id.password)).perform(typeText("te"), closeSoftKeyboard()).check(matches(withText("te")))
+
+        onView(withId(R.id.confirmPassword)).perform(typeText("te"), closeSoftKeyboard()).check(matches(withText("te")))
         onView(withId(R.id.filledButton)).perform(click())
 
-        // This checks that the telephone number input field-specific error message is displayed and shown to the user
-        onView(withId(R.id.telephoneNumber)).check(matches(hasErrorText("This field is not a valid telephone number")))
+        // This checks that the password input field-specific error message is displayed and shown to the user
+        onView(withId(R.id.password)).check(matches(hasErrorText("Password must be greater than 8 characters")))
+    }
+
+    @Test
+    fun test_registration_with_invalid_matching_passwords_input_field() {
+        onView(withId(R.id.email)).perform(typeText("tester_email@yahoo.com"), closeSoftKeyboard()).check(matches(withText("tester_email@yahoo.com")))
+        onView(withId(R.id.firstName)).perform(typeText("Tester"), closeSoftKeyboard()).check(matches(withText("Tester")))
+        onView(withId(R.id.lastName)).perform(typeText("Tester"), closeSoftKeyboard()).check(matches(withText("Tester")))
+        onView(withId(R.id.telephoneNumber)).perform(typeText("+15145390682"), closeSoftKeyboard()).check(matches(withText("+15145390682")))
+        onView(withId(R.id.password)).perform(typeText("tester_password"), closeSoftKeyboard()).check(matches(withText("tester_password")))
+
+        // This is an invalid password input field
+        onView(withId(R.id.confirmPassword)).perform(typeText("te"), closeSoftKeyboard()).check(matches(withText("te")))
+
+        onView(withId(R.id.filledButton)).perform(click())
+
+        // This checks that the password input field-specific error message is displayed and shown to the user
+        onView(withId(R.id.confirmPassword)).check(matches(hasErrorText("Passwords do not match")))
     }
 
     @Test

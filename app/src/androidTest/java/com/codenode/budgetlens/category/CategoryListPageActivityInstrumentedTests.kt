@@ -1,10 +1,7 @@
 package com.codenode.budgetlens.category
 
 import android.content.Intent
-import android.view.View
-import androidx.compose.material3.rememberTopAppBarState
 import androidx.core.content.ContextCompat.startActivity
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewInteraction
@@ -20,7 +17,6 @@ import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
-import com.codenode.budgetlens.receipts.ReceiptsListPageActivityInstrumentedTests
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -57,12 +53,8 @@ class CategoryListPageActivityInstrumentedTests {
     // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
     @Before
     fun setup() {
-        CategoryListPageActivityInstrumentedTests.clearStorage()
-        onView(withId(R.id.LoginActivityBtn)).perform(click())
-        var intent = Intent(
-            InstrumentationRegistry.getInstrumentation().targetContext,
-            LoginActivity::class.java
-        )
+        clearStorage()
+        var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
 
@@ -74,10 +66,7 @@ class CategoryListPageActivityInstrumentedTests {
         onView(withId(R.id.passwordText)).check(matches(withText("test1234")))
         onView(withId(R.id.passwordText)).perform(closeSoftKeyboard())
         onView(withId(R.id.checkCredentials)).perform(click()).check(matches(isDisplayed()))
-        intent = Intent(
-            InstrumentationRegistry.getInstrumentation().targetContext,
-            HomePageActivity::class.java
-        )
+        intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
     }

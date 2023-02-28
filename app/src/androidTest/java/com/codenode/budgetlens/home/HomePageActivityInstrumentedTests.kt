@@ -41,7 +41,6 @@ class HomePageActivityInstrumentedTests {
     @Before
     fun setup() {
         clearStorage()
-        onView(withId(R.id.LoginActivityBtn)).perform(click())
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
@@ -68,7 +67,8 @@ class HomePageActivityInstrumentedTests {
     @Test
     fun test_home_page_activity_create_manual_is_clickable() {
         onView(withId(R.id.addReceipts)).perform(click())
-        onView(withId(R.id.createManual)).perform(click()).check(matches(isDisplayed()))
+        onView(withId(R.id.createManual)).perform(click())
+        onView(withId(R.id.filledButton)).check(matches(isDisplayed()))
     }
 
     @Test
