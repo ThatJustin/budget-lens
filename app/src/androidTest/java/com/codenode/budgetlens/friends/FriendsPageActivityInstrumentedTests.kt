@@ -68,7 +68,7 @@ class FriendsPageActivityInstrumentedTests {
     }
 
     @Test
-    fun test_receipts_list_page_activity_is_displayed_and_scrollable() {
+    fun test_friends_page_activity_is_displayed_and_scrollable() {
         // This test checks to see if the friends page activity is displayed and scrollable
         // by first checking if it is displayed when the "Friends" button/item on the navigation
         // bar is clicked and then scrolling down and up the list to make sure that it is scrollable
