@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.receipts
+package com.codenode.budgetlens.login
 
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
@@ -12,8 +12,8 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.home.HomePageActivity
-import com.codenode.budgetlens.login.LoginActivity
+import com.codenode.budgetlens.login.password_reset.CodeConfirmationActivity
+import com.codenode.budgetlens.login.password_reset.PasswordResetActivity
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -22,7 +22,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class ReceiptsListPageActivityInstrumentedTests {
+class ResetPasswordPageActivityInstrumentedTests {
     // This is used to clear the shared preferences before each test
     companion object {
         @BeforeClass
@@ -35,34 +35,41 @@ class ReceiptsListPageActivityInstrumentedTests {
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ReceiptsListPageActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
+    // This is ran before each test for PasswordResetActivity in order to simulate the user flow/experience/interaction
+    // from the opening MainActivity logo splash page to reaching the reset password page from the login page
     @Before
     fun setup() {
         clearStorage()
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-
-        // The following inputs the username and password into the login page and clicks the login button after making
-        // sure to close the keyboard
-        onView(withId(R.id.usernameText)).perform(typeText("Test1234"), closeSoftKeyboard()).check(matches(withText("Test1234")))
-        onView(withId(R.id.passwordText)).perform(typeText("test1234"), closeSoftKeyboard()).check(matches(withText("test1234")))
-        onView(withId(R.id.checkCredentials)).perform(click()).check(matches(isDisplayed()))
-        intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
+        onView(withId(R.id.forgorPass)).perform(click())
+        intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, PasswordResetActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
     }
 
     @Test
-    fun test_receipts_list_page_activity_is_displayed() {
-        // This test checks to see if the receipts list page activity is displayed and scrollable
-        // by first checking if it is displayed when the "Receipts" button/item on the navigation
-        // bar is clicked and then scrolling down and up the list to make sure that it is scrollable
-        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
-        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
+    fun test_reset_password_page_activity_is_displayed() {
+        onView(withId(R.id.sendEmail)).perform(click()).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun test_reset_password_with_no_email_input() {
+        onView(withId(R.id.sendEmail)).perform(click())
+
+        // This is the error message that is displayed when the user does not enter an email address as input
+        onView(withId(R.id.emailInput)).check(matches(hasErrorText("This field is required")))
+    }
+
+    @Test
+    fun test_reset_password_with_valid_email_input() {
+        onView(withId(R.id.emailInput)).perform(typeText("tester_email@yahoo.com"), closeSoftKeyboard()).check(matches(withText("tester_email@yahoo.com")))
+        onView(withId(R.id.sendEmail)).perform(click())
+
+        // When the user enters a valid email address, the app should redirect the user to the CodeConfirmationActivity
+        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, CodeConfirmationActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-        onView(withId(R.id.search_bar_text)).check(matches(isDisplayed()))
     }
 }

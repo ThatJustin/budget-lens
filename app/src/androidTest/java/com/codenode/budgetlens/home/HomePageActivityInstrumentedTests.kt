@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.receipts
+package com.codenode.budgetlens.home
 
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
@@ -12,7 +12,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.home.HomePageActivity
+import com.codenode.budgetlens.common.ScanningReceiptActivity
 import com.codenode.budgetlens.login.LoginActivity
 import org.junit.Before
 import org.junit.BeforeClass
@@ -20,9 +20,10 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+// This Test Class is very flaky. Some tests pass sometimes and other times they fail randomly. I have no idea why.
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class ReceiptsListPageActivityInstrumentedTests {
+class HomePageActivityInstrumentedTests {
     // This is used to clear the shared preferences before each test
     companion object {
         @BeforeClass
@@ -35,8 +36,8 @@ class ReceiptsListPageActivityInstrumentedTests {
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ReceiptsListPageActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
+    // This is ran before each test for HomePageActivity in order to simulate the user flow/experience/interaction
+    // from the opening MainActivity logo splash page to reaching the home page after logging in
     @Before
     fun setup() {
         clearStorage()
@@ -55,14 +56,29 @@ class ReceiptsListPageActivityInstrumentedTests {
     }
 
     @Test
-    fun test_receipts_list_page_activity_is_displayed() {
-        // This test checks to see if the receipts list page activity is displayed and scrollable
-        // by first checking if it is displayed when the "Receipts" button/item on the navigation
-        // bar is clicked and then scrolling down and up the list to make sure that it is scrollable
-        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
-        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
+    fun test_home_page_activity_is_displayed() {
+        // This action is done to change the displayed page first before coming back to the home page to
+        // show it is indeed displayed since the default page that is opened from the login page is already
+        // the home page as was done in the setup above
+        onView(withId(R.id.receipts)).perform(click())
+        onView(withId(R.id.home)).perform(click()).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun test_home_page_activity_create_manual_is_clickable() {
+        onView(withId(R.id.addReceipts)).perform(click())
+        onView(withId(R.id.createManual)).perform(click())
+        onView(withId(R.id.filledButton)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun test_home_page_activity_scan_receipt_is_clickable() {
+        onView(withId(R.id.addReceipts)).perform(click())
+        onView(withId(R.id.ScanReceipt)).perform(click())
+
+        // When the user clicks on the "Scan Receipt" button from the home page, the user should be redirected to the ScanningReceiptActivity
+        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ScanningReceiptActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-        onView(withId(R.id.search_bar_text)).check(matches(isDisplayed()))
     }
 }

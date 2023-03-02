@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.category
+package com.codenode.budgetlens.friends
 
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
@@ -25,7 +25,7 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class CategoryListPageActivityInstrumentedTests {
+class FriendsPageActivityInstrumentedTests {
 
     private fun ViewInteraction.isDisplayed(): Boolean {
         return try {
@@ -40,8 +40,7 @@ class CategoryListPageActivityInstrumentedTests {
     companion object {
         @BeforeClass
         fun clearStorage() {
-            InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand("pm clear PACKAGE NAME")
-                .close()
+            InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand("pm clear PACKAGE NAME").close()
         }
     }
 
@@ -49,8 +48,8 @@ class CategoryListPageActivityInstrumentedTests {
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ReceiptsListPageActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
+    // This is ran before each test for FriendsPageActivity in order to simulate the user flow/experience/interaction
+    // from the opening MainActivity logo splash page and logging in into the app to viewing the friends page
     @Before
     fun setup() {
         clearStorage()
@@ -60,11 +59,8 @@ class CategoryListPageActivityInstrumentedTests {
 
         // The following inputs the username and password into the login page and clicks the login button after making
         // sure to close the keyboard
-        onView(withId(R.id.usernameText)).perform(typeText("Test1234"))
-        onView(withId(R.id.usernameText)).check(matches(withText("Test1234")))
-        onView(withId(R.id.passwordText)).perform(typeText("test1234"))
-        onView(withId(R.id.passwordText)).check(matches(withText("test1234")))
-        onView(withId(R.id.passwordText)).perform(closeSoftKeyboard())
+        onView(withId(R.id.usernameText)).perform(typeText("Test1234"), closeSoftKeyboard()).check(matches(withText("Test1234")))
+        onView(withId(R.id.passwordText)).perform(typeText("test1234"), closeSoftKeyboard()).check(matches(withText("test1234")))
         onView(withId(R.id.checkCredentials)).perform(click()).check(matches(isDisplayed()))
         intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -72,16 +68,22 @@ class CategoryListPageActivityInstrumentedTests {
     }
 
     @Test
-    fun test_display_category_list() {
-        // Click on the profile
-        onView(withId(R.id.profile_icon)).perform(click())
-
-
-
-
-        // click on the settings cogweel
-//        onData().perform(click())
-//        onView(withId(R.id.settings)).perform(click()).check(matches(isDisplayed()))
-        assert(true)
+    fun test_friends_page_activity_is_displayed_and_scrollable() {
+        // This test checks to see if the friends page activity is displayed and scrollable
+        // by first checking if it is displayed when the "Friends" button/item on the navigation
+        // bar is clicked and then scrolling down and up the list to make sure that it is scrollable
+        onView(withId(R.id.friends)).perform(click()).check(matches(isDisplayed()))
+        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, FriendsPageActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
+        if (onView(withId(R.id.friend_card_view)).isDisplayed()) {
+            onView(withId(R.id.friends_list)).perform(swipeUp())
+            onView(withId(R.id.friends_list)).perform(swipeDown())
+            onView(withId(R.id.friends_list)).perform(click())
+            onView(withId(R.id.relativeLayout)).check(matches(isDisplayed()))
+        }
+        else {
+            !onView(withId(R.id.friend_card_view)).isDisplayed()
+        }
     }
 }

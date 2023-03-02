@@ -21,6 +21,7 @@ class CodeConfirmationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        // TODO: The SignUpActivity and GoogleLoginActivity pages are unreachable from this page
         super.onCreate(savedInstanceState)
         binding = ActivityCodeConfimationBinding.inflate(layoutInflater)
         setContentView(R.layout.activity_code_confimation)

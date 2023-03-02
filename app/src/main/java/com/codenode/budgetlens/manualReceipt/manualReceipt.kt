@@ -2,7 +2,6 @@ package com.codenode.budgetlens.manualReceipt
 
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputFilter
@@ -20,17 +19,17 @@ open class Receipt() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt)
-        var mercant = findViewById<Spinner>(R.id.mercant)
-        var sps: SharedPreferences =this.getSharedPreferences("data",Context.MODE_PRIVATE)
-        var mercantList:ArrayList<String> =
-            sps.getString("mercant","IGA,Costco,Walmart,Subway,ADD")?.split(",") as ArrayList<String>
+        val merchant = findViewById<Spinner>(R.id.mercant)
+        val sps: SharedPreferences =this.getSharedPreferences("data",Context.MODE_PRIVATE)
+        val merchantList:ArrayList<String> =
+            sps.getString("merchant","IGA,Costco,Walmart,Subway,ADD")?.split(",") as ArrayList<String>
         var adapter = ArrayAdapter(
             baseContext,
             android.R.layout.simple_spinner_item,
-            mercantList
+            merchantList
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        mercant.setAdapter(adapter)
+        merchant.adapter = adapter
 
 
         val date = findViewById<TextView>(R.id.date)
@@ -42,7 +41,7 @@ open class Receipt() : AppCompatActivity() {
         warranties.setOnClickListener{
             initCalendar(this,warranties)
         }
-        var returnDate = findViewById<TextView>(R.id.returnDate)
+        val returnDate = findViewById<TextView>(R.id.returnDate)
         returnDate.setOnClickListener{
             initCalendar(this,returnDate)
         }
@@ -52,7 +51,7 @@ open class Receipt() : AppCompatActivity() {
         }
 
 
-        var ctx = this;
+        val ctx = this;
 
         val total = findViewById<TextView>(R.id.total)
         val location = findViewById<TextView>(R.id.location)
@@ -65,56 +64,56 @@ open class Receipt() : AppCompatActivity() {
             val itemTmp = item.text.toString();
             var flag = 0;
             Log.d("1111111",date.text.toString());
-            if(date.text.toString()==null|| ("".equals(date.text.toString()))){
+            if(date.text.toString()==null|| ("" == date.text.toString())){
                 flag++;
-                Toast.makeText(this,"pleace choose date",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"please choose a date",Toast.LENGTH_SHORT).show();
             }
-            if(total.text.toString()==null|| ("".equals(total.text.toString()))){
+            if(total.text.toString()==null|| ("" == total.text.toString())){
                 flag++;
-                Toast.makeText(this,"pleace enter total",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"please enter a total amount",Toast.LENGTH_SHORT).show();
             }
-            if(item.text.toString()==null|| ("".equals(item.text.toString()))){
+            if(item.text.toString()==null|| ("" == item.text.toString())){
                 flag++;
-                Toast.makeText(this,"pleace enter item",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"please enter an item",Toast.LENGTH_SHORT).show();
             }
-            if(location.text.toString()==null|| ("".equals(location.text.toString()))){
+            if(location.text.toString()==null|| ("" == location.text.toString())){
                 flag++;
-                Toast.makeText(this,"pleace enter location",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"please enter a location",Toast.LENGTH_SHORT).show();
             }else{
                 if(itemTmp.indexOf(",")==-1){
                     flag++;
-                    Toast.makeText(this,"pleace enter current item-price",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,"please enter a current item price",Toast.LENGTH_SHORT).show();
                 }else{
                     val itemArray = itemTmp.split(",");
                     if (itemArray.size>1){
                         for( i in itemArray){
                             val itemArr  = i.split("-");
                             if(itemArr.size>1){
-                                val item_price = itemArr[1];
-                                if( item_price.matches("-?\\d+(\\.\\d+)?".toRegex())){
+                                val itemPrice = itemArr[1];
+                                if( itemPrice.matches("-?\\d+(\\.\\d+)?".toRegex())){
                                     finish()
                                 }else{
                                     flag++;
-                                    Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this,"please enter a current price",Toast.LENGTH_SHORT).show();
                                 }
                             }else{
                                 flag++;
-                                Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this,"please enter a current price",Toast.LENGTH_SHORT).show();
                             }
                         }
                     }else{
                         val itemArr  = itemTmp.split("-");
                         if(itemArr.size>1){
-                            val item_price = itemArr[1];
-                            if( item_price.matches("-?\\d+(\\.\\d+)?".toRegex())){
+                            val itemPrice = itemArr[1];
+                            if( itemPrice.matches("-?\\d+(\\.\\d+)?".toRegex())){
                                 finish()
                             }else{
                                 flag++;
-                                Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this,"please enter a current price",Toast.LENGTH_SHORT).show();
                             }
                         }else{
                             flag++;
-                            Toast.makeText(this,"pleace enter current price",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this,"please enter a current price",Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -124,61 +123,61 @@ open class Receipt() : AppCompatActivity() {
             }
 
         }
-        mercant.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+        merchant.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
                 position: Int,
                 id: Long
             ) {
-                var spinnercontext =
-                    mercantList.get(position)
-                if ("ADD".equals(spinnercontext)){
+                val spinnerContext =
+                    merchantList[position]
+                if ("ADD" == spinnerContext){
                     val inputServer = EditText(ctx)
                     inputServer.filters = arrayOf<InputFilter>(LengthFilter(50))
                     val builder: AlertDialog.Builder = AlertDialog.Builder(ctx)
-                    builder.setTitle("pleace enter mercant").setIcon(android.R.drawable.ic_dialog_info)
+                    builder.setTitle("please enter a merchant").setIcon(android.R.drawable.ic_dialog_info)
                         .setView(inputServer)
                         .setNegativeButton("cancel", null)
                     builder.setPositiveButton(
-                        "confirm",
-                        DialogInterface.OnClickListener { dialog, which ->
-                            val _sign = inputServer.text.toString()
-                            Toast.makeText(this@Receipt, _sign, Toast.LENGTH_SHORT)
-                                .show()
-                            if (_sign != null && !_sign.isEmpty()) {
-                                mercantList.add(0,_sign);
+                        "confirm"
+                    ) { dialog, _ ->
+                        val sign = inputServer.text.toString()
+                        Toast.makeText(this@Receipt, sign, Toast.LENGTH_SHORT)
+                            .show()
+                        if (sign != null && sign.isNotEmpty()) {
+                            merchantList.add(0, sign);
 
-                                adapter = ArrayAdapter(
-                                    baseContext,
-                                    android.R.layout.simple_spinner_item,
-                                    mercantList
-                                )
-                                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                                mercant.setAdapter(adapter)
-                                var listString:String=""
-                                for (s in mercantList) {
-                                    if(s.length!=0){
-                                        listString += s + ","
-                                    }
-
+                            adapter = ArrayAdapter(
+                                baseContext,
+                                android.R.layout.simple_spinner_item,
+                                merchantList
+                            )
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            merchant.adapter = adapter
+                            var listString = ""
+                            for (s in merchantList) {
+                                if (s.isNotEmpty()) {
+                                    listString += "$s,"
                                 }
-                                var editor:SharedPreferences.Editor=sps.edit()
-                                editor.putString("mercant",listString)
-                                editor.commit()
-                                Log.i("11111",listString.toString())
-                                dialog.dismiss();
 
-                            } else {
-                                dialog.dismiss();
                             }
-                        })
-                    builder?.show()
+                            val editor: SharedPreferences.Editor = sps.edit()
+                            editor.putString("merchant", listString)
+                            editor.apply()
+                            Log.i("11111", listString)
+                            dialog.dismiss();
+
+                        } else {
+                            dialog.dismiss();
+                        }
+                    }
+                    builder.show()
                 }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
-        })
+        }
     }
 
 

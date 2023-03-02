@@ -19,6 +19,7 @@ class PasswordResetActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
+        // TODO: The SignUpActivity and GoogleLoginActivity pages are unreachable from this page
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_password_reset)
 

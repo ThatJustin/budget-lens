@@ -39,8 +39,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.time.LocalDateTime
 
-private lateinit var photoFile:File
-
 class ScanningReceiptActivity : AppCompatActivity() {
 
     private lateinit var getImage2: Button
