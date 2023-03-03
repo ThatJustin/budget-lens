@@ -22,13 +22,18 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.codenode.budgetlens.budget.BudgetPageActivity
+import com.codenode.budgetlens.data.UserFriends
 import com.codenode.budgetlens.data.UserFriends.Companion.sendFriendRequest
 import com.codenode.budgetlens.friends.requests.FriendPendingRequestsPageActivity
 import com.codenode.budgetlens.friends.requests.FriendWaitingForApprovalsPageActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_friends_page.*
 
 class FriendsPageActivity : AppCompatActivity() {
@@ -73,6 +78,7 @@ class FriendsPageActivity : AppCompatActivity() {
             }
         }
 
+        val rootView = findViewById<ConstraintLayout>(R.id.root_layout)
         emailInput = EditText(this)
         emailInput.inputType = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         emailInput.hint = "Email address"
@@ -103,7 +109,13 @@ class FriendsPageActivity : AppCompatActivity() {
             friendAddDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener {
                 if (validateEmail()) {
                     Log.i("FriendPageActivity", "[validated] add : email -> ${emailInput.text}")
-                    sendFriendRequest(this, emailInput)
+                    UserFriends.sendFriendRequest(this, emailInput,
+                        onFailed = {
+                            showSnackbar(rootView, it)
+                        }, onSuccess = {
+                            showSnackbar(rootView, it)
+                        })
+
                     emailInput.text.clear()
                     friendAddDialog.dismiss()
                 }
@@ -155,6 +167,13 @@ class FriendsPageActivity : AppCompatActivity() {
         } else {
             emailInput.error = null
             true
+        }
+    }
+
+
+    fun showSnackbar(rootView: View, message: String){
+        runOnUiThread {
+            Snackbar.make(this, rootView, message, Snackbar.LENGTH_SHORT).show()
         }
     }
 }
