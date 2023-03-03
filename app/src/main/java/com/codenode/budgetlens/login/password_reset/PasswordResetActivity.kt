@@ -1,9 +1,11 @@
 package com.codenode.budgetlens.login.password_reset
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
@@ -27,6 +29,14 @@ class PasswordResetActivity : AppCompatActivity() {
         val intent = Intent(this, CodeConfirmationActivity::class.java)
 
         emailAddress = findViewById(R.id.emailInput)
+
+        val builder = AlertDialog.Builder(this@PasswordResetActivity)
+        builder.setTitle("Error!")
+        builder.setCancelable(true)
+        builder.setNegativeButton("Cancel"
+        ) { p0, p1 ->
+        }
+        val dialog = builder.create()
 
         //This will redirect the user to the code confirmation page
         sendEmailButton.setOnClickListener {
@@ -71,12 +81,20 @@ class PasswordResetActivity : AppCompatActivity() {
                                 Log.i("Empty", "Something went wrong${response.body?.string()}")
                             }
                         } else {
+                            var errResponse = response.body?.string()
+
+                            if (errResponse?.trim()?.startsWith("<") ==true){
+                                errResponse = "An unknown server error has occurred."
+                            }
+
                             runOnUiThread {
-                                emailAddress.error = "Please enter an valid email"
+                                emailAddress.error = "Please enter a valid email."
+                                dialog.setMessage(errResponse)
+                                dialog.show()
                             }
                             Log.e(
                                 "Error",
-                                "Something went wrong${response.body?.string()} ${response.message} ${response.headers}"
+                                "Something went wrong$ ${response.message} ${response.headers}"
                             )
                         }
                     }
