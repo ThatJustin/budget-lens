@@ -38,6 +38,7 @@ class CategoryActivity : AppCompatActivity() {
             this,
             this.window.decorView
         )
+        CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.CATEGORY_SETTINGS)
         // Make sure the user category list is empty
         UserCategories.userCategories.clear()
         categoryList = UserCategories.loadCategoriesFromAPI(this)

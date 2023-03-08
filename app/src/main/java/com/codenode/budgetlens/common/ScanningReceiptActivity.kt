@@ -59,6 +59,8 @@ class ScanningReceiptActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scanning_receipt)
+        CommonComponents.handleNavigationBar(ActivityName.SCAN, this, this.window.decorView)
+        CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.SCAN)
 
         val context = this as Context
         val goToHomePageActivity = Intent(this, HomePageActivity::class.java)

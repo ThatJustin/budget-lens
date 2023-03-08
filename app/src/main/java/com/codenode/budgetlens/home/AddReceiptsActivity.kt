@@ -15,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.alibaba.fastjson.JSON
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.BearerToken
+import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Merchant
 import com.codenode.budgetlens.utils.CustomBubbleAttachPopup
 import com.codenode.budgetlens.utils.GlideEngine
@@ -46,6 +48,8 @@ class AddReceiptsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_receipts)
+        CommonComponents.handleNavigationBar(ActivityName.MANUAL_RECEIPTS, this, this.window.decorView)
+        CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.MANUAL_RECEIPTS)
         EventBus.getDefault().register(this);
         val date = findViewById<TextView>(R.id.tx1)
         date.setOnClickListener {
