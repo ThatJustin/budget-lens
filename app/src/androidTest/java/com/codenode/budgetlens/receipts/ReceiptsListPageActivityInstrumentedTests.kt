@@ -65,4 +65,18 @@ class ReceiptsListPageActivityInstrumentedTests {
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
         onView(withId(R.id.search_bar_text)).check(matches(isDisplayed()))
     }
+
+    @Test
+    fun test_adding_receipt_pull_up_tab_into_scan_receipt_is_clickable() {
+        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
+        onView(withId(R.id.addReceipts)).perform(click())
+        onView(withId(R.id.ScanReceipt)).perform(click())
+    }
+
+    @Test
+    fun test_adding_receipt_pull_up_tab_into_create_manual_receipt_is_clickable() {
+        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
+        onView(withId(R.id.addReceipts)).perform(click())
+        onView(withId(R.id.createManual)).perform(click())
+    }
 }
