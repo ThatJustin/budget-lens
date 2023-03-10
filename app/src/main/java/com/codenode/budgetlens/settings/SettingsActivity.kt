@@ -20,6 +20,7 @@ class SettingsActivity : AppCompatActivity() {
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.SETTINGS, this, this.window.decorView)
+        CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.SETTINGS)
 
 //        When clicking on the Category button, go to the Category Setting page.
         categoryButton = findViewById(R.id.category)

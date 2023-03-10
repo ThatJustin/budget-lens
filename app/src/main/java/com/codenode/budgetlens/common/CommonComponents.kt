@@ -6,18 +6,15 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.TableLayout
 import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.BuildConfig
-import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.friends.FriendsPageActivity
+import com.codenode.budgetlens.home.AddReceiptsActivity
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
@@ -26,7 +23,6 @@ import com.codenode.budgetlens.utils.AppUtils
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.edit_profile_dialog.view.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -34,6 +30,65 @@ import java.io.IOException
 
 class CommonComponents {
     companion object {
+
+        fun handleScanningReceipts(
+            view: View,
+            context: Context,
+            currentActivityName: ActivityName){
+            var addReceiptInfoButton = false
+            val openAddMenu: FloatingActionButton = view.findViewById(R.id.addReceipts)
+            val manualReceiptButton:FloatingActionButton = view.findViewById(R.id.createManual)
+            val scanReceiptButton:FloatingActionButton = view.findViewById(R.id.ScanReceipt)
+            val activity: Activity = context as Activity
+
+            manualReceiptButton.setOnClickListener {
+                AppUtils.changeActivity(activity, AddReceiptsActivity::class.java, 0, 0)
+            }
+
+            openAddMenu.setOnClickListener{
+                if(!addReceiptInfoButton){
+                    openAddMenu.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24)
+                    addReceiptInfoButton = true
+                    if (currentActivityName == ActivityName.SCAN) {
+                        manualReceiptButton.isEnabled = true
+                        manualReceiptButton.alpha = 1.0F
+                        scanReceiptButton.isEnabled = false
+                        scanReceiptButton.alpha = 0.0F
+                    }else if (currentActivityName == ActivityName.MANUAL_RECEIPTS){
+                        manualReceiptButton.isEnabled = false
+                        manualReceiptButton.alpha = 0.0F
+                        scanReceiptButton.isEnabled = true
+                        scanReceiptButton.alpha = 1.0F
+                    }else{
+                        manualReceiptButton.isEnabled = true
+                        manualReceiptButton.alpha = 1.0F
+                        scanReceiptButton.isEnabled = true
+                        scanReceiptButton.alpha = 1.0F
+
+                    }
+                    scanReceiptButton.isEnabled = true
+                    scanReceiptButton.alpha = 1.0F
+
+                }else{
+                    openAddMenu.setImageResource(R.drawable.ic_baseline_add_24)
+                    addReceiptInfoButton = false
+                    manualReceiptButton.isEnabled = false
+                    manualReceiptButton.alpha = 0.0F
+                    scanReceiptButton.isEnabled = false
+                    scanReceiptButton.alpha = 0.0F
+                }
+            }
+
+            scanReceiptButton.setOnClickListener{
+                openAddMenu.setImageResource(R.drawable.ic_baseline_add_24)
+                manualReceiptButton.isEnabled = false
+                manualReceiptButton.alpha = 0.0F
+                scanReceiptButton.isEnabled = false
+                scanReceiptButton.alpha = 0.0F
+                AppUtils.changeActivity(activity, ScanningReceiptActivity::class.java, 0, 0)
+            }
+
+        }
 
         /**
          * Handles navigation bar on every page page that has it.

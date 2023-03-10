@@ -71,6 +71,7 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
+        CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.ITEMS)
         itemTotal = findViewById(R.id.items_cost_value)
 
         isFromSingleReceipt =

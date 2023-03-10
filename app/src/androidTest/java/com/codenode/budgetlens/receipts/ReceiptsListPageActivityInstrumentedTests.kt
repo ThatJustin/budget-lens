@@ -60,9 +60,20 @@ class ReceiptsListPageActivityInstrumentedTests {
         // by first checking if it is displayed when the "Receipts" button/item on the navigation
         // bar is clicked and then scrolling down and up the list to make sure that it is scrollable
         onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
-        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
         onView(withId(R.id.search_bar_text)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun test_adding_receipt_pull_up_tab_into_scan_receipt_is_clickable() {
+        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
+        onView(withId(R.id.addReceipts)).perform(click())
+        onView(withId(R.id.ScanReceipt)).perform(click())
+    }
+
+    @Test
+    fun test_adding_receipt_pull_up_tab_into_create_manual_receipt_is_clickable() {
+        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
+        onView(withId(R.id.addReceipts)).perform(click())
+        onView(withId(R.id.createManual)).perform(click())
     }
 }

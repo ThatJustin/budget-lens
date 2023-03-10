@@ -50,6 +50,7 @@ class FriendsPageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_friends_page)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.FRIENDS, this, this.window.decorView)
+        CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.FRIENDS)
         val addFriendButton: Button = findViewById(R.id.add_button)
         val toggleButton: MaterialButtonToggleGroup = findViewById(R.id.toggleButton)
         toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
