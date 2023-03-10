@@ -2,6 +2,7 @@ package com.codenode.budgetlens.category
 
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
+import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewInteraction
@@ -16,6 +17,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.home.HomePageActivity
+import com.codenode.budgetlens.home.HomePageActivityInstrumentedTests
 import com.codenode.budgetlens.login.LoginActivity
 import org.junit.Before
 import org.junit.BeforeClass
@@ -53,18 +55,15 @@ class CategoryListPageActivityInstrumentedTests {
     // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
     @Before
     fun setup() {
-        clearStorage()
+        HomePageActivityInstrumentedTests.clearStorage()
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
 
         // The following inputs the username and password into the login page and clicks the login button after making
         // sure to close the keyboard
-        onView(withId(R.id.usernameText)).perform(typeText("Test1234"))
-        onView(withId(R.id.usernameText)).check(matches(withText("Test1234")))
-        onView(withId(R.id.passwordText)).perform(typeText("test1234"))
-        onView(withId(R.id.passwordText)).check(matches(withText("test1234")))
-        onView(withId(R.id.passwordText)).perform(closeSoftKeyboard())
+        onView(withId(R.id.usernameText)).perform(typeText("Test1234"), closeSoftKeyboard()).check(matches(withText("Test1234")))
+        onView(withId(R.id.passwordText)).perform(typeText("test1234"), closeSoftKeyboard()).check(matches(withText("test1234")))
         onView(withId(R.id.checkCredentials)).perform(click()).check(matches(isDisplayed()))
         intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -75,7 +74,7 @@ class CategoryListPageActivityInstrumentedTests {
     fun test_display_category_list() {
         // Click on the profile
         onView(withId(R.id.profile_icon)).perform(click())
-
+        onView(withId(R.id.settings)).perform(click())
 
 
 
@@ -83,5 +82,21 @@ class CategoryListPageActivityInstrumentedTests {
 //        onData().perform(click())
 //        onView(withId(R.id.settings)).perform(click()).check(matches(isDisplayed()))
         assert(true)
+    }
+
+    @Test
+    fun test_adding_receipt_pull_up_tab_into_scan_receipt_is_clickable() {
+        onView(withId(R.id.profile_icon)).perform(click())
+        onView(withId(R.id.settings)).perform(click())
+        onView(withId(R.id.addReceipts)).perform(click())
+        onView(withId(R.id.ScanReceipt)).perform(click())
+    }
+
+    @Test
+    fun test_adding_receipt_pull_up_tab_into_create_manual_receipt_is_clickable() {
+        onView(withId(R.id.profile_icon)).perform(click())
+        onView(withId(R.id.settings)).perform(click())
+        onView(withId(R.id.addReceipts)).perform(click())
+        onView(withId(R.id.createManual)).perform(click())
     }
 }
