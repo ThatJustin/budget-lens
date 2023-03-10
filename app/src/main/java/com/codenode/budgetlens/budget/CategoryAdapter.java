@@ -66,7 +66,7 @@ String respon;
                     JSONObject object = new JSONObject(respon);
                     JSONObject names=new JSONObject(object.getString(trend.getName()));
                     String frequency=names.getString("category_frequency");
-                    title.setText(trend.getName()+"  \nfrequency:"+frequency);
+                    title.setText(trend.getName()+"  \nFrequency:"+frequency);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
