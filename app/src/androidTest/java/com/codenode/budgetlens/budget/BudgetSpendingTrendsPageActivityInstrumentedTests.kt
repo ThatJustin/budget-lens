@@ -1,7 +1,7 @@
 package com.codenode.budgetlens.budget
 
 import android.content.Intent
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -14,8 +14,6 @@ import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
-import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
-import com.codenode.budgetlens.receipts.ReceiptsListPageActivityInstrumentedTests
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -37,14 +35,14 @@ class BudgetSpendingTrendsPageActivityInstrumentedTests{
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ReceiptsListPageActivity in order to simulate the user flow/experience/interaction
+    // This is ran before each test for BudgetSpendingTrendsPageActivity in order to simulate the user flow/experience/interaction
     // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
     @Before
     fun setup() {
-        ReceiptsListPageActivityInstrumentedTests.clearStorage()
+        clearStorage()
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        ContextCompat.startActivity(
+        startActivity(
             InstrumentationRegistry.getInstrumentation().targetContext,
             intent,
             null
@@ -57,7 +55,7 @@ class BudgetSpendingTrendsPageActivityInstrumentedTests{
         onView(withId(R.id.checkCredentials)).perform(click()).check(matches(isDisplayed()))
         intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        ContextCompat.startActivity(
+        startActivity(
             InstrumentationRegistry.getInstrumentation().targetContext,
             intent,
             null

@@ -12,9 +12,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.common.ScanningReceiptActivity
 import com.codenode.budgetlens.home.HomePageActivity
-import com.codenode.budgetlens.home.HomePageActivityInstrumentedTests
 import com.codenode.budgetlens.login.LoginActivity
 import org.junit.Before
 import org.junit.BeforeClass
@@ -37,11 +35,11 @@ class ManualReceiptsPageActivityInstrumentedTests{
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for HomePageActivity in order to simulate the user flow/experience/interaction
+    // This is ran before each test for ManualReceiptsPageActivity in order to simulate the user flow/experience/interaction
     // from the opening MainActivity logo splash page to reaching the home page after logging in
     @Before
     fun setup() {
-        HomePageActivityInstrumentedTests.clearStorage()
+        clearStorage()
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)

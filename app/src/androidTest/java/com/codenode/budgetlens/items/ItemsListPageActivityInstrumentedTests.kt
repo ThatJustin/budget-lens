@@ -1,7 +1,7 @@
 package com.codenode.budgetlens.items
 
 import android.content.Intent
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -14,8 +14,6 @@ import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
-import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
-import com.codenode.budgetlens.receipts.ReceiptsListPageActivityInstrumentedTests
 import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Rule
@@ -37,14 +35,14 @@ class ItemsListPageActivityInstrumentedTests{
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ReceiptsListPageActivity in order to simulate the user flow/experience/interaction
+    // This is ran before each test for ItemsListPageActivity in order to simulate the user flow/experience/interaction
     // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
     @Before
     fun setup() {
-        ReceiptsListPageActivityInstrumentedTests.clearStorage()
+        clearStorage()
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        ContextCompat.startActivity(
+        startActivity(
             InstrumentationRegistry.getInstrumentation().targetContext,
             intent,
             null
@@ -57,25 +55,16 @@ class ItemsListPageActivityInstrumentedTests{
         onView(withId(R.id.checkCredentials)).perform(click()).check(matches(isDisplayed()))
         intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        ContextCompat.startActivity(
+        startActivity(
             InstrumentationRegistry.getInstrumentation().targetContext,
             intent,
             null
         )
         onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
-        val intent2 = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptsListPageActivity::class.java)
-        intent2.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        ContextCompat.startActivity(
-            InstrumentationRegistry.getInstrumentation().targetContext,
-            intent2,
-            null
-        )
-        onView(withId(R.id.search_bar_text)).check(matches(isDisplayed()))
     }
 
     @Test
     fun test_item_list_activity_scan_receipt_is_clickable() {
-        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
         onView(withId(R.id.receipts_list)).perform(click())
         onView(withId(R.id.receipt_info_view_items)).perform(click())
         onView(withId(R.id.addReceipts)).perform(click())
@@ -84,7 +73,6 @@ class ItemsListPageActivityInstrumentedTests{
 
     @Test
     fun test_item_list_activity_create_manual_is_clickable() {
-        onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
         onView(withId(R.id.receipts_list)).perform(click())
         onView(withId(R.id.receipt_info_view_items)).perform(click())
         onView(withId(R.id.addReceipts)).perform(click())

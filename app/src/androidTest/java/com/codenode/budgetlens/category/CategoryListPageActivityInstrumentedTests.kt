@@ -2,7 +2,6 @@ package com.codenode.budgetlens.category
 
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
-import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.ViewInteraction
@@ -68,15 +67,14 @@ class CategoryListPageActivityInstrumentedTests {
         intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
+        onView(withId(R.id.profile_icon)).perform(click())
+        onView(withId(R.id.settings)).perform(click())
     }
 
     @Test
     fun test_display_category_list() {
         // Click on the profile
         onView(withId(R.id.profile_icon)).perform(click())
-        onView(withId(R.id.settings)).perform(click())
-
-
 
         // click on the settings cogweel
 //        onData().perform(click())
@@ -86,16 +84,12 @@ class CategoryListPageActivityInstrumentedTests {
 
     @Test
     fun test_adding_receipt_pull_up_tab_into_scan_receipt_is_clickable() {
-        onView(withId(R.id.profile_icon)).perform(click())
-        onView(withId(R.id.settings)).perform(click())
         onView(withId(R.id.addReceipts)).perform(click())
         onView(withId(R.id.ScanReceipt)).perform(click())
     }
 
     @Test
     fun test_adding_receipt_pull_up_tab_into_create_manual_receipt_is_clickable() {
-        onView(withId(R.id.profile_icon)).perform(click())
-        onView(withId(R.id.settings)).perform(click())
         onView(withId(R.id.addReceipts)).perform(click())
         onView(withId(R.id.createManual)).perform(click())
     }
