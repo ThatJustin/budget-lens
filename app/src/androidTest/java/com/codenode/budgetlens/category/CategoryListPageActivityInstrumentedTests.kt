@@ -16,7 +16,6 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.codenode.budgetlens.MainActivity
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.home.HomePageActivity
-import com.codenode.budgetlens.home.HomePageActivityInstrumentedTests
 import com.codenode.budgetlens.login.LoginActivity
 import org.junit.Before
 import org.junit.BeforeClass
@@ -50,11 +49,11 @@ class CategoryListPageActivityInstrumentedTests {
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ReceiptsListPageActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
+    // This is ran before each test for CategoryListPageActivity in order to simulate the user flow/experience/interaction
+    // from log in to home page, to the profile pull down tab to the settings icon that brings the user to the category settings page.
     @Before
     fun setup() {
-        HomePageActivityInstrumentedTests.clearStorage()
+        clearStorage()
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
@@ -75,10 +74,6 @@ class CategoryListPageActivityInstrumentedTests {
     fun test_display_category_list() {
         // Click on the profile
         onView(withId(R.id.profile_icon)).perform(click())
-
-        // click on the settings cogweel
-//        onData().perform(click())
-//        onView(withId(R.id.settings)).perform(click()).check(matches(isDisplayed()))
         assert(true)
     }
 

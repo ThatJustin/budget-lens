@@ -36,7 +36,7 @@ class ManualReceiptsPageActivityInstrumentedTests{
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
     // This is ran before each test for ManualReceiptsPageActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page to reaching the home page after logging in
+    // from the opening MainActivity logo splash page to reaching the home page after logging in to navigating to the manual receipts creation page
     @Before
     fun setup() {
         clearStorage()

@@ -36,7 +36,7 @@ class BudgetSpendingTrendsPageActivityInstrumentedTests{
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
     // This is ran before each test for BudgetSpendingTrendsPageActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page and logging in into the app to viewing the receipts list page
+    // from the opening MainActivity logo splash page and logging in into the app to viewing the budget page, then viewing the spending trends page.
     @Before
     fun setup() {
         clearStorage()
