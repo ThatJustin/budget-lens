@@ -212,7 +212,7 @@
             <com.codenode.budgetlens.ExpandableHeightGridView
                 android:id="@+id/grid_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:horizontalSpacing="10dp"
@@ -228,10 +228,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/clicktoadd"
                 app:layout_constraintVertical_bias="0.0" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-
+            <TextView
+                android:id="@+id/tv_ts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:paddingLeft="@dimen/dp_10"
+                android:textColor="#000"
+                android:text="The frequency only counts for the last 90 days"
+                android:layout_marginBottom="@dimen/dp_10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/grid_view" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </ScrollView>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabut"
         android:layout_width="80dp"

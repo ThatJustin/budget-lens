@@ -98,8 +98,8 @@ class BudgetPageActivity : AppCompatActivity() {
             name.setText("")
             box.isChecked=false
         }
-        getType()
 
+        getCostDatas()
         spendingTrends.setOnClickListener() {
             startActivity(goToItemsListActivity)
             }
@@ -109,10 +109,13 @@ class BudgetPageActivity : AppCompatActivity() {
     fun AddAdapter() {
         if (trendlist.size > 0) {
             tip.visibility=View.GONE
+            tv_ts.visibility=View.VISIBLE
         }else{
             tip.visibility=View.VISIBLE
+            tv_ts.visibility=View.GONE
         }
-        adapter = CategoryAdapter(this, trendlist)
+        adapter = CategoryAdapter(this,responseSt, trendlist)
+
         grid!!.isFocusable = false;
         grid!!.isExpanded = true
         grid!!.adapter = adapter
@@ -127,6 +130,7 @@ class BudgetPageActivity : AppCompatActivity() {
         params.put("category_name", name)
         params.put("category_toggle_star", star)
         params.put("parent_category_id", "")
+        params.put("icon", "")
         HttpUtils.post("Bearer ${BearerToken.getToken(this)}", url, params, object : TextHttpResponseHandler() {
             override fun onFailure(
                 statusCode: Int,
@@ -152,7 +156,7 @@ class BudgetPageActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                getType()
+                getCostDatas()
                 Log.i("Response", "responseString"+responseString)
             }
         })
@@ -187,6 +191,31 @@ class BudgetPageActivity : AppCompatActivity() {
                 }
                 val datas = list.toTypedArray()
                 pieChart.setDatas(datas)
+            }
+        })
+    }
+    var responseSt=""
+    private fun getCostDatas() {
+
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/category/costs/date/days=90/"
+        HttpUtils.get("Bearer ${BearerToken.getToken(this)}", url, object : TextHttpResponseHandler() {
+            override fun onFailure(
+                statusCode: Int,
+                headers: Array<Header>,
+                responseString: String,
+                throwable: Throwable
+            ) {
+
+            }
+
+            override fun onSuccess(
+                statusCode: Int,
+                headers: Array<Header>,
+                responseString: String
+            ) {
+                responseSt=responseString
+
+                getType()
             }
         })
     }
