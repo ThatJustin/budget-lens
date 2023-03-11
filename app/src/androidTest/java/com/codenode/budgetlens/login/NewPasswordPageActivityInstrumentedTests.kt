@@ -48,7 +48,7 @@ class NewPasswordPageActivityInstrumentedTests {
     }
 
     @Test
-    fun test_new_password_with_no_password_inputs() {
+    fun test_new_password_with_no_password_input_fields() {
         onView(withId(R.id.resetPassword)).perform(click())
 
         // This checks that the error messages are displayed and shown to the user
@@ -57,7 +57,27 @@ class NewPasswordPageActivityInstrumentedTests {
     }
 
     @Test
-    fun test_new_password_with_valid_password_inputs() {
+    fun test_new_password_with_invalid_matching_password_input_field() {
+        onView(withId(R.id.newPasswordInput)).perform(typeText("te"), closeSoftKeyboard()).check(matches(withText("te")))
+        onView(withId(R.id.confirmPasswordInput)).perform(typeText("t"), closeSoftKeyboard()).check(matches(withText("t")))
+        onView(withId(R.id.resetPassword)).perform(click())
+
+        // This checks that the error message is displayed and shown to the user
+        onView(withId(R.id.confirmPasswordInput)).check(matches(hasErrorText("Passwords do not match")))
+    }
+
+    @Test
+    fun test_new_password_with_invalid_password_size_input_field() {
+        onView(withId(R.id.newPasswordInput)).perform(typeText("t"), closeSoftKeyboard()).check(matches(withText("t")))
+        onView(withId(R.id.confirmPasswordInput)).perform(typeText("t"), closeSoftKeyboard()).check(matches(withText("t")))
+        onView(withId(R.id.resetPassword)).perform(click())
+
+        // This checks that the error message is displayed and shown to the user
+        onView(withId(R.id.newPasswordInput)).check(matches(hasErrorText("Password must be greater than 8 characters")))
+    }
+
+    @Test
+    fun test_new_password_with_valid_password_input_fields() {
         onView(withId(R.id.newPasswordInput)).perform(typeText("tester_password"), closeSoftKeyboard()).check(matches(withText("tester_password")))
         onView(withId(R.id.confirmPasswordInput)).perform(typeText("tester_password"), closeSoftKeyboard()).check(matches(withText("tester_password")))
         onView(withId(R.id.resetPassword)).perform(click())
