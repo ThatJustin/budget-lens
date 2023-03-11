@@ -48,24 +48,26 @@ class CategoryRecyclerViewAdapter(private val categories: MutableList<Category>)
         } else {
             imageStar.setImageResource(R.drawable.ic_baseline_star_outline_24)
         }
-        imageEdit.setImageResource(R.drawable.ic_baseline_edit_black_24)
 
         // update the image icon
         val id = context.resources.getIdentifier("@drawable/" + category.icon, null, context.packageName)
         holder.itemView.findViewById<ImageView>(R.id.image_category).setImageResource(id)
 
-        // Go to popup edit page for editing the sub category
-        val goToEditCategoryPopUp =
-            Intent(holder.itemView.context, EditCategoryPopUpActivity::class.java)
-
-        // Add the category name as an extra intent value to send to the edit popup page.
-        goToEditCategoryPopUp.putExtra("category", category.category_name)
-
-        imageEdit.setOnClickListener {
-            holder.itemView.context.startActivity(goToEditCategoryPopUp)
-        }
-
         if (category.parent_category_id != null) {
+
+            imageEdit.setImageResource(R.drawable.ic_baseline_edit_black_24)
+
+            // Go to popup edit page for editing the sub category
+            val goToEditCategoryPopUp =
+                Intent(holder.itemView.context, EditCategoryPopUpActivity::class.java)
+
+            // Add the category name as an extra intent value to send to the edit popup page.
+            goToEditCategoryPopUp.putExtra("category", category.category_name)
+
+            imageEdit.setOnClickListener {
+                holder.itemView.context.startActivity(goToEditCategoryPopUp)
+            }
+
             // Add garbage bin to subcategories
             imageGarbage.setImageResource(R.drawable.ic_baseline_delete_outline_24)
 

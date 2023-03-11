@@ -21,18 +21,22 @@ class FriendRequestSendRecyclerViewAdapter(private val friendRequestSend: Mutabl
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val friendRequestSendItem = friendRequestSend[position]
-        val firstNameShow:String = if(friendRequestSendItem.firstName.length>7){
-            friendRequestSendItem.firstName.subSequence(0,4).toString()+".."
-        }else
-            friendRequestSendItem.firstName
+        var firstNameShow:String? = friendRequestSendItem.firstName
+        if(friendRequestSendItem.firstName.isNullOrEmpty()){
+            firstNameShow = friendRequestSendItem.email.subSequence(0,8).toString()+".."
+        } else if(friendRequestSendItem.firstName!!.length>7){
+            firstNameShow = friendRequestSendItem.firstName!!.subSequence(0,4).toString()+".."
+        }
         holder.friendFirstName.text =
             holder.itemView.context.getString(R.string.friend_first_name, firstNameShow)
-        val lastNameShow:String = if(friendRequestSendItem.firstName.length<=5 && friendRequestSendItem.lastName.length>4){
-            friendRequestSendItem.lastName.subSequence(0,3).toString()+".."
-        }else if(friendRequestSendItem.lastName.length>5 && friendRequestSendItem.lastName.length>4){
-            friendRequestSendItem.lastName.subSequence(0,2).toString()+".."
-        }else
-            friendRequestSendItem.lastName
+        var lastNameShow:String? = friendRequestSendItem.lastName
+        if(friendRequestSendItem.firstName.isNullOrEmpty()){
+            lastNameShow = ""
+        }else if(friendRequestSendItem.firstName!!.length<=5 && friendRequestSendItem.lastName!!.length>4){
+            lastNameShow = friendRequestSendItem.lastName!!.subSequence(0,3).toString()+".."
+        }else if(friendRequestSendItem.lastName!!.length>5 && friendRequestSendItem.lastName!!.length>4){
+            lastNameShow = friendRequestSendItem.lastName!!.subSequence(0,2).toString()+".."
+        }
         holder.friendLastName.text=
             holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
         holder.friendInitial.text=
@@ -49,10 +53,6 @@ class FriendRequestSendRecyclerViewAdapter(private val friendRequestSend: Mutabl
         val friendFirstName: TextView = friendRequestSendView.findViewById(R.id.friend_first_name)
         val friendLastName: TextView = friendRequestSendView.findViewById(R.id.friend_last_name)
         val friendInitial: TextView = friendRequestSendView.findViewById(R.id.friend_initial)
-
-
-        }
     }
-
-
+}
 

@@ -87,10 +87,10 @@ class CommonComponents {
 //                            val intent = Intent(context, CalendarActivity::class.java)
 //                            context.startActivity(intent)
 //                            activity.overridePendingTransition(0, 0)
-                            val intent = Intent(context, CalendarListActivity::class.java)
+                           /* val intent = Intent(context, CalendarListActivity::class.java)
                             context.startActivity(intent)
                             activity.finish()
-                            activity.overridePendingTransition(0, 0)
+                            activity.overridePendingTransition(0, 0)*/
                         }
                         true
                     }

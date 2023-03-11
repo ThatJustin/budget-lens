@@ -25,18 +25,18 @@ class FriendsSelectRecyclerViewAdapter(private val friends: MutableList<Friends>
     }
     override fun onBindViewHolder(holder: FriendsSelectRecyclerViewAdapter.ViewHolder,position: Int) {
         val friend = friends[position]
-        val firstNameShow:String = if(friend.firstName.length>7){
-            friend.firstName.subSequence(0,4).toString()+".."
+        val firstNameShow:String = if(friend.firstName!!.length>7){
+            friend.firstName!!.subSequence(0,4).toString()+".."
         }else
-            friend.firstName
+            friend.firstName!!
         holder.friendFirstName.text =
             holder.itemView.context.getString(R.string.friend_first_name, firstNameShow)
-        val lastNameShow:String = if(friend.firstName.length<=5 && friend.lastName.length>8){
-            friend.lastName.subSequence(0,3).toString()+".."
-        }else if(friend.lastName.length>5 && friend.lastName.length>8){
-            friend.lastName.subSequence(0,2).toString()+".."
+        val lastNameShow:String = if(friend.firstName!!.length<=5 && friend.lastName!!.length>8){
+            friend.lastName!!.subSequence(0,3).toString()+".."
+        }else if(friend.lastName!!.length>5 && friend.lastName!!.length>8){
+            friend.lastName!!.subSequence(0,2).toString()+".."
         }else
-            friend.lastName
+            friend.lastName!!
         holder.friendLastName.text=
             holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
         holder.friendInitial.text=
@@ -66,7 +66,7 @@ class FriendsSelectRecyclerViewAdapter(private val friends: MutableList<Friends>
                  */
                 if(isChecked){
                     Log.i("Click", "Show "+friends[position].userId)
-                    selectedList.add(friends[position].userId)
+                    selectedList.add(friends[position].userId!!)
                     Log.i("Click", "added something to: "+selectedList)
                 }else{
                     Log.i("uncheck ", "Show "+friends[position].userId)

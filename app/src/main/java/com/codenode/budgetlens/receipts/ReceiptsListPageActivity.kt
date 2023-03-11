@@ -1,10 +1,8 @@
 package com.codenode.budgetlens.receipts
 
-import android.annotation.SuppressLint
 import android.content.Intent
-import android.view.View
+import android.util.Log
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,37 +12,33 @@ import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
-import com.codenode.budgetlens.data.UserReceipts.Companion.loadReceiptsFromAPI
+import com.codenode.budgetlens.data.UserReceipts.Companion.requestReceiptsFromAPI
 import com.codenode.budgetlens.data.UserReceipts.Companion.pageNumber
-import com.codenode.budgetlens.data.UserReceipts.Companion.userReceipts
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity.ReceiptsListPageActivity.pageSize
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterDialog
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterDialogListener
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterOptions
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialog
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialogListener
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.codenode.budgetlens.utils.HttpResponseListener
 import kotlinx.android.synthetic.main.activity_receipts_list_page.*
 
 class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener,
-    ReceiptsFilterDialogListener {
+    ReceiptsFilterDialogListener, HttpResponseListener {
 
     object ReceiptsListPageActivity {
         var pageSize = 5
     }
 
-    private lateinit var receiptsList: MutableList<Receipts>
     private var receiptsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var receiptsAdapter: RecyclerView.Adapter<ReceiptsRecyclerViewAdapter.ViewHolder>
+    private lateinit var receiptsAdapter: ReceiptsRecyclerViewAdapter
     private val sortOptions = SortOptions()
     private var filterOptions = ReceiptsFilterOptions()
-    var additionalData = ""
 
-    //Save an untouched copy for when sorting/filtering is undone
-    private lateinit var receiptsListUntouched: MutableList<Receipts>
+    var searchQuery = ""
+    var queryParams = ""
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipts_list_page)
@@ -88,91 +82,117 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
      * Handles RecycleView adapter.
      */
     private fun handleAdapter() {
-        userReceipts.clear()
         pageNumber = 1
 
-        val searchBar: SearchView = findViewById(R.id.search_bar_text)
-        val progressBar: ProgressBar = findViewById(R.id.progressBar)
-
-        //load the list
-        receiptsList = loadReceiptsFromAPI(this, pageSize, additionalData)
-        receiptsListUntouched = receiptsList.map { it.copy() }.toMutableList()
-
         val context = this
+        val searchBar: SearchView = findViewById(R.id.search_bar_text)
         receiptsListRecyclerView = findViewById(R.id.receipts_list)
-        progressBar.visibility = View.VISIBLE
-        if (receiptsList.isEmpty()) {
-            receiptsListRecyclerView!!.visibility = View.GONE
-            progressBar.visibility = View.GONE
-        }
+
+        //request receipts from backend
+        queryParams = generateQueryParams()
+
+        requestReceiptsFromAPI(VIEW_ITEMS_FIRST_LOAD, this, pageSize, queryParams)
+
         if (receiptsListRecyclerView != null) {
             receiptsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
             receiptsListRecyclerView!!.layoutManager = linearLayoutManager
-            receiptsAdapter = ReceiptsRecyclerViewAdapter(receiptsList)
+            receiptsAdapter = ReceiptsRecyclerViewAdapter()
             receiptsListRecyclerView!!.adapter = receiptsAdapter
-            progressBar.visibility = View.GONE
+
             receiptsListRecyclerView!!.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
-                @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    progressBar.visibility = View.VISIBLE
                     super.onScrollStateChanged(recyclerView, newState)
-                    progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        //Before loading, revert to the old order
-                        receiptsList.clear()
-                        receiptsList.addAll(receiptsListUntouched)
-
-                        //Load in more
-                        receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-
-                        // update the untouched
-                        receiptsListUntouched = receiptsList.map { it.copy() }.toMutableList()
-
-                        //Apply whatever sort is set
-                        applyReceiptsSortOptions()
-
-                        //Update the adapter items
-                        receiptsAdapter.notifyDataSetChanged()
+                        //request receipts
+                        requestReceiptsFromAPI(
+                            VIEW_ITEMS_SCROLL_STATE_CHANGE,
+                            context,
+                            pageSize,
+                            queryParams
+                        )
                     }
-                    progressBar.visibility = View.GONE
                 }
             })
 
             //listener for search bar input
             searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                @SuppressLint("NotifyDataSetChanged")
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    //clean the data, otherwise the search will based on the previous search
-                    additionalData = ""
-                    receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-                    receiptsAdapter.notifyDataSetChanged()
-
-                    //perform the search
-                    additionalData += "?search=" + searchBar.query
-                    userReceipts.clear()
-                    receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-                    receiptsAdapter.notifyDataSetChanged()
+                    //No need to do anything here
                     return true
                 }
 
-                @SuppressLint("NotifyDataSetChanged")
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    //clean the data, otherwise the search will based on the previous search
-                    additionalData = ""
-                    receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-                    receiptsAdapter.notifyDataSetChanged()
+                    //Since we are fetching items with new parameters, reset the page number to 1
+                    pageNumber = 1
+                    searchQuery = newText.toString()
 
-                    //perform the search
-                    additionalData += "?search=" + searchBar.query
-                    userReceipts.clear()
-                    receiptsList = loadReceiptsFromAPI(context, pageSize, additionalData)
-                    receiptsAdapter.notifyDataSetChanged()
+                    queryParams = generateQueryParams()
+                    requestReceiptsFromAPI(
+                        VIEW_ITEMS_SEARCH,
+                        context,
+                        pageSize,
+                        queryParams
+                    )
                     return true
                 }
             })
         }
+    }
+
+    /**
+     * Handles when an http request comes back successfully.
+     *
+     * VIEW_ITEMS_FIRST_LOAD - triggered by first opening the receipt activity and initiating the fist load
+     * VIEW_ITEMS_SCROLL_STATE_CHANGE - triggered by loading new receipts when dragging finger pointer down
+     * VIEW_ITEM_FILTER - triggered when a filter is set
+     * VIEW_ITEMS_SEARCH - triggered when user inputs in search view
+     */
+    override fun onHttpSuccess(viewItemRequestType: Int, mutableList: MutableList<*>) {
+        Log.i(
+            "Receipts-OnHttpSuccess",
+            "An Http request triggered by type $viewItemRequestType was successful."
+        )
+        val receiptsList = (mutableList as MutableList<Receipts>).map { it.copy() }.toMutableList()
+
+        //Update the adapter items
+        runOnUiThread {
+            when (viewItemRequestType) {
+                VIEW_ITEMS_FIRST_LOAD,
+                VIEW_ITEMS_SCROLL_STATE_CHANGE -> {
+                    receiptsAdapter.addReceipts(
+                        receiptsList,
+                        ::applyReceiptsSortOptions
+                    )
+                }
+                VIEW_ITEM_FILTER -> {
+                    receiptsAdapter.addFilteredReceipts(
+                        receiptsList,
+                        ::applyReceiptsSortOptions
+                    )
+                }
+                VIEW_ITEMS_SEARCH -> {
+                    receiptsAdapter.addSearchedReceipts(
+                        receiptsList,
+                        ::applyReceiptsSortOptions
+                    )
+                }
+                else -> {
+                    Log.i(
+                        "Receipts-OnHttpSuccess",
+                        "Unknown viewItemRequestType detected: $viewItemRequestType"
+                    )
+                }
+            }
+        }
+    }
+
+    /**
+     * Handles when an http request comes back with an error.
+     */
+    override fun onHttpError() {
+        Log.i("Receipts-OnHttpError", "An Http error was returned.")
     }
 
     class SortOptions {
@@ -188,9 +208,19 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         var isTipDescending = false
         var isTotalAscending = false
         var isTotalDescending = false
+
+        override fun toString(): String {
+            return "SortOptions(isMerchantAscending=$isMerchantAscending, isMerchantDescending=$isMerchantDescending, isLocationAscending=$isLocationAscending, isLocationDescending=$isLocationDescending, isCouponAscending=$isCouponAscending, isCouponDescending=$isCouponDescending, isTaxAscending=$isTaxAscending, isTaxDescending=$isTaxDescending, isTipAscending=$isTipAscending, isTipDescending=$isTipDescending, isTotalAscending=$isTotalAscending, isTotalDescending=$isTotalDescending)"
+        }
+
+        fun isSortingEnabled(): Boolean {
+            return isMerchantAscending || isMerchantDescending || isLocationAscending || isLocationDescending || isCouponAscending || isCouponDescending || isTaxAscending || isTaxDescending || isTipAscending || isTipDescending || isTotalAscending || isTotalDescending
+        }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    /**
+     * Upon closing the sort dialog, updates the sort options and updates the recycler view receipts.
+     */
     override fun onReturnedSortOptions(
         isMerchantAscending: Boolean,
         isMerchantDescending: Boolean,
@@ -219,116 +249,122 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
         sortOptions.isTotalAscending = isTotalAscending
         sortOptions.isTotalDescending = isTotalDescending
 
-        applyReceiptsSortOptions()
-
-        //Update adapter of changes
-        receiptsAdapter.notifyDataSetChanged()
+        runOnUiThread {
+            receiptsAdapter.revertAppliedSort()
+            val sortedReceiptList =
+                applyReceiptsSortOptions(receiptsAdapter.getUnsortedReceipts())
+            receiptsAdapter.sortReceipts(sortedReceiptList)
+        }
     }
 
     /**
      * Sorts the receiptsList MutableList<Receipts> based on sortOptions from user.
      */
-    private fun applyReceiptsSortOptions() {
-        // Restore receiptsList to the untouched state
-        receiptsList.clear()
-        receiptsList.addAll(receiptsListUntouched)
-
-        //Sort
-        if (sortOptions.isMerchantAscending) {
-            receiptsList.sortBy { it.merchant_name }
+    private fun applyReceiptsSortOptions(receiptsList: MutableList<Receipts>): MutableList<Receipts> {
+        if (sortOptions.isSortingEnabled()) {
+            if (sortOptions.isMerchantAscending) {
+                receiptsList.sortBy { it.merchant_name }
+            }
+            if (sortOptions.isMerchantDescending) {
+                receiptsList.sortByDescending { it.merchant_name }
+            }
+            if (sortOptions.isLocationAscending) {
+                receiptsList.sortBy { it.location }
+            }
+            if (sortOptions.isLocationDescending) {
+                receiptsList.sortByDescending { it.location }
+            }
+            if (sortOptions.isCouponAscending) {
+                receiptsList.sortBy { it.coupon }
+            }
+            if (sortOptions.isCouponDescending) {
+                receiptsList.sortByDescending { it.coupon }
+            }
+            if (sortOptions.isTaxAscending) {
+                receiptsList.sortBy { it.tax }
+            }
+            if (sortOptions.isTaxDescending) {
+                receiptsList.sortByDescending { it.tax }
+            }
+            if (sortOptions.isTipAscending) {
+                receiptsList.sortBy { it.tip }
+            }
+            if (sortOptions.isTipDescending) {
+                receiptsList.sortByDescending { it.tip }
+            }
+            if (sortOptions.isTotalAscending) {
+                receiptsList.sortBy { it.total_amount }
+            }
+            if (sortOptions.isTotalDescending) {
+                receiptsList.sortByDescending { it.total_amount }
+            }
         }
-        if (sortOptions.isMerchantDescending) {
-            receiptsList.sortByDescending { it.merchant_name }
-        }
-        if (sortOptions.isLocationAscending) {
-            receiptsList.sortBy { it.location }
-        }
-        if (sortOptions.isLocationDescending) {
-            receiptsList.sortByDescending { it.location }
-        }
-        if (sortOptions.isCouponAscending) {
-            receiptsList.sortBy { it.coupon }
-        }
-        if (sortOptions.isCouponDescending) {
-            receiptsList.sortByDescending { it.coupon }
-        }
-        if (sortOptions.isTaxAscending) {
-            receiptsList.sortBy { it.tax }
-        }
-        if (sortOptions.isTaxDescending) {
-            receiptsList.sortByDescending { it.tax }
-        }
-        if (sortOptions.isTipAscending) {
-            receiptsList.sortBy { it.tip }
-        }
-        if (sortOptions.isTipDescending) {
-            receiptsList.sortByDescending { it.tip }
-        }
-        if (sortOptions.isTotalAscending) {
-            receiptsList.sortBy { it.total_amount }
-        }
-        if (sortOptions.isTotalDescending) {
-            receiptsList.sortByDescending { it.total_amount }
-        }
+        return receiptsList
     }
 
     /**
      * A listener that gets back the filters set in the ReceiptsFilterDialog.
      */
-    @SuppressLint("NotifyDataSetChanged")
     override fun onReturnedFilterOptions(newFilterOptions: ReceiptsFilterOptions) {
         this.filterOptions = newFilterOptions
 
-        val filterOptionList = ArrayList<String>()
+        //Generate the new queryParams and assign them
+        queryParams = generateQueryParams()
+
+        //We need to set the page number back to 1 when changing the entire dataset
+        pageNumber = 1
+
+        //request
+        requestReceiptsFromAPI(VIEW_ITEM_FILTER, this, pageSize, queryParams)
+    }
+
+    /**
+     * Generates a string of query parameters from the filter and search fields.
+     */
+    fun generateQueryParams(): String {
+        val queryParams = ArrayList<String>()
+
         val sb = StringBuilder("?")
-        additionalData = ""
 
         //set additionalData here
         if (filterOptions.merchantName.isNotEmpty()) {
-            filterOptionList.add("merchant_name=${filterOptions.merchantName}")
+            queryParams.add("merchant_name=${filterOptions.merchantName}")
         }
         if (filterOptions.location.isNotEmpty()) {
-            filterOptionList.add("location=${filterOptions.location}")
+            queryParams.add("location=${filterOptions.location}")
         }
         if (filterOptions.coupon.isNotEmpty()) {
-            filterOptionList.add("coupon=${filterOptions.coupon}")
+            queryParams.add("coupon=${filterOptions.coupon}")
         }
         if (filterOptions.currency.isNotEmpty()) {
-            filterOptionList.add("currency=${filterOptions.currency}")
+            queryParams.add("currency=${filterOptions.currency}")
         }
         if (filterOptions.total.isNotEmpty()) {
-            filterOptionList.add("total=${filterOptions.total}")
+            queryParams.add("total=${filterOptions.total}")
         }
         if (filterOptions.scanDateStart.isNotEmpty() && filterOptions.scanDateEnd.isNotEmpty()) {
-            filterOptionList.add("scan_date_start=${filterOptions.scanDateStart}&scan_date_end=${filterOptions.scanDateEnd}"
+            queryParams.add(
+                "scan_date_start=${filterOptions.scanDateStart}&scan_date_end=${filterOptions.scanDateEnd}"
             )
         }
-
-        for (i in 0 until filterOptionList.size) {
+        if (searchQuery.isNotEmpty()) {
+            queryParams.add("search=$searchQuery")
+        }
+        for (i in 0 until queryParams.size) {
             if (i == 0) {
-                sb.append(filterOptionList[i])
+                sb.append(queryParams[i])
             } else {
-                sb.append("&${filterOptionList[i]}")
+                sb.append("&${queryParams[i]}")
             }
         }
 
-        additionalData = sb.toString()
-        println("additionalData $additionalData")
+        return if (queryParams.isEmpty()) "" else sb.toString()
+    }
 
-        receiptsList.clear()
-
-        pageNumber = 1
-
-        //reload
-        receiptsList = loadReceiptsFromAPI(this, pageSize, additionalData)
-
-        // update the untouched
-        receiptsListUntouched = receiptsList.map { it.copy() }.toMutableList()
-
-        //Apply whatever sort is set
-        applyReceiptsSortOptions()
-
-        //Update the adapter items
-        receiptsAdapter.notifyDataSetChanged()
+    companion object {
+        val VIEW_ITEMS_FIRST_LOAD = 0
+        val VIEW_ITEMS_SCROLL_STATE_CHANGE = 1
+        val VIEW_ITEM_FILTER = 3
+        val VIEW_ITEMS_SEARCH = 4
     }
 }
