@@ -63,6 +63,7 @@ class BudgetPageActivity : AppCompatActivity() {
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.BUDGET, this, this.window.decorView)
+        CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.BUDGET)
         findViewById<ConstraintLayout>(R.id.constraintLayout3).setOnClickListener() {
             val intent = Intent(this, BudgetSpendingTrendActivity::class.java)
             startActivity(intent)

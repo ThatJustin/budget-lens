@@ -45,6 +45,7 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.RECEIPTS, this, this.window.decorView)
+        CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.RECEIPTS)
 
         handleAdapter()
         handleSort()

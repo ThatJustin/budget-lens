@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".home.AddReceiptsActivity" >
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".manualReceipt.Receipt">
 <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -180,6 +186,81 @@
         app:cornerRadius="10dp" />
 
 </LinearLayout>
-
 </androidx.core.widget.NestedScrollView>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addReceipts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_baseline_add_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bottom_navigation"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.87"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/ScanReceipt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:alpha="0.0"
+            android:enabled="false"
+            android:src="@drawable/ic_baseline_add_a_photo_24"
+            app:layout_constraintBottom_toTopOf="@+id/addReceipts"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:title="Home" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/createManual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:alpha="0.0"
+            android:enabled="false"
+            android:src="@drawable/ic_baseline_post_add_24"
+            app:layout_constraintBottom_toTopOf="@+id/ScanReceipt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:title="Home" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:menu="@menu/bottom_nav_menu" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabut"
+            app:tint="@color/white"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:backgroundTint="@color/purple"
+            android:layout_marginBottom="40dp"
+            app:srcCompat="@drawable/budget"
+            app:fabCustomSize="80dp"
+            app:maxImageSize="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>

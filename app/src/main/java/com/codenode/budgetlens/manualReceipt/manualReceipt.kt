@@ -12,6 +12,8 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.codenode.budgetlens.R
+import com.codenode.budgetlens.common.ActivityName
+import com.codenode.budgetlens.common.CommonComponents
 import java.util.*
 
 
@@ -19,6 +21,8 @@ open class Receipt() : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_receipt)
+        CommonComponents.handleNavigationBar(ActivityName.MANUAL_RECEIPTS, this, this.window.decorView)
+        CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.MANUAL_RECEIPTS)
         val merchant = findViewById<Spinner>(R.id.mercant)
         val sps: SharedPreferences =this.getSharedPreferences("data",Context.MODE_PRIVATE)
         val merchantList:ArrayList<String> =
