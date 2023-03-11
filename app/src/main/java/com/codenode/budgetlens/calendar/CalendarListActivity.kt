@@ -17,6 +17,10 @@ import com.loopj.android.http.TextHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import kotlinx.android.synthetic.main.activity_calendar_list.*
 import java.math.BigDecimal
+import okhttp3.*
+import java.io.IOException
+import com.codenode.budgetlens.data.ReceiptSplitItem
+import org.json.JSONObject
 
 
 class CalendarListActivity : AppCompatActivity() {
@@ -45,39 +49,43 @@ class CalendarListActivity : AppCompatActivity() {
         }
     }
 
-    fun add(v1: String?, v2: String?): String? {
-        val b1 = BigDecimal(v1)
-        val b2 = BigDecimal(v2)
-        return b1.add(b2).toString()
-    }
     private fun getData() {
+        val ids = intent.getIntExtra("ids", -1)
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/receipt/$ids/"
 
-        var ids=intent.getStringExtra("ids")
-        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/itemsplit/sharedAmountList/"+ids+"/"
-        HttpUtils.get("Bearer ${BearerToken.getToken(this)}", url, object : TextHttpResponseHandler() {
-            override fun onFailure(
-                statusCode: Int,
-                headers: Array<Header>,
-                responseString: String,
-                throwable: Throwable
-            ) {
+        val client = OkHttpClient.Builder().build()
+        val request = Request.Builder()
+            .url(url)
+            .header("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .build()
 
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle failure
             }
 
-            override fun onSuccess(
-                statusCode: Int,
-                headers: Array<Header>,
-                responseString: String
-            ) {
-                var bean= JSON.parseObject(responseString, CalendarBean::class.java);
-
-                madapter.setNewInstance(bean.data as MutableList<CalendarBean.DataDTO>?)
-                var num="0"
-                for (str in bean.data!!) {
-                    num=add(num,str.item_price).toString()
+            override fun onResponse(call: Call, response: Response) {
+                val json = response.body?.string() ?: return
+                val jsonObject = JSONObject(json)
+                val items = jsonObject.getJSONArray("items")
+                val itemList = mutableListOf<ReceiptSplitItem>()
+                for (i in 0 until items.length()) {
+                    val item = items.getJSONObject(i)
+                    val receiptSplitItem = ReceiptSplitItem()
+                    receiptSplitItem.item_id = item.getInt("id")
+                    receiptSplitItem.item_name = item.getString("name")
+                    receiptSplitItem.item_price = item.getString("price")
+                    receiptSplitItem.splitList = listOf()
+                    itemList.add(receiptSplitItem)
                 }
-                tv_num.setText("$"+num)
-            }
+
+                runOnUiThread {
+                    madapter.setNewInstance(itemList)
+                    }
+
+                }
         })
     }
+
+
 }

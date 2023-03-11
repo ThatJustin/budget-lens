@@ -8,8 +8,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.viewholder.BaseViewHolder;
 import com.codenode.budgetlens.R;
 import com.codenode.budgetlens.data.CalendarBean;
+import com.codenode.budgetlens.data.ReceiptSplitItem;
 
-public class CalendarAdapter extends BaseQuickAdapter<CalendarBean.DataDTO, BaseViewHolder> {
+public class CalendarAdapter extends BaseQuickAdapter<ReceiptSplitItem, BaseViewHolder> {
 
     public CalendarAdapter() {
         super(R.layout.item_calendar);
@@ -17,14 +18,8 @@ public class CalendarAdapter extends BaseQuickAdapter<CalendarBean.DataDTO, Base
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, CalendarBean.DataDTO bean) {
-        helper.setText(R.id.name, bean.getItem_name());
-        helper.setText(R.id.price,"$"+bean.getItem_price());
-        CalendarItemAdapter itemAdapter=new CalendarItemAdapter();
-        RecyclerView recyclerView=helper.getView(R.id.recyclerview);
-
-        recyclerView.setAdapter(itemAdapter);
-        itemAdapter.setNewInstance(bean.getSplititem());
+    protected void convert(BaseViewHolder helper, ReceiptSplitItem item) {
+        helper.setText(R.id.name, item.getItem_name());
+        helper.setText(R.id.price,"$"+item.getItem_price());
     }
-
 }

@@ -108,9 +108,10 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
 
             handleSplitByItem.setOnClickListener{
                 // ToDo: SET UP GO TO NEXT ACTIVITY AND PASS IN SELECTED LIST AS EXTRA
-                var ids=intent.getStringExtra("ids")
+                var ids=intent.getIntExtra("ids", -1)
                 val intent = Intent(this,  CalendarListActivity::class.java)
                 intent.putExtra("ids", ids)
+                intent.putExtra("selectedList", ArrayList(selectedList))
                 startActivityForResult(intent, 100)
             }
 

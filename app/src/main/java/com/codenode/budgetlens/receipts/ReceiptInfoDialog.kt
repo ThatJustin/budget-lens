@@ -153,7 +153,8 @@ class ReceiptInfoDialog(
         //handle split bill button
         findViewById<Button>(R.id.receipt_info_split_bill)?.setOnClickListener {
             val goToSplitBillPageActivity = Intent(context, ReceiptSplitFriendSelect::class.java)
-            goToSplitBillPageActivity.putExtra("ids", ""+receiptInfo.id)
+            goToSplitBillPageActivity.putExtra("ids", receiptInfo.id)
+            goToSplitBillPageActivity.putExtra("user_id", receiptInfo.id)
             context.startActivity(goToSplitBillPageActivity)
         }
 
