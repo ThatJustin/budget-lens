@@ -179,6 +179,7 @@ class CommonComponents {
             }
 
             topAppBar.setOnMenuItemClickListener { menuItem ->
+                val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
                 when (menuItem.itemId) {
                     R.id.profile_icon -> {
                         //Do nothing

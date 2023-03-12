@@ -112,7 +112,7 @@ class ReceiptSplitFriendSelect : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode==101){
             friendList =
-                UserFriends.loadFriendsFromAPI(this, pageSize, additionalData)
+                UserFriends.loadFriendsFromAPI(this, pageSize, "")
             friendAdapter.notifyDataSetChanged()
         }
     }
