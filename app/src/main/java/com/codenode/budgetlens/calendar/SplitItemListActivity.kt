@@ -18,6 +18,8 @@ import java.io.IOException
 import com.codenode.budgetlens.data.ReceiptSplitItem
 import com.codenode.budgetlens.data.UserFriends
 import kotlinx.android.synthetic.main.activity_split_item_list.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import org.json.JSONArray
 import org.json.JSONObject
 
 
@@ -56,6 +58,7 @@ class SplitItemListActivity : AppCompatActivity() {
             finish()
         }
         tv_sure.setOnClickListener {
+            postData()
             val intent = Intent()
             setResult(101, intent)
             finish()
@@ -106,6 +109,7 @@ class SplitItemListActivity : AppCompatActivity() {
                     receiptSplitItem.item_name = item.getString("name")
                     receiptSplitItem.item_price = item.getString("price")
                     receiptSplitItem.splitList = listOf()
+                    receiptSplitItem.sharedWithSelf = true
                     itemList.add(receiptSplitItem)
                 }
 
@@ -116,6 +120,58 @@ class SplitItemListActivity : AppCompatActivity() {
 
             }
         })
+    }
+
+    private fun postData() {
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/itemsplit/"
+
+        val itemListJsonArray = JSONArray()
+
+        for (item in item_list) {
+            if (!item.splitList.isNullOrEmpty()) {
+                val itemJsonObject = JSONObject()
+                itemJsonObject.put("item_id", "${item.item_id}")
+                var itemSplitList = removeDuplicates(item.splitList!!)
+                itemJsonObject.put("shared_user_ids", itemSplitList.joinToString(","))
+                itemJsonObject.put("is_shared_with_item_user", item.sharedWithSelf)
+                itemListJsonArray.put(itemJsonObject)
+            } else {
+                //do nothing
+            }
+        }
+
+        val json = JSONObject()
+        json.put("item_list", itemListJsonArray)
+
+        val client = OkHttpClient.Builder().build()
+
+        val body = RequestBody.create("application/json".toMediaTypeOrNull(), json.toString())
+
+        val request = Request.Builder()
+            .url(url)
+            .header("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .method("POST", body = body)
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                // Handle failure
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                // Handle success
+            }
+        })
+    }
+
+    private fun removeDuplicates(list: List<Int>): List<Int> {
+        val distinctList = mutableListOf<Int>()
+        for (item in list) {
+            if (!distinctList.contains(item)) {
+                distinctList.add(item)
+            }
+        }
+        return distinctList
     }
 
 
