@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".home.AddReceiptsActivity" >
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".manualReceipt.Receipt">
 <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -34,12 +40,13 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="15dp"
         android:drawableRight="@mipmap/ic_down"
         android:hint="please choose a merchant"
         android:paddingVertical="16dp"
-        android:text=""
-        android:textColor="@color/text333"
-        android:textSize="14dp" />
+        android:textSize="20dp"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"  />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx1"
@@ -50,6 +57,8 @@
         android:layout_marginBottom="10dp"
         android:drawableRight="@mipmap/ic_rili"
         android:focusable="false"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:hint="Scan date"
         android:minHeight="48dp" />
 
@@ -62,6 +71,8 @@
         android:layout_marginBottom="10dp"
         android:hint="http//192.168.219:8000//receipt-images1111669934941jpg"
         android:inputType="text"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:focusable="false"
         android:minHeight="48dp" />
 
@@ -73,9 +84,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:hint="Location"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:drawableRight="@mipmap/location"
         android:inputType="text"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx4"
@@ -85,9 +99,12 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:hint="total"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:drawableRight="@mipmap/budget"
         android:inputType="numberDecimal"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx5"
@@ -98,8 +115,11 @@
         android:layout_marginBottom="10dp"
         android:drawableRight="@mipmap/budget"
         android:inputType="numberDecimal"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:hint="tax"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx6"
@@ -110,8 +130,11 @@
         android:layout_marginBottom="10dp"
         android:inputType="numberDecimal"
         android:hint="tip"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:drawableRight="@mipmap/budget"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/tx7"
         android:layout_width="match_parent"
@@ -120,8 +143,11 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:hint="coupon"
+        android:textColorHint="@color/text666"
+        android:textColor="@color/text666"
         android:drawableRight="@mipmap/budget"
-        android:minHeight="48dp"  />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <TextView
         android:id="@+id/tvCurrency"
@@ -143,8 +169,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="10dp"
         android:hint="receipt text"
+        android:visibility="gone"
         android:drawableRight="@mipmap/ic_rili"
-        android:minHeight="48dp" />
+        android:minHeight="48dp"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/filledButton"
@@ -158,6 +186,81 @@
         app:cornerRadius="10dp" />
 
 </LinearLayout>
-
 </androidx.core.widget.NestedScrollView>
+
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addReceipts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_baseline_add_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bottom_navigation"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.87"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/ScanReceipt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:alpha="0.0"
+            android:enabled="false"
+            android:src="@drawable/ic_baseline_add_a_photo_24"
+            app:layout_constraintBottom_toTopOf="@+id/addReceipts"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:title="Home" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/createManual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:alpha="0.0"
+            android:enabled="false"
+            android:src="@drawable/ic_baseline_post_add_24"
+            app:layout_constraintBottom_toTopOf="@+id/ScanReceipt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:title="Home" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:menu="@menu/bottom_nav_menu" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabut"
+            app:tint="@color/white"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:backgroundTint="@color/purple"
+            android:layout_marginBottom="40dp"
+            app:srcCompat="@drawable/budget"
+            app:fabCustomSize="80dp"
+            app:maxImageSize="40dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>

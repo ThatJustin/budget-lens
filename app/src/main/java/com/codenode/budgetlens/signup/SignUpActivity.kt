@@ -209,7 +209,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         if (passwordField.text.toString().length < 8) {
-            passwordField.error = "Password must be greater than 8 character"
+            passwordField.error = "Password must be greater than 8 characters"
             return false
         }
 

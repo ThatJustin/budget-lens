@@ -3,11 +3,8 @@ package com.codenode.budgetlens.receipts
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.NoMatchingViewException
-import androidx.test.espresso.ViewInteraction
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -26,16 +23,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class ReceiptsListPageFilteringAndSortingInstrumentedTests {
-
-    private fun ViewInteraction.isDisplayed(): Boolean {
-        return try {
-            check(matches(ViewMatchers.isDisplayed()))
-            true
-        } catch (e: NoMatchingViewException) {
-            false
-        }
-    }
-
     // This is used to clear the shared preferences before each test
     companion object {
         @BeforeClass
@@ -53,7 +40,6 @@ class ReceiptsListPageFilteringAndSortingInstrumentedTests {
     @Before
     fun setup() {
         clearStorage()
-        onView(withId(R.id.LoginActivityBtn)).perform(click())
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
@@ -78,22 +64,12 @@ class ReceiptsListPageFilteringAndSortingInstrumentedTests {
     @Test
     fun test_receipts_list_filter_dialog_window_opens() {
         // This test only checks to see if the receipts list filter dialog window opens when the filter button is clicked
-        if (onView(withId(R.id.receipts_list)).isDisplayed()) {
-            onView(withId(R.id.filter_button)).perform(click())
-        }
-        else {
-            !onView(withId(R.id.receipts_list)).isDisplayed()
-        }
+        onView(withId(R.id.filter_button)).perform(click())
     }
 
     @Test
     fun test_receipts_list_sort_by_dialog_window_opens() {
         // This test only checks to see if the receipts list sort by dialog window opens when the sort by button is clicked
-        if (onView(withId(R.id.receipts_list)).isDisplayed()) {
-            onView(withId(R.id.sort_by_button)).perform(click())
-        }
-        else {
-            !onView(withId(R.id.receipts_list)).isDisplayed()
-        }
+        onView(withId(R.id.sort_by_button)).perform(click())
     }
 }

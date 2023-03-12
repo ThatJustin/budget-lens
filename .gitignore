@@ -17,3 +17,4 @@ local.properties
 *.iws
 /.idea/tasks.xml
 /.idea/vcs.xml
+/.idea/androidTestResultsUserPreferences.xml
