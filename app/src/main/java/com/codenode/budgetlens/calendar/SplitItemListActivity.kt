@@ -1,43 +1,56 @@
 package com.codenode.budgetlens.calendar
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.alibaba.fastjson.JSON
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.adapter.CalendarAdapter
+import com.codenode.budgetlens.adapter.ItemSplitListApp
+import com.codenode.budgetlens.adapter.SplitItemListAdapter
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
-import com.codenode.budgetlens.data.CalendarBean
-import com.codenode.budgetlens.utils.HttpUtils
-import com.loopj.android.http.TextHttpResponseHandler
-import cz.msebera.android.httpclient.Header
-import kotlinx.android.synthetic.main.activity_calendar_list.*
-import java.math.BigDecimal
+import com.codenode.budgetlens.data.Friends
+import kotlinx.android.synthetic.main.activity_split_item_list.*
 import okhttp3.*
 import java.io.IOException
 import com.codenode.budgetlens.data.ReceiptSplitItem
+import com.codenode.budgetlens.data.UserFriends
+import kotlinx.android.synthetic.main.activity_split_item_list.*
 import org.json.JSONObject
 
 
-class CalendarListActivity : AppCompatActivity() {
+class SplitItemListActivity : AppCompatActivity() {
 
-    var madapter= CalendarAdapter()
+    var madapter = SplitItemListAdapter()
+    var item_list = mutableListOf<ReceiptSplitItem>()
+    private lateinit var friendList: MutableList<Friends>
+    private val REQUEST_CODE_CHOOSE_FRIENDS = 81
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calendar_list)
+        setContentView(R.layout.activity_split_item_list)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.HOME, this, this.window.decorView)
-       /* tv_split.setOnClickListener {
+        /* tv_split.setOnClickListener {
 
-        }*/
-        friends_list.adapter=madapter
+         }*/
+        friends_list.adapter = madapter
         getData()
+        friendList = UserFriends.loadFriendsFromAPI(this, 5, "")
+        madapter.friendList = friendList
         madapter.setOnItemChildClickListener { adapter, view, position ->
-            startActivity(Intent(this, ChooseFriendActivity::class.java))
+            item_list = madapter.itemList as MutableList<ReceiptSplitItem>
+            val app = application as ItemSplitListApp
+            app.itemList = item_list
+            val clickedItem = item_list[position]
+            val selected_item_id = clickedItem.item_id ?: -1
+            val selectedList = intent.getIntegerArrayListExtra("selectedList")
+            val intent = Intent(this@SplitItemListActivity, ChooseFriendActivity::class.java)
+            intent.putExtra("selectedList", selectedList?.let { ArrayList(it) })
+            intent.putExtra("selected_item_id", selected_item_id)
+            startActivityForResult(intent, REQUEST_CODE_CHOOSE_FRIENDS)
         }
         tv_cancel.setOnClickListener {
             finish()
@@ -46,6 +59,23 @@ class CalendarListActivity : AppCompatActivity() {
             val intent = Intent()
             setResult(101, intent)
             finish()
+        }
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // check if the result is from the ChooseFriendActivity and the result code is Activity.RESULT_OK
+        if (requestCode == REQUEST_CODE_CHOOSE_FRIENDS && resultCode == Activity.RESULT_OK) {
+
+            val app = application as ItemSplitListApp
+            item_list = app.itemList!!
+            runOnUiThread {
+                madapter.itemList = item_list
+                madapter.setNewInstance(item_list)
+            }
+
         }
     }
 
@@ -80,10 +110,11 @@ class CalendarListActivity : AppCompatActivity() {
                 }
 
                 runOnUiThread {
+                    madapter.itemList = itemList
                     madapter.setNewInstance(itemList)
-                    }
-
                 }
+
+            }
         })
     }
 

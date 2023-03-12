@@ -12,7 +12,6 @@ import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.budget.BudgetPageActivity
-import com.codenode.budgetlens.calendar.CalendarListActivity
 import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.friends.FriendsPageActivity
 import com.codenode.budgetlens.home.HomePageActivity
@@ -87,7 +86,7 @@ class CommonComponents {
 //                            val intent = Intent(context, CalendarActivity::class.java)
 //                            context.startActivity(intent)
 //                            activity.overridePendingTransition(0, 0)
-                           /* val intent = Intent(context, CalendarListActivity::class.java)
+                           /* val intent = Intent(context, SplitItemListActivity::class.java)
                             context.startActivity(intent)
                             activity.finish()
                             activity.overridePendingTransition(0, 0)*/
