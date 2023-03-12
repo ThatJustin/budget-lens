@@ -24,7 +24,7 @@ class ChooseFriendActivity : AppCompatActivity() {
     private var participants: MutableList<Friends> = ArrayList()
     var item_list = mutableListOf<ReceiptSplitItem>()
     private lateinit var friendList: MutableList<Friends>
-    private lateinit var friendAdapter: RecyclerView.Adapter<ParticipantsSelectRecyclerViewAdapter.ViewHolder>
+    private lateinit var friendAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
     private var friendsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var pageSize = 5

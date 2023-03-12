@@ -17,60 +17,133 @@ class ParticipantsSelectRecyclerViewAdapter(
     private val itemList: MutableList<ReceiptSplitItem>,
     private val selected_item_id: Int
 ) :
-    RecyclerView.Adapter<ParticipantsSelectRecyclerViewAdapter.ViewHolder>() {
-    //    val selectedList: MutableList<Int> = ArrayList()
-    var context: Context? = null
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): ViewHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.friend_select_card, parent, false)
-        return ViewHolder(view)
-    }
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val friend = friends[position]
-        val firstNameShow: String = if (friend.firstName!!.length > 7) {
-            friend.firstName!!.subSequence(0, 4).toString() + ".."
-        } else
-            friend.firstName!!
-        holder.friendFirstName.text =
-            holder.itemView.context.getString(R.string.friend_first_name, firstNameShow)
-        val lastNameShow: String =
-            if (friend.firstName!!.length <= 5 && friend.lastName!!.length > 8) {
-                friend.lastName!!.subSequence(0, 3).toString() + ".."
-            } else if (friend.lastName!!.length > 5 && friend.lastName!!.length > 8) {
-                friend.lastName!!.subSequence(0, 2).toString() + ".."
-            } else
-                friend.lastName!!
-        holder.friendLastName.text =
-            holder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
-        holder.friendInitial.text =
-            holder.itemView.context.getString(R.string.friend_initial, friend.friendInitial)
-        holder.friendEmail.text =
-            holder.itemView.context.getString(R.string.friend_email, friend.email)
+    private val sharedWithSelf = 0
+    private val friend = 1
+    private var sharedWithSelfChecked = false
 
-        // Check if friend is in the splitList for the selected item
-        val selectedItem = itemList.find { it.item_id == selected_item_id }
-        if (selectedItem != null && selectedItem.splitList?.contains(friend.userId) == true) {
-            holder.selectFriend.isChecked = true
-        } else {
-            holder.selectFriend.isChecked = false
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            sharedWithSelf -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.friend_select_card, parent, false)
+                SharedWithSelfViewHolder(view)
+            }
+            else -> {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.friend_select_card, parent, false)
+                FriendViewHolder(view)
+            }
         }
     }
 
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder.itemViewType) {
+            sharedWithSelf -> {
+                val sharedWithSelfHolder = holder as SharedWithSelfViewHolder
+                sharedWithSelfHolder.sharedWithSelfCheckBox.isChecked = sharedWithSelfChecked
+                // Check if friend is in the splitList for the selected item
+                val selectedItem = itemList.find { it.item_id == selected_item_id }
+                if (selectedItem != null && selectedItem.sharedWithSelf == true) {
+                    sharedWithSelfHolder.sharedWithSelfCheckBox.isChecked = true
+                } else {
+                    sharedWithSelfHolder.sharedWithSelfCheckBox.isChecked = false
+                }
+            }
+            friend -> {
+                val friendHolder = holder as FriendViewHolder
+                val currentFriend = friends[position - 1]
+                val firstNameShow: String = if (currentFriend.firstName!!.length > 7) {
+                    currentFriend.firstName!!.subSequence(0, 4).toString() + ".."
+                } else
+                    currentFriend.firstName!!
+                friendHolder.friendFirstName.text =
+                    friendHolder.itemView.context.getString(
+                        R.string.friend_first_name,
+                        firstNameShow
+                    )
+                val lastNameShow: String =
+                    if (currentFriend.firstName!!.length <= 5 && currentFriend.lastName!!.length > 8) {
+                        currentFriend.lastName!!.subSequence(0, 3).toString() + ".."
+                    } else if (currentFriend.lastName!!.length > 5 && currentFriend.lastName!!.length > 8) {
+                        currentFriend.lastName!!.subSequence(0, 2).toString() + ".."
+                    } else
+                        currentFriend.lastName!!
+                friendHolder.friendLastName.text =
+                    friendHolder.itemView.context.getString(R.string.friend_last_name, lastNameShow)
+                friendHolder.friendInitial.text =
+                    friendHolder.itemView.context.getString(
+                        R.string.friend_initial,
+                        currentFriend.friendInitial
+                    )
+                friendHolder.friendEmail.text =
+                    friendHolder.itemView.context.getString(
+                        R.string.friend_email,
+                        currentFriend.email
+                    )
 
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
-        context = recyclerView.context
+                // Check if friend is in the splitList for the selected item
+                val selectedItem = itemList.find { it.item_id == selected_item_id }
+                if (selectedItem != null && selectedItem.splitList?.contains(currentFriend.userId) == true) {
+                    friendHolder.selectFriend.isChecked = true
+                } else {
+                    friendHolder.selectFriend.isChecked = false
+                }
+            }
+        }
     }
 
     override fun getItemCount(): Int {
-        return friends.size
+        return friends.size + 1
     }
 
-    inner class ViewHolder(friendsView: View) : RecyclerView.ViewHolder(friendsView),
+    override fun getItemViewType(position: Int): Int {
+        return if (position == sharedWithSelf) {
+            sharedWithSelf
+        } else {
+            friend
+        }
+    }
+
+    inner class SharedWithSelfViewHolder(friendsView: View) : RecyclerView.ViewHolder(friendsView),
+        View.OnClickListener {
+        val friendFirstName: TextView = friendsView.findViewById(R.id.friend_first_name)
+        val friendInitial: TextView = friendsView.findViewById(R.id.friend_initial)
+        val friendLastName: TextView = friendsView.findViewById(R.id.friend_last_name)
+        val friendEmail: TextView = friendsView.findViewById(R.id.friend_email)
+        val sharedWithSelfCheckBox: CheckBox = friendsView.findViewById(R.id.friend_select)
+
+        init {
+            friendInitial.text = "M"
+            friendFirstName.text = "Me"
+            friendLastName.text = ""
+            friendEmail.text = ""
+            friendsView.setOnClickListener(this)
+            sharedWithSelfCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                val itemPosition = itemList.indexOfFirst { it.item_id == selected_item_id }
+                if (itemPosition >= 0) {
+                    val item = itemList[itemPosition]
+                    /*
+                    ADD FRIEND ID TO LIST IF CHECKED, ELSE REMOVE FROM LIST.
+                     */
+                    if (isChecked) {
+                        Log.i("Click", "Show " + "Me")
+                        item.sharedWithSelf = true
+                    } else {
+                        Log.i("uncheck ", "Show " + "Me")
+                        item.sharedWithSelf = false
+                    }
+                }
+            }
+        }
+
+        override fun onClick(v: View?) {
+            //nothing
+        }
+    }
+
+    inner class FriendViewHolder(friendsView: View) : RecyclerView.ViewHolder(friendsView),
         View.OnClickListener {
         val friendEmail: TextView = friendsView.findViewById(R.id.friend_email)
         val friendFirstName: TextView = friendsView.findViewById(R.id.friend_first_name)
@@ -80,8 +153,8 @@ class ParticipantsSelectRecyclerViewAdapter(
 
         init {
             friendsView.setOnClickListener(this)
-            selectFriend.setOnCheckedChangeListener { friendsView, isChecked ->
-                val friendPosition = adapterPosition
+            selectFriend.setOnCheckedChangeListener { _, isChecked ->
+                val friendPosition = adapterPosition - 1
                 val itemPosition = itemList.indexOfFirst { it.item_id == selected_item_id }
                 if (itemPosition >= 0) {
                     val item = itemList[itemPosition]
@@ -89,10 +162,10 @@ class ParticipantsSelectRecyclerViewAdapter(
                     ADD FRIEND ID TO LIST IF CHECKED, ELSE REMOVE FROM LIST.
                      */
                     if (isChecked) {
-                        Log.i("Click", "Show " + friends[position].userId)
+                        Log.i("Click", "Show " + friends[friendPosition].userId)
                         item.splitList = item.splitList!!.plus(friends[friendPosition].userId!!)
                     } else {
-                        Log.i("uncheck ", "Show " + friends[position].userId)
+                        Log.i("uncheck ", "Show " + friends[friendPosition].userId)
                         item.splitList =
                             item.splitList!!.filter { it != friends[friendPosition].userId }
                     }
@@ -103,11 +176,9 @@ class ParticipantsSelectRecyclerViewAdapter(
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                val friend = friends[position]
+                val friend = friends[position - 1]
                 println("Clicked $friend")
             }
-
-
         }
     }
 }
