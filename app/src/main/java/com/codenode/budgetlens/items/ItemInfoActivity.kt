@@ -31,6 +31,7 @@ import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 
@@ -44,6 +45,7 @@ class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var itemPrice: TextView
     private lateinit var itemName: TextView
     private lateinit var itemOwner: TextView
+    private lateinit var purchasedFrequency: TextView
     private var newItemName: String = ""
     private var newItemPrice: String = ""
     var categoryMap = mutableMapOf<Int, String>()
@@ -67,6 +69,7 @@ class ItemInfoActivity() : AppCompatActivity() {
         itemPrice = findViewById(R.id.item_info_price)
         itemName = findViewById(R.id.item_info_name)
         itemOwner = findViewById(R.id.item_original_owner)
+        purchasedFrequency = findViewById(R.id.purchased_frequency)
 
         handleCategories(itemId)
         handleGetItemData(itemId)
@@ -79,9 +82,9 @@ class ItemInfoActivity() : AppCompatActivity() {
 
     private fun handleGetItemData(itemId: String?) {
         //get the item data
-        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/"
-        val itemsRequest = OkHttpClient()
-        val request = Request.Builder()
+        var url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/"
+        var itemsRequest = OkHttpClient()
+        var request = Request.Builder()
             .url(url)
             .method("GET", null)
             .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
@@ -124,6 +127,65 @@ class ItemInfoActivity() : AppCompatActivity() {
                 }
             }
         })
+
+        // Get the item purchased frequency
+        url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/date"
+        itemsRequest = OkHttpClient()
+        request = Request.Builder()
+            .url(url)
+            .method("GET", null)
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
+            .addHeader("Content-Type", "application/json")
+            .build()
+        itemsRequest.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                response.use {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body?.string()
+                        if (responseBody != null) {
+                            var newFrequency = "N/A"
+                            /*
+                             It will throw an error if there is no history of the
+                             item purchased in the last month which will show it as N/A
+                            */
+                            try {
+                                val obj = JSONObject(responseBody.toString())
+                                val keys = obj.keys()
+                                while (keys.hasNext()) {
+                                    val key = keys.next()
+                                    val itemFrequency =
+                                        obj.getJSONObject(key).getInt("item_frequency")
+                                    newFrequency = itemFrequency.toString()
+
+                                }
+                            } catch (_: Exception) {
+
+                            }
+                            runOnUiThread {
+                                val purchasedFrequencyString =
+                                    getString(R.string.item_frequency, newFrequency)
+                                purchasedFrequency.text = purchasedFrequencyString
+                            }
+                        } else {
+                            Log.i(
+                                "Error",
+                                "Something went wrong ${response.message} ${response.headers}"
+                            )
+                        }
+                    } else {
+                        Log.e(
+                            "Error",
+                            "Tried to load purchased frequency for an invalid item ID."
+                        )
+                    }
+                }
+            }
+        })
+
     }
 
     /**
