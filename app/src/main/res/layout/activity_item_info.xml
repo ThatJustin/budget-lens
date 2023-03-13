@@ -75,7 +75,23 @@
                 android:textStyle="bold"
                 app:drawableRightCompat="@drawable/ic_baseline_edit_24" />
 
+            <LinearLayout
+                android:id="@+id/purchased_frequency_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center">
 
+                <TextView
+                    android:id="@+id/purchased_frequency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/item_frequency"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="TextContrastCheck" />
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/llAddedBy"
                 android:layout_width="wrap_content"
@@ -104,7 +120,6 @@
                     android:textStyle="bold"
                     tools:ignore="TextContrastCheck" />
             </LinearLayout>
-
             <TextView
                 android:id="@+id/item_page_scan_date"
                 android:layout_width="wrap_content"
