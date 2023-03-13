@@ -82,9 +82,9 @@ class ItemInfoActivity() : AppCompatActivity() {
 
     private fun handleGetItemData(itemId: String?) {
         //get the item data
-        var url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/"
-        var itemsRequest = OkHttpClient()
-        var request = Request.Builder()
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/"
+        val itemsRequest = OkHttpClient()
+        val request = Request.Builder()
             .url(url)
             .method("GET", null)
             .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
@@ -129,9 +129,17 @@ class ItemInfoActivity() : AppCompatActivity() {
         })
 
         // Get the item purchased frequency
-        url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/date"
-        itemsRequest = OkHttpClient()
-        request = Request.Builder()
+        requestUpdatePurchasedFrequency(itemId)
+
+    }
+
+    /**
+     * Retrieves the purchased frequency of the item from the backend.
+     */
+    private fun requestUpdatePurchasedFrequency(itemId: String?) {
+        val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/${itemId}/date"
+        val itemsRequest = OkHttpClient()
+        val request = Request.Builder()
             .url(url)
             .method("GET", null)
             .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
@@ -165,11 +173,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                             } catch (_: Exception) {
 
                             }
-                            runOnUiThread {
-                                val purchasedFrequencyString =
-                                    getString(R.string.item_frequency, newFrequency)
-                                purchasedFrequency.text = purchasedFrequencyString
-                            }
+                            updatePurchasedFrequency(newFrequency)
                         } else {
                             Log.i(
                                 "Error",
@@ -185,8 +189,19 @@ class ItemInfoActivity() : AppCompatActivity() {
                 }
             }
         })
-
     }
+
+    /**
+     * Updates the item purchase frequency on the UI.
+     */
+    private fun updatePurchasedFrequency(newFrequency: String) {
+        runOnUiThread {
+            val purchasedFrequencyString =
+                getString(R.string.item_frequency, newFrequency)
+            purchasedFrequency.text = purchasedFrequencyString
+        }
+    }
+
 
     /**
      * Handles the item category loading and assigning.
