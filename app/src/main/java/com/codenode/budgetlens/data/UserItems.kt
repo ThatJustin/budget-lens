@@ -1,11 +1,13 @@
 package com.codenode.budgetlens.data
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.common.BearerToken
+import com.codenode.budgetlens.utils.HttpResponseListener
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
@@ -14,21 +16,20 @@ import java.util.concurrent.CountDownLatch
 
 class UserItems {
     companion object {
-        var userItems = mutableListOf<Items>()
         var pageNumber = 1
-        var totalCost = 0.0
 
+        private var httpResponseListener: HttpResponseListener? = null
 
-        //TODO move this to another thread
-        fun loadItemsFromAPI(
+        fun requestItemsFromAPI(
+            viewItemRequestType: Int,
             context: Context,
             pageSize: Int,
-            additionalData: String
-        ): Pair<MutableList<Items>, Double> {
-
-
+            queryParams: String
+        ) {
+            httpResponseListener = context as Activity as HttpResponseListener
+            val userItems = mutableListOf<Items>()
             val url =
-                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/pageNumber=${pageNumber}&pageSize=${pageSize}/" + additionalData
+                "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/pageNumber=${pageNumber}&pageSize=${pageSize}/" + queryParams
             var contentLoadedFromResponse = false
 
             val itemsRequest = OkHttpClient()
@@ -38,7 +39,6 @@ class UserItems {
                 .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
                 .addHeader("Content-Type", "application/json")
                 .build()
-            val countDownLatch = CountDownLatch(1)
             itemsRequest.newCall(request).enqueue(object : Callback {
                 @RequiresApi(Build.VERSION_CODES.O)
                 override fun onResponse(call: Call, response: Response) {
@@ -47,15 +47,12 @@ class UserItems {
                         if (response.isSuccessful) {
                             val responseBody = response.body?.string()
                             if (responseBody != null) {
-                                val pageList =
-                                    JSONObject(responseBody.toString()).getString("page_list")
+                                val responseString = JSONObject(responseBody.toString())
+
+                                val pageList = responseString.getString("page_list")
+                                val totalPrice = responseString.getDouble("total_price")
+
                                 val items = JSONArray(pageList)
-
-                                totalCost =
-                                    JSONObject(responseBody.toString()).getString("total Cost")
-                                        .toDouble()
-
-
 
                                 for (i in 0 until items.length()) {
                                     contentLoadedFromResponse = true
@@ -64,7 +61,8 @@ class UserItems {
                                     val name = item.getString("name")
                                     val price = item.getDouble("price")
                                     val scanDate = item.getString("scan_date")
-                                    var month = "Error"
+                                    val itemCategoryName = item.getString("category_name")
+                                    var month: String
                                     when (scanDate.substring(5, 7)) {
                                         "01" -> month = "JAN"
                                         "02" -> month = "FEB"
@@ -91,13 +89,19 @@ class UserItems {
                                             id,
                                             name,
                                             price,
-                                            displayDate
+                                            displayDate,
+                                            itemCategoryName
                                         )
                                     )
                                 }
                                 if (contentLoadedFromResponse) {
                                     pageNumber++
                                 }
+                                httpResponseListener?.onHttpSuccess(
+                                    viewItemRequestType,
+                                    userItems,
+                                    totalPrice
+                                )
                                 Log.i("Successful", "Successfully loaded items from API.")
                             } else {
                                 Log.i(
@@ -112,19 +116,13 @@ class UserItems {
                             )
                         }
                     }
-                    countDownLatch.countDown()
                 }
 
                 override fun onFailure(call: Call, e: IOException) {
                     e.printStackTrace()
-                    countDownLatch.countDown()
+                    httpResponseListener?.onHttpError()
                 }
             })
-
-            // wait for a response before returning
-            countDownLatch.await()
-            return Pair(userItems, totalCost)
         }
-
     }
 }

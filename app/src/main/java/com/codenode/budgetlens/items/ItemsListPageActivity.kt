@@ -6,11 +6,8 @@ import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.SearchView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,57 +19,49 @@ import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Categories
 import com.codenode.budgetlens.data.Items
-import com.codenode.budgetlens.data.UserItems.Companion.loadItemsFromAPI
+import com.codenode.budgetlens.data.UserItems.Companion.requestItemsFromAPI
 import com.codenode.budgetlens.data.UserItems.Companion.pageNumber
-import com.codenode.budgetlens.data.UserItems.Companion.userItems
 import com.codenode.budgetlens.items.filter.ItemsFilterDialog
 import com.codenode.budgetlens.items.filter.ItemsFilterDialogListener
 import com.codenode.budgetlens.items.filter.ItemsFilterOptions
 import com.codenode.budgetlens.items.sort.ItemsSortDialog
 import com.codenode.budgetlens.items.sort.ItemsSortDialogListener
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
+import com.codenode.budgetlens.utils.HttpResponseListener
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import okhttp3.*
 import org.json.JSONArray
 import java.io.IOException
-import java.text.SimpleDateFormat
 import java.util.*
 
 
 class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
-    ItemsFilterDialogListener {
-    //Save an untouched copy for when sorting/filtering is undone
-    private lateinit var itemsListUntouched: MutableList<Items>
+    ItemsFilterDialogListener, HttpResponseListener {
 
-    private lateinit var itemsList: MutableList<Items>
-    private var itemsListRecyclerView: RecyclerView? = null
-    var userCategories = mutableListOf<Categories>()
-    private lateinit var linearLayoutManager: LinearLayoutManager
-    private lateinit var itemsAdapter: RecyclerView.Adapter<ItemsRecyclerViewAdapter.ViewHolder>
     private var pageSize = 5
-    var additionalData = ""
-    var filteringDataWithoutCategories = ""
+    private var itemsListRecyclerView: RecyclerView? = null
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private lateinit var itemsAdapter: ItemsRecyclerViewAdapter
     private val sortOptions = SortOptions()
     private var filterOptions = ItemsFilterOptions()
-    private lateinit var chipGroup: ChipGroup
-    private lateinit var itemTotal: TextView
-    private lateinit var result: Pair<MutableList<Items>, Double>
-
     private var isFromSingleReceipt = false
+    var searchQuery = ""
+    var queryParams = ""
+    var userCategories = mutableListOf<Categories>()
+    private lateinit var chipGroup: ChipGroup
+
     private var receiptID = -1
-    private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.CANADA)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_items_list)
 
-        val searchBar: SearchView = findViewById(R.id.search_bar_text)
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
         CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.ITEMS)
-        itemTotal = findViewById(R.id.items_cost_value)
 
         isFromSingleReceipt =
             intent.getBooleanExtra("singleReceiptView", false)
@@ -100,7 +89,9 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     private fun handleChipGroup() {
         //get the starred category lists from api
         chipGroup = findViewById(R.id.category_chips)
-        addChip("All", 0, R.style.AllChipStyle)
+        runOnUiThread {
+            addChip("All", 0, R.style.AllChipStyle)
+        }
         val url =
             "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/?category_toggle_star=true"
 
@@ -123,18 +114,16 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
                             val starredCategories = JSONArray(responseBody)
 
                             for (i in 0 until starredCategories.length()) {
-
                                 val category = starredCategories.getJSONObject(i)
                                 val id = category.getInt("id")
                                 val name = category.getString("category_name")
                                 userCategories.add(Categories(id, name))
-
-                                addChip(name, id, R.style.ItemSortChipStyle)
-
-
+                                runOnUiThread {
+                                    addChip(name, id, R.style.ItemSortChipStyle)
+                                }
                             }
 
-                            Log.i("Successful", "Successfully loaded items from API.")
+                            Log.i("Successful", "Successfully loaded chips from API.")
                         } else {
                             Log.i(
                                 "Error",
@@ -148,17 +137,12 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
                         )
                     }
                 }
-
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                e.printStackTrace()
-
+                Log.i("ItemListPage - Chips.", chipGroup.toString() + "\r\n ${e.printStackTrace()}")
             }
         })
-        Log.i("chips", chipGroup.toString())
-
-
     }
 
     /**
@@ -179,88 +163,127 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     }
 
     /**
-     * Sets the receiptID query param for the "additionalData".
-     * Will only be called when this activity is opened by clicking on a receipts View Item button.
-     */
-    private fun setAdditionalDataReceiptID() {
-        if (isFromSingleReceipt) {
-            if (receiptID == -1) {
-                Log.i("ItemsListPageActivity,", "Tried to open activity with -1 receiptID. ")
-            } else {
-                additionalData = "?receipt=${receiptID}"
-            }
-        }
-    }
-
-    /**
      * Handles RecycleView adapter.
      */
     private fun handleAdapter() {
-        userItems.clear()
-
         pageNumber = 1
-
-        val progressBar: ProgressBar = findViewById(R.id.progressBar)
-
-        //load the list
-        result = loadItemsFromAPI(this, pageSize, additionalData)
-        itemsList = result.first
-
-
-        itemTotal.text = result.second.toString()
-        itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
-
         val context = this
-
+        val searchBar: SearchView = findViewById(R.id.search_bar_text)
         itemsListRecyclerView = findViewById(R.id.items_list)
-//        starredCategoriesRecyclerView = findViewById(R.id.category_sort)
+        queryParams = generateQueryParams()
 
-        progressBar.visibility = View.VISIBLE
+        requestItemsFromAPI(VIEW_ITEMS_FIRST_LOAD, this, pageSize, queryParams)
 
-        if (itemsList.isEmpty()) {
-            itemsListRecyclerView!!.visibility = View.GONE
-            progressBar.visibility = View.GONE
-        }
 
-//        set item list recycler view
+        //set item list recycler view
         if (itemsListRecyclerView != null) {
             itemsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
             itemsListRecyclerView!!.layoutManager = linearLayoutManager
-            itemsAdapter = ItemsRecyclerViewAdapter(itemsList, this)
+            itemsAdapter = ItemsRecyclerViewAdapter(context)
 
             itemsListRecyclerView!!.adapter = itemsAdapter
-            progressBar.visibility = View.GONE
             itemsListRecyclerView!!.addOnScrollListener(object :
                 RecyclerView.OnScrollListener() {
                 @SuppressLint("NotifyDataSetChanged")
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
-                    progressBar.visibility = View.VISIBLE
                     if (!recyclerView.canScrollVertically(RecyclerView.FOCUS_DOWN) && recyclerView.scrollState == RecyclerView.SCROLL_STATE_IDLE) {
-                        //Before loading, revert to the old order
-                        itemsList.clear()
-                        itemsList.addAll(itemsListUntouched)
-
-                        //Load in more
-                        result = loadItemsFromAPI(context, pageSize, additionalData)
-                        itemsList = result.first
-                        itemTotal.text = result.second.toString()
-
-                        // update the untouched
-                        itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
-
-                        //Apply whatever sort is set
-                        applyItemSortOptions()
-
-                        //Update the adapter items
-                        itemsAdapter.notifyDataSetChanged()
+                        //request receipts
+                        requestItemsFromAPI(
+                            VIEW_ITEMS_SCROLL_STATE_CHANGE,
+                            context,
+                            pageSize,
+                            queryParams
+                        )
                     }
-                    progressBar.visibility = View.GONE
+                }
+            })
+            //listener for search bar input
+            searchBar.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    //No need to do anything here
+                    return true
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    //Since we are fetching items with new parameters, reset the page number to 1
+                    pageNumber = 1
+                    searchQuery = newText.toString()
+
+                    queryParams = generateQueryParams()
+                    println(queryParams)
+                    requestItemsFromAPI(
+                        ReceiptsListPageActivity.VIEW_ITEMS_SEARCH,
+                        context,
+                        pageSize,
+                        queryParams
+                    )
+                    return true
+                }
+            })
+        }
+    }
+
+    /**
+     * Handles when an item request http request comes back successfully.
+     *
+     * VIEW_ITEMS_FIRST_LOAD - triggered by first opening the items activity and initiating the fist load
+     * VIEW_ITEMS_SCROLL_STATE_CHANGE - triggered by loading new items when dragging finger pointer down
+     * VIEW_ITEM_FILTER - triggered when a filter is set
+     * VIEW_ITEMS_SEARCH - triggered when user inputs in search view
+     */
+    override fun onHttpSuccess(
+        viewItemRequestType: Int,
+        mutableList: MutableList<*>,
+        totalPrice: Double
+    ) {
+        Log.i(
+            "Items-OnHttpSuccess",
+            "An Http request triggered by type $viewItemRequestType was successful."
+        )
+        val itemList = (mutableList as MutableList<Items>).map { it.copy() }.toMutableList()
+
+        //Update the adapter items
+        runOnUiThread {
+            when (viewItemRequestType) {
+                VIEW_ITEMS_FIRST_LOAD,
+                VIEW_ITEMS_SCROLL_STATE_CHANGE -> {
+                    itemsAdapter.addItems(
+                        itemList,
+                        ::applyItemSortOptions,
+                        totalPrice
+                    )
+                }
+                VIEW_ITEM_FILTER -> {
+                    itemsAdapter.addFilteredItems(
+                        itemList,
+                        ::applyItemSortOptions,
+                        totalPrice
+                    )
+                }
+                VIEW_ITEMS_SEARCH -> {
+                    itemsAdapter.addSearchedItems(
+                        itemList,
+                        ::applyItemSortOptions,
+                        totalPrice
+                    )
+                }
+                else -> {
+                    Log.i(
+                        "Items-OnHttpSuccess",
+                        "Unknown viewItemRequestType detected: $viewItemRequestType"
+                    )
                 }
             }
-            )
         }
+    }
+
+    /**
+     * Handles when an http request comes back with an error.
+     */
+    override fun onHttpError() {
+        Log.i("Items-OnHttpError", "An Http error was returned.")
     }
 
     class SortOptions {
@@ -269,6 +292,13 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         var isNameAscending = false
         var isNameDescending = false
 
+        override fun toString(): String {
+            return "SortOptions(isPriceAscending=$isPriceAscending, isPriceDescending=$isPriceDescending, isNameAscending=$isNameAscending, isNameDescending=$isNameDescending)"
+        }
+
+        fun isSortingEnabled(): Boolean {
+            return isPriceAscending || isPriceDescending || isNameAscending || isNameDescending
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -284,106 +314,51 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         sortOptions.isNameAscending = isNameAscending
         sortOptions.isNameDescending = isNameDescending
 
-        applyItemSortOptions()
-
-        //Update adapter of changes
-        itemsAdapter.notifyDataSetChanged()
-    }
-
-    /**
-     * Sorts the itemList MutableList<Items> based on sortOptions from user.
-     */
-    private fun applyItemSortOptions() {
-        // Restore itemList to the untouched state
-
-        itemsList.clear()
-        itemsList.addAll(itemsListUntouched)
-
-        //Sort
-        if (sortOptions.isPriceAscending) {
-            itemsList.sortBy { it.price }
-        }
-        if (sortOptions.isPriceDescending) {
-            itemsList.sortByDescending { it.price }
-        }
-        if (sortOptions.isNameAscending) {
-            itemsList.sortBy { it.name.lowercase() }
-        }
-        if (sortOptions.isNameDescending) {
-            itemsList.sortByDescending { it.name.lowercase() }
+        runOnUiThread {
+            //Revert the previous sort
+            itemsAdapter.revertAppliedSort()
+            // Sort them with the new options
+            val sortedReceiptList =
+                applyItemSortOptions(itemsAdapter.getUnsortedItems())
+            itemsAdapter.sortItems(sortedReceiptList)
         }
     }
 
     /**
-     * A listener that gets back the filters set in the ItemFilterDialog.
+     * Sorts the itemList MutableList<Items> based on sortOptions from user and returns it.
      */
-    @SuppressLint("NotifyDataSetChanged", "ResourceType")
+    private fun applyItemSortOptions(itemList: MutableList<Items>): MutableList<Items> {
+        if (sortOptions.isSortingEnabled()) {
+            if (sortOptions.isPriceAscending) {
+                itemList.sortBy { it.price }
+            }
+            if (sortOptions.isPriceDescending) {
+                itemList.sortByDescending { it.price }
+            }
+            if (sortOptions.isNameAscending) {
+                itemList.sortBy { it.name.lowercase() }
+            }
+            if (sortOptions.isNameDescending) {
+                itemList.sortByDescending { it.name.lowercase() }
+            }
+        }
+        return itemList
+    }
+
+    /**
+     * A listener that gets back the filters set in the ItemFilterDialog and applies them.
+     */
     override fun onReturnedFilterOptions(newFilterOptions: ItemsFilterOptions) {
         this.filterOptions = newFilterOptions
-        val filterOptionList = ArrayList<String>()
-        val sb = StringBuilder("")
-        additionalData = ""
-        filteringDataWithoutCategories = ""
-        setAdditionalDataReceiptID()
 
+        //Generate the new queryParams and assign them
+        queryParams = generateQueryParams()
 
-        if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
-            filterOptionList.add("category_id=${filterOptions.categoryId}")
-            var id = -1
-            for (i in 0 until userCategories.size) {
-                if (userCategories[i].category_name == filterOptions.categoryName) {
-                    id = i
-                }
-            }
-            chipGroup.check(id + 2)
-
-
-        } else {
-            chipGroup.check(1)
-        }
-        if (filterOptions.merchantName.isNotEmpty() && filterOptions.merchantId > -1) {
-            filterOptionList.add("merchant_id=${filterOptions.merchantId}")
-        }
-        if (filterOptions.startDate.isNotEmpty() && filterOptions.endDate.isNotEmpty()) {
-            filterOptionList.add(
-                "start_date=${filterOptions.startDate}&end_date=${filterOptions.endDate}"
-            )
-        }
-        if (filterOptions.minPrice > 0 && filterOptions.maxPrice > 0) {
-            filterOptionList.add("min_price=${filterOptions.minPrice}&max_price=${filterOptions.maxPrice}")
-        }
-
-        for (i in 0 until filterOptionList.size) {
-            if (i == 0) {
-                sb.append(filterOptionList[i])
-            } else {
-                sb.append(
-                    "&${filterOptionList[i]}"
-                )
-                filteringDataWithoutCategories += "&${filterOptionList[i]}"
-            }
-        }
-
-        additionalData = if (isFromSingleReceipt) "$additionalData&$sb" else "?$sb"
-
-        itemsList.clear()
-
-        pageSize = 1
+        //We need to set the page number back to 1 when changing the entire dataset
         pageNumber = 1
 
-        //reload
-        result = loadItemsFromAPI(this, pageSize, additionalData)
-        itemsList = result.first
-        itemTotal.text = result.second.toString()
-
-        // update the untouched
-        itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
-
-        //Apply whatever sort is set
-        applyItemSortOptions()
-
-        //Update the adapter items
-        itemsAdapter.notifyDataSetChanged()
+        //request
+        requestItemsFromAPI(VIEW_ITEM_FILTER, this, pageSize, queryParams)
     }
 
     /**
@@ -393,25 +368,25 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ITEM_INFO_ACTIVITY) {
-            val posToRemove = data?.getIntExtra("position", -1)
-            val price = data?.getDoubleExtra("price", 0.0)
-            if (posToRemove != null && price != null) {
-                val newTotal = (itemTotal.text.toString().toDouble() - price)
-                // retrieve the deleted item after deleting
-                val removedItem = result.first.removeAt(posToRemove)
-                itemsAdapter.notifyItemRemoved(posToRemove)
-
-                //remove the item from untouched
-                itemsListUntouched.remove(removedItem)
-
-                //why must pair be val
-                result = Pair(result.first, newTotal)
-                itemsList = result.first
-                itemTotal.text = result.second.toString()
-                itemsAdapter.notifyDataSetChanged()
-            }
-        }
+//        if (requestCode == ITEM_INFO_ACTIVITY) {
+//            val posToRemove = data?.getIntExtra("position", -1)
+//            val price = data?.getDoubleExtra("price", 0.0)
+//            if (posToRemove != null && price != null) {
+//                val newTotal = (itemTotal.text.toString().toDouble() - price)
+//                // retrieve the deleted item after deleting
+//                val removedItem = result.first.removeAt(posToRemove)
+//                itemsAdapter.notifyItemRemoved(posToRemove)
+//
+//                //remove the item from untouched
+//                itemsListUntouched.remove(removedItem)
+//
+//                //why must pair be val
+//                result = Pair(result.first, newTotal)
+//                itemsList = result.first
+//                itemTotal.text = result.second.toString()
+//                itemsAdapter.notifyDataSetChanged()
+//            }
+//        }
     }
 
     /**
@@ -425,59 +400,91 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
         startActivityForResult(intent, ITEM_INFO_ACTIVITY)
     }
 
-    companion object {
-        const val ITEM_INFO_ACTIVITY = 6463646
-    }
-
     private fun addChip(label: String, id: Int, styleRes: Int) {
-
         val chip = Chip(this)
         val chipDrawable = ChipDrawable.createFromAttributes(this, null, 0, styleRes)
         chip.text = label
-        if (chip.text == "All") chip.setTextColor(Color.WHITE)
-
+        if (chip.text == "All") {
+            chip.setTextColor(Color.WHITE)
+        }
         chip.isClickable = true
         chip.setChipDrawable(chipDrawable)
-        chipGroup.addView(chip)
         chip.setOnClickListener {
-
             if (id != 0 && chip.isChecked) {
-                additionalData = "?category_id=$id$filteringDataWithoutCategories"
                 filterOptions.categoryName = label
                 filterOptions.categoryId = id
-                handleFilter()
-
             } else {
-                additionalData = "?$filteringDataWithoutCategories"
                 filterOptions.categoryName = ""
                 filterOptions.categoryId = -1
-                handleFilter()
-
             }
+            queryParams = generateQueryParams()
 
-
-            itemsList.clear()
-
-            pageSize = 1
+            //We need to set the page number back to 1 when changing the entire dataset
             pageNumber = 1
 
-            //reload
-            result = loadItemsFromAPI(this, pageSize, additionalData)
-            itemsList = result.first
-            itemTotal.text = result.second.toString()
-
-            // update the untouched
-            itemsListUntouched = itemsList.map { it.copy() }.toMutableList()
-
-            //Apply whatever sort is set
-            applyItemSortOptions()
-
-            //Update the adapter items
-            itemsAdapter.notifyDataSetChanged()
-
-
+            //request
+            requestItemsFromAPI(VIEW_ITEM_FILTER, this, pageSize, queryParams)
         }
-
+        chipGroup.addView(chip)
     }
 
+    @SuppressLint("ResourceType")
+    fun generateQueryParams(): String {
+        val queryParams = ArrayList<String>()
+
+        val sb = StringBuilder("?")
+
+        if (isFromSingleReceipt) {
+            if (receiptID == -1) {
+                Log.i("ItemsListPageActivity,", "Tried to open activity with -1 receiptID. ")
+            } else {
+                queryParams.add("receipt=${receiptID}")
+            }
+        }
+        if (filterOptions.categoryName.isNotEmpty() && filterOptions.categoryId > -1) {
+            queryParams.add("category_id=${filterOptions.categoryId}")
+            var id = -1
+            for (i in 0 until userCategories.size) {
+                if (userCategories[i].category_name == filterOptions.categoryName) {
+                    id = i
+                }
+            }
+            chipGroup.check(id + 2)
+        } else {
+            chipGroup.check(1)
+        }
+
+        if (filterOptions.merchantName.isNotEmpty() && filterOptions.merchantId > -1) {
+            queryParams.add("merchant_id=${filterOptions.merchantId}")
+        }
+        if (filterOptions.startDate.isNotEmpty() && filterOptions.endDate.isNotEmpty()) {
+            queryParams.add(
+                "start_date=${filterOptions.startDate}&end_date=${filterOptions.endDate}"
+            )
+        }
+        if (filterOptions.minPrice > 0 && filterOptions.maxPrice > 0) {
+            queryParams.add("min_price=${filterOptions.minPrice}&max_price=${filterOptions.maxPrice}")
+        }
+        if (searchQuery.isNotEmpty()) {
+            queryParams.add("search=$searchQuery")
+        }
+        for (i in 0 until queryParams.size) {
+            if (i == 0) {
+                sb.append(queryParams[i])
+            } else {
+                sb.append("&${queryParams[i]}")
+            }
+        }
+
+        return if (queryParams.isEmpty()) "" else sb.toString()
+    }
+
+    companion object {
+        const val ITEM_INFO_ACTIVITY = 6463646
+
+        val VIEW_ITEMS_FIRST_LOAD = 0
+        val VIEW_ITEMS_SCROLL_STATE_CHANGE = 1
+        val VIEW_ITEM_FILTER = 3
+        val VIEW_ITEMS_SEARCH = 4
+    }
 }

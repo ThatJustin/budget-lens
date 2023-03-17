@@ -29,7 +29,7 @@
     <string name="friend_email">%1$s</string>
     <string name="trade_relation">%1$s</string>
     <string name="trade_amount">%1$f</string>
-    <string name="items_total">$ %1$f.2f</string>
+    <string name="items_total">%.2f</string>
     <string name="date">%1$f</string>
     <string name="price">$%1$.2f</string>
     <string name="price_title">Price</string>
@@ -114,6 +114,7 @@
     <string name="label">label</string>
     <string name="percentage_left">%1$s</string>
     <string name="amount_left">%1$s</string>
+    <string name="no_items_found">No items found.</string>
     <string-array name="category_place_holder">
         <item>Groceries</item>
         <item>Entertainment</item>

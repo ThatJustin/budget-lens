@@ -111,6 +111,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:padding="10dp"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/search_bar_text" />
 
             <ProgressBar
@@ -119,8 +120,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:indeterminate="true"
-                android:padding="10dp" />
+                android:padding="10dp"
+                android:visibility="gone" />
 
+            <TextView
+                android:id="@+id/empty_view_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/no_items_found"
+                android:visibility="visible" />
         </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -213,7 +222,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/appBarLayout2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87"/>
+        app:layout_constraintVertical_bias="0.87" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/ScanReceipt"

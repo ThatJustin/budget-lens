@@ -1,6 +1,5 @@
 package com.codenode.budgetlens.receipts
 
-import android.content.Intent
 import android.util.Log
 import android.widget.Button
 import android.widget.SearchView
@@ -8,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Receipts
@@ -21,7 +19,6 @@ import com.codenode.budgetlens.receipts.filter.ReceiptsFilterOptions
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialog
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialogListener
 import com.codenode.budgetlens.utils.HttpResponseListener
-import kotlinx.android.synthetic.main.activity_receipts_list_page.*
 
 class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener,
     ReceiptsFilterDialogListener, HttpResponseListener {
@@ -150,7 +147,7 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
      * VIEW_ITEM_FILTER - triggered when a filter is set
      * VIEW_ITEMS_SEARCH - triggered when user inputs in search view
      */
-    override fun onHttpSuccess(viewItemRequestType: Int, mutableList: MutableList<*>) {
+    override fun onHttpSuccess(viewItemRequestType: Int, mutableList: MutableList<*>, totalPrice: Double) {
         Log.i(
             "Receipts-OnHttpSuccess",
             "An Http request triggered by type $viewItemRequestType was successful."
