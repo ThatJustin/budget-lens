@@ -75,7 +75,7 @@ class ItemsRecyclerViewAdapter(
     /**
      * Removes an item at the selected position and sends a snackbar message to indicate that to the user.
      */
-    private fun removeItem(position: Int, newPrice: Double) {
+    fun removeItem(position: Int, newPrice: Double) {
         val activity = context as Activity
         Snackbar.make(
             activity.findViewById<BottomNavigationView>(R.id.bottom_navigation),
@@ -85,6 +85,7 @@ class ItemsRecyclerViewAdapter(
         items.removeAt(position)
         notifyItemRemoved(position)
         checkShowRecyclerView()
+        updateTotalPrice(newPrice)
     }
 
     /**

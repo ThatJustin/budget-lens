@@ -368,25 +368,13 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == ITEM_INFO_ACTIVITY) {
-//            val posToRemove = data?.getIntExtra("position", -1)
-//            val price = data?.getDoubleExtra("price", 0.0)
-//            if (posToRemove != null && price != null) {
-//                val newTotal = (itemTotal.text.toString().toDouble() - price)
-//                // retrieve the deleted item after deleting
-//                val removedItem = result.first.removeAt(posToRemove)
-//                itemsAdapter.notifyItemRemoved(posToRemove)
-//
-//                //remove the item from untouched
-//                itemsListUntouched.remove(removedItem)
-//
-//                //why must pair be val
-//                result = Pair(result.first, newTotal)
-//                itemsList = result.first
-//                itemTotal.text = result.second.toString()
-//                itemsAdapter.notifyDataSetChanged()
-//            }
-//        }
+        if (requestCode == ITEM_INFO_ACTIVITY) {
+            val posToRemove = data?.getIntExtra("position", -1)
+            val price = data?.getDoubleExtra("price", 0.0)
+            if (posToRemove != null && posToRemove != -1 && price != null) {
+                itemsAdapter.removeItem(posToRemove, -price)
+            }
+        }
     }
 
     /**
