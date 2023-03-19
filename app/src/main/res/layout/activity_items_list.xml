@@ -8,9 +8,13 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBar"
@@ -20,137 +24,155 @@
             app:menu="@menu/top_app_bar"
             app:title="Items" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/items_sort_by_and_filter_bar"
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/items_sort_by_and_filter_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="9dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:titleCentered="true">
+
+        <TextView
+            android:id="@+id/itemsTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:titleCentered="true">
+            android:layout_marginVertical="10dp"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/black"
+            android:textSize="22sp"
+            app:layout_constraintStart_toStartOf="@+id/items_sort_by_and_filter_bar"
+            app:layout_constraintTop_toTopOf="@+id/items_sort_by_and_filter_bar" />
 
-            <TextView
-                android:id="@+id/itemsTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:layout_marginStart="16dp"
-                android:textColor="@color/black"
-                android:textSize="22sp"
-                app:layout_constraintStart_toStartOf="@+id/items_sort_by_and_filter_bar"
-                app:layout_constraintTop_toTopOf="@+id/items_sort_by_and_filter_bar" />
+        <Button
+            android:id="@+id/sort_item_btn_open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="#6750A4"
+            android:text="@string/sort_by"
+            app:icon="@drawable/sort_48px"
+            app:layout_constraintBottom_toBottomOf="@+id/itemsTextView"
+            app:layout_constraintEnd_toEndOf="@+id/itemsTextView"
+            app:layout_constraintStart_toStartOf="@+id/itemsTextView"
+            app:layout_constraintTop_toTopOf="@+id/itemsTextView" />
 
-            <Button
-                android:id="@+id/sort_item_btn_open"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:backgroundTint="#6750A4"
-                android:text="@string/sort_by"
-                app:icon="@drawable/sort_48px"
-                app:layout_constraintBottom_toBottomOf="@+id/itemsTextView"
-                app:layout_constraintEnd_toEndOf="@+id/itemsTextView"
-                app:layout_constraintStart_toStartOf="@+id/itemsTextView"
-                app:layout_constraintTop_toTopOf="@+id/itemsTextView" />
+        <Button
+            android:id="@+id/filter_item_btn_open"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#6750A4"
+            android:text="@string/filter"
+            app:icon="@drawable/filter_alt_48px"
+            app:layout_constraintBottom_toBottomOf="@+id/itemsTextView"
+            app:layout_constraintEnd_toEndOf="@+id/itemsTextView"
+            app:layout_constraintHorizontal_bias="0.944"
+            app:layout_constraintStart_toStartOf="@+id/itemsTextView"
+            app:layout_constraintTop_toTopOf="@+id/itemsTextView" />
 
-            <Button
-                android:id="@+id/filter_item_btn_open"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#6750A4"
-                android:text="@string/filter"
-                app:icon="@drawable/filter_alt_48px"
-                app:layout_constraintBottom_toBottomOf="@+id/itemsTextView"
-                app:layout_constraintEnd_toEndOf="@+id/itemsTextView"
-                app:layout_constraintHorizontal_bias="0.944"
-                app:layout_constraintStart_toStartOf="@+id/itemsTextView"
-                app:layout_constraintTop_toTopOf="@+id/itemsTextView" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/horizontal_line"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/items_sort_by_and_filter_bar">
 
-        <LinearLayout
+        <SearchView
+            android:id="@+id/search_bar_text"
             android:layout_width="match_parent"
-            android:layout_height="460dp"
-            android:layout_margin="10dp"
-            android:orientation="vertical">
-
-            <SearchView
-                android:id="@+id/search_bar_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:background="#E7E0EC"
-                android:iconifiedByDefault="false"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:queryBackground="@android:color/transparent"
-                android:queryHint="@string/search"
-                android:singleLine="true"
-                app:layout_constraintTop_toTopOf="@+id/search_bar"
-                app:startIconDrawable="@drawable/search_48px" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#E7E0EC"
+            android:iconifiedByDefault="false"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:queryBackground="@android:color/transparent"
+            android:queryHint="@string/search"
+            android:singleLine="true"
+            app:layout_constraintTop_toTopOf="@+id/search_bar"
+            app:startIconDrawable="@drawable/search_48px" />
 
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scrollbars="none">
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:id="@+id/category_chips"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="10dp"
-                    app:chipSpacingHorizontal="0dp"
-                    app:selectionRequired="false"
-                    app:singleSelection="true">
-
-                </com.google.android.material.chip.ChipGroup>
-            </HorizontalScrollView>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/items_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:padding="10dp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/search_bar_text" />
-
-            <ProgressBar
-                android:id="@+id/progressBar"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/category_chips"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:indeterminate="true"
-                android:padding="10dp"
-                android:visibility="gone" />
+                android:layout_height="50dp"
+                android:layout_marginStart="10dp"
+                app:chipSpacingHorizontal="0dp"
+                app:selectionRequired="false"
+                app:singleSelection="true">
 
-            <TextView
-                android:id="@+id/empty_view_msg"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/no_items_found"
-                android:visibility="visible" />
-        </LinearLayout>
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/items_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="10dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/search_bar_text" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:indeterminate="true"
+            android:padding="10dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/empty_view_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_items_found"
+            android:visibility="visible" />
+    </LinearLayout>
 
     <View
         android:id="@+id/horizontal_line"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="#AB9494"
-        app:layout_constraintBottom_toTopOf="@+id/items_cost" />
+        app:layout_constraintBottom_toTopOf="@+id/items_cost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/items_cost"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#FFFBFE"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@android:color/transparent"
         app:titleCentered="true">
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="130dp"
             android:layout_margin="10dp"
