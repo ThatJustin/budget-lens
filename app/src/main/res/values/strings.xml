@@ -59,6 +59,7 @@
     <string name="total_items_currency">Total :</string>
     <string name="choose_friends">Choose the participants</string>
     <string name="added_by">Added by:</string>
+    <string name="item_frequency">Purchased Frequency: %s</string>
     <string name="view_items">View Items</string>
     <string name="split_total">Split by Total</string>
     <string name="split_item">Split by Item</string>
