@@ -123,21 +123,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabut"
-        app:tint="@color/white"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        app:backgroundTint="@color/purple"
         android:layout_marginBottom="40dp"
-        app:srcCompat="@drawable/budget"
+        app:backgroundTint="@color/purple"
         app:fabCustomSize="80dp"
-        app:maxImageSize="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:maxImageSize="40dp"
+        app:srcCompat="@drawable/budget"
+        app:tint="@color/white" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addReceipts"
@@ -149,8 +149,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/bottom_navigation"
         app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/appBarLayout2"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87"/>
+        app:layout_constraintVertical_bias="0.87" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/ScanReceipt"
@@ -165,6 +166,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/appBarLayout2"
         app:layout_constraintVertical_bias="1.0"
         app:title="Home" />
 
@@ -181,7 +183,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/appBarLayout2"
         app:layout_constraintVertical_bias="1.0"
         app:title="Home" />
 </androidx.constraintlayout.widget.ConstraintLayout>
