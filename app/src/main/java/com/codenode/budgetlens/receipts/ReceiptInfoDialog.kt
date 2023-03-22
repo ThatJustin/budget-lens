@@ -12,14 +12,12 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat.startActivity
 import com.bumptech.glide.Glide
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserProfile
-import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
@@ -28,18 +26,13 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 //Open already uploaded receipt
-class ReceiptInfoDialog(
-    context: Context,
-    receipt: Receipts
-) : Dialog(context) {
-
+class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
     var receiptInfo = receipt
-
     private lateinit var receiptInfoDialog: Dialog
     var isDeletedReceipt = false
     private var receiptTotalValue: Double = 0.0
+
     @SuppressLint("InflateParams", "StringFormatInvalid")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,27 +43,57 @@ class ReceiptInfoDialog(
         //connect your xml component(like: textview, imageview, button)
         val imageReceipt = dialogView.findViewById<ImageView>(R.id.receipt_info_receipt_image)
         val tvMerchantName = dialogView.findViewById<TextView>(R.id.tvMerchantName)
-//        val tvAddedBy = dialogView.findViewById<TextView>(R.id.tvAddedBy)
         val tvReceiptDate = dialogView.findViewById<TextView>(R.id.tvReceiptDate)
         val tvAddedBy = dialogView.findViewById<TextView>(R.id.tvAddedBy)
         val tvSplitAmount = dialogView.findViewById<TextView>(R.id.tvTotalAmount)
-        val tvTotalAmountCurrency = dialogView.findViewById<TextView>(R.id.tvTotalAmountCurrency)
-//        val tvExpirationDate = dialogView.findViewById<TextView>(R.id.tvExpirationDate)
         val tvDateUploaded = dialogView.findViewById<TextView>(R.id.tvDateUploaded)
-//        val tvReturnPeriod = dialogView.findViewById<TextView>(R.id.tvReturnPeriod)
+        val receiptLocation = dialogView.findViewById<TextView>(R.id.receipt_location_text)
+        val receiptTax = dialogView.findViewById<TextView>(R.id.receipt_tax_amount)
+        val receiptTip = dialogView.findViewById<TextView>(R.id.receipt_tip_amount)
+        val receiptCoupon = dialogView.findViewById<TextView>(R.id.receipt_coupon_amount)
+        val receiptCurrency = dialogView.findViewById<TextView>(R.id.receipt_currency_type)
 
 
         if (receiptInfo.merchant_name != null) {
             tvMerchantName.text =
                 context.getString(R.string.merchant_name, receiptInfo.merchant_name)
-            tvMerchantName.text = tvMerchantName.text.toString()
-                .substring(0, tvMerchantName.text.toString().length - 2)
+            tvMerchantName.text = tvMerchantName.text.toString().plus(" -")
         } else {
             tvMerchantName.text = context.getString(R.string.merchant_name, "N/A")
-            tvMerchantName.text = tvMerchantName.text.toString()
-                .substring(0, tvMerchantName.text.toString().length - 2)
+            tvMerchantName.text = tvMerchantName.text.toString().plus(" -")
         }
-        tvDateUploaded.text = "0000/00/00 - 00:00" // not yet implemented in Receipt Model
+
+        if (receiptInfo.scan_date != null) {
+            tvReceiptDate.text =
+                context.getString(
+                    R.string.receipt_date,
+                    receiptInfo.scan_date?.replace("-", "/")
+                )
+            tvDateUploaded.text =
+                context.getString(
+                    R.string.receipt_scan_date,
+                    receiptInfo.scan_date?.replace("-", "/")?.let { it ->
+                        SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault()).parse(
+                            it
+                        )?.let {
+                            SimpleDateFormat("yyyy/MM/dd - HH:mm",
+                                Locale.getDefault()).format(it)
+                        }
+                    }
+                )
+        } else {
+            tvReceiptDate.text =
+                context.getString(
+                    R.string.receipt_date,
+                    SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault()).format(Date())
+                )
+            tvDateUploaded.text =
+                context.getString(
+                    R.string.receipt_scan_date,
+                    SimpleDateFormat("yyyy/MM/dd - HH:mm", Locale.getDefault()).format(Date())
+                )
+        }
+
         if (receiptInfo.total_amount != null) {
             tvSplitAmount.text = context.getString(R.string.total, receiptInfo.total_amount)
             receiptTotalValue = tvSplitAmount.text.toString().toDouble()
@@ -78,21 +101,43 @@ class ReceiptInfoDialog(
             tvSplitAmount.text = context.getString(R.string.total, 0.00)
             receiptTotalValue = tvSplitAmount.text.toString().toDouble()
         }
-        if (receiptInfo.currency != null) {
-            tvTotalAmountCurrency.text =
-                context.getString(R.string.total_amount_currency, receiptInfo.currency)
+
+        tvAddedBy.text =
+            context.getString(R.string.user_profile_name, UserProfile.getFullName())
+
+        if (receiptInfo.location != null) {
+            receiptLocation.text = 
+                context.getString(R.string.receipt_location_text,receiptInfo.location)
         } else {
-            tvTotalAmountCurrency.text = context.getString(R.string.total_amount_currency, "N/A")
+            receiptLocation.text = 
+                context.getString(R.string.receipt_location_text, "N/A")
         }
 
-        if (receiptInfo.scan_date != null) {
-            tvReceiptDate.text = context.getString(R.string.scan_date, receiptInfo.scan_date)
+        if (receiptInfo.tax != null) {
+            receiptTax.text = context.getString(R.string.tax_amount, receiptInfo.tax)
         } else {
-            val date: String = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-            tvReceiptDate.text = context.getString(R.string.scan_date, date)
+            receiptTax.text = context.getString(R.string.tax_amount, 0.00)
         }
-        tvAddedBy.text =
-            context.getString(R.string.user_profile_name, " " + UserProfile.getFullName())
+
+        if (receiptInfo.tip != null) {
+            receiptTip.text = context.getString(R.string.tip_amount, receiptInfo.tip)
+        } else {
+            receiptTip.text = context.getString(R.string.tip_amount, 0.00)
+        }
+
+        if (receiptInfo.coupon != null) {
+            receiptCoupon.text = context.getString(R.string.coupon_amount, receiptInfo.coupon)
+        } else {
+            receiptCoupon.text = context.getString(R.string.coupon_amount, 0)
+        }
+
+        if (receiptInfo.currency != null) {
+            receiptCurrency.text = 
+                context.getString(R.string.receipt_currency_type, receiptInfo.currency)
+        } else {
+            receiptCurrency.text = 
+                context.getString(R.string.receipt_currency_type, "N/A")
+        }
 
         //TODO Glide to another thread, it's costly on the main UI thread
         imageReceipt.scaleType = ImageView.ScaleType.CENTER
@@ -116,7 +161,6 @@ class ReceiptInfoDialog(
         }
         handleListeners()
     }
-
 
     private fun handleListeners() {
         //handle delete button
@@ -161,7 +205,6 @@ class ReceiptInfoDialog(
         }
 
     }
-
 
     // This should ideally not be here, but for now it is until further infrastructure is done
     //TODO move to appropriate class when it can
@@ -214,4 +257,3 @@ class ReceiptInfoDialog(
         })
     }
 }
-

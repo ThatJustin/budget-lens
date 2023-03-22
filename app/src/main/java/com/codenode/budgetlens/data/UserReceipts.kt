@@ -48,7 +48,7 @@ class UserReceipts {
                                     val receipt = receipts.getJSONObject(i)
                                     val id = receipt.getInt("id")
                                     val merchant = receipt.getString("merchant")
-                                    val scanDate = receipt.getString("scan_date").substring(0, 10)
+                                    val scanDate = receipt.getString("scan_date").substring(0, 16).replace("T", " ")
                                     val receiptImage = receipt.getString("receipt_image")
                                     val location = receipt.getString("location")
                                     val total = receipt.getDouble("total")

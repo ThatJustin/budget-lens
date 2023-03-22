@@ -35,9 +35,8 @@
 
                     <TextView
                         android:id="@+id/merchant_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.25"
                         android:text="@string/merchant_name"
                         android:textColor="@color/black"
                         android:textSize="17sp"
@@ -46,9 +45,10 @@
 
                     <TextView
                         android:id="@+id/scan_date"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.45"
+                        android:layout_weight="1"
+                        android:layout_marginStart="10dp"
                         android:text="@string/scan_date"
                         android:textColor="@color/black"
                         android:textSize="17sp"
