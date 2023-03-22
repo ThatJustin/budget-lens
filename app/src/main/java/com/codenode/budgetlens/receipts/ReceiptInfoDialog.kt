@@ -54,14 +54,9 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
         val receiptCurrency = dialogView.findViewById<TextView>(R.id.receipt_currency_type)
 
 
-        if (receiptInfo.merchant_name != null) {
-            tvMerchantName.text =
-                context.getString(R.string.merchant_name, receiptInfo.merchant_name)
-            tvMerchantName.text = tvMerchantName.text.toString().plus(" -")
-        } else {
-            tvMerchantName.text = context.getString(R.string.merchant_name, "N/A")
-            tvMerchantName.text = tvMerchantName.text.toString().plus(" -")
-        }
+        tvMerchantName.text =
+            context.getString(R.string.merchant_name, receiptInfo.merchant_name)
+        tvMerchantName.text = tvMerchantName.text.toString().plus(" -")
 
         if (receiptInfo.scan_date != null) {
             tvReceiptDate.text =
@@ -76,8 +71,10 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
                         SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.getDefault()).parse(
                             it
                         )?.let {
-                            SimpleDateFormat("yyyy/MM/dd - HH:mm",
-                                Locale.getDefault()).format(it)
+                            SimpleDateFormat(
+                                "yyyy/MM/dd - HH:mm",
+                                Locale.getDefault()
+                            ).format(it)
                         }
                     }
                 )
@@ -94,50 +91,18 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
                 )
         }
 
-        if (receiptInfo.total_amount != null) {
-            tvSplitAmount.text = context.getString(R.string.total, receiptInfo.total_amount)
-            receiptTotalValue = tvSplitAmount.text.toString().toDouble()
-        } else {
-            tvSplitAmount.text = context.getString(R.string.total, 0.00)
-            receiptTotalValue = tvSplitAmount.text.toString().toDouble()
-        }
-
+        tvSplitAmount.text = context.getString(R.string.total, receiptInfo.total_amount)
+        receiptTotalValue = tvSplitAmount.text.toString().toDouble()
         tvAddedBy.text =
             context.getString(R.string.user_profile_name, UserProfile.getFullName())
+        receiptLocation.text =
+            context.getString(R.string.receipt_location_text, receiptInfo.location)
+        receiptTax.text = context.getString(R.string.tax_amount, receiptInfo.tax)
+        receiptTip.text = context.getString(R.string.tip_amount, receiptInfo.tip)
+        receiptCoupon.text = context.getString(R.string.coupon_amount, receiptInfo.coupon)
 
-        if (receiptInfo.location != null) {
-            receiptLocation.text = 
-                context.getString(R.string.receipt_location_text,receiptInfo.location)
-        } else {
-            receiptLocation.text = 
-                context.getString(R.string.receipt_location_text, "N/A")
-        }
-
-        if (receiptInfo.tax != null) {
-            receiptTax.text = context.getString(R.string.tax_amount, receiptInfo.tax)
-        } else {
-            receiptTax.text = context.getString(R.string.tax_amount, 0.00)
-        }
-
-        if (receiptInfo.tip != null) {
-            receiptTip.text = context.getString(R.string.tip_amount, receiptInfo.tip)
-        } else {
-            receiptTip.text = context.getString(R.string.tip_amount, 0.00)
-        }
-
-        if (receiptInfo.coupon != null) {
-            receiptCoupon.text = context.getString(R.string.coupon_amount, receiptInfo.coupon)
-        } else {
-            receiptCoupon.text = context.getString(R.string.coupon_amount, 0)
-        }
-
-        if (receiptInfo.currency != null) {
-            receiptCurrency.text = 
-                context.getString(R.string.receipt_currency_type, receiptInfo.currency)
-        } else {
-            receiptCurrency.text = 
-                context.getString(R.string.receipt_currency_type, "N/A")
-        }
+        receiptCurrency.text =
+            context.getString(R.string.receipt_currency_type, receiptInfo.currency)
 
         //TODO Glide to another thread, it's costly on the main UI thread
         imageReceipt.scaleType = ImageView.ScaleType.CENTER
@@ -199,7 +164,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
         //handle split bill button
         findViewById<Button>(R.id.receipt_info_split_bill)?.setOnClickListener {
             val goToSplitBillPageActivity = Intent(context, ReceiptSplitFriendSelect::class.java)
-            goToSplitBillPageActivity.putExtra("receipt total",receiptTotalValue)
+            goToSplitBillPageActivity.putExtra("receipt total", receiptTotalValue)
             goToSplitBillPageActivity.putExtra("receiptID", receiptInfo.id)
             context.startActivity(goToSplitBillPageActivity)
         }

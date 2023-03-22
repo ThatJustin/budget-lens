@@ -54,7 +54,7 @@ class UserReceipts {
                                     val total = receipt.getDouble("total")
                                     val tax = receipt.getDouble("tax")
                                     val tip = receipt.getDouble("tip")
-                                    val coupon = receipt.getInt("coupon")
+                                    val coupon = receipt.getDouble("coupon")
                                     val currency = receipt.getString("currency")
                                     userReceipts.add(
                                         Receipts(

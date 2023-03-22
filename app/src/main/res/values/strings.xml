@@ -44,7 +44,7 @@
     <string name="coupon_selection">Select Coupon</string>
     <string name="total_selection">Select Total</string>
     <string name="coupon">Coupon</string>
-    <string name="coupon_amount">%1$d</string>
+    <string name="coupon_amount">%1$.2f</string>
     <string name="receipt_coupon">Coupon($):</string>
     <string name="location">Location</string>
     <string name="tax">Tax</string>
