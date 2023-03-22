@@ -130,7 +130,7 @@
             <ImageView
                 android:id="@+id/receipt_info_receipt_image"
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="250dp"
                 android:src="@drawable/ic_baseline_receipt_long_24"
                 android:contentDescription="@string/receipt_image_thumbnail_preview_description"/>
         </androidx.cardview.widget.CardView>
@@ -246,33 +246,12 @@
                     android:text="@string/tax_amount"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/receipt_tip"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/receipt_tip"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/receipt_tip_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/tip_amount"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="10dp">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/receipt_coupon"
@@ -288,31 +267,38 @@
                     android:id="@+id/receipt_coupon_amount"
                     android:layout_width="91dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="4dp"
                     android:layout_marginTop="5dp"
                     android:text="@string/coupon_amount"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
 
                 <TextView
-                    android:id="@+id/receipt_currency"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/receipt_tip"
+                    android:layout_width="90dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
+                    android:layout_marginStart="15dp"
                     android:layout_marginTop="5dp"
-                    android:text="@string/currency_type"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/receipt_currency_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/receipt_currency_type"
+                    android:text="@string/receipt_tip"
                     android:textSize="18sp"
                     android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/receipt_tip_amount"
+                    android:layout_width="91dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/tip_amount"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </LinearLayout>

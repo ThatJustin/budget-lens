@@ -51,7 +51,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
         val receiptTax = dialogView.findViewById<TextView>(R.id.receipt_tax_amount)
         val receiptTip = dialogView.findViewById<TextView>(R.id.receipt_tip_amount)
         val receiptCoupon = dialogView.findViewById<TextView>(R.id.receipt_coupon_amount)
-        val receiptCurrency = dialogView.findViewById<TextView>(R.id.receipt_currency_type)
+        val receiptCurrency = dialogView.findViewById<TextView>(R.id.receipt_details)
 
 
         tvMerchantName.text =
@@ -102,7 +102,7 @@ class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
         receiptCoupon.text = context.getString(R.string.coupon_amount, receiptInfo.coupon)
 
         receiptCurrency.text =
-            context.getString(R.string.receipt_currency_type, receiptInfo.currency)
+            context.getString(R.string.receipt_details, "Receipt Details (" + receiptInfo.currency + "):")
 
         //TODO Glide to another thread, it's costly on the main UI thread
         imageReceipt.scaleType = ImageView.ScaleType.CENTER

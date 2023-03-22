@@ -55,12 +55,10 @@
     <string name="receipt_tip">Tip($):</string>
     <string name="total_price">Total</string>
     <string name="currency">Currency</string>
-    <string name="currency_type">Currency:</string>
-    <string name="receipt_currency_type">%1$s</string>
     <string name="scan_date">%1$s</string>
     <string name="receipt_date">%1$s</string>
     <string name="receipt_scan_date">%1$s</string>
-    <string name="receipt_details">Receipt Details:</string>
+    <string name="receipt_details">%1$s</string>
     <string name="receipt_location">Location:</string>
     <string name="receipt_location_text">%1$s</string>
     <string name="receipt_image_thumbnail_preview_description">Receipt Image Thumbnail Preview</string>
