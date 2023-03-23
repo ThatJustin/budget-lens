@@ -45,7 +45,7 @@ class ReceiptsRecyclerViewAdapter :
             holder.scanDate.text = holder.itemView.context.getString(R.string.scan_date, date)
         } else {
             holder.scanDate.text =
-                holder.itemView.context.getString(R.string.scan_date, receipt.scan_date)
+                holder.itemView.context.getString(R.string.scan_date, receipt.scan_date!!.substring(0, 10))
         }
         if (receipt.total_amount == null) {
             holder.totalAmount.text = holder.itemView.context.getString(R.string.total_amount, 0.00)
@@ -54,7 +54,6 @@ class ReceiptsRecyclerViewAdapter :
                 holder.itemView.context.getString(R.string.total_amount, receipt.total_amount)
         }
         if (receipt.receipt_image == "null" || receipt.receipt_image!!.isEmpty()) {
-            //If it''s null, just load the default, yes it's "null" lol
             holder.receiptImage.scaleType = ImageView.ScaleType.CENTER
             Glide.with(holder.itemView.context).load(R.drawable.ic_baseline_receipt_long_24)
                 .into(holder.receiptImage)

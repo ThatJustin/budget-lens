@@ -25,21 +25,16 @@
             android:paddingEnd="16dp"
             app:contentInsetStartWithNavigation="0dp"
             app:navigationIcon="@drawable/ic_baseline_close_24"
-            app:title="Receipt Info" />
-
+            app:title="Receipt Info"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/button_border"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
@@ -47,7 +42,7 @@
             android:id="@+id/llmerchant"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:gravity="center">
 
             <ImageView
                 android:id="@+id/receipt_info_merchant_icon"
@@ -57,66 +52,71 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="2dp"
-                android:src="@drawable/ic_baseline_store_24" />
+                android:src="@drawable/ic_baseline_store_24"
+                android:contentDescription="@string/merchant_image_logo_thumbnail_preview_description"/>
 
-            <TextView
-                android:id="@+id/tvMerchantName"
+            <LinearLayout
+                android:id="@+id/tvMerchantNameAndDateSection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="0dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="5dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:layout_toEndOf="@+id/receipt_info_merchant_icon"
-                android:text="Costco"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/tvReceiptDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginStart="9dp"
-                android:layout_marginTop="5dp"
-                android:layout_toEndOf="@+id/tvMerchantName"
-                android:text=" - 2069/04/20 4:20 PM"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvMerchantName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/merchant_name"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvReceiptDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="@string/receipt_date"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/tvTotalAmountSection"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvReceiptDate"
+                android:layout_below="@+id/tvMerchantNameAndDateSection"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="5dp"
-
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
                 android:layout_toEndOf="@+id/receipt_info_merchant_icon"
-                android:gravity="center_vertical">
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/tvTotalAmountCurrency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingEnd="0dp"
                     android:text="@string/total_amount_currency"
-
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/tvTotalAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:text="420.60"
+                    android:text="@string/total"
                     android:textColor="?attr/colorPrimary"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
             </LinearLayout>
-        </RelativeLayout>
 
+        </RelativeLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cvReceiptImage"
@@ -130,15 +130,34 @@
             <ImageView
                 android:id="@+id/receipt_info_receipt_image"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
-                android:src="@drawable/ic_baseline_receipt_long_24" />
+                android:layout_height="250dp"
+                android:src="@drawable/ic_baseline_receipt_long_24"
+                android:contentDescription="@string/receipt_image_thumbnail_preview_description"/>
         </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/receipt_uploaded_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cvReceiptImage"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvDateUploaded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/receipt_scan_date"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/llAddedBy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvDateUploaded">
+            android:layout_below="@id/receipt_uploaded_date">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -146,57 +165,182 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/added_by"
-                android:textSize="18sp" />
+                android:textSize="18sp"/>
 
             <TextView
                 android:id="@+id/tvAddedBy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:text="@string/user_profile_name"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"/>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvDateUploaded"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/receipt_details_section"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/cvReceiptImage"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:text="2022/02/02 - 13:54"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:layout_below="@id/llAddedBy"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/receipt_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:text="@string/receipt_details"
+                android:textColor="#A45050"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/receipt_location"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/receipt_location"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/receipt_location_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/receipt_location_text"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/receipt_tax"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/receipt_tax"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/receipt_tax_amount"
+                    android:layout_width="91dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/tax_amount"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/receipt_coupon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/receipt_coupon"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/receipt_coupon_amount"
+                    android:layout_width="91dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/coupon_amount"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="10dp">
+
+                <TextView
+                    android:id="@+id/receipt_tip"
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/receipt_tip"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/receipt_tip_amount"
+                    android:layout_width="91dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/tip_amount"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout">
 
         <LinearLayout
+            android:id="@+id/lay_upper_btn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/lay_bottom_btn"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="0dp"
             android:weightSum="5">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/receipt_info_view_items"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:layout_weight="2.5"
                 android:text="@string/view_items"
                 android:textColor="?attr/colorPrimary"
                 app:backgroundTint="@android:color/transparent"
                 app:strokeColor="?attr/colorPrimary"
-                app:strokeWidth="1dp" />
+                app:strokeWidth="1dp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/receipt_info_split_bill"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2.5"
-                android:text="@string/split_bill" />
+                android:text="@string/split_bill"/>
         </LinearLayout>
 
         <LinearLayout
@@ -204,7 +348,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
             android:gravity="bottom"
             android:orientation="horizontal"
             android:weightSum="5">
@@ -212,20 +359,19 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/receipt_info_delete"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="2.5"
                 android:backgroundTint="#A45050"
-                android:text="@string/delete" />
+                android:text="@string/delete"/>
 
             <Button
                 android:id="@+id/receipt_info_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="10dp"
                 android:layout_weight="2.5"
-                android:text="@string/edit" />
+                android:text="@string/edit"/>
         </LinearLayout>
-
 
     </RelativeLayout>
 
