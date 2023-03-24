@@ -42,7 +42,7 @@ class CommonComponents {
             val activity: Activity = context as Activity
 
             manualReceiptButton.setOnClickListener {
-                AppUtils.changeActivity(activity, AddReceiptsActivity::class.java, 0, 0)
+                AppUtils.changeActivities(activity, AddReceiptsActivity::class.java, 0, 0)
             }
 
             openAddMenu.setOnClickListener{
