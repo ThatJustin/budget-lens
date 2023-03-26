@@ -11,7 +11,7 @@ import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.calendar.SplitItemListActivity
+import com.codenode.budgetlens.itemSplit.SplitItemListActivity
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Friends

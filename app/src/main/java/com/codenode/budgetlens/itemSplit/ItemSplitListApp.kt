@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.adapter
+package com.codenode.budgetlens.itemSplit
 
 import android.app.Application
 import com.codenode.budgetlens.data.ReceiptSplitItem
