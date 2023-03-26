@@ -99,10 +99,10 @@
                         android:textColor="@color/black"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toTopOf="@id/buy_date"/>
+                        app:layout_constraintTop_toTopOf="@id/item_category"/>
 
                     <TextView
-                        android:id="@+id/buy_date"
+                        android:id="@+id/item_category"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="2dp"
