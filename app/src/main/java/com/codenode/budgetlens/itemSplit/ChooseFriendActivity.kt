@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.calendar
+package com.codenode.budgetlens.itemSplit
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -6,12 +6,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.adapter.ItemSplitListApp
 import com.codenode.budgetlens.adapter.ParticipantsSelectRecyclerViewAdapter
 import com.codenode.budgetlens.common.ActivityName
 import com.codenode.budgetlens.common.CommonComponents
@@ -36,9 +34,9 @@ class ChooseFriendActivity : AppCompatActivity() {
         friendList = UserFriends.loadFriendsFromAPI(this, pageSize, "")
         val selectedList = intent.getIntegerArrayListExtra("selectedList")
         val selected_item_id = intent.getIntExtra("selected_item_id", -1)
-        participants = selectedList?.let { filterFriendsByUserId(friendList, it) }!!
+        participants = selectedList?.let { filterFriendsByUserId(friendList, it) } ?: mutableListOf()
         val app = application as ItemSplitListApp
-        item_list = app.itemList!!
+        item_list = app.itemList ?: mutableListOf()
         val context = this
         friendsListRecyclerView = findViewById(R.id.friends_list)
         progressBar.visibility = View.VISIBLE

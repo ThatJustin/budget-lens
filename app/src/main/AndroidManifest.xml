@@ -17,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BudgetLens"
         android:usesCleartextTraffic="true"
-        android:name=".adapter.ItemSplitListApp"
+        android:name=".itemSplit.ItemSplitListApp"
         tools:targetApi="31">
         <activity
             android:name=".receipts.ReceiptSplitFriendSelect"
@@ -80,10 +80,10 @@
             android:required="false" />
 
         <activity
-            android:name=".calendar.ChooseFriendActivity"
+            android:name=".itemSplit.ChooseFriendActivity"
             android:exported="false" />
         <activity
-            android:name=".calendar.SplitItemListActivity"
+            android:name=".itemSplit.SplitItemListActivity"
             android:exported="false" />
         <activity
             android:name=".home.AddReceiptsActivity"
