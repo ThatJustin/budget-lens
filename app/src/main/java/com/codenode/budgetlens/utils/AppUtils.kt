@@ -47,5 +47,10 @@ class AppUtils {
             activity.finish()
             activity.overridePendingTransition(enterAnim, exitAnim);
         }
+        fun changeActivities(activity: Activity, javaClass: Class<*>, enterAnim: Int, exitAnim: Int) {
+            val intent = Intent(activity, javaClass)
+            activity.startActivity(intent)
+            activity.overridePendingTransition(enterAnim, exitAnim);
+        }
     }
 }
