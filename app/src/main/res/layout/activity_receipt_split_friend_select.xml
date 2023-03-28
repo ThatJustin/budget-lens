@@ -102,6 +102,7 @@
                 android:text="@string/split_item"
                 android:textSize="12sp"
                 app:backgroundTint="@color/purple"/>
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -131,5 +132,7 @@
         app:maxImageSize="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/budget_button_logo_thumbnail_preview_description"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

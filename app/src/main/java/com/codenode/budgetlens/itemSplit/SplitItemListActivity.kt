@@ -17,14 +17,13 @@ import java.io.IOException
 import com.codenode.budgetlens.data.ReceiptSplitItem
 import com.codenode.budgetlens.data.UserFriends
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 
-
 class SplitItemListActivity : AppCompatActivity() {
-
     var madapter = SplitItemListAdapter()
-    var item_list = mutableListOf<ReceiptSplitItem>()
+    private var itemList = mutableListOf<ReceiptSplitItem>()
     private lateinit var friendList: MutableList<Friends>
     private val REQUEST_CODE_CHOOSE_FRIENDS = 81
 
@@ -33,28 +32,29 @@ class SplitItemListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_split_item_list)
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.HOME, this, this.window.decorView)
-        /* tv_split.setOnClickListener {
 
-         }*/
         friends_list.adapter = madapter
         getData()
+
         friendList = UserFriends.loadFriendsFromAPI(this, 5, "")
         madapter.friendList = friendList
-        madapter.setOnItemChildClickListener { adapter, view, position ->
-            item_list = madapter.itemList as MutableList<ReceiptSplitItem>
+        madapter.setOnItemChildClickListener { _, _, position ->
+            itemList = madapter.itemList as MutableList<ReceiptSplitItem>
             val app = application as ItemSplitListApp
-            app.itemList = item_list
-            val clickedItem = item_list[position]
-            val selected_item_id = clickedItem.item_id ?: -1
+            app.itemList = itemList
+            val clickedItem = itemList[position]
+            val selectedItemID = clickedItem.item_id ?: -1
             val selectedList = intent.getIntegerArrayListExtra("selectedList")
             val intent = Intent(this@SplitItemListActivity, ChooseFriendActivity::class.java)
             intent.putExtra("selectedList", selectedList?.let { ArrayList(it) })
-            intent.putExtra("selected_item_id", selected_item_id)
+            intent.putExtra("selected_item_id", selectedItemID)
             startActivityForResult(intent, REQUEST_CODE_CHOOSE_FRIENDS)
         }
+
         tv_cancel.setOnClickListener {
             finish()
         }
+
         tv_sure.setOnClickListener {
             postData()
             val intent = Intent()
@@ -69,14 +69,12 @@ class SplitItemListActivity : AppCompatActivity() {
 
         // check if the result is from the ChooseFriendActivity and the result code is Activity.RESULT_OK
         if (requestCode == REQUEST_CODE_CHOOSE_FRIENDS && resultCode == Activity.RESULT_OK) {
-
-            val app = application as ItemSplitListApp
-            item_list = app.itemList!!
+            val activityApp = application as ItemSplitListApp
+            itemList = activityApp.itemList!!
             runOnUiThread {
-                madapter.itemList = item_list
-                madapter.setNewInstance(item_list)
+                madapter.itemList = itemList
+                madapter.setNewInstance(itemList)
             }
-
         }
     }
 
@@ -118,20 +116,18 @@ class SplitItemListActivity : AppCompatActivity() {
                     }
                 }
             }
-
         })
     }
 
     private fun postData() {
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/itemsplit/"
-
         val itemListJsonArray = JSONArray()
 
-        for (item in item_list) {
+        for (item in itemList) {
             if (!item.splitList.isNullOrEmpty()) {
                 val itemJsonObject = JSONObject()
                 itemJsonObject.put("item_id", "${item.item_id}")
-                var itemSplitList = removeDuplicates(item.splitList!!)
+                val itemSplitList = removeDuplicates(item.splitList!!)
                 itemJsonObject.put("shared_user_ids", itemSplitList.joinToString(","))
                 itemJsonObject.put("is_shared_with_item_user", item.sharedWithSelf)
                 itemListJsonArray.put(itemJsonObject)
@@ -144,8 +140,7 @@ class SplitItemListActivity : AppCompatActivity() {
         json.put("item_list", itemListJsonArray)
 
         val client = OkHttpClient.Builder().build()
-
-        val body = RequestBody.create("application/json".toMediaTypeOrNull(), json.toString())
+        val body = json.toString().toRequestBody("application/json".toMediaTypeOrNull())
 
         val request = Request.Builder()
             .url(url)
@@ -173,6 +168,4 @@ class SplitItemListActivity : AppCompatActivity() {
         }
         return distinctList
     }
-
-
 }

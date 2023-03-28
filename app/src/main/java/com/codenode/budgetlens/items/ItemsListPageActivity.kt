@@ -36,10 +36,8 @@ import org.json.JSONArray
 import java.io.IOException
 import java.util.*
 
-
 class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     ItemsFilterDialogListener, HttpResponseListener {
-
     private var pageSize = 5
     private var itemsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -51,23 +49,18 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
     var queryParams = ""
     var userCategories = mutableListOf<Categories>()
     private lateinit var chipGroup: ChipGroup
-
     private var receiptID = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_items_list)
 
-
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.ITEMS, this, this.window.decorView)
         CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.ITEMS)
 
-        isFromSingleReceipt =
-            intent.getBooleanExtra("singleReceiptView", false)
-        receiptID =
-            intent.getIntExtra("receiptID", -1)
-
+        isFromSingleReceipt = intent.getBooleanExtra("singleReceiptView", false)
+        receiptID = intent.getIntExtra("receiptID", -1)
 
         handleChipGroup()
         handleAdapter()
@@ -469,10 +462,9 @@ class ItemsListPageActivity : AppCompatActivity(), ItemsSortDialogListener,
 
     companion object {
         const val ITEM_INFO_ACTIVITY = 6463646
-
-        val VIEW_ITEMS_FIRST_LOAD = 0
-        val VIEW_ITEMS_SCROLL_STATE_CHANGE = 1
-        val VIEW_ITEM_FILTER = 3
-        val VIEW_ITEMS_SEARCH = 4
+        const val VIEW_ITEMS_FIRST_LOAD = 0
+        const val VIEW_ITEMS_SCROLL_STATE_CHANGE = 1
+        const val VIEW_ITEM_FILTER = 3
+        const val VIEW_ITEMS_SEARCH = 4
     }
 }

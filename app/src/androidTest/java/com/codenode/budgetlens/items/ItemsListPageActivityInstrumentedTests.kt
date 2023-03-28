@@ -35,19 +35,16 @@ class ItemsListPageActivityInstrumentedTests{
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ItemsListPageActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page and logging in into the app to accessing the receipts list page to then opening a receipt to
-    // view the items list page
+    // This is ran before each test for ItemsListPageActivity in order to simulate the user
+    // flow/experience/interaction from the opening MainActivity logo splash page and logging in
+    // into the app to accessing the receipts list page to then opening a receipt to view the items
+    // list page
     @Before
     fun setup() {
         clearStorage()
         var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(
-            InstrumentationRegistry.getInstrumentation().targetContext,
-            intent,
-            null
-        )
+        startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
 
         // The following inputs the username and password into the login page and clicks the login button after making
         // sure to close the keyboard
@@ -56,16 +53,12 @@ class ItemsListPageActivityInstrumentedTests{
         onView(withId(R.id.checkCredentials)).perform(click()).check(matches(isDisplayed()))
         intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(
-            InstrumentationRegistry.getInstrumentation().targetContext,
-            intent,
-            null
-        )
+        startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
         onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
     }
 
     @Test
-    fun test_item_list_activity_scan_receipt_is_clickable() {
+    fun test_items_list_page_activity_scan_receipt_is_clickable() {
         onView(withId(R.id.receipts_list)).perform(click())
         onView(withId(R.id.receipt_info_view_items)).perform(click())
         onView(withId(R.id.addReceipts)).perform(click())
@@ -73,7 +66,7 @@ class ItemsListPageActivityInstrumentedTests{
     }
 
     @Test
-    fun test_item_list_activity_create_manual_is_clickable() {
+    fun test_items_list_page_activity_create_manual_is_clickable() {
         onView(withId(R.id.receipts_list)).perform(click())
         onView(withId(R.id.receipt_info_view_items)).perform(click())
         onView(withId(R.id.addReceipts)).perform(click())
@@ -81,4 +74,9 @@ class ItemsListPageActivityInstrumentedTests{
         onView(withId(R.id.filledButton)).check(matches(isDisplayed()))
     }
 
+    @Test
+    fun test_items_list_page_activity_is_reachable_from_bottom_navigation_bar() {
+        onView(withId(R.id.items)).perform(click()).check(matches(isDisplayed()))
+        onView(withId(R.id.search_bar_text)).check(matches(isDisplayed()))
+    }
 }

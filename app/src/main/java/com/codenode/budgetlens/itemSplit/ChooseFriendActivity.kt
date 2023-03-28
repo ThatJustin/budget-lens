@@ -20,12 +20,13 @@ import kotlinx.android.synthetic.main.activity_choose_friend.*
 
 class ChooseFriendActivity : AppCompatActivity() {
     private var participants: MutableList<Friends> = ArrayList()
-    var item_list = mutableListOf<ReceiptSplitItem>()
+    private var itemList = mutableListOf<ReceiptSplitItem>()
     private lateinit var friendList: MutableList<Friends>
     private lateinit var friendAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>
     private var friendsListRecyclerView: RecyclerView? = null
     private lateinit var linearLayoutManager: LinearLayoutManager
     private var pageSize = 5
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_choose_friend)
@@ -33,10 +34,10 @@ class ChooseFriendActivity : AppCompatActivity() {
         CommonComponents.handleNavigationBar(ActivityName.HOME, this, this.window.decorView)
         friendList = UserFriends.loadFriendsFromAPI(this, pageSize, "")
         val selectedList = intent.getIntegerArrayListExtra("selectedList")
-        val selected_item_id = intent.getIntExtra("selected_item_id", -1)
+        val selectedItemID = intent.getIntExtra("selected_item_id", -1)
         participants = selectedList?.let { filterFriendsByUserId(friendList, it) } ?: mutableListOf()
         val app = application as ItemSplitListApp
-        item_list = app.itemList ?: mutableListOf()
+        itemList = app.itemList ?: mutableListOf()
         val context = this
         friendsListRecyclerView = findViewById(R.id.friends_list)
         progressBar.visibility = View.VISIBLE
@@ -45,12 +46,13 @@ class ChooseFriendActivity : AppCompatActivity() {
             friendsListRecyclerView!!.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
+
         if (friendsListRecyclerView != null) {
             friendsListRecyclerView!!.setHasFixedSize(true)
             linearLayoutManager = LinearLayoutManager(this)
             friendsListRecyclerView!!.layoutManager = linearLayoutManager
             friendAdapter =
-                ParticipantsSelectRecyclerViewAdapter(participants, item_list, selected_item_id)
+                ParticipantsSelectRecyclerViewAdapter(participants, itemList, selectedItemID)
 
             friendsListRecyclerView!!.adapter = friendAdapter
             progressBar.visibility = View.GONE
@@ -66,10 +68,8 @@ class ChooseFriendActivity : AppCompatActivity() {
                         friendAdapter.notifyDataSetChanged()
                     }
                     progressBar.visibility = View.GONE
-
                 }
             })
-
         }
 
         // find the Cancel button and add click listener
@@ -86,8 +86,8 @@ class ChooseFriendActivity : AppCompatActivity() {
         confirmButton.setOnClickListener {
             // create an intent to return to previous activity with selected participants list
             val intent = Intent()
-            val app = application as ItemSplitListApp
-            app.itemList = item_list
+            val activityApp = application as ItemSplitListApp
+            activityApp.itemList = itemList
             intent.putExtra("selectedList", selectedList?.let { ArrayList(it) })
             setResult(Activity.RESULT_OK, intent)
             finish() // close the activity and return to previous activity
@@ -95,7 +95,6 @@ class ChooseFriendActivity : AppCompatActivity() {
     }
 
     private fun filterFriendsByUserId(friendList: MutableList<Friends>, selectedList: ArrayList<Int>): MutableList<Friends> {
-
         val participants = mutableListOf<Friends>()
         for (friend in friendList) {
             if (selectedList.contains(friend.userId)) {
@@ -103,6 +102,5 @@ class ChooseFriendActivity : AppCompatActivity() {
             }
         }
         return participants
-
     }
 }
