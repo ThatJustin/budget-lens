@@ -2,38 +2,27 @@ package com.codenode.budgetlens.common
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
-import android.media.MediaRouter.UserRouteInfo
 import android.net.Uri
 import android.os.Build
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.home.HomePageActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-//import kotlinx.android.synthetic.main.activity_scanning_receipt.view.*
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -45,14 +34,12 @@ class ScanningReceiptActivity : AppCompatActivity() {
     private lateinit var getGalleryImg: FloatingActionButton
     private lateinit var confirmImage: Button
     private lateinit var imageView: ImageView
-    private var imagePath: String? = ""
-    private var fileName: String = ""
 
-    private var currentImgPath: String? = ""
+    private var currentImgPath: String = ""
     private var tempFile: String? = ""
 
-    private var galPath: String? = ""
-    private var pictureFromGall: File? = null
+    private lateinit var imageUriGallery: Uri
+    private lateinit var imageFileGallery: File
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -76,16 +63,12 @@ class ScanningReceiptActivity : AppCompatActivity() {
             var storageDirectory: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
             try {
                 var imgFile: File = File.createTempFile(tempFile,".png",storageDirectory)
+                imageFileGallery = imgFile
                 currentImgPath = imgFile.absolutePath // path to where images are saved:/storage/emulated/0/Android/data/com.codenode.budgetlens/files/Pictures
-                var imageUri: Uri = FileProvider.getUriForFile(this, "com.codenode.budgetlens",imgFile)
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+                imageUriGallery = FileProvider.getUriForFile(this, "com.codenode.budgetlens",imgFile)
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUriGallery)
                 tempFile = currentImgPath.toString().split("/").last()
-                Log.i("Path", currentImgPath.toString())
-                Log.i("Path", tempFile.toString())
-                pictureFromGall = getIntent().getExtras()?.get(tempFile) as File?
-                tempFile = pictureFromGall.toString()
                 startActivityForResult(intent, 2)
-
             }catch (e: IOException){
                 e.printStackTrace()
             }
@@ -127,9 +110,14 @@ class ScanningReceiptActivity : AppCompatActivity() {
         }
         if (requestCode == 2) {
             imageView.setImageURI(data?.data)
+            this.contentResolver.openInputStream(data?.data!!)?.let { inputStream ->
+                val fileOutputStream = FileOutputStream(imageFileGallery)
+                inputStream.copyTo(fileOutputStream)
+                inputStream.close()
+                fileOutputStream.close()
+            }
             confirmImage.isEnabled = true
             confirmImage.alpha = 1.0F
-
         }
     }
 

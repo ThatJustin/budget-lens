@@ -63,7 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:enabled="false"
+        android:enabled="true"
         app:srcCompat="@android:drawable/ic_menu_gallery"
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
