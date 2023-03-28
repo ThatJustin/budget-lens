@@ -16,6 +16,7 @@ import com.codenode.budgetlens.data.UserProfile
 import com.codenode.budgetlens.friends.FriendsPageActivity
 import com.codenode.budgetlens.home.AddReceiptsActivity
 import com.codenode.budgetlens.home.HomePageActivity
+import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.codenode.budgetlens.login.LoginActivity
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.codenode.budgetlens.settings.SettingsActivity
@@ -141,8 +142,9 @@ class CommonComponents {
                         }
                         true
                     }
-                    R.id.calendar -> {
-                        if (currentActivityName != ActivityName.CALENDAR) {
+                    R.id.items -> {
+                        if (currentActivityName != ActivityName.ITEMS) {
+                            AppUtils.changeActivity(activity, ItemsListPageActivity::class.java, 0, 0)
                         }
                         true
                     }
