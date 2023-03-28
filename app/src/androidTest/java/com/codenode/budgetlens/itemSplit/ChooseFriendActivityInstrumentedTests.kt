@@ -34,7 +34,7 @@ class ChooseFriendActivityInstrumentedTests {
     @Before
     fun setup() {
         clearStorage()
-        var intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ChooseFriendActivity::class.java)
+        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ChooseFriendActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
     }
@@ -57,7 +57,7 @@ class ChooseFriendActivityInstrumentedTests {
     @Test
     fun test_split_item_list_activity_cancel_button() {
         onView(withId(R.id.cancel_button)).perform(click())
-        intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ChooseFriendActivity::class.java)
+        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ChooseFriendActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
     }

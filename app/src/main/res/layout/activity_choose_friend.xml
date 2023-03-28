@@ -36,6 +36,7 @@
                     android:layout_marginEnd="15dp"
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_baseline_account_circle_70"/>
+
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
