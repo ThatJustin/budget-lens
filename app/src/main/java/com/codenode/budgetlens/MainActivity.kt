@@ -2,11 +2,10 @@ package com.codenode.budgetlens
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.GlobalSharedPreferences
-import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
 
 
@@ -18,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         
         //if they have a token, they can go to the home page
         val intent: Intent = if (BearerToken.exists(this)) {
-            Intent(this, HomePageActivity::class.java)
+            Intent(this, BudgetPageActivity::class.java)
         } else { //otherwise they must register or login
             Intent(this, LoginActivity::class.java)
         }

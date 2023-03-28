@@ -22,8 +22,8 @@
         android:title="@string/friends" />
 
     <item
-        android:id="@+id/calendar"
-        android:icon="@drawable/ic_baseline_calendar_month_24"
-        android:title="@string/calendar" />
+        android:id="@+id/items"
+        android:icon="@drawable/ic_baseline_shopping_bag_24"
+        android:title="@string/items" />
 
 </menu>

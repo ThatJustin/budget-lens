@@ -120,6 +120,7 @@
     <string name="create">+ CREATE</string>
     <string name="delete_sub_category">Delete Sub Category</string>
     <string name="delete_this_category">Delete this Category?</string>
+    <string name="welcome_message">Welcome to Budget Lens, this is a Beta version. Please subscribe our Concordia Team for further information. </string>
     <string name="confirm">Confirm</string>
     <string name="save_filter">Save</string>
     <string name="label">label</string>
