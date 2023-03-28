@@ -13,7 +13,6 @@ import android.view.WindowManager
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.util.Pair
@@ -24,13 +23,13 @@ import com.codenode.budgetlens.common.BearerToken
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.CountDownLatch
 
 class ItemsFilterDialog(
     private val activityContext: Context,
@@ -98,8 +97,8 @@ class ItemsFilterDialog(
         handleClosingDialog()
         handleChipClicking()
         loadFilters()
-        handleMerchant()
-        handleCategory()
+        loadMerchants()
+        loadCategories()
         handleStartEndDate()
         handlePriceRange()
     }
@@ -269,7 +268,7 @@ class ItemsFilterDialog(
     /**
      * Handles merchant filter.
      */
-    private fun handleMerchant() {
+    private fun loadMerchants() {
         // If this activity is from viewing a receipts items, there is no merchant to filter
         // since it's all from the same receipt (same merchant)
         if (isFromSingleReceipt) {
@@ -277,31 +276,39 @@ class ItemsFilterDialog(
             val merchantConstraint = findViewById<ConstraintLayout>(R.id.merchantConstraint)
             merchantConstraint.visibility = View.GONE
         } else {
-            val merchantNamesMap = loadMerchantNames()
-            val merchantNames: MutableList<String> = merchantNamesMap.values.toMutableList()
-                .sortedBy { it.lowercase() } as MutableList<String>
+            loadMerchantNames()
+        }
+    }
 
-            val adapter = ArrayAdapter(context, R.layout.list_items, merchantNames)
-            merchantOptions.setAdapter(adapter)
+    /**
+     * Processes the returned merchant name information and sets the option adapter.
+     */
+    private fun processMerchantNames(merchantNamesMap: MutableMap<Int, String>) {
+        val progressBar = findViewById<CircularProgressIndicator>(R.id.merchant_progress_bar)
+        val merchantNames: MutableList<String> = merchantNamesMap.values.toMutableList()
+            .sortedBy { it.lowercase() } as MutableList<String>
 
-            merchantOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
-                filterOptions.merchantName = ""
-                filterOptions.merchantId = -1
-                merchantChip.visibility = View.GONE
-                val value = adapter.getItem(pos) ?: ""
-                if (value.isNotEmpty()) {
-                    filterOptions.merchantName = value
-                    filterOptions.merchantId = getKeyByValue(merchantMap, value)
-                    merchantChip.visibility = View.VISIBLE
-                }
+        val adapter = ArrayAdapter(context, R.layout.list_items, merchantNames)
+        merchantOptions.setAdapter(adapter)
+
+        merchantOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
+            filterOptions.merchantName = ""
+            filterOptions.merchantId = -1
+            merchantChip.visibility = View.GONE
+            val value = adapter.getItem(pos) ?: ""
+            if (value.isNotEmpty()) {
+                filterOptions.merchantName = value
+                filterOptions.merchantId = getKeyByValue(merchantMap, value)
+                merchantChip.visibility = View.VISIBLE
             }
         }
+        progressBar.visibility = View.GONE
     }
 
     /**
      * Loads merchants names for the merchant filter.
      */
-    private fun loadMerchantNames(): MutableMap<Int, String> {
+    private fun loadMerchantNames() {
         merchantMap.clear()
         //I do not think anything in the DB begins at index 0
         categoryMap[0] = ""
@@ -315,12 +322,9 @@ class ItemsFilterDialog(
             .addHeader("Content-Type", "application/json")
             .build()
 
-        val countDownLatch = CountDownLatch(1)
-
         registrationPost.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
-                countDownLatch.countDown()
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -340,6 +344,9 @@ class ItemsFilterDialog(
                                     merchantMap[id] = name
                                 }
                             }
+                            (activityContext as Activity).runOnUiThread {
+                                processMerchantNames(merchantMap)
+                            }
                             Log.i("Successful", "Successfully loaded merchant names from API.")
                         } else {
                             Log.i(
@@ -355,41 +362,19 @@ class ItemsFilterDialog(
                         )
                     }
                 }
-                countDownLatch.countDown()
             }
         })
-        countDownLatch.await()
-        return merchantMap
     }
 
     private fun <K, V> getKeyByValue(hashMap: Map<K, V>, target: V): K {
         return hashMap.filter { target == it.value }.keys.first()
     }
 
+
     /**
-     * Handles category filter.
+     * Loads the category information from the backend. It will then update the UI with them.
      */
-    private fun handleCategory() {
-        val categoryItemsMap = loadCategories()
-        val categoryItems: MutableList<String> = categoryItemsMap.values.toMutableList()
-            .sortedBy { it.lowercase() } as MutableList<String>
-
-        val adapter = ArrayAdapter(context, R.layout.list_items, categoryItems)
-        categoryOptions.setAdapter(adapter)
-        categoryOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
-            filterOptions.categoryName = ""
-            filterOptions.categoryId = -1
-            categoryChip.visibility = View.GONE
-            val value = adapter.getItem(pos) ?: ""
-            if (value.isNotEmpty()) {
-                filterOptions.categoryName = value
-                filterOptions.categoryId = getKeyByValue(categoryMap, value)
-                categoryChip.visibility = View.VISIBLE
-            }
-        }
-    }
-
-    private fun loadCategories(): MutableMap<Int, String> {
+    private fun loadCategories() {
         categoryMap.clear()
         //I do not think anything in the DB begins at index 0
         categoryMap[0] = ""
@@ -403,12 +388,10 @@ class ItemsFilterDialog(
             .addHeader("Content-Type", "application/json")
             .build()
 
-        val countDownLatch = CountDownLatch(1)
 
         registrationPost.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 e.printStackTrace()
-                countDownLatch.countDown()
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -423,6 +406,9 @@ class ItemsFilterDialog(
                                 val id = category.getInt("id")
                                 val categoryName = category.getString("category_name")
                                 categoryMap[id] = categoryName
+                            }
+                            (activityContext as Activity).runOnUiThread {
+                                processCategories(categoryMap)
                             }
                             Log.i("Successful", "Successfully loaded categories from API.")
                         } else {
@@ -439,11 +425,32 @@ class ItemsFilterDialog(
                         )
                     }
                 }
-                countDownLatch.countDown()
             }
         })
-        countDownLatch.await()
-        return categoryMap
+    }
+
+    /**
+     * Processes the returned category information and sets the option adapter.
+     */
+    private fun processCategories(categoryMap: MutableMap<Int, String>) {
+        val progressBar = findViewById<CircularProgressIndicator>(R.id.category_progress_bar)
+        val categoryItems: MutableList<String> = categoryMap.values.toMutableList()
+            .sortedBy { it.lowercase() } as MutableList<String>
+
+        val adapter = ArrayAdapter(context, R.layout.list_items, categoryItems)
+        categoryOptions.setAdapter(adapter)
+        categoryOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
+            filterOptions.categoryName = ""
+            filterOptions.categoryId = -1
+            categoryChip.visibility = View.GONE
+            val value = adapter.getItem(pos) ?: ""
+            if (value.isNotEmpty()) {
+                filterOptions.categoryName = value
+                filterOptions.categoryId = getKeyByValue(categoryMap, value)
+                categoryChip.visibility = View.VISIBLE
+            }
+        }
+        progressBar.visibility = View.GONE
     }
 
     /**
