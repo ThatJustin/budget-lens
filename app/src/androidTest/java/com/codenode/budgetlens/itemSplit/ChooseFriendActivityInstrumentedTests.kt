@@ -64,7 +64,7 @@ class ChooseFriendActivityInstrumentedTests {
     }
 
     @Test
-    fun test_choose_friend_activity_sure_button_is_clickable() {
+    fun test_choose_friend_activity_confirm_button_is_clickable() {
         onView(withId(R.id.confirm_button)).perform(click())
         val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, SplitItemListActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
