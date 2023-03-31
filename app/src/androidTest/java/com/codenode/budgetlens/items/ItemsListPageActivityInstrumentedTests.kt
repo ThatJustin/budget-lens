@@ -35,9 +35,10 @@ class ItemsListPageActivityInstrumentedTests{
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ItemsListPageActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page and logging in into the app to accessing the receipts list page to then opening a receipt to
-    // view the items list page
+    // This is ran before each test for ItemsListPageActivity in order to simulate the user
+    // flow/experience/interaction from the opening MainActivity logo splash page and logging in
+    // into the app to accessing the receipts list page to then opening a receipt to view the items
+    // list page
     @Before
     fun setup() {
         clearStorage()
