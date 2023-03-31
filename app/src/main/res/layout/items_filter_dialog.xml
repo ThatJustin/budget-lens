@@ -265,6 +265,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/merchant_progress_bar"
+            android:layout_width="34dp"
+            android:layout_height="32dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="2dp"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:indicatorColor="@color/purple_300"
+            app:indicatorSize="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/items_filter_merchant_text_input_layer"
+            app:layout_constraintStart_toEndOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/divider2"
+            app:layout_constraintVertical_bias="0.32999998" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/items_filter_merchant_text_input_layer"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -350,6 +367,23 @@
                 android:popupBackground="#F3EDF7" />
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/category_progress_bar"
+            android:layout_width="34dp"
+            android:layout_height="32dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="2dp"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:indicatorColor="@color/purple_300"
+            app:indicatorSize="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/items_filter_category_text_input_layer"
+            app:layout_constraintStart_toEndOf="@+id/textView13"
+            app:layout_constraintTop_toBottomOf="@+id/divider3"
+            app:layout_constraintVertical_bias="0.32999998" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

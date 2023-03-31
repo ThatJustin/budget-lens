@@ -9,9 +9,9 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.codenode.budgetlens.BuildConfig
+import com.codenode.budgetlens.budget.BudgetPageActivity
 import com.codenode.budgetlens.common.BearerToken
 import com.codenode.budgetlens.common.GlobalSharedPreferences
-import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.login.LoginActivity
 import com.google.gson.Gson
 import okhttp3.*
@@ -148,7 +148,7 @@ class UserProfile {
                                 activity.finish()
                                 context.startActivity(
                                     Intent(context,
-                                        HomePageActivity::class.java)
+                                        BudgetPageActivity::class.java)
                                 )
 
                                 Log.i("Successful", "Successfully loaded profile from API.")
