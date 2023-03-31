@@ -71,13 +71,6 @@ class CategoryListPageActivityInstrumentedTests {
     }
 
     @Test
-    fun test_display_category_list() {
-        // Click on the profile
-        onView(withId(R.id.profile_icon)).perform(click())
-        assert(true)
-    }
-
-    @Test
     fun test_adding_receipt_pull_up_tab_into_scan_receipt_is_clickable() {
         onView(withId(R.id.addReceipts)).perform(click())
         onView(withId(R.id.ScanReceipt)).perform(click())

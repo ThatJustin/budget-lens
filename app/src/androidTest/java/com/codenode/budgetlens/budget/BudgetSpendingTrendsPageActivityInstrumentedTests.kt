@@ -65,17 +65,16 @@ class BudgetSpendingTrendsPageActivityInstrumentedTests{
     }
 
     @Test
-    fun test_item_list_activity_scan_receipt_is_clickable() {
+    fun test_budget_spending_trend_activity_scan_receipt_is_clickable() {
         onView(withId(R.id.addReceipts)).perform(click())
         onView(withId(R.id.ScanReceipt)).perform(click())
     }
 
     @Test
-    fun test_item_list_activity_create_manual_is_clickable() {
+    fun test_budget_spending_trend_activity_create_manual_receipt_is_clickable() {
         onView(withId(R.id.addReceipts)).perform(click())
         onView(withId(R.id.createManual)).perform(click())
         onView(withId(R.id.filledButton)).check(matches(isDisplayed()))
     }
-
 }
 

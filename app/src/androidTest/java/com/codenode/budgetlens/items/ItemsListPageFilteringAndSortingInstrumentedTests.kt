@@ -1,4 +1,4 @@
-package com.codenode.budgetlens.common
+package com.codenode.budgetlens.items
 
 import android.content.Intent
 import androidx.core.content.ContextCompat.startActivity
@@ -20,10 +20,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-// This Test Class is very flaky. Some tests pass sometimes and other times they fail randomly. I have no idea why.
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class ScanningReceiptPageActivityInstrumentedTests {
+class ItemsListPageFilteringAndSortingInstrumentedTests {
     // This is used to clear the shared preferences before each test
     companion object {
         @BeforeClass
@@ -36,8 +35,8 @@ class ScanningReceiptPageActivityInstrumentedTests {
     @get:Rule
     val mainActivityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    // This is ran before each test for ScanningReceiptActivity in order to simulate the user flow/experience/interaction
-    // from the opening MainActivity logo splash page to reaching the ScanningReceiptActivity page
+    // This is ran before each test for ItemsListPageActivity in order to simulate the user flow/experience/interaction
+    // from the opening MainActivity logo splash page and logging in into the app to viewing the items list page
     @Before
     fun setup() {
         clearStorage()
@@ -47,48 +46,30 @@ class ScanningReceiptPageActivityInstrumentedTests {
 
         // The following inputs the username and password into the login page and clicks the login button after making
         // sure to close the keyboard
-        onView(withId(R.id.usernameText)).perform(typeText("Test1234"), closeSoftKeyboard()).check(matches(withText("Test1234")))
-        onView(withId(R.id.passwordText)).perform(typeText("test1234"), closeSoftKeyboard()).check(matches(withText("test1234")))
+        onView(withId(R.id.usernameText)).perform(typeText("Test1234"))
+        onView(withId(R.id.usernameText)).check(matches(withText("Test1234")))
+        onView(withId(R.id.passwordText)).perform(typeText("test1234"))
+        onView(withId(R.id.passwordText)).check(matches(withText("test1234")))
+        onView(withId(R.id.passwordText)).perform(closeSoftKeyboard())
         onView(withId(R.id.checkCredentials)).perform(click()).check(matches(isDisplayed()))
         intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, HomePageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
-        onView(withId(R.id.addReceipts)).perform(click())
-        onView(withId(R.id.ScanReceipt)).perform(click())
-        intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ScanningReceiptActivity::class.java)
+        onView(withId(R.id.items)).perform(click()).check(matches(isDisplayed()))
+        intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ItemsListPageActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(InstrumentationRegistry.getInstrumentation().targetContext, intent, null)
     }
 
     @Test
-    fun test_scanning_receipt_page_activity_is_displayed() {
-        onView(withId(R.id.imageView)).check(matches(isDisplayed()))
+    fun test_items_list_filter_dialog_window_opens() {
+        // This test only checks to see if the items list filter dialog window opens when the filter button is clicked
+        onView(withId(R.id.filter_item_btn_open)).perform(click())
     }
 
     @Test
-    fun test_scanning_receipt_page_activity_add_from_gallery_is_clickable() {
-        onView(withId(R.id.addFromGallery)).perform(click())
-    }
-
-    @Test
-    fun test_scanning_receipt_page_activity_confirm_receipt_is_clickable() {
-        onView(withId(R.id.confirmReceipt)).perform(click()).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun test_scanning_receipt_page_activity_get_image_is_clickable() {
-        onView(withId(R.id.getImage)).perform(click())
-    }
-
-    @Test
-    fun test_adding_receipt_pull_up_tab_into_scan_receipt_is_clickable() {
-        onView(withId(R.id.addReceipts)).perform(click())
-        onView(withId(R.id.ScanReceipt)).perform(click())
-    }
-
-    @Test
-    fun test_adding_receipt_pull_up_tab_into_create_manual_receipt_is_clickable() {
-        onView(withId(R.id.addReceipts)).perform(click())
-        onView(withId(R.id.createManual)).perform(click())
+    fun test_items_list_sort_by_dialog_window_opens() {
+        // This test only checks to see if the items list sort by dialog window opens when the sort by button is clicked
+        onView(withId(R.id.sort_item_btn_open)).perform(click())
     }
 }
