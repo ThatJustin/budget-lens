@@ -65,7 +65,7 @@ class SplitItemListActivityInstrumentedTests {
     }
 
     @Test
-    fun test_split_item_list_activity_sure_button_is_clickable() {
+    fun test_split_item_list_activity_confirm_button_is_clickable() {
         onView(withId(R.id.tv_sure)).perform(click())
         val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ReceiptSplitFriendSelect::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
