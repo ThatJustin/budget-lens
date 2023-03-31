@@ -160,17 +160,21 @@ class CommonComponents {
         fun handleTopAppBar(view: View, context: Context, layoutInflater: LayoutInflater) {
             val topAppBar = view.findViewById<MaterialToolbar>(R.id.topAppBar)
             //Set the name of the profile to the first sub menu item
-            val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
-            if (subProfile != null) {
-                subProfile.title =
-                    UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
+            if (topAppBar.menu.size()>0){
+                val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
+                if (subProfile != null) {
+                    subProfile.title =
+                        UserProfile.userProfile.firstName + " " + UserProfile.userProfile.lastName
+                }
             }
+
 
             topAppBar.setNavigationOnClickListener {
                 // Handle navigation icon press
             }
 
             topAppBar.setOnMenuItemClickListener { menuItem ->
+                val subProfile = topAppBar.menu.getItem(0).subMenu?.getItem(0)
                 when (menuItem.itemId) {
                     R.id.profile_icon -> {
                         //Do nothing

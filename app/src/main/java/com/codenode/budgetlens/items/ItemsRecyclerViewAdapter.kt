@@ -1,6 +1,6 @@
 package com.codenode.budgetlens.items
 
-
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
@@ -12,7 +12,6 @@ import com.codenode.budgetlens.R
 import com.codenode.budgetlens.data.Items
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-
 
 class ItemsRecyclerViewAdapter(
     val itemListActivity: ItemsListPageActivity
@@ -101,6 +100,9 @@ class ItemsRecyclerViewAdapter(
         if (items.isEmpty()) {
             itemListRecyclerView!!.visibility = View.GONE
             emptyViewMsg.visibility = View.VISIBLE
+            val activity = context as Activity
+            val itemTotalView = activity.findViewById<TextView>(R.id.items_cost_value)
+            itemTotalView.text = activity.getString(R.string.items_total, 0.00)
         } else {
             itemListRecyclerView!!.visibility = View.VISIBLE
             emptyViewMsg.visibility = View.GONE
@@ -125,6 +127,7 @@ class ItemsRecyclerViewAdapter(
     /**
      * Updates the currently viewable items with the sorted version.
      */
+    @SuppressLint("NotifyDataSetChanged")
     fun sortItems(sortedItemsList: MutableList<Items>) {
         this.items.clear()
         this.items.addAll(sortedItemsList)
@@ -135,6 +138,7 @@ class ItemsRecyclerViewAdapter(
     /**
      * Adds new items to the viewable recyclerview.
      */
+    @SuppressLint("NotifyDataSetChanged")
     fun addItems(
         itemsList: MutableList<Items>,
         applyItemsSortOptions: (MutableList<Items>) -> MutableList<Items>,
@@ -153,6 +157,7 @@ class ItemsRecyclerViewAdapter(
     /**
      * Modifies the recycler view to show the searched items.
      */
+    @SuppressLint("NotifyDataSetChanged")
     fun addSearchedItems(
         itemsList: MutableList<Items>,
         applyItemsSortOptions: (MutableList<Items>) -> MutableList<Items>,
@@ -173,6 +178,7 @@ class ItemsRecyclerViewAdapter(
     /**
      * Modifies the recycler view to show the filtered items.
      */
+    @SuppressLint("NotifyDataSetChanged")
     fun addFilteredItems(
         itemsList: MutableList<Items>,
         applyItemsSortOptions: (MutableList<Items>) -> MutableList<Items>,

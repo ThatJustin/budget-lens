@@ -80,4 +80,10 @@ class ItemsListPageActivityInstrumentedTests{
         onView(withId(R.id.createManual)).perform(click())
         onView(withId(R.id.filledButton)).check(matches(isDisplayed()))
     }
+    
+    @Test
+    fun test_items_list_page_activity_is_reachable_from_bottom_navigation_bar() {
+        onView(withId(R.id.items)).perform(click()).check(matches(isDisplayed()))
+        onView(withId(R.id.search_bar_text)).check(matches(isDisplayed()))
+    }
 }
