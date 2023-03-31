@@ -61,5 +61,4 @@ class ManualReceiptsPageActivityInstrumentedTests{
         onView(withId(R.id.addReceipts)).perform(click())
         onView(withId(R.id.ScanReceipt)).perform(click())
     }
-
 }
