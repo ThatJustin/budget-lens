@@ -7,7 +7,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
-import android.text.InputType
 import android.text.InputType.*
 import android.text.TextWatcher
 import android.util.Log
@@ -35,7 +34,7 @@ import org.json.JSONObject
 import java.io.IOException
 import java.util.concurrent.CountDownLatch
 
-class ItemInfoActivity() : AppCompatActivity() {
+class ItemInfoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var categoryDropDown: AutoCompleteTextView
     private lateinit var importantDatesList: MutableList<ImportantDates>
@@ -45,6 +44,7 @@ class ItemInfoActivity() : AppCompatActivity() {
     private lateinit var itemPrice: TextView
     private lateinit var itemName: TextView
     private lateinit var itemOwner: TextView
+    private lateinit var itemScanDate: TextView
     private lateinit var purchasedFrequency: TextView
     private var newItemName: String = ""
     private var newItemPrice: String = ""
@@ -69,14 +69,15 @@ class ItemInfoActivity() : AppCompatActivity() {
         itemPrice = findViewById(R.id.item_info_price)
         itemName = findViewById(R.id.item_info_name)
         itemOwner = findViewById(R.id.item_original_owner)
+        itemScanDate = findViewById(R.id.item_page_scan_date)
         purchasedFrequency = findViewById(R.id.purchased_frequency)
 
         handleCategories(itemId)
         handleGetItemData(itemId)
         handleAdapter(itemId)
         handleDeleteItem(itemId, position)
-        handleEditItemPrice(itemId, position)
-        handleEditItemName(itemId, position)
+        handleEditItemPrice(itemId)
+        handleEditItemName(itemId)
         handleAddImportantDateButton(itemId)
     }
 
@@ -105,10 +106,12 @@ class ItemInfoActivity() : AppCompatActivity() {
                             val price = item.getString("price")
                             val name = item.getString("name")
                             val user = item.getString("user")
+                            val scanDate = item.getString("scan_date").substring(0, 16).replace("T", " ")
                             runOnUiThread {
                                 itemPrice.text = price
                                 itemName.text = name
                                 itemOwner.text = user
+                                itemScanDate.text = scanDate.replace("-", "/")
                                 categoryDropDown.setText(item.getString("category_name"), false)
                             }
                             localPrice = price.toDouble()
@@ -130,7 +133,6 @@ class ItemInfoActivity() : AppCompatActivity() {
 
         // Get the item purchased frequency
         requestUpdatePurchasedFrequency(itemId)
-
     }
 
     /**
@@ -168,7 +170,6 @@ class ItemInfoActivity() : AppCompatActivity() {
                                     val itemFrequency =
                                         obj.getJSONObject(key).getInt("item_frequency")
                                     newFrequency = itemFrequency.toString()
-
                                 }
                             } catch (_: Exception) {
 
@@ -217,9 +218,9 @@ class ItemInfoActivity() : AppCompatActivity() {
         categoryDropDown = findViewById(R.id.category_dropdown)
         categoryDropDown.setAdapter(arrayAdapter)
 
-        //Handle when the dropdonn is clicked
+        //Handle when the dropdown is clicked
         categoryDropDown.onItemClickListener =
-            AdapterView.OnItemClickListener { parent, view, position, id ->
+            AdapterView.OnItemClickListener { parent, _, position, id ->
                 // get the selected item
                 val item = parent.getItemAtPosition(position)
 
@@ -229,7 +230,6 @@ class ItemInfoActivity() : AppCompatActivity() {
                     .setMessage("If it is, this spending and all spendings under this label will change to $item,")
                     .setPositiveButton("Apply To All Spendings") { _, _ ->
                         val regexValue = itemName.text
-                        val itemId = id
                         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/rules/add/"
 
                         // make the post request
@@ -241,7 +241,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                             .post(
                                 FormBody.Builder()
                                     .add("regex", regexValue.toString())
-                                    .add("category", itemId.toString())
+                                    .add("category", id.toString())
                                     .build()
                             )
                             .build()
@@ -267,14 +267,13 @@ class ItemInfoActivity() : AppCompatActivity() {
                             }
                         })
                     }
-                    .setNegativeButton("Just this spending") { dialog, _ ->
-                        val newItemCategory = id
+                    .setNegativeButton("Just this spending") { _, _ ->
                         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
                         val registrationPost = OkHttpClient()
                         val mediaType = "application/json".toMediaTypeOrNull()
 
                         val body = ("{\r\n" +
-                                "    \"category_id\": \"${newItemCategory}\"\r\n" +
+                                "    \"category_id\": \"$id\"\r\n" +
                                 "}").trimIndent().toRequestBody(mediaType)
 
                         val request = Request.Builder()
@@ -324,7 +323,7 @@ class ItemInfoActivity() : AppCompatActivity() {
         description.maxLines = 1
         //backend has a max length of 36, respect it here
         description.filters = arrayOf(InputFilter.LengthFilter(36))
-        description.inputType = InputType.TYPE_CLASS_TEXT
+        description.inputType = TYPE_CLASS_TEXT
         layout.addView(description)
 
         //Calendar to select a date
@@ -500,11 +499,11 @@ class ItemInfoActivity() : AppCompatActivity() {
         }
     }
 
-    private fun handleEditItemPrice(itemId: String?, position: Int) {
+    private fun handleEditItemPrice(itemId: String?) {
         findViewById<TextView>(R.id.item_info_price)?.setOnClickListener {
-            val editItemName: EditText = EditText(this)
+            val editItemName = EditText(this)
             editItemName.inputType = TYPE_CLASS_TEXT
-            val editItemPrice: EditText = EditText(this)
+            val editItemPrice = EditText(this)
             editItemPrice.inputType = TYPE_CLASS_PHONE
 
             MaterialAlertDialogBuilder(this)
@@ -515,7 +514,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                 .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.dismiss()
                 }
-                .setPositiveButton("Edit") { dialog, _ ->
+                .setPositiveButton("Edit") { _, _ ->
                     newItemPrice = editItemPrice.text.toString()
                     val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
                     val registrationPost = OkHttpClient()
@@ -531,6 +530,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                         .addHeader("Content-Type", "application/json")
                         .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
                         .build()
+
                     registrationPost.newCall(request).enqueue(object : Callback {
                         override fun onFailure(call: Call, e: IOException) {
                             e.printStackTrace()
@@ -559,9 +559,9 @@ class ItemInfoActivity() : AppCompatActivity() {
         }
     }
 
-    private fun handleEditItemName(itemId: String?, position: Int) {
+    private fun handleEditItemName(itemId: String?) {
         findViewById<TextView>(R.id.item_info_name)?.setOnClickListener {
-            val editItemName: EditText = EditText(this)
+            val editItemName = EditText(this)
             editItemName.inputType = TYPE_CLASS_TEXT
 
             MaterialAlertDialogBuilder(this)
@@ -571,7 +571,7 @@ class ItemInfoActivity() : AppCompatActivity() {
                 .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.dismiss()
                 }
-                .setPositiveButton("Edit") { dialog, _ ->
+                .setPositiveButton("Edit") { _, _ ->
                     newItemName = editItemName.text.toString()
                     val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/$itemId/"
                     val registrationPost = OkHttpClient()
@@ -671,5 +671,4 @@ class ItemInfoActivity() : AppCompatActivity() {
         countDownLatch.await()
         return categoryMap
     }
-
 }

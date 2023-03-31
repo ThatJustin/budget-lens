@@ -1,5 +1,6 @@
 package com.codenode.budgetlens.budget
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.text.TextUtils
 import android.util.Log
@@ -19,7 +20,6 @@ import com.codenode.budgetlens.common.CommonComponents
 import com.codenode.budgetlens.data.Costs
 import com.codenode.budgetlens.data.Trend
 import com.codenode.budgetlens.data.Tyepnames
-import com.codenode.budgetlens.home.HomePageActivity
 import com.codenode.budgetlens.items.ItemsListPageActivity
 import com.codenode.budgetlens.utils.AppUtils
 import com.codenode.budgetlens.utils.HttpUtils
@@ -36,54 +36,54 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class BudgetPageActivity : AppCompatActivity() {
-    var mMyDialog: MyDialog? = null
+    private var mMyDialog: MyDialog? = null
     var adapter: CategoryAdapter? = null
-    var trendlist = arrayListOf<Trend>()
+    var trendList = arrayListOf<Trend>()
     var grid :ExpandableHeightGridView?=null
+
+    @SuppressLint("InflateParams")
     override fun onCreate(savedInstanceState: android.os.Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_budget_page)
-        var textView6 = findViewById<TextView>(R.id.textView6)
-        var spendingTrends = findViewById<TextView>(R.id.textView10)
-
+        val textView6 = findViewById<TextView>(R.id.textView6)
+        val spendingTrends = findViewById<TextView>(R.id.textView10)
         val goToItemsListActivity = Intent(this, ItemsListPageActivity::class.java)
         val time = System.currentTimeMillis()
 
-        val format = SimpleDateFormat("MM")
+        val format = SimpleDateFormat("MM", Locale.ENGLISH)
         val d1 = Date(time)
         val t1 = format.format(d1)
 
-        val formats = SimpleDateFormat("dd")
+        val formats = SimpleDateFormat("dd", Locale.ENGLISH)
         val d1s = Date(time)
         val t1s = formats.format(d1s)
 
         AppUtils.setData(textView6, t1, t1s)
         getCosts()
-        Log.e("WWWWWWWW", t1 + "===" + t1s)
+        Log.e("WWWWWWWW", "$t1===$t1s")
 
         CommonComponents.handleTopAppBar(this.window.decorView, this, layoutInflater)
         CommonComponents.handleNavigationBar(ActivityName.BUDGET, this, this.window.decorView)
         CommonComponents.handleScanningReceipts(this.window.decorView, this, ActivityName.BUDGET)
-        findViewById<ConstraintLayout>(R.id.constraintLayout3).setOnClickListener() {
+        findViewById<ConstraintLayout>(R.id.constraintLayout3).setOnClickListener {
             val intent = Intent(this, BudgetSpendingTrendActivity::class.java)
             startActivity(intent)
         }
-        findViewById<TextView>(R.id.clicktoadd).setOnClickListener() {
+        findViewById<TextView>(R.id.clicktoadd).setOnClickListener {
             mMyDialog?.show()
         }
 
-        grid = findViewById<ExpandableHeightGridView>(R.id.grid_view)
-
+        grid = findViewById(R.id.grid_view)
 
         val screenWidth = windowManager.defaultDisplay.width
         val view1: View = layoutInflater.inflate(R.layout.dialog_add, null)
         mMyDialog = MyDialog(this, view1, true, true)
         val mainLayout: LinearLayout = view1.findViewById(R.id.mainlayout)
-        val lp: ViewGroup.LayoutParams = mainLayout.getLayoutParams()
+        val lp: ViewGroup.LayoutParams = mainLayout.layoutParams
         lp.width = screenWidth
-        mainLayout.setLayoutParams(lp)
-        var name = view1.findViewById<EditText>(R.id.tv_context)
-        var box = view1.findViewById<CheckBox>(R.id.tv_box)
+        mainLayout.layoutParams = lp
+        val name = view1.findViewById<EditText>(R.id.tv_context)
+        val box = view1.findViewById<CheckBox>(R.id.tv_box)
         view1.findViewById<TextView>(R.id.tv_sure).setOnClickListener {
             if (TextUtils.isEmpty(name.text.toString().trim())){
                 Toast.makeText(
@@ -93,37 +93,35 @@ class BudgetPageActivity : AppCompatActivity() {
                 ).show()
                 return@setOnClickListener
             }
+
             addType(name.text.toString().trim(), box.isChecked)
             mMyDialog?.dismiss()
             name.setText("")
             box.isChecked=false
         }
 
-        getCostDatas()
-        spendingTrends.setOnClickListener() {
+        getCostData()
+        spendingTrends.setOnClickListener {
             startActivity(goToItemsListActivity)
             }
-
     }
 
-    fun AddAdapter() {
-        if (trendlist.size > 0) {
+    fun addAdapter() {
+        if (trendList.size > 0) {
             tip.visibility=View.GONE
             tv_ts.visibility=View.VISIBLE
         }else{
             tip.visibility=View.VISIBLE
             tv_ts.visibility=View.GONE
         }
-        adapter = CategoryAdapter(this,responseSt, trendlist)
+        adapter = CategoryAdapter(this,responseSt, trendList)
 
-        grid!!.isFocusable = false;
+        grid!!.isFocusable = false
         grid!!.isExpanded = true
         grid!!.adapter = adapter
     }
 
-
     private fun addType(name: String, star: Boolean) {
-
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/"
         val params = RequestParams()
 
@@ -156,13 +154,13 @@ class BudgetPageActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                getCostDatas()
-                Log.i("Response", "responseString"+responseString)
+                getCostData()
+                Log.i("Response", "responseString$responseString")
             }
         })
     }
-    private fun getCosts() {
 
+    private fun getCosts() {
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/costs/"
         HttpUtils.get("Bearer ${BearerToken.getToken(this)}", url, object : TextHttpResponseHandler() {
             override fun onFailure(
@@ -171,7 +169,6 @@ class BudgetPageActivity : AppCompatActivity() {
                 responseString: String,
                 throwable: Throwable
             ) {
-
             }
 
             override fun onSuccess(
@@ -179,24 +176,24 @@ class BudgetPageActivity : AppCompatActivity() {
                 headers: Array<Header>,
                 responseString: String
             ) {
-                var bean=JSON.parseObject(responseString, Costs::class.java);
+                val bean=JSON.parseObject(responseString, Costs::class.java)
+                val madapter = CostsAdapter()
 
+                recyc.adapter = madapter
+                madapter.setNewInstance(bean.Costs as MutableList<Costs.CostsBean>?)
 
-                var madapte= CostsAdapter()
-                recyc.adapter=madapte;
-                madapte.setNewInstance(bean.Costs as MutableList<Costs.CostsBean>?)
                 val list: MutableList<Float> = ArrayList()
                 for (fl in bean.Costs!!) {
                     list.add(fl.category_cost!!)
                 }
-                val datas = list.toTypedArray()
-                pieChart.setDatas(datas)
+                val data = list.toTypedArray()
+                pieChart.setDatas(data)
             }
         })
     }
-    var responseSt=""
-    private fun getCostDatas() {
 
+    var responseSt=""
+    private fun getCostData() {
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/items/category/costs/date/days=90/"
         HttpUtils.get("Bearer ${BearerToken.getToken(this)}", url, object : TextHttpResponseHandler() {
             override fun onFailure(
@@ -205,7 +202,6 @@ class BudgetPageActivity : AppCompatActivity() {
                 responseString: String,
                 throwable: Throwable
             ) {
-
             }
 
             override fun onSuccess(
@@ -214,7 +210,6 @@ class BudgetPageActivity : AppCompatActivity() {
                 responseString: String
             ) {
                 responseSt=responseString
-
                 getType()
             }
         })
@@ -223,18 +218,17 @@ class BudgetPageActivity : AppCompatActivity() {
     fun getType() {
         val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/category/"
 
-        Log.i("Response", "aaa" + url)
+        Log.i("Response", "aaa$url")
+
         val registrationPost = OkHttpClient()
-
         val mediaType = "application/json".toMediaTypeOrNull()
-
-        val body = ("").trimIndent().toRequestBody(mediaType)
+        ("").trimIndent().toRequestBody(mediaType)
 
         val request = Request.Builder()
             .url(url)
             .method("GET", null)
             .addHeader("Content-Type", "application/json")
-            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)!!}")
+            .addHeader("Authorization", "Bearer ${BearerToken.getToken(this)}")
             .build()
 
         registrationPost.newCall(request).enqueue(object : Callback {
@@ -248,27 +242,26 @@ class BudgetPageActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val responseBody = response.body?.string()
                         if (responseBody != null) {
-                            Log.i("Successful", "Logout Successfully."+responseBody)
-                            var  list = JSON.parseArray(responseBody, Tyepnames::class.java)
+                            Log.i("Successful", "Logout Successfully.$responseBody")
+                            val list = JSON.parseArray(responseBody, Tyepnames::class.java)
 
-                            trendlist = arrayListOf<Trend>()
+                            trendList = arrayListOf()
 
-                            Log.e("Response", "aaa"+list.toString())
+                            Log.e("Response", "aaa$list")
+
                             for (type in list) {
                                 if(type.category_toggle_star){
-                                    var trend = Trend()
+                                    val trend = Trend()
                                     trend.icon = R.drawable.restaurant
                                     trend.name = type.category_name
-                                    trendlist.add(trend)
+                                    trendList.add(trend)
                                 }
-
                             }
-                            grid!!.post { AddAdapter() }
 
+                            grid!!.post { addAdapter() }
                         } else {
                             Log.i("Empty", "Something went wrong${response.body?.string()}")
                         }
-
                     } else {
                         Log.e(
                             "Error",

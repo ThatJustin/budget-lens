@@ -63,6 +63,7 @@
     <string name="receipt_location_text">%1$s</string>
     <string name="receipt_image_thumbnail_preview_description">Receipt Image Thumbnail Preview</string>
     <string name="merchant_image_logo_thumbnail_preview_description">Merchant Image Logo Thumbnail Preview</string>
+    <string name="budget_button_logo_thumbnail_preview_description">Budget Button Logo Thumbnail Preview</string>
     <string name="close_dialog_preview_description">Close Dialog.</string>
     <string name="total">%1$.2f</string>
     <string name="total_amount">Total Amount($): %1$.2f</string>
@@ -72,9 +73,11 @@
     <string name="item_frequency">Purchased Frequency: %s</string>
     <string name="added_by">Added by</string>
     <string name="view_items">View Items</string>
+    <string name="receipt_items_list">List of Receipts Items</string>
     <string name="split_total">Split by Total</string>
     <string name="split_item">Split by Item</string>
     <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
     <string name="add_date">Add Important Date</string>
     <string name="edit">Edit</string>
     <string name="split_bill">Split Bill</string>
@@ -83,7 +86,6 @@
     <string name="receipts">Receipts</string>
     <string name="budget">Budget</string>
     <string name="friends">Friends</string>
-    <string name="calendar">Calendar</string>
     <string name="items">Items</string>
     <string name="sort_by">Sort By</string>
     <string name="request">Friend Requests</string>

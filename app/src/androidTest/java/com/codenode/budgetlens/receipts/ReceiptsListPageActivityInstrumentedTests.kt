@@ -56,9 +56,9 @@ class ReceiptsListPageActivityInstrumentedTests {
 
     @Test
     fun test_receipts_list_page_activity_is_displayed() {
-        // This test checks to see if the receipts list page activity is displayed and scrollable
-        // by first checking if it is displayed when the "Receipts" button/item on the navigation
-        // bar is clicked and then scrolling down and up the list to make sure that it is scrollable
+        // This test checks to see if the receipts list page activity is displayed by first checking
+        // if it is displayed when the "Receipts" button/item on the navigation
+        // bar is clicked and then clicking on the search bar to check if it is displayed
         onView(withId(R.id.receipts)).perform(click()).check(matches(isDisplayed()))
         onView(withId(R.id.search_bar_text)).check(matches(isDisplayed()))
     }
