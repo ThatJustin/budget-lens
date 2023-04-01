@@ -51,6 +51,17 @@ jobs:
       - name: Run Lint
         run: |
           ./gradlew Lint
+      - name: Generate Code Coverage Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: Code Coverage Report
+          path: app/build/reports/coverage/debug
+        # Generate test coverage reports
+      - name: Download Test Coverage Reports Folder
+        uses: actions/download-artifact@v2
+        with:
+          name: Test Coverage Report
+          path: app/build/reports/coverage/debug
 #  tests:
 #    runs-on: macos-latest
 #    needs: build

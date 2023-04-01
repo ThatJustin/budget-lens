@@ -5,11 +5,12 @@ plugins {
     id 'kotlin-android-extensions'
 }
 
-task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'connectedAndroidTest']) {
 
     reports {
         xml.required = true
         html.required = true
+        csv.required = true
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
@@ -19,7 +20,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
     sourceDirectories.setFrom(files([mainSrc]))
     classDirectories.setFrom(files([debugTree]))
     executionData.setFrom(fileTree(dir: "$buildDir", includes: [
-            "jacoco/testDebugUnitTest.exec"
+            "jacoco/testDebugUnitTest.exec", "outputs/code-coverage/connected/*coverage.ec"
     ]))
 }
 
@@ -57,6 +58,8 @@ android {
 
     buildTypes {
         debug {
+            applicationIdSuffix ".debug"
+            minifyEnabled false
             testCoverageEnabled true
             buildConfigField('String', 'ADDRESS', "\"${InetAddress.localHost.getCanonicalHostName()}\"")
             buildConfigField('String', 'PORT', "\"8000\"")
