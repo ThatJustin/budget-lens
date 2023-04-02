@@ -13,3 +13,4 @@ This repository is intended for the Capstone team to manage the frontend of the 
 4. Create an [emulation of an android phone](https://developer.android.com/studio/run/managing-avds) to test the app.
 5. Ensure the [backend server](https://github.com/teoPalomino/budget-lens-backend) is running as well.
 6. Run the [app on the emulator](https://developer.android.com/studio/run/emulator#avd). 
+7. 
