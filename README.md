@@ -12,5 +12,9 @@ This repository is intended for the Capstone team to manage the frontend of the 
 3. Open Android Studio - File > Open... and navigate to the project folder.
 4. Create an [emulation of an android phone](https://developer.android.com/studio/run/managing-avds) to test the app.
 5. Ensure the [backend server](https://github.com/teoPalomino/budget-lens-backend) is running as well.
-6. Run the [app on the emulator](https://developer.android.com/studio/run/emulator#avd). 
-7. 
+6. Ensure the project directory has a `local.properties` file with the following to connect to the backend server:
+```
+ADDRESS = XXX.XXX.XXX.XXX
+PORT = XXXX
+```
+7. Run the [app on the emulator](https://developer.android.com/studio/run/emulator#avd). 
