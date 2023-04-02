@@ -10,14 +10,13 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/budgetlens_app_logo_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/budgetlens_app_logo_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BudgetLens"
         android:usesCleartextTraffic="true"
-        android:name=".itemSplit.ItemSplitListApp"
         tools:targetApi="31">
         <activity
             android:name=".receipts.ReceiptSplitFriendSelect"
@@ -155,7 +154,6 @@
             android:name=".budget.BudgetPageActivity"
             android:exported="true"
             android:parentActivityName=".home.HomePageActivity">
-            >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -164,7 +162,6 @@
             android:name=".budget.BudgetSpendingTrendActivity"
             android:exported="true"
             android:parentActivityName=".home.HomePageActivity">
-            >
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
