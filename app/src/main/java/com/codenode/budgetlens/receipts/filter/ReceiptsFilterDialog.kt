@@ -19,6 +19,7 @@ import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity.ReceiptsListPageActivity.pageSize
 import com.codenode.budgetlens.common.BearerToken
+import com.codenode.budgetlens.receipts.ReceiptMenu
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -33,7 +34,9 @@ import java.util.concurrent.CountDownLatch
 class ReceiptsFilterDialog(
     private val activityContext: Context,
     themeID: Int,
+    private val receiptMenu: ReceiptMenu?,
     private val supportFragmentManager: FragmentManager,
+    @Deprecated("Use")
     private val previousFilterOptions: ReceiptsFilterOptions
 ) : Dialog(activityContext, themeID) {
 
@@ -115,6 +118,7 @@ class ReceiptsFilterDialog(
         handleTotals()
         handleScanDateStartEnd()
     }
+
 
     /**
      * Loads previously applied filters.

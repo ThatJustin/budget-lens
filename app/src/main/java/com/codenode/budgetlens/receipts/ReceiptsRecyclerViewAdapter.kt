@@ -90,7 +90,7 @@ class ReceiptsRecyclerViewAdapter :
 
             if (position != RecyclerView.NO_POSITION) {
                 val receipt = receipts[position]
-                val dialog = ReceiptInfoDialog(context!!, receipt)
+                val dialog = ReceiptInfoDialogOld(context!!, receipt)
                 dialog.setOnDismissListener {
                     if (dialog.isDeletedReceipt) {
                         removeReceipt(position)
