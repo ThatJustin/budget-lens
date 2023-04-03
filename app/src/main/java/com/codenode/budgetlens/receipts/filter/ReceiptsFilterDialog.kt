@@ -2,41 +2,32 @@ package com.codenode.budgetlens.receipts.filter
 
 import android.app.Activity
 import android.app.Dialog
+import android.widget.AdapterView.OnItemClickListener
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.core.util.Pair
 import androidx.fragment.app.FragmentManager
-import com.codenode.budgetlens.BuildConfig
 import com.codenode.budgetlens.R
-import com.codenode.budgetlens.receipts.ReceiptsListPageActivity.ReceiptsListPageActivity.pageSize
-import com.codenode.budgetlens.common.BearerToken
-import com.codenode.budgetlens.receipts.ReceiptMenu
+import com.codenode.budgetlens.data.UserReceipts
+import com.codenode.budgetlens.receipts.ReceiptsListPageActivity
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
-import okhttp3.*
-import org.json.JSONArray
-import org.json.JSONObject
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.CountDownLatch
 
 class ReceiptsFilterDialog(
     private val activityContext: Context,
     themeID: Int,
-    private val receiptMenu: ReceiptMenu?,
     private val supportFragmentManager: FragmentManager,
-    @Deprecated("Use")
     private val previousFilterOptions: ReceiptsFilterOptions
 ) : Dialog(activityContext, themeID) {
 
@@ -83,6 +74,7 @@ class ReceiptsFilterDialog(
         couponMap.clear()
         totalMap.clear()
 
+
         //Set listener
         receiptsFilterDialogListener = activityContext as Activity as ReceiptsFilterDialogListener
 
@@ -111,18 +103,45 @@ class ReceiptsFilterDialog(
         handleClosingDialog()
         handleChipClicking()
         loadFilters()
-        handleMerchants()
-        handleLocations()
-        handleCurrencies()
-        handleCoupons()
-        handleTotals()
+
+        UserReceipts.filterReceiptsMenu(activityContext as ReceiptsListPageActivity, onSuccess = {
+            handleMerchants(it.merchants)
+            handleLocations(it.locations)
+            handleCurrencies(it.currency)
+            handleCoupons(it.coupon)
+            handleTotals(it.total)
+        }, onFailure = {
+            Log.d("ERROR@1: =>", "ERROR@1: => $it")
+        })
         handleScanDateStartEnd()
     }
 
 
     /**
-     * Loads previously applied filters.
+     * Handles the start and end date setOnClickListener which calls openDateRangePicker.
      */
+    private fun handleScanDateStartEnd() {
+        scanDateStart.setOnClickListener {
+            openDateRangePicker()
+        }
+
+        scanDateEnd.setOnClickListener {
+            openDateRangePicker()
+        }
+    }
+
+    /**
+     * Handles closing the dialog.
+     */
+    private fun handleClosingDialog() {
+        val closeDialog = findViewById<TextView>(R.id.filter_receipts_dialog_close)
+        closeDialog.setOnClickListener {
+            receiptsFilterDialogListener?.onReturnedFilterOptions(filterOptions)
+            this.dismiss()
+        }
+    }
+
+
     private fun loadFilters() {
         //Update the filters to the previously selected ones
         this.filterOptions = previousFilterOptions
@@ -301,9 +320,8 @@ class ReceiptsFilterDialog(
     /**
      * Handles merchant filter.
      */
-    private fun handleMerchants() {
-        val merchantReceiptsMap = loadMerchants()
-        val merchantReceipts: MutableList<String> = merchantReceiptsMap.values.toMutableList().distinct()
+    private fun handleMerchants(merchants: List<String>) {
+        val merchantReceipts: MutableList<String> = merchants.distinct()
             .sortedBy { it.lowercase() } as MutableList<String>
 
         val adapter = ArrayAdapter(context, R.layout.list_receipts, merchantReceipts)
@@ -322,9 +340,8 @@ class ReceiptsFilterDialog(
     /**
      * Handles location filter.
      */
-    private fun handleLocations() {
-        val locationReceiptsMap = loadLocations()
-        val locationReceipts: MutableList<String> = locationReceiptsMap.values.toMutableList().distinct()
+    private fun handleLocations(locations: List<String>) {
+        val locationReceipts: MutableList<String> = locations.distinct()
             .sortedBy { it.lowercase() } as MutableList<String>
 
         val adapter = ArrayAdapter(context, R.layout.list_receipts, locationReceipts)
@@ -343,9 +360,8 @@ class ReceiptsFilterDialog(
     /**
      * Handles currency filter.
      */
-    private fun handleCurrencies() {
-        val currencyReceiptsMap = loadCurrencies()
-        val currencyReceipts: MutableList<String> = currencyReceiptsMap.values.toMutableList().distinct()
+    private fun handleCurrencies(currencies: List<String>) {
+        val currencyReceipts: MutableList<String> = currencies.distinct()
             .sortedBy { it.lowercase() } as MutableList<String>
 
         val adapter = ArrayAdapter(context, R.layout.list_receipts, currencyReceipts)
@@ -364,10 +380,9 @@ class ReceiptsFilterDialog(
     /**
      * Handles coupon filter.
      */
-    private fun handleCoupons() {
-        val couponReceiptsMap = loadCoupons()
-        val couponReceipts: MutableList<String> = couponReceiptsMap.values.toMutableList().distinct()
-            .sortedBy { it.lowercase() } as MutableList<String>
+    private fun handleCoupons(coupons: List<Double>) {
+        val couponReceipts: List<String> = coupons.distinct()
+            .sortedBy { it }.map { it.toString() }
 
         val adapter = ArrayAdapter(context, R.layout.list_receipts, couponReceipts)
         couponOptions.setAdapter(adapter)
@@ -385,14 +400,13 @@ class ReceiptsFilterDialog(
     /**
      * Handles total filter.
      */
-    private fun handleTotals() {
-        val totalReceiptsMap = loadTotals()
-        val totalReceipts: MutableList<String> = totalReceiptsMap.values.toMutableList().distinct()
-            .sortedBy { it.lowercase() } as MutableList<String>
+    private fun handleTotals(totals: List<Double>) {
+        val totalReceipts: List<String> = totals.distinct()
+            .sortedBy { it }.map { it.toString() }
 
         val adapter = ArrayAdapter(context, R.layout.list_receipts, totalReceipts)
         totalOptions.setAdapter(adapter)
-        totalOptions.onItemClickListener = OnItemClickListener { _, _, pos, _ ->
+        totalOptions.onItemClickListener = AdapterView.OnItemClickListener { _, _, pos, _ ->
             filterOptions.total = ""
             totalChip.visibility = View.GONE
             val value = adapter.getItem(pos) ?: ""
@@ -400,367 +414,6 @@ class ReceiptsFilterDialog(
                 filterOptions.total = value
                 totalChip.visibility = View.VISIBLE
             }
-        }
-    }
-
-    private fun loadMerchants(): MutableMap<Int, String> {
-        var pageNumber = 1
-        merchantMap.clear()
-        var contentLoadedFromResponse = true
-
-        while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
-            contentLoadedFromResponse = false
-
-            val receiptsRequest = OkHttpClient()
-            val request = Request.Builder()
-                .url(url)
-                .method("GET", null)
-                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
-                .addHeader("Content-Type", "application/json")
-                .build()
-
-            val countDownLatch = CountDownLatch(1)
-
-            receiptsRequest.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                    countDownLatch.countDown()
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    Log.i("Response", "Got the response from server")
-                    response.use {
-                        if (response.isSuccessful) {
-                            val responseBody = response.body?.string()
-                            if (responseBody != null) {
-                                val pageList =
-                                    JSONObject(responseBody.toString()).getString("page_list")
-                                val receipts = JSONArray(pageList)
-                                for (i in 0 until receipts.length()) {
-                                    contentLoadedFromResponse = true
-                                    val receipt = receipts.getJSONObject(i)
-                                    val id = receipt.getInt("id")
-                                    val merchant = receipt.getString("merchant")
-                                    merchantMap[id] = merchant
-                                }
-                                if (contentLoadedFromResponse) {
-                                    pageNumber++
-                                }
-                                Log.i("Successful", "Successfully loaded merchants from API.")
-                            } else {
-                                contentLoadedFromResponse = false
-                                Log.i(
-                                    "Error",
-                                    "Something went wrong ${response.message} ${response.headers}"
-                                )
-                            }
-                        } else {
-                            Log.e(
-                                "Error",
-                                "Something went wrong ${response.message} ${response.headers}"
-                            )
-                        }
-                    }
-                    countDownLatch.countDown()
-                }
-            })
-
-            countDownLatch.await()
-        }
-        return merchantMap
-    }
-
-    private fun loadLocations(): MutableMap<Int, String> {
-        var pageNumber = 1
-        locationMap.clear()
-        var contentLoadedFromResponse = true
-
-        while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
-            contentLoadedFromResponse = false
-
-            val receiptsRequest = OkHttpClient()
-            val request = Request.Builder()
-                .url(url)
-                .method("GET", null)
-                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
-                .addHeader("Content-Type", "application/json")
-                .build()
-
-            val countDownLatch = CountDownLatch(1)
-
-            receiptsRequest.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                    countDownLatch.countDown()
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    Log.i("Response", "Got the response from server")
-                    response.use {
-                        if (response.isSuccessful) {
-                            val responseBody = response.body?.string()
-                            if (responseBody != null) {
-                                val pageList =
-                                    JSONObject(responseBody.toString()).getString("page_list")
-                                val receipts = JSONArray(pageList)
-                                for (i in 0 until receipts.length()) {
-                                    contentLoadedFromResponse = true
-                                    val receipt = receipts.getJSONObject(i)
-                                    val id = receipt.getInt("id")
-                                    val location = receipt.getString("location")
-                                    locationMap[id] = location
-                                }
-                                if (contentLoadedFromResponse) {
-                                    pageNumber++
-                                }
-                                Log.i("Successful", "Successfully loaded locations from API.")
-                            } else {
-                                Log.i(
-                                    "Error",
-                                    "Something went wrong ${response.message} ${response.headers}"
-                                )
-                            }
-                        } else {
-                            Log.e(
-                                "Error",
-                                "Something went wrong ${response.message} ${response.headers}"
-                            )
-                        }
-                    }
-                    countDownLatch.countDown()
-                }
-            })
-
-            countDownLatch.await()
-        }
-        return locationMap
-    }
-
-    private fun loadCurrencies(): MutableMap<Int, String> {
-        var pageNumber = 1
-        currencyMap.clear()
-        var contentLoadedFromResponse = true
-
-        while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
-            contentLoadedFromResponse = false
-
-            val receiptsRequest = OkHttpClient()
-            val request = Request.Builder()
-                .url(url)
-                .method("GET", null)
-                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
-                .addHeader("Content-Type", "application/json")
-                .build()
-
-            val countDownLatch = CountDownLatch(1)
-
-            receiptsRequest.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                    countDownLatch.countDown()
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    Log.i("Response", "Got the response from server")
-                    response.use {
-                        if (response.isSuccessful) {
-                            val responseBody = response.body?.string()
-                            if (responseBody != null) {
-                                val pageList =
-                                    JSONObject(responseBody.toString()).getString("page_list")
-                                val receipts = JSONArray(pageList)
-                                for (i in 0 until receipts.length()) {
-                                    contentLoadedFromResponse = true
-                                    val receipt = receipts.getJSONObject(i)
-                                    val id = receipt.getInt("id")
-                                    val currency = receipt.getString("currency")
-                                    currencyMap[id] = currency
-                                }
-                                if (contentLoadedFromResponse) {
-                                    pageNumber++
-                                }
-                                Log.i("Successful", "Successfully loaded currencies from API.")
-                            } else {
-                                Log.i(
-                                    "Error",
-                                    "Something went wrong ${response.message} ${response.headers}"
-                                )
-                            }
-                        } else {
-                            Log.e(
-                                "Error",
-                                "Something went wrong ${response.message} ${response.headers}"
-                            )
-                        }
-                    }
-                    countDownLatch.countDown()
-                }
-            })
-
-            countDownLatch.await()
-        }
-        return currencyMap
-    }
-
-    private fun loadCoupons(): MutableMap<Int, String> {
-        var pageNumber = 1
-        couponMap.clear()
-        var contentLoadedFromResponse = true
-
-        while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
-            contentLoadedFromResponse = false
-
-            val receiptsRequest = OkHttpClient()
-            val request = Request.Builder()
-                .url(url)
-                .method("GET", null)
-                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
-                .addHeader("Content-Type", "application/json")
-                .build()
-
-            val countDownLatch = CountDownLatch(1)
-
-            receiptsRequest.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                    countDownLatch.countDown()
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    Log.i("Response", "Got the response from server")
-                    response.use {
-                        if (response.isSuccessful) {
-                            val responseBody = response.body?.string()
-                            if (responseBody != null) {
-                                val pageList =
-                                    JSONObject(responseBody.toString()).getString("page_list")
-                                val receipts = JSONArray(pageList)
-                                for (i in 0 until receipts.length()) {
-                                    contentLoadedFromResponse = true
-                                    val receipt = receipts.getJSONObject(i)
-                                    val id = receipt.getInt("id")
-                                    val coupon = receipt.getString("coupon")
-                                    couponMap[id] = coupon
-                                }
-                                if (contentLoadedFromResponse) {
-                                    pageNumber++
-                                }
-                                Log.i("Successful", "Successfully loaded coupons from API.")
-                            } else {
-                                Log.i(
-                                    "Error",
-                                    "Something went wrong ${response.message} ${response.headers}"
-                                )
-                            }
-                        } else {
-                            Log.e(
-                                "Error",
-                                "Something went wrong ${response.message} ${response.headers}"
-                            )
-                        }
-                    }
-                    countDownLatch.countDown()
-                }
-            })
-
-            countDownLatch.await()
-        }
-        return couponMap
-    }
-
-    private fun loadTotals(): MutableMap<Int, String> {
-        var pageNumber = 1
-        totalMap.clear()
-        var contentLoadedFromResponse = true
-
-        while (contentLoadedFromResponse) {
-            val url = "http://${BuildConfig.ADDRESS}:${BuildConfig.PORT}/api/receipts/pageNumber=${pageNumber}&pageSize=${pageSize}/"
-            contentLoadedFromResponse = false
-
-            val receiptsRequest = OkHttpClient()
-            val request = Request.Builder()
-                .url(url)
-                .method("GET", null)
-                .addHeader("Authorization", "Bearer ${BearerToken.getToken(context)}")
-                .addHeader("Content-Type", "application/json")
-                .build()
-
-            val countDownLatch = CountDownLatch(1)
-
-            receiptsRequest.newCall(request).enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    e.printStackTrace()
-                    countDownLatch.countDown()
-                }
-
-                override fun onResponse(call: Call, response: Response) {
-                    Log.i("Response", "Got the response from server")
-                    response.use {
-                        if (response.isSuccessful) {
-                            val responseBody = response.body?.string()
-                            if (responseBody != null) {
-                                val pageList =
-                                    JSONObject(responseBody.toString()).getString("page_list")
-                                val receipts = JSONArray(pageList)
-                                for (i in 0 until receipts.length()) {
-                                    contentLoadedFromResponse = true
-                                    val receipt = receipts.getJSONObject(i)
-                                    val id = receipt.getInt("id")
-                                    val total = receipt.getString("total")
-                                    totalMap[id] = total
-                                }
-                                if (contentLoadedFromResponse) {
-                                    pageNumber++
-                                }
-                                Log.i("Successful", "Successfully loaded merchants from API.")
-                            } else {
-                                contentLoadedFromResponse = false
-                                Log.i(
-                                    "Error",
-                                    "Something went wrong ${response.message} ${response.headers}"
-                                )
-                            }
-                        } else {
-                            Log.e(
-                                "Error",
-                                "Something went wrong ${response.message} ${response.headers}"
-                            )
-                        }
-                    }
-                    countDownLatch.countDown()
-                }
-            })
-
-            countDownLatch.await()
-        }
-        return totalMap
-    }
-
-    /**
-     * Handles the start and end date setOnClickListener which calls openDateRangePicker.
-     */
-    private fun handleScanDateStartEnd() {
-        scanDateStart.setOnClickListener {
-            openDateRangePicker()
-        }
-
-        scanDateEnd.setOnClickListener {
-            openDateRangePicker()
-        }
-    }
-
-    /**
-     * Handles closing the dialog.
-     */
-    private fun handleClosingDialog() {
-        val closeDialog = findViewById<TextView>(R.id.filter_receipts_dialog_close)
-        closeDialog.setOnClickListener {
-            receiptsFilterDialogListener?.onReturnedFilterOptions(filterOptions)
-            this.dismiss()
         }
     }
 }

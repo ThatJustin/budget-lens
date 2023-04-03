@@ -27,7 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 //Open already uploaded receipt
-class ReceiptInfoDialogOld(context: Context, receipt: Receipts) : Dialog(context) {
+class ReceiptInfoDialog(context: Context, receipt: Receipts) : Dialog(context) {
     var receiptInfo = receipt
     private lateinit var receiptInfoDialog: Dialog
     var isDeletedReceipt = false

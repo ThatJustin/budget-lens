@@ -13,6 +13,7 @@ import com.codenode.budgetlens.data.Receipts
 import com.codenode.budgetlens.data.UserReceipts.Companion.requestReceiptsFromAPI
 import com.codenode.budgetlens.data.UserReceipts.Companion.pageNumber
 import com.codenode.budgetlens.receipts.ReceiptsListPageActivity.ReceiptsListPageActivity.pageSize
+import com.codenode.budgetlens.receipts.filter.ReceiptsFilterDialog
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterDialogListener
 import com.codenode.budgetlens.receipts.filter.ReceiptsFilterOptions
 import com.codenode.budgetlens.receipts.sort.ReceiptsSortDialog
