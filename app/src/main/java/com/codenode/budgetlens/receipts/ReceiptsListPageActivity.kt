@@ -64,7 +64,9 @@ class ReceiptsListPageActivity : AppCompatActivity(), ReceiptsSortDialogListener
      * Handles the filter.
      */
     private fun handleFilter() {
+        var receiptMenu : ReceiptMenu? =null
         val filterButton = findViewById<Button>(R.id.filter_button)
+
         filterButton.setOnClickListener {
             val dialog = ReceiptsFilterDialog(
                 this,
